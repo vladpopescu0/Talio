@@ -26,6 +26,9 @@ Agenda-items
 (3 min)	Summary action points
 
 (5 min) 	Question round - Does anybody have any questions? 
+			Is everybody able to run the project?
+			How can we login to localhost:8080/h2-console?
+			 
 
 (3 min)	Setting the roles for the next team meeting
 
