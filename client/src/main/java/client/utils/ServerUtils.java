@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -56,6 +57,19 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {
                 });
+    }
+
+    /**
+     *Method that gets all boards from the database
+     *through the /boards api
+     * @return A list of all boards added to the database
+     */
+    public List<Board> getBoards() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("boards") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<List<Board>>() {});
     }
 
     public Quote addQuote(Quote quote) {
