@@ -6,13 +6,15 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class CardList {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String name;
     @ElementCollection
     private List<Card> cards;
@@ -32,6 +34,10 @@ public class CardList {
 
     public List<Card> getCards() {
         return cards;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     @Override
