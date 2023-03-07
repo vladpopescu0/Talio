@@ -15,41 +15,47 @@
  */
 package client.utils;
 
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+import commons.Quote;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.InvocationCallback;
+import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
-import org.glassfish.jersey.client.ClientConfig;
-
-import commons.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
-    public void getQuotesTheHardWay() throws IOException {
-        var url = new URL("http://localhost:8080/api/quotes");
-        var is = url.openConnection().getInputStream();
-        var br = new BufferedReader(new InputStreamReader(is));
-        String line;
-        while ((line = br.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
+    public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
+
+//    public void getQuotesTheHardWay() throws IOException {
+//        var url = new URL("http://localhost:8080/api/quotes");
+//        var is = url.openConnection().getInputStream();
+//        var br = new BufferedReader(new InputStreamReader(is));
+//        String line;
+//        while ((line = br.readLine()) != null) {
+//            System.out.println(line);
+//        }
+//    }
 
     public List<Quote> getQuotes() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/quotes") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Quote>>() {});
+                .get(new GenericType<>() {
+                });
     }
 
     public Quote addQuote(Quote quote) {
@@ -59,4 +65,34 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
+
+    public void registerForUpdates(Consumer<Quote> consumer) {
+        var res = ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/quotes/updates") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(Response.class);
+
+        res.getStatus();
+        res.readEntity(Quote.class);
+    }
+
+
+//    public void updateQuotes(Consumer<Quote> quote){
+//        Future<Response> future = ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/quotes") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .async()
+//                .get(new InvocationCallback<>() {
+//                            @Override
+//                            public void completed(Response r) {
+//                            }
+//
+//                            @Override
+//                            public void failed(Throwable throwable) {
+//                                System.out.println("Doesn't work");
+//                            }
+//                        });
+//    }
 }
