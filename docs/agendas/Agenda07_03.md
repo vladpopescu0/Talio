@@ -7,7 +7,7 @@ Attendees: Georgios Kontos, Ioan Leolea, Jakub Matyja, Vlad Popescu, Shashwat Sa
 
 Roles:
 Chair: 		Shashwat Sahay
-Minute Taker:
+Minute Taker:	Ioan Leolea
 
 Agenda-items
 
