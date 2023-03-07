@@ -15,21 +15,14 @@
  */
 package client.utils;
 
-import commons.Board;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.client.InvocationCallback;
 import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
-import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
@@ -69,7 +62,7 @@ public class ServerUtils {
                 .target(SERVER).path("boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<List<Board>>() {});
+                .get(new GenericType<>() {});
     }
 
     public Quote addQuote(Quote quote) {
