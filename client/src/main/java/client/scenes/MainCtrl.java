@@ -24,13 +24,13 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
-    private QuoteOverviewCtrl overviewCtrl;
+    private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
 
-    public void initialize(Stage primaryStage, Pair<QuoteOverviewCtrl, Parent> overview,
+    public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
         this.overviewCtrl = overview.getKey();
@@ -44,7 +44,7 @@ public class MainCtrl {
     }
 
     public void showOverview() {
-        primaryStage.setTitle("Quotes: Overview");
+        primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
         overviewCtrl.refresh();
     }

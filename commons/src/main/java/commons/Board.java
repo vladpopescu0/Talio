@@ -46,6 +46,11 @@ public class Board {
         this.list = list;
         this.name = name;
     }
+    //empty constructor was necessary since post requests do not work for some reasons
+    //also when creating a post request, the first name and last name of the person are set to null
+    private Board() {
+        // for object mappers
+    }
 
     /**
      * Constructor for the Board class without a given list

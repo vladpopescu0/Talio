@@ -15,6 +15,7 @@
  */
 package client.utils;
 
+import commons.Board;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -31,7 +32,7 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
-    public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
+    //public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
 
 //    public void getQuotesTheHardWay() throws IOException {
 //        var url = new URL("http://localhost:8080/api/quotes");

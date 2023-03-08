@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
+import commons.Board;
 import commons.Quote;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -41,11 +42,9 @@ public class BoardsOverviewCtrl implements Initializable {
     private ObservableList<Board> data;
 
     @FXML
-    private TableView<Quote> table;
+    private TableView<Board> table;
     @FXML
     private TableColumn<Board, String> colBoardName;
-    @FXML
-    private TableColumn<Board, String> colVisibility;
     @FXML
     private TableColumn<Board, String> colCreator;
 
@@ -57,9 +56,8 @@ public class BoardsOverviewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().name));
-        //colVisibility.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().isPasswordProtected));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().person));
+        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty("Vlad"));
     }
 
     public void addBoard() {

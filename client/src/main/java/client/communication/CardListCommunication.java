@@ -1,6 +1,5 @@
 package client.communication;
 
-import client.utils.SocketHandler;
 import commons.CardList;
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
@@ -13,6 +12,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.logging.SocketHandler;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 

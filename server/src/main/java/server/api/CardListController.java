@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import server.database.CardListRepository;
-import server.services.CardListService;
+//import server.services.CardListService;
 
 @RestController
 @RequestMapping(path = "/api/lists")
 public class CardListController {
     private final CardListRepository repo;
 
-    private CardListService CLService; // im not sure if we should use that
+    //private CardListService CLService; // im not sure if we should use that
 
     public CardListController(CardListRepository repo){
         this.repo = repo;
