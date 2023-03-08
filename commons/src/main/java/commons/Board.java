@@ -2,13 +2,10 @@ package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class Board {
@@ -18,56 +15,83 @@ public class Board {
      * so the name is the primary key is their name
      */
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
     private String name;
 
     /**
-     * Each board is associated with the person that created it.
+     * Each Board has a collection of users that have joined the board
      */
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Person creator;
+    private final List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
     @ElementCollection
-    private List<CardList> list;
+    private final List<CardList> list;
 
     /**
      * Constructor for the Board class
-     * @param person the creator of the board
+     * @param creator the creator of the board
      * @param name the name of the board
      * @param list a CardList
      */
     @SuppressWarnings("unused")
-    private Board(Person person, List<CardList> list, String name) {
-        this.creator = person;
+    private Board(User creator, List<CardList> list, String name) {
+        this.users = new ArrayList<>();
+        users.add(creator);
         this.list = list;
         this.name = name;
     }
 
     /**
      * Constructor for the Board class without a given list
-     * @param person the creator of the board
+     * @param creator the creator of the board
      * @param name the name of the board
      */
-    public Board(Person person, String name) {
-        this.creator = person;
+    @SuppressWarnings("unused")
+    public Board(User creator, String name) {
+        this.users = new ArrayList<>();
+        users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
     }
 
     /**
-     * Getter for the creator
-     * @return the creator as a Person object
+     * Getter for the id of the board
+     * @return the id
      */
-    public Person getCreator() {
-        return this.creator;
+    public long getId() {
+        return this.id;
+    }
+
+    /**
+     * Getter for the list of users
+     * @return the list of users that have joined the board
+     */
+    @SuppressWarnings("unused")
+    public List<User> getUsers() {
+        return users;
+    }
+
+    /**
+     * Adds a user to the collection of users related to the board
+     * @param user the user to be added
+     */
+    @SuppressWarnings("unused")
+    public void addUser(User user) {
+        if (this.users.contains(user)) {
+            return;
+        }
+        users.add(user);
     }
 
     /**
      * Getter for the name
      * @return the name of the board
      */
+    @SuppressWarnings("unused")
     public String getName() {
         return this.name;
     }
@@ -76,6 +100,7 @@ public class Board {
      * Setter for the name
      * @param name the new name of the board
      */
+    @SuppressWarnings("unused")
     public void setName(String name) {
         this.name = name;
     }
@@ -84,6 +109,7 @@ public class Board {
      * Getter for the list of CardLists
      * @return the CardLists
      */
+    @SuppressWarnings("unused")
     public List<CardList> getList() {
         return list;
     }
@@ -92,6 +118,7 @@ public class Board {
      * Adds a CardList to the board(used for drag and drop feature)
      * @param cardList the card to be added
      */
+    @SuppressWarnings("unused")
     public void addList(CardList cardList) {
         list.add(cardList);
     }
@@ -99,6 +126,7 @@ public class Board {
     /**
      * Adds a new, empty CardList to the board
      */
+    @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
     }
@@ -126,6 +154,11 @@ public class Board {
      */
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+        return "Board{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", users=" + users +
+                ", list=" + list +
+                '}';
     }
 }
