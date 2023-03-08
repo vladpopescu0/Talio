@@ -16,6 +16,17 @@
 package client.utils;
 
 import commons.Board;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.List;
+
+import commons.Board;
+import org.glassfish.jersey.client.ClientConfig;
+
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
