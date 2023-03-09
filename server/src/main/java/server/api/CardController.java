@@ -1,22 +1,19 @@
 package server.api;
 
-import commons.CardList;
+
+import commons.Card;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.database.CardRepository;
 
 import java.util.List;
 
-import server.database.CardListRepository;
-//import server.services.CardListService;
-
 @RestController
-@RequestMapping(path = "/api/lists")
-public class CardListController {
-    private final CardListRepository repo;
+@RequestMapping("/api/cards")
+public class CardController {
+    private final CardRepository repo;
 
-    //private CardListService CLService; // im not sure if we should use that
-
-    public CardListController(CardListRepository repo){
+    public CardController(CardRepository repo){
         this.repo = repo;
     }
     private static boolean isNullOrEmpty(String s) {
@@ -24,26 +21,26 @@ public class CardListController {
     }
 
     @GetMapping(path = { "", "/" })
-    public List<CardList> getAll() {
+    public List<Card> getAll() {
         return repo.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
+    public ResponseEntity<Card> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
-    @PostMapping(path = { "", "/" })
-    public ResponseEntity<CardList> add(@RequestBody CardList list) {
+    @PostMapping("/add")
+    public ResponseEntity<Card> add(@RequestBody Card card) {
 
-        if (isNullOrEmpty(list.getName()) || list.getCards() == null || list.getCards().isEmpty()) {
+        if (isNullOrEmpty(card.getName())) {
             return ResponseEntity.badRequest().build();
         }
 
-        CardList saved = repo.save(list);
+        Card saved = repo.save(card);
         return ResponseEntity.ok(saved);
     }
 
