@@ -23,6 +23,7 @@ public class Board {
     /**
      * Each Board has a collection of users that have joined the board
      */
+    @ElementCollection
     private final List<User> users;
 
     /**
@@ -129,6 +130,15 @@ public class Board {
     @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
+    }
+
+    /**
+     * Remove a given CardList from the board
+     * @param cardList the cardList to be removed, if included in the board
+     */
+    @SuppressWarnings("unused")
+    public void removeCardList(CardList cardList) {
+        this.list.remove(cardList);
     }
 
     /**
