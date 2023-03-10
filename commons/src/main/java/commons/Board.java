@@ -16,22 +16,21 @@ public class Board {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    private long id;
 
     private String name;
 
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @OneToMany
-    private List<User> users;
+    @ElementCollection
+    private final List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
-    @OneToMany
-    private List<CardList> list;
-
+    @ElementCollection
+    private final List<CardList> list;
 
     /**
      * Constructor for the Board class
@@ -58,10 +57,6 @@ public class Board {
         users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
-    }
-
-    public Board() {
-
     }
 
     /**
@@ -135,6 +130,15 @@ public class Board {
     @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
+    }
+
+    /**
+     * Remove a given CardList from the board
+     * @param cardList the cardList to be removed, if included in the board
+     */
+    @SuppressWarnings("unused")
+    public void removeCardList(CardList cardList) {
+        this.list.remove(cardList);
     }
 
     /**

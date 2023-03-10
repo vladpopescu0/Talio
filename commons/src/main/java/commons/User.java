@@ -14,14 +14,14 @@ public class User {
 
     private String username;
 
-    @ManyToMany
+    @ElementCollection
     private List<Board> boardList;
 
     /**
      * Constructor for object mapper
      */
     @SuppressWarnings("unused")
-    public User() {
+    private User() {
 
     }
 

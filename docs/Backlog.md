@@ -14,10 +14,11 @@ OOPP '23, version: Mar 2, 2023
 
 ## EPIC - Minimal Application  
 
-#### *As a user, I want ...*  
+### *As a user, I want ...*  
 
 - to connect to the app without logging in, so I don't have to remember my password.  
   - When I enter the app I will see a board.  
+  - The functionalities will be the same when I am not logged in.
 - to create a single board, so I can start adding my tasks that need organizing.  
   - Have a single board on the front page.  
   - Data about the board is stored in the database.  
