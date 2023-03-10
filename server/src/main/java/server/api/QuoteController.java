@@ -41,6 +41,7 @@ public class QuoteController {
         this.repo = repo;
     }
 
+
     @GetMapping(path = { "", "/" })
     public List<Quote> getAll() {
         return repo.findAll();
@@ -50,8 +51,11 @@ public class QuoteController {
     public ResponseEntity<Quote> getById(@PathVariable("id") long id) {
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
+        }else if(repo.findById(id).isPresent()){
+            return ResponseEntity.ok(repo.findById(id).get());
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+
+        return ResponseEntity.badRequest().build();
     }
 
     @PostMapping(path = { "", "/" })
