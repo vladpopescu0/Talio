@@ -16,20 +16,22 @@ public class Board {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
 
     /**
      * Each Board has a collection of users that have joined the board
      */
-    private final List<User> users;
+    @OneToMany
+    private List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
-    @ElementCollection
-    private final List<CardList> list;
+    @OneToMany
+    private List<CardList> list;
+
 
     /**
      * Constructor for the Board class
@@ -56,6 +58,10 @@ public class Board {
         users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
+    }
+
+    public Board() {
+
     }
 
     /**

@@ -1,9 +1,6 @@
 package commons;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,13 +14,14 @@ public class User {
 
     private String username;
 
+    @ManyToMany
     private List<Board> boardList;
 
     /**
      * Constructor for object mapper
      */
     @SuppressWarnings("unused")
-    private User() {
+    public User() {
 
     }
 
