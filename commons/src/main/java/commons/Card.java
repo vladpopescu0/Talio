@@ -17,6 +17,9 @@ public class Card {
     @Column
     private String name;
 
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private CardList list;
+
     public Card(){
 
     }
