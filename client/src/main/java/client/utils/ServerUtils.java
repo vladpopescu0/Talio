@@ -18,27 +18,13 @@ package client.utils;
 import commons.Board;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.List;
-
-import commons.Board;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.Response;
-import org.glassfish.jersey.client.ClientConfig;
-
-import java.util.List;
-import java.util.function.Consumer;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
@@ -85,16 +71,6 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
-    public void registerForUpdates(Consumer<Quote> consumer) {
-        var res = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes/updates") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(Response.class);
-
-        res.getStatus();
-        res.readEntity(Quote.class);
-    }
 
 
 //    public void updateQuotes(Consumer<Quote> quote){

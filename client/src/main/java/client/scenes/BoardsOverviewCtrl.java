@@ -22,7 +22,6 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.Quote;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,7 +56,7 @@ public class BoardsOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty("Vlad"));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty("Admin"));
     }
 
     public void addBoard() {

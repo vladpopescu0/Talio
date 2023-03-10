@@ -33,6 +33,7 @@ public class MainCtrl {
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<AddQuoteCtrl, Parent> add) {
         this.primaryStage = primaryStage;
+
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
 
@@ -46,7 +47,7 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+//        overviewCtrl.refresh();
     }
 
     public void showAdd() {
