@@ -24,13 +24,13 @@ public class Board {
      * Each Board has a collection of users that have joined the board
      */
     @ElementCollection
-    private final List<User> users;
+    private List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
     @ElementCollection
-    private final List<CardList> list;
+    private List<CardList> list;
 
     /**
      * Constructor for the Board class
@@ -44,6 +44,11 @@ public class Board {
         users.add(creator);
         this.list = list;
         this.name = name;
+    }
+    //empty constructor was necessary since post requests do not work for some reasons
+    //also when creating a post request, the first name and last name of the person are set to null
+    private Board() {
+        // for object mappers
     }
 
     /**
@@ -130,15 +135,6 @@ public class Board {
     @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
-    }
-
-    /**
-     * Remove a given CardList from the board
-     * @param cardList the cardList to be removed, if included in the board
-     */
-    @SuppressWarnings("unused")
-    public void removeCardList(CardList cardList) {
-        this.list.remove(cardList);
     }
 
     /**
