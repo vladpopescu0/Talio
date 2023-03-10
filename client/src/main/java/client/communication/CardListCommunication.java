@@ -1,11 +1,12 @@
 package client.communication;
 
-import client.utils.SocketHandler;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
+
+import java.util.logging.SocketHandler;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 @SuppressWarnings("unused")

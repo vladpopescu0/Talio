@@ -4,7 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -16,9 +17,6 @@ public class Card {
 
     @Column
     private String name;
-
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private CardList list;
 
     public Card(){
 

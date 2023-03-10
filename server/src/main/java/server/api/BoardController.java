@@ -18,7 +18,6 @@ public class BoardController {
      * Constructor for the BoardController class
      * @param repo the board repository used
      */
-    @SuppressWarnings("unused")
     public BoardController(BoardRepository repo) {
         this.repo = repo;
     }
@@ -28,7 +27,6 @@ public class BoardController {
      * @return a list of all existing boards
      */
     @GetMapping(path = {"", "/"})
-    @SuppressWarnings("unused")
     public List<Board> getAll() {
         return repo.findAll();
     }
