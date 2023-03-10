@@ -19,6 +19,6 @@
             <Font size="36.0" />
          </font>
       </Label>
-      <Button fx:id="joinBoard" layoutX="423.0" layoutY="226.0" mnemonicParsing="false" prefWidth="75.0" text="Join board" />
+      <Button fx:id="joinBoard" layoutX="423.0" layoutY="226.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
     </children>
 </AnchorPane>

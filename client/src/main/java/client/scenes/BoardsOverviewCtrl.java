@@ -68,4 +68,12 @@ public class BoardsOverviewCtrl implements Initializable {
         data = FXCollections.observableList(boards);
         table.setItems(data);
     }
+
+    /**
+     * Joins the selected Board
+     * It is currently redirecting to the only available Board
+     */
+    public void joinBoard() {
+        mainCtrl.showBoardView();
+    }
 }
