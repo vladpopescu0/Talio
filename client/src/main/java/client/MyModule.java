@@ -15,6 +15,7 @@
  */
 package client;
 
+import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -30,5 +31,6 @@ public class MyModule implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardsOverviewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(BoardViewCtrl.class).in(Scopes.SINGLETON);
     }
 }
