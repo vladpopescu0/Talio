@@ -14,7 +14,6 @@ import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 @Entity
 public class Card {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private String name;
 
     public Card(){
