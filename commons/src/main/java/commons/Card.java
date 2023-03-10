@@ -4,14 +4,17 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class Card {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @Column
     private String name;
 
     public Card(){
@@ -21,6 +24,8 @@ public class Card {
     public Card(String name){
         this.name = name;
     }
+
+    public String getName() { return this.name; }
 
     @Override
     public boolean equals(Object obj) {
