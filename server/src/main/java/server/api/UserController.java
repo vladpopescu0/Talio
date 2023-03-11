@@ -3,30 +3,30 @@ package server.api;
 import commons.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.UserRepository;
+import server.services.UserService;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
-    private final UserRepository repo;
+    private final UserService userService;
 
     /**
      * Constructor for the UserController class
-     * @param repo the user repository used
+     * @param userService the user controller used
      */
-    public UserController(UserRepository repo) {
-        this.repo = repo;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<User> getById(@PathVariable("id") long id) {
-        if (!repo.existsById(id)) {
+        User user = userService.getById(id);
+        if (user == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return ResponseEntity.ok(user);
     }
 
     /**
@@ -37,7 +37,25 @@ public class UserController {
     @PostMapping(path = {"", "/"})
     @SuppressWarnings("unused")
     public ResponseEntity<User> add(@RequestBody User user) {
-        User saved = repo.save(user);
-        return ResponseEntity.ok(saved);
+        User added = userService.add(user);
+        if (added == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(added);
+    }
+
+    /**
+     * Modifies the name of a user
+     * @param id the id of the user to be modified
+     * @param name the new name of the user
+     * @return an error if the change cannot be made, ok otherwise
+     */
+    @PostMapping(path = "/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<User> modifyName(@PathVariable("id") long id, @RequestBody String name) {
+        if (!userService.changeName(userService.getById(id), name)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }
