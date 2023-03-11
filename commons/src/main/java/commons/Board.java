@@ -47,6 +47,7 @@ public class Board {
     }
     //empty constructor was necessary since post requests do not work for some reasons
     //also when creating a post request, the first name and last name of the person are set to null
+    @SuppressWarnings("unused")
     private Board() {
         // for object mappers
     }
@@ -91,6 +92,11 @@ public class Board {
             return;
         }
         users.add(user);
+    }
+
+    @SuppressWarnings("unused")
+    public void removeUser(User user) {
+        this.users.remove(user);
     }
 
     /**

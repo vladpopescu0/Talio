@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.*;
 import server.services.CardListService;
 
 import java.util.List;
-import server.services.CardListService;
 
 @RestController
 @RequestMapping(path = "/api/lists")
@@ -22,6 +21,7 @@ public class CardListController {
      * @return all the CardList objects on the server
      */
     @GetMapping(path = { "", "/" })
+    @SuppressWarnings("unused")
     public List<CardList> getAll() {
         return CLService.getAll();
     }
@@ -31,6 +31,7 @@ public class CardListController {
      * @return a ResponseEntity with the status OK and the value of the CardList if the CardList with the searched id is found, else a ResponseEntity with the BAD_REQUEST status
      */
     @GetMapping("/{id}")
+    @SuppressWarnings("unused")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         CardList list = CLService.getById(id);
         if(list == null){
@@ -44,6 +45,7 @@ public class CardListController {
      * @return a ResponseEntity with the status OK and the value of the CardList if the addition is successful, else a ResponseEntity with the BAD_REQUEST status
      */
     @PostMapping(path = "/add")
+    @SuppressWarnings("unused")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
         CardList addedList = CLService.add(list);
         if(addedList == null){
@@ -57,7 +59,8 @@ public class CardListController {
      * @return a ResponseEntity with the status OK if the deletion is successful, else a ResponseEntity with the BAD_REQUEST status
      */
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity removeList(@PathVariable("id") long id){
+    @SuppressWarnings("unused")
+    public ResponseEntity<CardList> removeList(@PathVariable("id") long id){
         if(!CLService.delete(id)){
             return ResponseEntity.badRequest().build();
         }
@@ -66,7 +69,8 @@ public class CardListController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity modifyName(@PathVariable("id") long id,@RequestBody String name){
+    @SuppressWarnings("unused")
+    public ResponseEntity<CardList> modifyName(@PathVariable("id") long id, @RequestBody String name){
         if(!CLService.changeName(CLService.getById(id),name)){
             return ResponseEntity.badRequest().build();
         }

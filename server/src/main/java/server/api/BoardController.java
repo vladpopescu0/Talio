@@ -3,32 +3,34 @@ package server.api;
 import commons.Board;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.database.BoardRepository;
+import server.services.BoardService;
 
 import java.util.List;
 
-@SuppressWarnings("OptionalGetWithoutIsPresent")
 @RestController
 @RequestMapping("/boards")
 public class BoardController {
 
-    private final BoardRepository repo;
+    private final BoardService boardService;
 
     /**
      * Constructor for the BoardController class
-     * @param repo the board repository used
+     * @param boardService the board service used
      */
-    public BoardController(BoardRepository repo) {
-        this.repo = repo;
+    public BoardController(BoardService boardService) {
+        this.boardService = boardService;
     }
 
     /**
      * A method that returns all boards on the address "localhost:8080/boards"
+     *
      * @return a list of all existing boards
      */
+
     @GetMapping(path = {"", "/"})
+    @SuppressWarnings("unused")
     public List<Board> getAll() {
-        return repo.findAll();
+        return boardService.getAll();
     }
 
     /**
@@ -40,10 +42,11 @@ public class BoardController {
     @GetMapping("/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
-        if (!repo.existsById(id)) {
+        Board board = boardService.getById(id);
+        if (board == null) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(repo.findById(id).get());
+        return ResponseEntity.ok(board);
     }
 
     /**
@@ -54,7 +57,39 @@ public class BoardController {
     @PostMapping(path = { "", "/"})
     @SuppressWarnings("unused")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
+        Board added = boardService.add(board);
+        if(added == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(added);
+    }
+
+    /**
+     * Deletes a board from the repo
+     * @param id the id of the board to be removed
+     * @return an error if the board does not exist in the repo
+     */
+    @DeleteMapping(path = "/delete/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<Board> removeBoard(@PathVariable("id") long id) {
+        if (boardService.delete(id)){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Modifies the name of a board
+     * @param id the id of the board to be modified
+     * @param name the new name of the board
+     * @return an error if the change cannot be made, ok otherwise
+     */
+    @PostMapping(path = "/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<Board> modifyName(@PathVariable("id") long id, @RequestBody String name) {
+        if(!boardService.changeName(boardService.getById(id), name)) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().build();
     }
 }

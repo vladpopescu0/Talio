@@ -74,6 +74,24 @@ public class User {
     }
 
     /**
+     * Getter for the list of boards of a user
+     * @return the list of boards of a user
+     */
+    @SuppressWarnings("unused")
+    public List<Board> getBoardList() {
+        return boardList;
+    }
+
+    /**
+     * Removes a board from the boards a user has joined
+     * @param board the board to be removed
+     */
+    @SuppressWarnings("unused")
+    public void removeBoard(Board board) {
+        this.boardList.remove(board);
+    }
+
+    /**
      * Equals method for User
      * @param o another object
      * @return true if-f o is equal to this
