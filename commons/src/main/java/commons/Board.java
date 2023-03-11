@@ -23,13 +23,13 @@ public class Board {
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @ElementCollection
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
-    @ElementCollection
+    @OneToMany(mappedBy = "board",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<CardList> list;
 
     /**
@@ -48,7 +48,7 @@ public class Board {
     //empty constructor was necessary since post requests do not work for some reasons
     //also when creating a post request, the first name and last name of the person are set to null
     @SuppressWarnings("unused")
-    private Board() {
+    public Board() {
         // for object mappers
     }
 

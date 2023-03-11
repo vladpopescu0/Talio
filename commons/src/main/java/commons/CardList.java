@@ -17,7 +17,10 @@ public class CardList {
     private Long id;
     private String name;
 
-    @OneToMany
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Board board;
+
+    @OneToMany(mappedBy = "cllist", cascade = CascadeType.ALL)
     private List<Card> cards;
 
     public CardList() {
@@ -33,6 +36,13 @@ public class CardList {
         this.id = id;
         this.name = name;
         this.cards = cards;
+    }
+    @SuppressWarnings("unused")
+    public CardList(long id,String name, List<Card> cards, Board board){
+        this.id = id;
+        this.name = name;
+        this.cards = cards;
+        this.board = board;
     }
 
     /**
@@ -75,6 +85,13 @@ public class CardList {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /** Sets a new board for a CardList object
+     * @param board board that needs to be appended to object
+     */
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override

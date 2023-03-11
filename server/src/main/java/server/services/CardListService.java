@@ -33,6 +33,7 @@ public class CardListService extends GenericService<CardList> {
     public boolean changeName(CardList target, String name){
         if(target != null && repo.existsById(target.getId())){
             target.setName(name);
+            repo.save(target);
             return true;
         }
 

@@ -9,7 +9,6 @@ public class GenericService<T> {
 
     final JpaRepository<T, Long> repo;
 
-    @Autowired
     public GenericService(JpaRepository<T, Long> repo) { this.repo = repo;}
 
     /**
