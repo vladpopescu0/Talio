@@ -17,11 +17,11 @@ package client;
 
 import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
+import client.scenes.CreateBoardViewCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
 
-import client.scenes.AddQuoteCtrl;
 import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
@@ -29,8 +29,8 @@ public class MyModule implements Module {
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
-        binder.bind(AddQuoteCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardsOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CreateBoardViewCtrl.class).in(Scopes.SINGLETON);
     }
 }

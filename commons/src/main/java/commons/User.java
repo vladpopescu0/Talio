@@ -1,5 +1,6 @@
 package commons;
 
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,7 @@ public class User {
      * @param username the username of the user
      */
     @SuppressWarnings("unused")
+    @Inject
     public User(String username) {
         this.username = username;
         this.boardList = new ArrayList<>();

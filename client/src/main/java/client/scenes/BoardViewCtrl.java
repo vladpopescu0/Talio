@@ -24,7 +24,6 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
-import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -52,12 +51,12 @@ public class BoardViewCtrl implements Initializable {
      * @param mainCtrl Main controller of the program
      */
     @Inject
-    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
 
-        User user = new User("User"); //Create a front-end only instance of Board
-        board = new Board(user, "Board 1");
+        //User user = new User("User"); //Create a front-end only instance of Board
+        this.board = board;
     }
 
     /**

@@ -16,15 +16,13 @@
 package client.utils;
 
 import commons.Board;
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-
-import java.util.List;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.core.GenericType;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
-import jakarta.ws.rs.client.ClientBuilder;
-import jakarta.ws.rs.client.Entity;
-import jakarta.ws.rs.core.GenericType;
+import java.util.List;
+
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
@@ -41,14 +39,14 @@ public class ServerUtils {
 //        }
 //    }
 
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
+//    public List<Quote> getQuotes() {
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/quotes") //
+//               .request(APPLICATION_JSON) //
+//             .accept(APPLICATION_JSON) //
+//                .get(new GenericType<>() {
+//                });
+//    }
 
     /**
      *Method that gets all boards from the database
@@ -63,13 +61,13 @@ public class ServerUtils {
                 .get(new GenericType<>() {});
     }
 
-    public Quote addQuote(Quote quote) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-    }
+   // public Quote addQuote(Quote quote) {
+   //     return ClientBuilder.newClient(new ClientConfig()) //
+   //             .target(SERVER).path("api/quotes") //
+   //             .request(APPLICATION_JSON) //
+   //             .accept(APPLICATION_JSON) //
+   //             .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+   // }
 
 
 

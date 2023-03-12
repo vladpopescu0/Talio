@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -29,12 +30,11 @@ public class MainCtrl {
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
-
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+    private CreateBoardViewCtrl createBoardViewCtrl;
+    private Scene createBoard;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<AddQuoteCtrl, Parent> add) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateBoardViewCtrl, Parent> create) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -43,8 +43,8 @@ public class MainCtrl {
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+        this.createBoardViewCtrl = create.getKey();
+        this.createBoard = new Scene(create.getValue());
 
         showOverview();
         primaryStage.show();
@@ -56,17 +56,17 @@ public class MainCtrl {
 //        overviewCtrl.refresh();
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
     /**
      * Redirects to the Board View page
      */
-    public void showBoardView() {
-        primaryStage.setTitle("Board View");
+    public void showBoardView(Board board) {
+        primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
     }
+
+    public void createBoardView() {
+        primaryStage.setTitle("New Board");
+        primaryStage.setScene(createBoard);
+    }
+
 }
