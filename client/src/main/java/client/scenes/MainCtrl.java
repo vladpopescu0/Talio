@@ -25,18 +25,21 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
+    @SuppressWarnings("unused")
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
 
-
     private CreateListCtrl createListCtrl;
     private Scene createList;
+    @SuppressWarnings("unused")
+    private CreateBoardViewCtrl createBoardViewCtrl;
+    private Scene createBoard;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -48,6 +51,9 @@ public class MainCtrl {
 
         this.createListCtrl = createList.getKey();
         this.createList = new Scene(createList.getValue());
+
+        this.createBoardViewCtrl = create.getKey();
+        this.createBoard = new Scene(create.getValue());
 
         showOverview();
         primaryStage.show();
@@ -62,8 +68,8 @@ public class MainCtrl {
     /**
      * Redirects to the Board View page
      */
-    public void showBoardView() {
-        primaryStage.setTitle("Board View");
+    public void showBoardView(Board board) {
+        primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
     }
 
@@ -85,7 +91,14 @@ public class MainCtrl {
 //        primaryStage.show();
     }
 
+    @SuppressWarnings("unused")
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
     }
+    public void createBoardView() {
+        primaryStage.setTitle("New Board");
+        primaryStage.setScene(createBoard);
+    }
+
+
 }

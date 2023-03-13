@@ -22,6 +22,7 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.User;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -59,6 +60,10 @@ public class BoardsOverviewCtrl implements Initializable {
         colCreator.setCellValueFactory(q -> new SimpleStringProperty("Admin"));
     }
 
+    public void createBoard() {
+        mainCtrl.createBoardView(); //to be added with addBoard Scene
+    }
+
     public void refresh() {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
@@ -70,6 +75,6 @@ public class BoardsOverviewCtrl implements Initializable {
      * It is currently redirecting to the only available Board
      */
     public void joinBoard() {
-        mainCtrl.showBoardView();
+        mainCtrl.showBoardView(new Board(new User("a"), "a"));
     }
 }

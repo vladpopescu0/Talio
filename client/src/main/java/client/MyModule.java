@@ -14,11 +14,15 @@
  * limitations under the License.
  */
 package client;
-
 import client.scenes.*;
+import client.scenes.BoardViewCtrl;
+import client.scenes.BoardsOverviewCtrl;
+import client.scenes.CreateBoardViewCtrl;
 import com.google.inject.Binder;
 import com.google.inject.Module;
 import com.google.inject.Scopes;
+
+import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
 
@@ -28,5 +32,6 @@ public class MyModule implements Module {
         binder.bind(BoardsOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardViewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateListCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CreateBoardViewCtrl.class).in(Scopes.SINGLETON);
     }
 }

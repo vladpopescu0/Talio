@@ -16,13 +16,13 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
-
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import client.scenes.*;
 import com.google.inject.Injector;
 
+import client.scenes.BoardViewCtrl;
+import client.scenes.BoardsOverviewCtrl;
+import client.scenes.CreateBoardViewCtrl;
+import client.scenes.MainCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -31,19 +31,21 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
+    public static void main(String[] args) {
          launch();
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(Stage primaryStage) {
 
         var overview = FXML.load(BoardsOverviewCtrl.class, "client", "scenes", "MainPage.fxml");
         var boardView = FXML.load(BoardViewCtrl.class, "client", "scenes", "BoardView.fxml");
         var createList = FXML.load(CreateListCtrl.class, "client", "scenes", "CreateList.fxml");
+        var createBoardCtrl = FXML.load(CreateBoardViewCtrl.class, "client", "scenes", "CreateBoard.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
-        mainCtrl.initialize(primaryStage, overview, boardView, createList);
+        mainCtrl.initialize(primaryStage, overview, boardView, createList, createBoardCtrl);
     }
 }

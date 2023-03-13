@@ -3,6 +3,7 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class Board {
      * @param name the name of the board
      */
     @SuppressWarnings("unused")
+    @Inject
     public Board(User creator, String name) {
         this.users = new ArrayList<>();
         users.add(creator);

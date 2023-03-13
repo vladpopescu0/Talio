@@ -51,11 +51,11 @@ public class CreateListCtrl {
         }
 
         clearField();
-        mainCtrl.showBoardView();
+        mainCtrl.showBoardView(this.board);
     }
 
     public void cancel(){
         clearField();
-        mainCtrl.showBoardView();
+        mainCtrl.showBoardView(this.board);
     }
 }
