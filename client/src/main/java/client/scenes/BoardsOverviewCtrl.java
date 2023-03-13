@@ -59,10 +59,6 @@ public class BoardsOverviewCtrl implements Initializable {
         colCreator.setCellValueFactory(q -> new SimpleStringProperty("Admin"));
     }
 
-    public void addBoard() {
-        mainCtrl.showAdd(); //to be added with addBoard Scene
-    }
-
     public void refresh() {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);

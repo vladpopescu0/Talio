@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -30,11 +31,12 @@ public class MainCtrl {
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+
+    private CreateListCtrl createListCtrl;
+    private Scene createList;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<AddQuoteCtrl, Parent> add) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -43,8 +45,9 @@ public class MainCtrl {
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+
+        this.createListCtrl = createList.getKey();
+        this.createList = new Scene(createList.getValue());
 
         showOverview();
         primaryStage.show();
@@ -56,17 +59,33 @@ public class MainCtrl {
 //        overviewCtrl.refresh();
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
     /**
      * Redirects to the Board View page
      */
     public void showBoardView() {
         primaryStage.setTitle("Board View");
         primaryStage.setScene(boardView);
+    }
+
+    public void showCreateList(Board board) {
+        primaryStage.setTitle("Main Page");
+        primaryStage.setScene(createList);
+        this.createListCtrl.setBoard(board);
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(Main.class.getResource("ClientView.fxml"));
+//        mainLayout = loader.load();
+//
+//        ClientViewController cvc = loader.getController();
+//        cvc.setClient(client); // Passing the client-object to the ClientViewController
+//        this.createListCtrl.setBoard(board);
+//
+//        Scene scene = new Scene(mainLayout, 900, 600);
+//        primaryStage.setScene(scene);
+//        primaryStage.setResizable(true);
+//        primaryStage.show();
+    }
+
+    public BoardViewCtrl getBoardViewCtrl() {
+        return boardViewCtrl;
     }
 }

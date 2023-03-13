@@ -16,7 +16,6 @@
 package client.scenes;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -45,6 +44,7 @@ public class BoardViewCtrl implements Initializable {
     private ListView<CardList> cardListView;
 
     private ObservableList<CardList> cardListObservableList;
+
 
     /**
      * Constructor of the Controller for BoardView
@@ -82,10 +82,11 @@ public class BoardViewCtrl implements Initializable {
      * Adds a new CardList to the Board
      */
     public void addCardList() {
-        CardList newCardList = new CardList(board.getList().size() + 1,
-                "List " + (board.getList().size() + 1), new ArrayList<>());
-        board.addList(newCardList);
-        refresh();
+        mainCtrl.showCreateList(board);
+
+//        CardList newCardList = new CardList(
+//                "List " + (board.getList().size() + 1), new ArrayList<>());
+//        board.addList(newCardList);
     }
 
     /**
@@ -95,4 +96,7 @@ public class BoardViewCtrl implements Initializable {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
     }
+
+
+
 }
