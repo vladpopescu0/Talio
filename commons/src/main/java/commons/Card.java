@@ -17,15 +17,29 @@ public class Card {
     @Column
     private String name;
 
+    @ManyToOne
+    private CardList cardList;
+
     public Card(){
 
     }
 
+    public Card(String name,CardList cardList){
+        this.name = name;
+        this.cardList = cardList;
+    }
     public Card(String name){
         this.name = name;
     }
 
     public String getName() { return this.name; }
+    public CardList getCardList(){
+        return this.cardList;
+    }
+    public CardList setCardList(CardList cardList){
+        this.cardList=cardList;
+        return cardList;
+    }
 
     @Override
     public boolean equals(Object obj) {

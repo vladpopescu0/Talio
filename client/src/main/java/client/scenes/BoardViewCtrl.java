@@ -85,6 +85,7 @@ public class BoardViewCtrl implements Initializable {
         CardList newCardList = new CardList(board.getList().size() + 1,
                 "List " + (board.getList().size() + 1), new ArrayList<>());
         board.addList(newCardList);
+        System.out.println(cardListView.getItems());
         refresh();
     }
 

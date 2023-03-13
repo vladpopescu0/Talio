@@ -29,6 +29,7 @@ public class MainCtrl {
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
+    private Scene addCard;
 
     private AddQuoteCtrl addCtrl;
     private Scene add;
@@ -53,7 +54,7 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
+        overviewCtrl.refresh();
     }
 
     public void showAdd() {
@@ -68,5 +69,9 @@ public class MainCtrl {
     public void showBoardView() {
         primaryStage.setTitle("Board View");
         primaryStage.setScene(boardView);
+    }
+    public void showAddCard(){
+        primaryStage.setTitle("Add Card");
+        primaryStage.setScene(addCard);
     }
 }

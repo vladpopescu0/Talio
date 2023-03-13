@@ -47,6 +47,12 @@ public class CardListController {
     @PostMapping(path = "/add")
     @SuppressWarnings("unused")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
+//        if (list == null || isNullOrEmpty(list.getName())){
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        Quote saved = repo.save(quote);
+//        return ResponseEntity.ok(saved);
         CardList addedList = CLService.add(list);
         if(addedList == null){
             return ResponseEntity.badRequest().build();

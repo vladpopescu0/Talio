@@ -19,6 +19,8 @@ import commons.Board;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
+
+import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.Quote;
@@ -71,6 +73,13 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
+    public CardList getCardListById(long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
 
 
 //    public void updateQuotes(Consumer<Quote> quote){

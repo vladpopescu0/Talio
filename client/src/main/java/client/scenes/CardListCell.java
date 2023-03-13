@@ -48,8 +48,10 @@ public class CardListCell extends ListCell<CardList> {
                     fxmlLoader.load();
 
                     addCardButton.setOnAction(event -> {
+
                         Card card = new Card("Card " + (cardsList.getItems().size() + 1));
                         cardsList.getItems().add(card);
+                        System.out.println(this.getItem());
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
