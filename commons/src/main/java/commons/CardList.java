@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -17,7 +18,7 @@ public class CardList {
     private Long id;
     private String name;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) //should have optional = false
     private Board board;
 
     @OneToMany(mappedBy = "cllist", cascade = CascadeType.ALL)
@@ -27,19 +28,24 @@ public class CardList {
 
     }
 
+    public CardList(String name,Board board) {
+        this.name = name;
+        this.board = board;
+        this.cards = new ArrayList<>();
+    }
     /**
-     * @param id id of the specific CardList
      * @param name name of the specific CardList
      * @param cards the cards in the CardList
      */
-    public CardList(long id,String name, List<Card> cards){
+    @SuppressWarnings("unused")
+    public CardList(String name, List<Card> cards){
         this.id = id;
         this.name = name;
         this.cards = cards;
     }
+
     @SuppressWarnings("unused")
-    public CardList(long id,String name, List<Card> cards, Board board){
-        this.id = id;
+    public CardList(String name, List<Card> cards, Board board){
         this.name = name;
         this.cards = cards;
         this.board = board;

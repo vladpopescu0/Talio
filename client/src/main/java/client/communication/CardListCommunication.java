@@ -1,5 +1,6 @@
 package client.communication;
 
+import com.google.inject.Inject;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -9,16 +10,16 @@ import org.glassfish.jersey.client.ClientConfig;
 import java.util.logging.SocketHandler;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
-@SuppressWarnings("unused")
+
 public class CardListCommunication {
 
     private static final String SERVER = "http://localhost:8080/";
-    @SuppressWarnings("unused")
-    private final SocketHandler handler; //not using this yet because no synchronization
-    @SuppressWarnings("unused")
-    public CardListCommunication(SocketHandler handler) {
-        this.handler = handler;
-    }
+//    @SuppressWarnings("unused")
+//    private final SocketHandler handler; //not using this yet because no synchronization
+
+//    public CardListCommunication(SocketHandler handler) {
+//        this.handler = handler;
+//    }
 
     /**
      * @param listid the id of the list to be retrieved
@@ -45,7 +46,6 @@ public class CardListCommunication {
     /**
      * @param list the list that is posted
      */
-    @SuppressWarnings("unused")
     public void addCL(CardList list) {
          Response res = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/add") //

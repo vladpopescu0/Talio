@@ -33,7 +33,7 @@ public class Card {
     }
 
     public String getName() { return this.name; }
-    @SuppressWarnings("unused")
+
     public void setList(CardList cllist) { this.cllist = cllist;}
 
     @Override

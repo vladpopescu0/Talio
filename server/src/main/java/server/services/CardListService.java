@@ -15,7 +15,7 @@ public class CardListService extends GenericService<CardList> {
 
     /**
      * @param cl CardList that needs to be added
-     * @return null if the CardList is null or has null field, else true
+     * @return null if the CardList is null or has null field, else saves the cardlist
      */
     public CardList add(CardList cl){
         if(cl == null || cl.getName() == null || cl.getCards() == null){
