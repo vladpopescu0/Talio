@@ -30,7 +30,7 @@ public class Board {
     /**
      * Each board has multiple lists of cards
      */
-    @OneToMany(mappedBy = "board",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "board",fetch = FetchType.LAZY)
     private List<CardList> list;
 
     /**

@@ -39,7 +39,18 @@ public class CreateBoardViewCtrl implements Initializable {
             errorLabel.setVisible(true);
         } else {
             errorLabel.setVisible(false);
-            Board newBoard = new Board(new User("a"), boardName.getText());
+            User u1 = new User("a");
+            Board newBoard = new Board(u1, boardName.getText());
+            System.out.println(newBoard);
+            System.out.println(u1);
+            u1.addBoard(newBoard);
+            try{
+                server.addUser(u1);
+                server.addBoard(newBoard);
+            }catch (Error e){
+                e.printStackTrace();
+            }
+
             mainCtrl.showBoardView(newBoard);
         }
     }

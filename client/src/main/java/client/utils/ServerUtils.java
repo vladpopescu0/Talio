@@ -16,8 +16,11 @@
 package client.utils;
 
 import commons.Board;
+import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
@@ -61,13 +64,25 @@ public class ServerUtils {
                 .get(new GenericType<>() {});
     }
 
-   // public Quote addQuote(Quote quote) {
-   //     return ClientBuilder.newClient(new ClientConfig()) //
-   //             .target(SERVER).path("api/quotes") //
-   //             .request(APPLICATION_JSON) //
-   //             .accept(APPLICATION_JSON) //
-   //             .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
-   // }
+    public Response addBoard(Board board) {
+        System.out.println("coaie board");
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(board, APPLICATION_JSON));
+
+    }
+
+    public Response addUser(User user) {
+        System.out.println("coaie user");
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(user, APPLICATION_JSON));
+
+    }
 
 
 

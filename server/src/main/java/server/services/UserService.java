@@ -22,6 +22,7 @@ public class UserService extends GenericService<User> {
                 || user.getUsername() == null) {
             return null;
         }
+        System.out.println(user);
         return repo.save(user);
     }
 

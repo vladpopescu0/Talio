@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 public class UserController {
 
     private final UserService userService;
@@ -34,8 +34,7 @@ public class UserController {
      * @param user the user to add
      * @return a ResponseEntity verifying the user is saved
      */
-    @PostMapping(path = {"", "/"})
-    @SuppressWarnings("unused")
+    @PostMapping(path = "/add")
     public ResponseEntity<User> add(@RequestBody User user) {
         User added = userService.add(user);
         if (added == null) {
