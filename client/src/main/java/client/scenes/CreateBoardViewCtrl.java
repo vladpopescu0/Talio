@@ -60,7 +60,7 @@ public class CreateBoardViewCtrl implements Initializable {
 
                 try {
                     server.addBoard(newBoard);
-                    server.addUser(u1);
+                    //server.addUser(u1);
                 } catch (WebApplicationException e) {
 
                     var alert = new Alert(Alert.AlertType.ERROR);
