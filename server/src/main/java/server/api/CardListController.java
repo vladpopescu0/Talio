@@ -35,6 +35,7 @@ public class CardListController {
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         CardList list = CLService.getById(id);
         if(list == null){
+            System.out.println("this is null");
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(list);
@@ -83,5 +84,6 @@ public class CardListController {
 
         return ResponseEntity.ok().build();
     }
+
 
     }

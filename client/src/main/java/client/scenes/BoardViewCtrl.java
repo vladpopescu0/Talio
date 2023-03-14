@@ -74,7 +74,11 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell());
+        cardListView.setCellFactory(cl -> {
+            CardListCell c = new CardListCell(server,mainCtrl);
+            System.out.println(c.getItem()+"ceva\n");
+            return c;
+        });
         titledPane.setText(board.getName());
     }
 

@@ -7,9 +7,10 @@ import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
-import java.awt.*;
 
 public class AddCardCtrl {
 
@@ -24,25 +25,29 @@ public class AddCardCtrl {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private long cardListId;
 
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl,long cardListId) {
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.cardListId = cardListId;
 
     }
 
     public void cancel() {
         clearFields();
         mainCtrl.showBoardView();
+        System.out.println(mainCtrl.id);
     }
 
-    public void ok(long id) {
-        CardList cl = null;
+    public void ok() {
+        Card toBeAdded = getCard();
         try {
-            cl = server.getCardListById(id);
+            if(!isNullOrEmpty(toBeAdded.getName())){
+                System.out.println(toBeAdded);
+                server.addCard(getCard());
+                clearFields();
+                mainCtrl.showBoardView();
+            }
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -51,14 +56,18 @@ public class AddCardCtrl {
             alert.showAndWait();
             return;
         }
-        System.out.println(cl);
-        clearFields();
-        mainCtrl.showBoardView();
+
     }
 
     private Card getCard() {
         var name = title.getText();
-        return new Card(name,null);
+        CardList cardList = server.getCardListById(mainCtrl.id);
+        Card newCard = new Card(name,cardList);
+        System.out.println(newCard);
+        return newCard;
+    }
+    private static boolean isNullOrEmpty(String s) {
+        return s == null || s.isEmpty();
     }
 
     private void clearFields() {

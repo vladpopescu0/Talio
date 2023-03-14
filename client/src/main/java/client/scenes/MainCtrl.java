@@ -31,11 +31,12 @@ public class MainCtrl {
     private Scene boardView;
     private Scene addCard;
 
-    private AddQuoteCtrl addCtrl;
+    private AddCardCtrl addCtrl;
     private Scene add;
+    public long id=-1;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<AddQuoteCtrl, Parent> add) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<AddCardCtrl, Parent> add) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -57,12 +58,6 @@ public class MainCtrl {
         overviewCtrl.refresh();
     }
 
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
-    }
-
     /**
      * Redirects to the Board View page
      */
@@ -72,6 +67,6 @@ public class MainCtrl {
     }
     public void showAddCard(){
         primaryStage.setTitle("Add Card");
-        primaryStage.setScene(addCard);
+        primaryStage.setScene(add);
     }
 }

@@ -20,12 +20,9 @@ import static com.google.inject.Guice.createInjector;
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import client.scenes.BoardViewCtrl;
-import client.scenes.BoardsOverviewCtrl;
+import client.scenes.*;
 import com.google.inject.Injector;
 
-import client.scenes.AddQuoteCtrl;
-import client.scenes.MainCtrl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -43,7 +40,8 @@ public class Main extends Application {
 
         var overview = FXML.load(BoardsOverviewCtrl.class, "client", "scenes", "MainPage.fxml");
         var boardView = FXML.load(BoardViewCtrl.class, "client", "scenes", "BoardView.fxml");
-        var add = FXML.load(AddQuoteCtrl.class, "client", "scenes", "AddQuote.fxml");
+        var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
+
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design

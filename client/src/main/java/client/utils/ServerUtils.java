@@ -20,6 +20,7 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
 
+import commons.Card;
 import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
 
@@ -79,6 +80,14 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
+    }
+
+    public Card addCard(Card card){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
 

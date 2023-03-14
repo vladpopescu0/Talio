@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
@@ -10,6 +11,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
+
+import javax.inject.Inject;
 
 public class CardListCell extends ListCell<CardList> {
     @FXML
@@ -24,7 +27,15 @@ public class CardListCell extends ListCell<CardList> {
     private ObservableList<Card> cardObservableList;
 
     private FXMLLoader fxmlLoader;
+    private ServerUtils serverUtils;
+    private MainCtrl mainCtrl;
 
+
+    @Inject
+    public CardListCell(ServerUtils serverUtils, MainCtrl mainCtrl){
+        this.serverUtils = serverUtils;
+        this.mainCtrl = mainCtrl;
+    }
     /**
      * Update method for a custom ListCell
      * @param cardList The new item for the cell.
@@ -48,10 +59,11 @@ public class CardListCell extends ListCell<CardList> {
                     fxmlLoader.load();
 
                     addCardButton.setOnAction(event -> {
-
+                        mainCtrl.id=this.getItem().getId();
+                        mainCtrl.showAddCard();
                         Card card = new Card("Card " + (cardsList.getItems().size() + 1));
                         cardsList.getItems().add(card);
-                        System.out.println(this.getItem());
+                        System.out.println(this.getItem().getId()+"cardlist\n");
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
