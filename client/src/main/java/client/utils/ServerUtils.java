@@ -74,6 +74,11 @@ public class ServerUtils {
                 .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
     }
 
+    /**
+     * Get a CardList from the database using its id
+     * @param id the id to search in the database, gets bad request if it is not proper
+     * @return the CardList that was found
+     */
     public CardList getCardListById(long id){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/"+id) //
