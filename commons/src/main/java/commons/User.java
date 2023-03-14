@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,7 +16,9 @@ public class User {
     private long id;
     private String username;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnore
+//    @Column(name = "board_list", nullable = false)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Board> boardList;
 
     /**

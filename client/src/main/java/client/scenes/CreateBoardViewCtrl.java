@@ -4,12 +4,17 @@ import client.utils.ServerUtils;
 
 import commons.Board;
 import commons.User;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 import javax.inject.Inject;
+
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.stage.Modality;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -34,25 +39,38 @@ public class CreateBoardViewCtrl implements Initializable {
         errorLabel.setVisible(false);
     }
 
+    public Board getBoard() {
+        User u1 = new User("a");
+        return new Board(u1, boardName.getText());
+    }
+
     public void createNewBoard() {
-        if (boardName.getText().isEmpty()) {
+        /**if (boardName.getText().isEmpty()) {
             errorLabel.setVisible(true);
         } else {
             errorLabel.setVisible(false);
+            System.out.println(newBoard);
+            System.out.println(u1 + "\n\n");
+            System.out.println(server.addUser(u1));
+            System.out.println(server.addBoard(newBoard));**/
+
             User u1 = new User("a");
             Board newBoard = new Board(u1, boardName.getText());
-            System.out.println(newBoard);
-            System.out.println(u1);
             u1.addBoard(newBoard);
-            try{
-                server.addUser(u1);
-                server.addBoard(newBoard);
-            }catch (Error e){
-                e.printStackTrace();
-            }
+
+                try {
+                    server.addBoard(newBoard);
+                    server.addUser(u1);
+                } catch (WebApplicationException e) {
+
+                    var alert = new Alert(Alert.AlertType.ERROR);
+                    alert.initModality(Modality.APPLICATION_MODAL);
+                    alert.setContentText(e.getMessage());
+                    alert.showAndWait();
+                    return;
+                }
 
             mainCtrl.showBoardView(newBoard);
         }
     }
 
-}

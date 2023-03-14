@@ -18,8 +18,7 @@ public class UserService extends GenericService<User> {
      * @return null id the user is null or has a null field, else the user
      */
     public User add(User user) {
-        if (user == null || user.getBoardList() == null
-                || user.getUsername() == null) {
+        if (user == null || user.getUsername() == null) {
             return null;
         }
         System.out.println(user);

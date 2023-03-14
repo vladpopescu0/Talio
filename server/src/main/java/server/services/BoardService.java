@@ -16,8 +16,7 @@ public class BoardService extends GenericService<Board> {
      * @return null if the Board is null or has a null field, else the board
      */
     public Board add(Board board) {
-        if (board == null || board.getName() == null || board.getList() == null
-                || board.getUsers() == null) {
+        if (board == null) {
             return null;
         }
         return repo.save(board);

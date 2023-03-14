@@ -1,5 +1,7 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -24,7 +26,9 @@ public class Board {
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @ManyToMany(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties
+//    @Column(name = "users", nullable = false)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users;
 
     /**
@@ -88,7 +92,6 @@ public class Board {
      * Adds a user to the collection of users related to the board
      * @param user the user to be added
      */
-    @SuppressWarnings("unused")
     public void addUser(User user) {
         if (this.users.contains(user)) {
             return;

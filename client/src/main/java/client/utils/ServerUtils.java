@@ -64,23 +64,21 @@ public class ServerUtils {
                 .get(new GenericType<>() {});
     }
 
-    public Response addBoard(Board board) {
-        System.out.println("coaie board");
+    public Board addBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(board, APPLICATION_JSON));
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
 
     }
 
-    public Response addUser(User user) {
-        System.out.println("coaie user");
+    public User addUser(User user) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/users/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(user, APPLICATION_JSON));
+                .post(Entity.entity(user, APPLICATION_JSON), User.class);
 
     }
 
