@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -24,6 +25,7 @@ public class MainCtrl {
 
     private Stage primaryStage;
 
+    @SuppressWarnings("unused")
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
@@ -34,9 +36,19 @@ public class MainCtrl {
     private AddCardCtrl addCtrl;
     private Scene add;
     public long id=-1;
+    public Board board;
+
+
+    private CreateListCtrl createListCtrl;
+    private Scene createList;
+    @SuppressWarnings("unused")
+    private CreateBoardViewCtrl createBoardViewCtrl;
+    private Scene createBoard;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<AddCardCtrl, Parent> add) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,
+                           Pair<AddCardCtrl,Parent> add) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -45,8 +57,15 @@ public class MainCtrl {
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+
+        this.createListCtrl = createList.getKey();
+        this.createList = new Scene(createList.getValue());
+
+        this.createBoardViewCtrl = create.getKey();
+        this.createBoard = new Scene(create.getValue());
+
+        this.addCtrl=add.getKey();
+        this.add=new Scene(add.getValue());
 
         showOverview();
         primaryStage.show();
@@ -61,12 +80,42 @@ public class MainCtrl {
     /**
      * Redirects to the Board View page
      */
-    public void showBoardView() {
-        primaryStage.setTitle("Board View");
+    public void showBoardView(Board board) {
+        primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
+        this.board=board;
     }
     public void showAddCard(){
         primaryStage.setTitle("Add Card");
         primaryStage.setScene(add);
     }
+
+    public void showCreateList(Board board) {
+        primaryStage.setTitle("Main Page");
+        primaryStage.setScene(createList);
+        this.createListCtrl.setBoard(board);
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(Main.class.getResource("ClientView.fxml"));
+//        mainLayout = loader.load();
+//
+//        ClientViewController cvc = loader.getController();
+//        cvc.setClient(client); // Passing the client-object to the ClientViewController
+//        this.createListCtrl.setBoard(board);
+//
+//        Scene scene = new Scene(mainLayout, 900, 600);
+//        primaryStage.setScene(scene);
+//        primaryStage.setResizable(true);
+//        primaryStage.show();
+    }
+
+    @SuppressWarnings("unused")
+    public BoardViewCtrl getBoardViewCtrl() {
+        return boardViewCtrl;
+    }
+    public void createBoardView() {
+        primaryStage.setTitle("New Board");
+        primaryStage.setScene(createBoard);
+    }
+
+
 }

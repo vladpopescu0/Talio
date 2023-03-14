@@ -14,11 +14,10 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column
-    private String name;
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
+    private CardList cllist;
 
-    @ManyToOne
-    private CardList cardList;
+    private String name;
 
     public Card(){
 
@@ -26,18 +25,19 @@ public class Card {
 
     public Card(String name,CardList cardList){
         this.name = name;
-        this.cardList = cardList;
+        this.cllist = cardList;
     }
     public Card(String name){
         this.name = name;
+        this.cllist = new CardList();
     }
 
     public String getName() { return this.name; }
     public CardList getCardList(){
-        return this.cardList;
+        return this.cllist;
     }
     public CardList setCardList(CardList cardList){
-        this.cardList=cardList;
+        this.cllist=cardList;
         return cardList;
     }
 

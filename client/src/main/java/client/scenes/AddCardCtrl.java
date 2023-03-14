@@ -35,7 +35,7 @@ public class AddCardCtrl {
 
     public void cancel() {
         clearFields();
-        mainCtrl.showBoardView();
+        mainCtrl.showBoardView(mainCtrl.board);
         System.out.println(mainCtrl.id);
     }
 
@@ -43,10 +43,10 @@ public class AddCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                System.out.println(toBeAdded);
+                System.out.println(toBeAdded+"\nfrontend\n");
                 server.addCard(getCard());
                 clearFields();
-                mainCtrl.showBoardView();
+                mainCtrl.showBoardView(mainCtrl.board);
             }
         } catch (WebApplicationException e) {
 

@@ -36,11 +36,11 @@ public class CardController {
 
     @PostMapping("/add")
     public ResponseEntity<Card> add(@RequestBody Card card) {
-
+        System.out.println(card + "\nthis was BEFORE card should add\n");
         if (isNullOrEmpty(card.getName()) || card.getCardList()==null) {
             return ResponseEntity.badRequest().build();
         }
-
+        System.out.println(card + "\nthis was card should add\n");
         Card saved = repo.save(card);
         return ResponseEntity.ok(saved);
     }
@@ -53,9 +53,9 @@ public class CardController {
      */
     @PutMapping("/updateParent/{id}")
     public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
-        //I would like to have a query to get the list but i dont think it is really necessary and should
+        //I would like to have a query to get the list but i do not think it is really necessary and should
         //put the list in the frontend
-        if(cardList==null || repo.existsById(id)){
+        if(cardList==null || !repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
 

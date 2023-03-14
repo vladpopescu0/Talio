@@ -1,5 +1,8 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,17 +14,18 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
     private String username;
 
-    @ElementCollection
+    @JsonIgnore
+//    @Column(name = "board_list", nullable = false)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Board> boardList;
 
     /**
      * Constructor for object mapper
      */
     @SuppressWarnings("unused")
-    private User() {
+    public User() {
 
     }
 
@@ -30,6 +34,7 @@ public class User {
      * @param username the username of the user
      */
     @SuppressWarnings("unused")
+    @Inject
     public User(String username) {
         this.username = username;
         this.boardList = new ArrayList<>();

@@ -16,7 +16,7 @@ public class CardListService extends GenericService<CardList> {
 
     /**
      * @param cl CardList that needs to be added
-     * @return null if the CardList is null or has null field, else true
+     * @return null if the CardList is null or has null field, else saves the cardlist
      */
     public CardList add(CardList cl){
         if(cl == null || cl.getName() == null){
@@ -34,6 +34,7 @@ public class CardListService extends GenericService<CardList> {
     public boolean changeName(CardList target, String name){
         if(target != null && repo.existsById(target.getId())){
             target.setName(name);
+            repo.save(target);
             return true;
         }
 

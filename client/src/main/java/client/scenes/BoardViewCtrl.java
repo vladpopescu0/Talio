@@ -16,7 +16,6 @@
 package client.scenes;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -24,7 +23,6 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
-import commons.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -33,6 +31,7 @@ import javafx.scene.control.*;
 
 public class BoardViewCtrl implements Initializable {
 
+    @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -46,18 +45,19 @@ public class BoardViewCtrl implements Initializable {
 
     private ObservableList<CardList> cardListObservableList;
 
+
     /**
      * Constructor of the Controller for BoardView
      * @param server Server Utility class
      * @param mainCtrl Main controller of the program
      */
     @Inject
-    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
 
-        User user = new User("User"); //Create a front-end only instance of Board
-        board = new Board(user, "Board 1");
+        //User user = new User("User"); //Create a front-end only instance of Board
+        this.board = board;
     }
 
     /**
@@ -86,8 +86,7 @@ public class BoardViewCtrl implements Initializable {
      * Adds a new CardList to the Board
      */
     public void addCardList() {
-        CardList newCardList = new CardList(board.getList().size() + 1,
-                "List " + (board.getList().size() + 1), new ArrayList<>());
+        CardList newCardList = new CardList("list"+(board.getList().size() + 1),board,board.getList().size() + 1);
         board.addList(newCardList);
         System.out.println(cardListView.getItems());
         refresh();
@@ -96,8 +95,12 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Refreshes the Board View
      */
+    @SuppressWarnings("unused")
     public void refresh() {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
     }
+
+
+
 }

@@ -8,7 +8,7 @@ import server.services.CardListService;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/lists")
+@RequestMapping(path = "api/lists")
 public class CardListController {
     private final CardListService CLService;
 
@@ -46,7 +46,6 @@ public class CardListController {
      * @return a ResponseEntity with the status OK and the value of the CardList if the addition is successful, else a ResponseEntity with the BAD_REQUEST status
      */
     @PostMapping(path = "/add")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
 //        if (list == null || isNullOrEmpty(list.getName())){
 //            return ResponseEntity.badRequest().build();
@@ -60,6 +59,7 @@ public class CardListController {
         }
         return ResponseEntity.ok(addedList);
     }
+
 
     /**
      * @param id the id of the list that is deleted

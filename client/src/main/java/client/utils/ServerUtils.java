@@ -24,7 +24,7 @@ import commons.Card;
 import commons.CardList;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.Quote;
+import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -44,14 +44,14 @@ public class ServerUtils {
 //        }
 //    }
 
-    public List<Quote> getQuotes() {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-    }
+//    public List<Quote> getQuotes() {
+//        return ClientBuilder.newClient(new ClientConfig()) //
+//                .target(SERVER).path("api/quotes") //
+//               .request(APPLICATION_JSON) //
+//             .accept(APPLICATION_JSON) //
+//                .get(new GenericType<>() {
+//                });
+//    }
 
     /**
      *Method that gets all boards from the database
@@ -60,18 +60,28 @@ public class ServerUtils {
      */
     public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("boards") //
+                .target(SERVER).path("api/boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
     }
 
-    public Quote addQuote(Quote quote) {
+    public Board addBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/quotes") //
+                .target(SERVER).path("api/boards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(quote, APPLICATION_JSON), Quote.class);
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+
+    }
+
+    public User addUser(User user) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(user, APPLICATION_JSON), User.class);
+
     }
 
     /**
