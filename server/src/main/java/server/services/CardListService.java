@@ -8,6 +8,10 @@ import server.database.CardListRepository;
 @Service
 public class CardListService extends GenericService<CardList> {
 
+    /**
+     * Constructor for the CardListService class
+     * @param repo the repository used
+     */
     @Autowired
     public CardListService(CardListRepository repo){
         super(repo);

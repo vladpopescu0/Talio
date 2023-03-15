@@ -26,6 +26,10 @@ import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
 
+    /**
+     * Configures the controllers for the scenes
+     * @param binder binds the controllers
+     */
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);

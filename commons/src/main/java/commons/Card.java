@@ -19,33 +19,67 @@ public class Card {
 
     private String name;
 
+    /**
+     * Empty consrtuctor
+     */
     public Card(){
 
     }
 
+    /**
+     * Constructor for the Card class
+     * @param name the name of the card
+     */
     public Card(String name){
         this.name = name;
         this.cllist = new CardList();
     }
+
+    /**
+     * Constructor for the Card class
+     * @param name the name of the card
+     * @param cllist the list to which the card is included
+     */
     public Card(String name,CardList cllist){
         this.name = name;
         this.cllist = cllist;
     }
 
+    /**
+     * Getter for the name
+     * @return the name of the card
+     */
     public String getName() { return this.name; }
 
+    /**
+     * Setter for the list
+     * @param cllist the list to which the card belongs
+     */
     public void setList(CardList cllist) { this.cllist = cllist;}
 
+    /**
+     * Equals method for the Card class
+     * @param obj the obj to be compared to this
+     * @return true if-f this == obj
+     */
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
+    /**
+     * Hash code method for the card
+     * @return a generated hash code
+     */
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
+    /**
+     * toString method for the card
+     * @return the card presented as a String
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);

@@ -45,7 +45,7 @@ public class CardListCommunication {
      * @param list the list that is posted
      */
     public void addCL(CardList list) {
-         Response res = ClientBuilder.newClient(new ClientConfig()) //
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
@@ -55,6 +55,11 @@ public class CardListCommunication {
             System.out.println("error");
         }
     }
+
+    /**
+     * Removes a cardList
+     * @param listid the id of the list to be removed
+     */
     @SuppressWarnings("unused")
     public void removeCL(long listid) {
         Response res = ClientBuilder.newClient(new ClientConfig()) //
@@ -67,6 +72,12 @@ public class CardListCommunication {
             System.out.println("error");
         }
     }
+
+    /**
+     * Modifies the name of the cardList
+     * @param listid the id of the list to rename
+     * @param name the new name of the cardList
+     */
     @SuppressWarnings("unused")
     public void modifyNameCL(long listid, String name) {
         Response res = ClientBuilder.newClient(new ClientConfig()) //

@@ -24,26 +24,40 @@ public class CardList {
     @OneToMany(mappedBy = "cllist", cascade = CascadeType.ALL)
     private List<Card> cards;
 
+    /**
+     * Empty constructor for the cardList class
+     */
     public CardList() {
 
     }
 
+    /**
+     * Constructor for the CardList class
+     * @param name the name of the CardList
+     * @param board the board to which the list should be added
+     */
     public CardList(String name,Board board) {
         this.name = name;
         this.board = board;
         this.cards = new ArrayList<>();
     }
+
     /**
      * @param name name of the specific CardList
      * @param cards the cards in the CardList
      */
     @SuppressWarnings("unused")
     public CardList(String name, List<Card> cards){
-        this.id = id;
         this.name = name;
         this.cards = cards;
     }
 
+    /**
+     * Constructor for the CardList class
+     * @param name the name of the CardList
+     * @param cards the cards in the CardList
+     * @param board the board to which the CardList belongs
+     */
     @SuppressWarnings("unused")
     public CardList(String name, List<Card> cards, Board board){
         this.name = name;
@@ -100,16 +114,29 @@ public class CardList {
         this.board = board;
     }
 
+    /**
+     * Equals method for the CardList class
+     * @param obj the obj to be compared with this
+     * @return true if-f this == obj
+     */
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
+    /**
+     * Hash code method for the cardList class
+     * @return a generated hashCode
+     */
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
+    /**
+     * toString method for the CardList class
+     * @return the CardList as a String
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);

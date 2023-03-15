@@ -50,6 +50,7 @@ public class BoardViewCtrl implements Initializable {
      * Constructor of the Controller for BoardView
      * @param server Server Utility class
      * @param mainCtrl Main controller of the program
+     * @param board the board to be displayed
      */
     @Inject
     public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
@@ -78,6 +79,10 @@ public class BoardViewCtrl implements Initializable {
         titledPane.setText(board.getName());
     }
 
+    /**
+     * Setter for the board
+     * @param board the new board to be assigned to the scene
+     */
     public void setBoard(Board board) {
         this.board = board;
     }

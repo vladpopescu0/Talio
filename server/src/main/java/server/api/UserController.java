@@ -21,11 +21,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * gets all users in the repo
+     * @return all the users as a list
+     */
     @GetMapping(path = "/")
     public List<User> getAll() {
         return userService.getAll();
     }
 
+    /**
+     * Gets a user with a specific id
+     * @param id the id in search
+     * @return the user as a response entity if found,
+     * a bad request page otherwise
+     */
     @GetMapping("/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<User> getById(@PathVariable("id") long id) {

@@ -36,8 +36,17 @@ public class MainCtrl {
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
 
+    /**
+     * Initializes the application
+     * @param primaryStage the primary stage used
+     * @param overview the boardOverview scene
+     * @param boardView the boardView scene
+     * @param createList the createList scene
+     * @param create the createBoard scene
+     */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<CreateBoardViewCtrl, Parent> create) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -57,6 +66,9 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * SHows an overview of all boards
+     */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
@@ -65,6 +77,7 @@ public class MainCtrl {
 
     /**
      * Redirects to the Board View page
+     * @param board the board to be shown
      */
     public void showBoardView(Board board) {
         primaryStage.setTitle(board.getName());
@@ -72,6 +85,10 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
     }
 
+    /**
+     * Shows the createList scene
+     * @param board the board to which the list is to be added
+     */
     public void showCreateList(Board board) {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(createList);
@@ -90,10 +107,18 @@ public class MainCtrl {
 //        primaryStage.show();
     }
 
+    /**
+     * Getter for boardViewCtrl
+     * @return the boardViewCtrl
+     */
     @SuppressWarnings("unused")
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
     }
+
+    /**
+     * Shows the createBoard scene
+     */
     public void createBoardView() {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);

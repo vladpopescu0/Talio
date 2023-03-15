@@ -1628,3 +1628,6 @@ SELECT * FROM USER USER BOARD [42000-200]
 2023-03-14 14:11:14 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "SELECT * FROM BOARD BOARD_USERS CARD[*]"; SQL statement:
 SELECT * FROM BOARD BOARD_USERS CARD [42000-200]
+2023-03-15 14:55:48 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "BOARD" not found; SQL statement:
+select board0_.id as id1_0_, board0_.name as name2_0_ from board board0_ [42102-200]

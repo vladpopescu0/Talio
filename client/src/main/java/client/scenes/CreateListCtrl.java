@@ -21,6 +21,12 @@ public class CreateListCtrl {
     @FXML
     private TextField name;
 
+    /**
+     * Constructor for the CreateListCtrl class
+     * @param clComm the communication used
+     * @param mainCtrl the mainCtrl of the application
+     * @param board the board to which the cardList is supposed to be added
+     */
     @Inject
     public CreateListCtrl(CardListCommunication clComm, MainCtrl mainCtrl, Board board) {
         this.clComm = clComm;
@@ -28,18 +34,32 @@ public class CreateListCtrl {
         this.board = board;
     }
 
+    /**
+     * Getter for the name of the list
+     * @return the name of the list, as entered by the user
+     */
     public String getName(){
         return name.getText();
     }
 
+    /**
+     * Setter for the board
+     * @param board the board to which the list is added
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Clears the name field
+     */
     private void clearField() {
         name.clear();
     }
 
+    /**
+     * Creates the list, when the corresponding button is pressed
+     */
     public void createList(){
         try{
             clComm.addCL(new CardList(getName(),board));
@@ -54,6 +74,9 @@ public class CreateListCtrl {
         mainCtrl.showBoardView(this.board);
     }
 
+    /**
+     * Redirects to the board Page
+     */
     public void cancel(){
         clearField();
         mainCtrl.showBoardView(this.board);

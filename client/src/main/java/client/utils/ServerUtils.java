@@ -63,6 +63,11 @@ public class ServerUtils {
                 .get(new GenericType<>() {});
     }
 
+    /**
+     * adds a new board to the database
+     * @param board the board to be added
+     * @return the new board
+     */
     public Board addBoard(Board board) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/add") //
@@ -72,6 +77,11 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Adds a new user to the database
+     * @param user the user to be added
+     * @return the new user
+     */
     public User addUser(User user) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/users/add") //

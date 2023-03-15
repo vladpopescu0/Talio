@@ -8,6 +8,10 @@ import server.database.UserRepository;
 @Service
 public class UserService extends GenericService<User> {
 
+    /**
+     * Constructor for the UserService
+     * @param repo the repository used
+     */
     @Autowired
     public UserService(UserRepository repo) {
         super(repo);
