@@ -14,7 +14,7 @@ public class Card {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @ManyToOne(optional = false,fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private CardList cllist;
 
     private String name;
@@ -26,6 +26,12 @@ public class Card {
 
     }
 
+
+    public Card(String name,CardList cardList){
+        this.name = name;
+        this.cllist = cardList;
+    }
+
     /**
      * Constructor for the Card class
      * @param name the name of the card
@@ -33,16 +39,6 @@ public class Card {
     public Card(String name){
         this.name = name;
         this.cllist = new CardList();
-    }
-
-    /**
-     * Constructor for the Card class
-     * @param name the name of the card
-     * @param cllist the list to which the card is included
-     */
-    public Card(String name,CardList cllist){
-        this.name = name;
-        this.cllist = cllist;
     }
 
     /**
@@ -56,6 +52,15 @@ public class Card {
      * @param cllist the list to which the card belongs
      */
     public void setList(CardList cllist) { this.cllist = cllist;}
+
+    public CardList getCardList(){
+        return this.cllist;
+    }
+    public CardList setCardList(CardList cardList){
+        this.cllist=cardList;
+        return cardList;
+    }
+
 
     /**
      * Equals method for the Card class

@@ -29,6 +29,13 @@ public class MainCtrl {
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
+    private Scene addCard;
+
+    private AddCardCtrl addCtrl;
+    private Scene add;
+    public long id=-1;
+    public Board board;
+
 
     private CreateListCtrl createListCtrl;
     private Scene createList;
@@ -45,8 +52,9 @@ public class MainCtrl {
      * @param create the createBoard scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
-                           Pair<CreateBoardViewCtrl, Parent> create) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,
+                           Pair<AddCardCtrl,Parent> add) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -61,6 +69,9 @@ public class MainCtrl {
 
         this.createBoardViewCtrl = create.getKey();
         this.createBoard = new Scene(create.getValue());
+
+        this.addCtrl=add.getKey();
+        this.add=new Scene(add.getValue());
 
         showOverview();
         primaryStage.show();
@@ -82,7 +93,13 @@ public class MainCtrl {
     public void showBoardView(Board board) {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
-        this.boardViewCtrl.setBoard(board);
+        //this.boardViewCtrl.setBoard(board);
+
+        this.board=board;
+    }
+    public void showAddCard(){
+        primaryStage.setTitle("Add Card");
+        primaryStage.setScene(add);
     }
 
     /**

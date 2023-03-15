@@ -42,6 +42,7 @@ public class CardListController {
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         CardList list = cLService.getById(id);
         if(list == null){
+            System.out.println("this is null");
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(list);
@@ -55,11 +56,18 @@ public class CardListController {
     @PostMapping(path = "/add")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
         CardList addedList = cLService.add(list);
+//        if (list == null || isNullOrEmpty(list.getName())){
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        Quote saved = repo.save(quote);
+//        return ResponseEntity.ok(saved);
         if(addedList == null){
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(addedList);
     }
+
 
     /**
      * @param id the id of the list that is deleted
@@ -94,3 +102,4 @@ public class CardListController {
     }
 
 }
+

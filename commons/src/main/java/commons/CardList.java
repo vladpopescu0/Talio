@@ -21,7 +21,7 @@ public class CardList {
     @ManyToOne(fetch = FetchType.LAZY) //should have optional = false
     private Board board;
 
-    @OneToMany(mappedBy = "cllist", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cllist")
     private List<Card> cards;
 
     /**
@@ -40,6 +40,20 @@ public class CardList {
         this.name = name;
         this.board = board;
         this.cards = new ArrayList<>();
+    }
+
+    /**
+     * constructor for testing frontend
+     * @param name name of board list
+     * @param board the current board (idk if it works properly)
+     * @param id set id for testing
+     */
+    @SuppressWarnings("unused")
+    public CardList(String name,Board board,long id) {
+        this.name = name;
+        this.board = board;
+        this.cards = new ArrayList<>();
+        this.id=id;//temporary
     }
 
     /**

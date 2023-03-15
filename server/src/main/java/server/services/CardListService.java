@@ -1,5 +1,6 @@
 package server.services;
 
+import commons.Card;
 import commons.CardList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +23,7 @@ public class CardListService extends GenericService<CardList> {
      * @return null if the CardList is null or has null field, else saves the cardlist
      */
     public CardList add(CardList cl){
-        if(cl == null || cl.getName() == null || cl.getCards() == null){
+        if(cl == null || cl.getName() == null){
             return null;
         }
 
@@ -43,6 +44,20 @@ public class CardListService extends GenericService<CardList> {
 
         return false;
 
+    }
+
+    /**
+     * Adds a card to targeted list
+     * @param target the list to which the card is added
+     * @param card the card added
+     * @return true if successful, otherwise false
+     */
+    public boolean addCard(CardList target, Card card){
+        if(target != null && repo.existsById(target.getId()) && card!=null){
+            target.addCard(card);
+            return true;
+        }
+        return false;
     }
 
 }
