@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("api/users")
 public class UserController {
@@ -17,6 +19,11 @@ public class UserController {
      */
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping(path = "/")
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")

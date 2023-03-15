@@ -24,31 +24,25 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
-    @SuppressWarnings("unused")
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
-    private Scene addCard;
-
-    private AddCardCtrl addCtrl;
-    private Scene add;
-    public long id=-1;
-    public Board board;
-
 
     private CreateListCtrl createListCtrl;
     private Scene createList;
+    public long id;
     @SuppressWarnings("unused")
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
 
-    public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,
-                           Pair<AddCardCtrl,Parent> add) {
+    private Scene addCard;
+    public Board board;
+    private AddCardCtrl addCardCtrl;
 
+    public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,Pair<AddCardCtrl,Parent> addCard) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -64,8 +58,8 @@ public class MainCtrl {
         this.createBoardViewCtrl = create.getKey();
         this.createBoard = new Scene(create.getValue());
 
-        this.addCtrl=add.getKey();
-        this.add=new Scene(add.getValue());
+        this.addCardCtrl = addCard.getKey();
+        this.addCard=new Scene(addCard.getValue());
 
         showOverview();
         primaryStage.show();
@@ -74,7 +68,7 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-        overviewCtrl.refresh();
+        this.overviewCtrl.refresh();
     }
 
     /**
@@ -84,11 +78,14 @@ public class MainCtrl {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
         this.board=board;
+        this.boardViewCtrl.setBoard(board);
     }
+
     public void showAddCard(){
         primaryStage.setTitle("Add Card");
-        primaryStage.setScene(add);
+        primaryStage.setScene(addCard);
     }
+
 
     public void showCreateList(Board board) {
         primaryStage.setTitle("Main Page");
@@ -116,6 +113,5 @@ public class MainCtrl {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
     }
-
 
 }

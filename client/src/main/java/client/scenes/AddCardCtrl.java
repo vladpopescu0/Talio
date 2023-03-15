@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
-import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -79,10 +78,19 @@ public class AddCardCtrl {
         System.out.println(newCard);
         return newCard;
     }
+
+    /**
+     * Checks whether a string is "" or null
+     * @param s the string to be tested
+     * @return true if the string is as described, false otherwise
+     */
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
     }
 
+    /**
+     * clears the title text field
+     */
     private void clearFields() {
         title.clear();
     }

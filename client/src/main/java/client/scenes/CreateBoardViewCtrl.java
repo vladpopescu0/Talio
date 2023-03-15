@@ -38,39 +38,31 @@ public class CreateBoardViewCtrl implements Initializable {
         boardName.setText("Board");
         errorLabel.setVisible(false);
     }
-
+    @SuppressWarnings("unused")
     public Board getBoard() {
         User u1 = new User("a");
         return new Board(u1, boardName.getText());
     }
 
     public void createNewBoard() {
-        /**if (boardName.getText().isEmpty()) {
-            errorLabel.setVisible(true);
-        } else {
-            errorLabel.setVisible(false);
-            System.out.println(newBoard);
-            System.out.println(u1 + "\n\n");
-            System.out.println(server.addUser(u1));
-            System.out.println(server.addBoard(newBoard));**/
+        User u1 = new User("C");
+        Board newBoard = new Board(u1, boardName.getText());
+        u1.addBoard(newBoard);
+        newBoard.addUser(u1);
 
-            User u1 = new User("a");
-            Board newBoard = new Board(u1, boardName.getText());
-            u1.addBoard(newBoard);
+        try {
+            server.addBoard(newBoard);
+//            server.addUser(u1);
+        } catch (WebApplicationException e) {
 
-                try {
-                    server.addBoard(newBoard);
-                    //server.addUser(u1);
-                } catch (WebApplicationException e) {
-
-                    var alert = new Alert(Alert.AlertType.ERROR);
-                    alert.initModality(Modality.APPLICATION_MODAL);
-                    alert.setContentText(e.getMessage());
-                    alert.showAndWait();
-                    return;
-                }
-
-            mainCtrl.showBoardView(newBoard);
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+            return;
         }
+
+        mainCtrl.showOverview();
     }
+}
 
