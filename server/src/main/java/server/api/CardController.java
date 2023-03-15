@@ -78,14 +78,15 @@ public class CardController {
      */
     @PutMapping("/updateParent/{id}")
     public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
-        //I would like to have a query to get the list but i do not think it is really necessary and should
+        //I would like to have a query to get the list but i
+        //do not think it is really necessary and should
         //put the list in the frontend
         if(cardList==null || !repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
 
         Card updatedCard = repo.getById(id);
-        updatedCard.setCardList(cardList);
+        updatedCard.setList(cardList);
         return ResponseEntity.ok(updatedCard);
     }
 

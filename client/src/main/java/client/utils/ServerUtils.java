@@ -16,15 +16,18 @@
 package client.utils;
 
 import commons.Board;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+
+import commons.Card;
+import commons.CardList;
+import org.glassfish.jersey.client.ClientConfig;
+
 import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
-
-import java.util.List;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
@@ -64,7 +67,7 @@ public class ServerUtils {
     }
 
     /**
-     * adds a new board to the database
+     * Adds a board to the database
      * @param board the board to be added
      * @return the new board
      */
@@ -78,7 +81,7 @@ public class ServerUtils {
     }
 
     /**
-     * Adds a new user to the database
+     * Adds a user to the database
      * @param user the user to be added
      * @return the new user
      */
@@ -91,6 +94,31 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Get a CardList from the database using its id
+     * @param id the id to search in the database, gets bad request if it is not proper
+     * @return the CardList that was found
+     */
+    public CardList getCardListById(long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+    /**
+     * Adds a user to the database
+     * @param card the card to be added
+     * @return the new card
+     */
+    public Card addCard(Card card){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
 
 
 //    public void updateQuotes(Consumer<Quote> quote){

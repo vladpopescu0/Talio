@@ -26,7 +26,11 @@ public class Card {
 
     }
 
-
+    /**
+     * Constructor for the card class
+     * @param name the name of the card
+     * @param cardList the list to which the card is included
+     */
     public Card(String name,CardList cardList){
         this.name = name;
         this.cllist = cardList;
@@ -53,14 +57,13 @@ public class Card {
      */
     public void setList(CardList cllist) { this.cllist = cllist;}
 
+    /**
+     * Getter for the cardList
+     * @return the cardList to which this card belongs
+     */
     public CardList getCardList(){
         return this.cllist;
     }
-    public CardList setCardList(CardList cardList){
-        this.cllist=cardList;
-        return cardList;
-    }
-
 
     /**
      * Equals method for the Card class

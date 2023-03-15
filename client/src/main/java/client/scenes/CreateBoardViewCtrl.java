@@ -75,7 +75,24 @@ public class CreateBoardViewCtrl implements Initializable {
             return;
         }
 
+        mainCtrl.showBoardView(newBoard);
+    }
+
+    /**
+     * Resets the field to 'Board'
+     */
+    public void resetField() {
+        boardName.setText("Board");
+    }
+
+    /**
+     * Redirects the user back to the overview page and
+     * resets the board name field
+     */
+    public void toBoardsOverview() {
+        resetField();
         mainCtrl.showOverview();
     }
+
 }
 

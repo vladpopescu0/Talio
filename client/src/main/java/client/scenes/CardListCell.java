@@ -31,6 +31,11 @@ public class CardListCell extends ListCell<CardList> {
     private MainCtrl mainCtrl;
 
 
+    /**
+     * Constructor for the CardListCell
+     * @param serverUtils the serverUtils used
+     * @param mainCtrl the mainCtrl of the application
+     */
     @Inject
     public CardListCell(ServerUtils serverUtils, MainCtrl mainCtrl){
         this.serverUtils = serverUtils;

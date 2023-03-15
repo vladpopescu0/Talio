@@ -95,7 +95,8 @@ public class BoardViewCtrl implements Initializable {
      * Adds a new CardList to the Board
      */
     public void addCardList() {
-        CardList newCardList = new CardList("list"+(board.getList().size() + 1),board,board.getList().size() + 1);
+        CardList newCardList = new CardList("list"+(board.getList().size() + 1),board,
+                board.getList().size() + 1);
         board.addList(newCardList);
         System.out.println(cardListView.getItems());
         refresh();
@@ -110,6 +111,11 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
     }
 
-
+    /**
+     * Redirects the user back to the overview page
+     */
+    public void toOverview() {
+        mainCtrl.showOverview();
+    }
 
 }
