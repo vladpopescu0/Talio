@@ -78,6 +78,10 @@ public class BoardViewCtrl implements Initializable {
         titledPane.setText(board.getName());
     }
 
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
     /**
      * Adds a new CardList to the Board
      */

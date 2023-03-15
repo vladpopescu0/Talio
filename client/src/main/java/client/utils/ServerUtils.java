@@ -20,7 +20,6 @@ import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import java.util.List;
@@ -58,7 +57,7 @@ public class ServerUtils {
      */
     public List<Board> getBoards() {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("boards") //
+                .target(SERVER).path("api/boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});

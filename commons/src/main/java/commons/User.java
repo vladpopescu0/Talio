@@ -1,6 +1,7 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 import javax.inject.Inject;
 import javax.persistence.*;
@@ -16,9 +17,14 @@ public class User {
     private long id;
     private String username;
 
-    @JsonIgnore
-//    @Column(name = "board_list", nullable = false)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    //@JsonIgnore
+//    @JsonBackReference
+    @JsonBackReference
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "user_board",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "board_id"))
     private List<Board> boardList;
 
     /**
@@ -33,7 +39,6 @@ public class User {
      * Constructor for a user
      * @param username the username of the user
      */
-    @SuppressWarnings("unused")
     @Inject
     public User(String username) {
         this.username = username;
@@ -76,6 +81,7 @@ public class User {
             return;
         }
         this.boardList.add(board);
+        board.getUsers().add(this);
     }
 
     /**

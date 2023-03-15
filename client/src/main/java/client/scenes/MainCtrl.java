@@ -24,8 +24,6 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
-    @SuppressWarnings("unused")
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
@@ -62,7 +60,7 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
+        this.overviewCtrl.refresh();
     }
 
     /**
@@ -71,6 +69,7 @@ public class MainCtrl {
     public void showBoardView(Board board) {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
+        this.boardViewCtrl.setBoard(board);
     }
 
     public void showCreateList(Board board) {
@@ -99,6 +98,5 @@ public class MainCtrl {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
     }
-
 
 }

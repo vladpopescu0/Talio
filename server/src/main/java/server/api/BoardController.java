@@ -28,7 +28,6 @@ public class BoardController {
      */
 
     @GetMapping(path = {"", "/"})
-    @SuppressWarnings("unused")
     public List<Board> getAll() {
         return boardService.getAll();
     }

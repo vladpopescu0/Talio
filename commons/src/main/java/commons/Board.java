@@ -1,7 +1,6 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
@@ -19,22 +18,21 @@ public class Board {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
 
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @JsonIgnoreProperties
-//    @Column(name = "users", nullable = false)
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
-    @OneToMany(mappedBy = "board",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<CardList> list;
 
     /**
@@ -62,11 +60,9 @@ public class Board {
      * @param creator the creator of the board
      * @param name the name of the board
      */
-    @SuppressWarnings("unused")
     @Inject
     public Board(User creator, String name) {
         this.users = new ArrayList<>();
-        users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
     }
@@ -75,7 +71,7 @@ public class Board {
      * Getter for the id of the board
      * @return the id
      */
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -97,6 +93,7 @@ public class Board {
             return;
         }
         users.add(user);
+        user.getBoardList().add(this);
     }
 
     @SuppressWarnings("unused")

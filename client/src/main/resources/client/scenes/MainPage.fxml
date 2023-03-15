@@ -9,19 +9,19 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="424.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardsOverviewCtrl">
     <children>
-        <Button fx:id="addBoard" layoutX="423.0" layoutY="186.0" mnemonicParsing="false" onAction="#createBoard" text="Add Board" />
-        <Button fx:id="refresh" layoutX="431.0" layoutY="147.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
+        <Button fx:id="addBoard" layoutX="429.0" layoutY="213.0" mnemonicParsing="false" onAction="#createBoard" text="Add Board" />
+        <Button fx:id="refresh" layoutX="437.0" layoutY="173.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
         <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="285.0" prefWidth="400.0">
             <columns>
                 <TableColumn fx:id="colBoardName" editable="false" prefWidth="200.0" text="Board Name" />
             <TableColumn fx:id="colCreator" editable="false" prefWidth="200.0" text="Creator" />
             </columns>
         </TableView>
-      <Label fx:id="pageTitle" layoutX="48.0" layoutY="14.0" prefHeight="60.0" prefWidth="273.0" text="Welcome to Talio" textAlignment="CENTER">
+      <Label fx:id="pageTitle" layoutX="73.0" layoutY="14.0" prefHeight="60.0" prefWidth="495.0" text="Welcome to Talio" textAlignment="CENTER">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
-      <Button fx:id="joinBoard" layoutX="423.0" layoutY="226.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
+      <Button fx:id="joinBoard" layoutX="428.0" layoutY="252.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
     </children>
 </AnchorPane>
