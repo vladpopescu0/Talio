@@ -1,5 +1,8 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,33 +16,17 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @ManyToOne(optional = false,fetch = FetchType.EAGER)
-    private CardList cllist;
-
     private String name;
 
     public Card(){
 
     }
 
-    public Card(String name,CardList cardList){
-        this.name = name;
-        this.cllist = cardList;
-    }
     public Card(String name){
         this.name = name;
-        this.cllist = new CardList();
     }
 
     public String getName() { return this.name; }
-    public CardList getCardList(){
-        return this.cllist;
-    }
-    public CardList setCardList(CardList cardList){
-        this.cllist=cardList;
-        return cardList;
-    }
 
     @Override
     public boolean equals(Object obj) {

@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Card;
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,6 +40,17 @@ public class CardListController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/addCard/{id}")
+    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
+        if(card==null){
+            System.out.println("this is null");
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println(card +"this is card");
+        CLService.addCard(id,card);
+        return ResponseEntity.ok(card);
     }
 
     /**

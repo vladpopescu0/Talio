@@ -1,5 +1,8 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -21,7 +24,7 @@ public class CardList {
     @ManyToOne(fetch = FetchType.LAZY) //should have optional = false
     private Board board;
 
-    @OneToMany(mappedBy = "cllist")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
     public CardList() {

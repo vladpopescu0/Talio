@@ -44,13 +44,14 @@ public class CardListService extends GenericService<CardList> {
 
     /**
      * Adds a card to targeted list
-     * @param target the list to which the card is added
      * @param card the card added
      * @return true if successful, otherwise false
      */
-    public boolean addCard(CardList target, Card card){
-        if(target != null && repo.existsById(target.getId()) && card!=null){
-            target.addCard(card);
+    public boolean addCard(long id, Card card){
+        if(repo.existsById(id) && card!=null){
+            CardList cl = repo.getById(id);
+            cl.addCard(card);
+            repo.save(cl);
             return true;
         }
         return false;

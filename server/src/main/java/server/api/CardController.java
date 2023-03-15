@@ -34,10 +34,18 @@ public class CardController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
+    @GetMapping("/addlist/{id}")
+    public ResponseEntity<List<Card>> getCardsByListId(@PathVariable("id") long id){
+        if(id<0 || !repo.existsById(id)){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(null);
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Card> add(@RequestBody Card card) {
         System.out.println(card + "\nthis was BEFORE card should add\n");
-        if (isNullOrEmpty(card.getName()) || card.getCardList()==null) {
+        if (isNullOrEmpty(card.getName())) {
             return ResponseEntity.badRequest().build();
         }
         System.out.println(card + "\nthis was card should add\n");
@@ -48,22 +56,8 @@ public class CardController {
     /**
      * Changes the parent list of a card, could be used when dragged and dropped
      * @param id id of card that is changed
-     * @param cardList new parent card list
      * @return response of request
      */
-    @PutMapping("/updateParent/{id}")
-    public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
-        //I would like to have a query to get the list but i do not think it is really necessary and should
-        //put the list in the frontend
-        if(cardList==null || !repo.existsById(id)){
-            return ResponseEntity.badRequest().build();
-        }
-
-        Card updatedCard = repo.getById(id);
-        updatedCard.setCardList(cardList);
-        return ResponseEntity.ok(updatedCard);
-    }
-
 
     @DeleteMapping(path = "/delete/{id}")
     public void removeCard(@PathVariable("id") long id){
