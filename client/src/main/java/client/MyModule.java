@@ -33,5 +33,6 @@ public class MyModule implements Module {
         binder.bind(BoardViewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateBoardViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);
     }
 }

@@ -3,9 +3,12 @@ package client.communication;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
+
+import java.util.List;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -55,10 +58,9 @@ public class CardListCommunication {
             System.out.println("error");
         }
     }
-    @SuppressWarnings("unused")
     public void removeCL(long listid) {
         Response res = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists/" + listid) //
+                .target(SERVER).path("api/lists/delete/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
@@ -68,16 +70,22 @@ public class CardListCommunication {
         }
     }
     @SuppressWarnings("unused")
-    public void modifyNameCL(long listid, String name) {
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
+    public CardList modifyNameCL(long listid, String name) {
+        return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(name, APPLICATION_JSON));
+                .put(Entity.entity(name, APPLICATION_JSON), CardList.class);
 
-        if (res.getStatus() != 200) {
-            System.out.println("error");
-        }
+    }
+
+    public List<CardList> getAll() {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/all") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>(){
+                });
     }
 
 

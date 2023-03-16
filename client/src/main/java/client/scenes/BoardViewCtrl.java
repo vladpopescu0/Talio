@@ -18,6 +18,7 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.communication.CardListCommunication;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -34,6 +35,8 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+
+    private final CardListCommunication cardListCommunication;
 
     private Board board;
 
@@ -52,11 +55,10 @@ public class BoardViewCtrl implements Initializable {
      * @param mainCtrl Main controller of the program
      */
     @Inject
-    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
+    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board, CardListCommunication cardListCommunication) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-
-        //User user = new User("User"); //Create a front-end only instance of Board
+        this.cardListCommunication = cardListCommunication;
         this.board = board;
     }
 
@@ -74,7 +76,7 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell());
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication));
         titledPane.setText(board.getName());
     }
 
@@ -82,26 +84,40 @@ public class BoardViewCtrl implements Initializable {
         this.board = board;
     }
 
+    public Board getBoard() {
+        return board;
+    }
+
     /**
      * Adds a new CardList to the Board
      */
     public void addCardList() {
         mainCtrl.showCreateList(board);
+        refresh();
+    }
 
-//        CardList newCardList = new CardList(
-//                "List " + (board.getList().size() + 1), new ArrayList<>());
-//        board.addList(newCardList);
+    public void refresh() {
+        cardListObservableList = FXCollections.observableList(board.getList());
+        cardListView.setItems(cardListObservableList);
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication));
     }
 
     /**
      * Refreshes the Board View
      */
-    @SuppressWarnings("unused")
-    public void refresh() {
-        cardListObservableList = FXCollections.observableList(board.getList());
-        cardListView.setItems(cardListObservableList);
+    public void refreshDelete(CardList cardList) {
+        cardListObservableList.remove(cardList);
+        refresh();
+    }
+    public void cancel(){
+        mainCtrl.showOverview();
     }
 
-
-
+    public void refreshRename() {
+//        System.out.println(board.getList());
+//        cardListObservableList.remove(0,cardListObservableList.size());
+//        cardListObservableList.addAll(board.getList());
+        cardListView.setItems(FXCollections.observableList(board.getList()));
+//        System.out.println(cardListCommunication.getAll());
+    }
 }

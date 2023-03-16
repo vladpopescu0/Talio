@@ -11,6 +11,11 @@ public class BoardService extends GenericService<Board> {
     @Autowired
     public BoardService(BoardRepository repo) {super(repo);}
 
+    @Override
+    public Board getById(long id) {
+        return super.getById(id);
+    }
+
     /**
      * @param board board to be added
      * @return null if the Board is null or has a null field, else the board

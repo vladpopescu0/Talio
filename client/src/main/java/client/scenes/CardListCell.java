@@ -1,5 +1,8 @@
 package client.scenes;
 
+import client.communication.CardListCommunication;
+import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
 import commons.CardList;
 import javafx.collections.FXCollections;
@@ -12,6 +15,16 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 
 public class CardListCell extends ListCell<CardList> {
+
+    private final MainCtrl mainCtrl;
+
+    private final CardListCommunication cardListCommunication;
+
+    @FXML
+    private Button EditListButton;
+
+    @FXML
+    private Button deleteList;
     @FXML
     private TitledPane titledPane;
 
@@ -24,6 +37,14 @@ public class CardListCell extends ListCell<CardList> {
     private ObservableList<Card> cardObservableList;
 
     private FXMLLoader fxmlLoader;
+
+    @Inject
+    public CardListCell(MainCtrl mainCtrl,CardListCommunication cardListCommunication){
+        this.mainCtrl = mainCtrl;
+        this.cardListCommunication = cardListCommunication;
+
+    }
+
 
     /**
      * Update method for a custom ListCell
@@ -46,10 +67,12 @@ public class CardListCell extends ListCell<CardList> {
 
                 try {
                     fxmlLoader.load();
-
-                    addCardButton.setOnAction(event -> {
-                        Card card = new Card("Card " + (cardsList.getItems().size() + 1));
-                        cardsList.getItems().add(card);
+                    EditListButton.setOnAction(event -> {
+                        rename(cardList.getId());
+                    });
+                    deleteList.setOnAction(event -> {
+                        delete(cardList.getId());
+                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -66,4 +89,17 @@ public class CardListCell extends ListCell<CardList> {
             setGraphic(titledPane);
         }
     }
+
+    public void rename(Long id){
+        mainCtrl.showChangeListName(id);
+
+    }
+
+    public void delete(Long id){
+        Board b = mainCtrl.getBoardViewCtrl().getBoard();
+        cardListCommunication.removeCL(id);
+        mainCtrl.showBoardView(b);
+    }
+
+
 }

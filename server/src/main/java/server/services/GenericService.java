@@ -14,7 +14,9 @@ public class GenericService<T> {
      * Gets all the entities in the repository
      * @return all the entities in the repo as a list
      */
-    public List<T> getAll() {return repo.findAll();}
+    public List<T> getAll() {
+        return repo.findAll();
+    }
 
     /**
      * Gets an entity with a specific id, if existing

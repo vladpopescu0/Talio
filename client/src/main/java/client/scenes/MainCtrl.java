@@ -16,13 +16,13 @@
 package client.scenes;
 
 import commons.Board;
+import commons.CardList;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-
     private Stage primaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
@@ -36,8 +36,12 @@ public class MainCtrl {
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
 
+    private ChangeNameCtrl changeListNameCtrl;
+    private Scene changeListName;
+
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,
+                           Pair<ChangeNameCtrl, Parent> changeListName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -52,6 +56,9 @@ public class MainCtrl {
 
         this.createBoardViewCtrl = create.getKey();
         this.createBoard = new Scene(create.getValue());
+
+        this.changeListNameCtrl = changeListName.getKey();
+        this.changeListName = new Scene(changeListName.getValue());
 
         showOverview();
         primaryStage.show();
@@ -70,6 +77,8 @@ public class MainCtrl {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
         this.boardViewCtrl.setBoard(board);
+        this.boardViewCtrl.refresh();
+//        System.out.println(board);
     }
 
     public void showCreateList(Board board) {
@@ -97,6 +106,15 @@ public class MainCtrl {
     public void createBoardView() {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
+    }
+
+    public void showChangeListName(Long id) {
+//        primaryStage.setTitle(list.getName());
+        Board board = getBoardViewCtrl().getBoard();
+        primaryStage.setScene(changeListName);
+        this.changeListNameCtrl.setId(id);
+        this.changeListNameCtrl.setBoard(board);
+//        this.boardViewCtrl.refresh();
     }
 
 }

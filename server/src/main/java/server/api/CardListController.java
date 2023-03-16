@@ -20,10 +20,14 @@ public class CardListController {
     /**
      * @return all the CardList objects on the server
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = { "", "/all" })
     @SuppressWarnings("unused")
-    public List<CardList> getAll() {
-        return CLService.getAll();
+    public ResponseEntity<List<CardList>> getAll() {
+        List<CardList> list = CLService.getAll();
+        if(list == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(list);
     }
 
     /**
@@ -58,7 +62,6 @@ public class CardListController {
      * @return a ResponseEntity with the status OK if the deletion is successful, else a ResponseEntity with the BAD_REQUEST status
      */
     @DeleteMapping(path = "/delete/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> removeList(@PathVariable("id") long id){
         if(!CLService.delete(id)){
             return ResponseEntity.badRequest().build();
@@ -70,11 +73,12 @@ public class CardListController {
     @PutMapping(path = "/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<CardList> modifyName(@PathVariable("id") long id, @RequestBody String name){
-        if(!CLService.changeName(CLService.getById(id),name)){
+        CardList cl = CLService.changeName(CLService.getById(id),name);
+        if(cl == null){
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cl);
     }
 
     }

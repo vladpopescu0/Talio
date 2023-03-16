@@ -2,63 +2,79 @@ package client.scenes;
 
 import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
-import com.google.inject.Inject;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
-public class CreateListCtrl {
+public class ChangeNameCtrl {
 
     private final MainCtrl mainCtrl;
     private ServerUtils server;
 
     private final CardListCommunication clComm;
 
-
     private Board board;
 
+
+    private Long id;
+
     @FXML
-    private TextField name;
+    private TextField newName;
+
+    @FXML
+    private Button change;
 
     @Inject
-    public CreateListCtrl(CardListCommunication clComm, MainCtrl mainCtrl, Board board, ServerUtils server) {
-        this.clComm = clComm;
+    public ChangeNameCtrl(CardListCommunication clComm, MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
-        this.board = board;
         this.server = server;
+        this.clComm = clComm;
     }
 
     public String getName(){
-        return name.getText();
+        return newName.getText();
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+//    public void setBoard(Board board) {
+//        this.board = board;
+//    }
 
     private void clearField() {
-        name.clear();
+        newName.clear();
     }
 
-    public void createList(){
+    public void changeName(){
+
         try{
-            CardList list = new CardList(getName());
-            board.addList(list);
-            Board b = server.addBoard(board);
-            list.setId(b.getList().get(b.getList().size() - 1).getId());
+            CardList original = clComm.getCL(id);
+            int index = board.getList().indexOf(original);
+            CardList cl = clComm.modifyNameCL(id,getName());
+            cl.setName(getName());
+            board.getList().set(index,cl);
         } catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+
         clearField();
-        mainCtrl.getBoardViewCtrl().refreshRename();
         mainCtrl.showBoardView(this.board);
+        mainCtrl.getBoardViewCtrl().refreshRename();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public void cancel(){

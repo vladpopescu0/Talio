@@ -64,5 +64,9 @@ public class CreateBoardViewCtrl implements Initializable {
 
         mainCtrl.showOverview();
     }
+
+    public void cancel(){
+        mainCtrl.showOverview();
+    }
 }
 

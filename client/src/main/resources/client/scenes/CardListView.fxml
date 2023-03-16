@@ -6,17 +6,18 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane fx:id="titledPane" alignment="TOP_CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="200.0" text="List" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<TitledPane fx:id="titledPane" alignment="TOP_CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="148.0" prefWidth="242.0" text="List" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <content>
-        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+        <AnchorPane prefHeight="150.0" prefWidth="242.0">
             <children>
                 <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                     <content>
                         <ListView fx:id="cardsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                     </content>
                 </ScrollPane>
-                <Button fx:id="addCardButton" mnemonicParsing="false" text="Add Card" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                <Button mnemonicParsing="false" text="Delete List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="80.0" />
+                <Button fx:id="addCardButton" mnemonicParsing="false" text="Add Card" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="3.0" />
+                <Button fx:id="deleteList" mnemonicParsing="false" text="Delete List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="147.0" />
+            <Button fx:id="EditListButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Edit List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="79.0" />
             </children>
         </AnchorPane>
     </content>

@@ -5,12 +5,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.CardListRepository;
 
+import java.util.List;
+
 @Service
 public class CardListService extends GenericService<CardList> {
 
     @Autowired
     public CardListService(CardListRepository repo){
         super(repo);
+    }
+
+    public List<CardList> getAll(){
+        return repo.findAll();
     }
 
     /**
@@ -30,15 +36,24 @@ public class CardListService extends GenericService<CardList> {
      * @param name the name that will substitute the old name
      * @return true if change is successful, else false
      */
-    public boolean changeName(CardList target, String name){
-        if(target != null && repo.existsById(target.getId())){
+    public CardList changeName(CardList target, String name){
+        if(target != null && repo.existsById(target.getId())) {
             target.setName(name);
-            repo.save(target);
-            return true;
+            return repo.save(target);
         }
 
-        return false;
+        return null;
 
+    }
+
+    public boolean delete(long id) {
+        System.out.println(id);
+        if(id < 0 || !repo.existsById(id)){
+            return false;
+        } else {
+            repo.deleteById(id);
+            return true;
+        }
     }
 
 }

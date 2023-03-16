@@ -42,10 +42,11 @@ public class Main extends Application {
         var boardView = FXML.load(BoardViewCtrl.class, "client", "scenes", "BoardView.fxml");
         var createList = FXML.load(CreateListCtrl.class, "client", "scenes", "CreateList.fxml");
         var createBoardCtrl = FXML.load(CreateBoardViewCtrl.class, "client", "scenes", "CreateBoard.fxml");
+        var changeListNameCtrl = FXML.load(ChangeNameCtrl.class, "client", "scenes", "ChangeListName.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
-        mainCtrl.initialize(primaryStage, overview, boardView, createList, createBoardCtrl);
+        mainCtrl.initialize(primaryStage, overview, boardView, createList, createBoardCtrl,changeListNameCtrl);
     }
 }
