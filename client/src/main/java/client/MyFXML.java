@@ -33,6 +33,10 @@ public class MyFXML {
 
     private Injector injector;
 
+    /**
+     * Constuctor for MyFXML class
+     * @param injector the injector to be used
+     */
     public MyFXML(Injector injector) {
         this.injector = injector;
     }
