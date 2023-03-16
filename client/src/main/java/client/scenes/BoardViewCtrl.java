@@ -76,7 +76,6 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> {
             CardListCell c = new CardListCell(server,mainCtrl);
-            System.out.println(c.getItem()+"ceva\n");
             return c;
         });
         titledPane.setText(board.getName());
@@ -92,7 +91,7 @@ public class BoardViewCtrl implements Initializable {
     public void addCardList() {
         CardList newCardList = new CardList("list"+(board.getList().size() + 1),board,board.getList().size() + 1);
         board.addList(newCardList);
-        System.out.println(cardListView.getItems());
+        //System.out.println("sts\n"+cardListView.getItems()+"\nsts");
         refresh();
     }
 

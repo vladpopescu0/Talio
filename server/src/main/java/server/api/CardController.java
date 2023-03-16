@@ -51,6 +51,17 @@ public class CardController {
         Card saved = repo.save(card);
         return ResponseEntity.ok(saved);
     }
+    @PutMapping(path = "/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<Card> modifyName(@PathVariable("id") long id, @RequestBody String name){
+        if(!repo.existsById(id)){
+            return ResponseEntity.badRequest().build();
+        }
+        Card newChangedCard = repo.getById(id);
+        newChangedCard.setName(name);
+        repo.save(newChangedCard);
+        return ResponseEntity.ok().build();
+    }
 
     /**
      * Changes the parent list of a card, could be used when dragged and dropped

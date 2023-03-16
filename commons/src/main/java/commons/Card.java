@@ -24,6 +24,13 @@ public class Card {
     }
 
     public String getName() { return this.name; }
+    public long getId(){
+        return this.id;
+    }
+    public String setName(String name){
+        this.name=name;
+        return name;
+    }
 
     @Override
     public boolean equals(Object obj) {

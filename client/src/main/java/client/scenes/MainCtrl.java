@@ -38,11 +38,18 @@ public class MainCtrl {
     private Scene createBoard;
 
     private Scene addCard;
-    public Board board;
     private AddCardCtrl addCardCtrl;
 
+    public Board board;
+
+    private Scene editCard;
+    private EditCardCtrl editCardCtrl;
+
+
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,Pair<AddCardCtrl,Parent> addCard) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<CreateBoardViewCtrl, Parent> create,Pair<AddCardCtrl,Parent> addCard,
+                           Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -60,6 +67,9 @@ public class MainCtrl {
 
         this.addCardCtrl = addCard.getKey();
         this.addCard=new Scene(addCard.getValue());
+
+        this.editCard = new Scene(editCard.getValue());
+        this.editCardCtrl = editCard.getKey();
 
         showOverview();
         primaryStage.show();
@@ -79,11 +89,19 @@ public class MainCtrl {
         primaryStage.setScene(boardView);
         this.board=board;
         this.boardViewCtrl.setBoard(board);
+        this.boardViewCtrl.refresh();
     }
 
     public void showAddCard(){
         primaryStage.setTitle("Add Card");
         primaryStage.setScene(addCard);
+    }
+    public void showEditCard(){
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.updateFields();
+        //must change later for safety measures
+
     }
 
 

@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,6 +14,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CardListCell extends ListCell<CardList> {
     @FXML
@@ -27,13 +30,17 @@ public class CardListCell extends ListCell<CardList> {
     private ObservableList<Card> cardObservableList;
 
     private FXMLLoader fxmlLoader;
-    private ServerUtils serverUtils;
+    private ServerUtils server;
     private MainCtrl mainCtrl;
 
-
+    /**
+     *useful dependencies for universal variables and server communication
+     * @param serverUtils the utils where the connection to the apis is
+     * @param mainCtrl the controller of the whole application
+     */
     @Inject
     public CardListCell(ServerUtils serverUtils, MainCtrl mainCtrl){
-        this.serverUtils = serverUtils;
+        this.server = serverUtils;
         this.mainCtrl = mainCtrl;
     }
     /**
@@ -57,24 +64,29 @@ public class CardListCell extends ListCell<CardList> {
 
                 try {
                     fxmlLoader.load();
-
+                    System.out.println(this.getItem().getId());
                     addCardButton.setOnAction(event -> {
                         mainCtrl.id=this.getItem().getId();
                         mainCtrl.showAddCard();
-                        Card card = new Card("Card " + (cardsList.getItems().size() + 1));
-                        cardsList.getItems().add(card);
-                        System.out.println(this.getItem().getId()+"cardlist\n");
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
             titledPane.setText(cardList.getName());
-
-            cardObservableList = FXCollections.observableList(cardList.getCards());
+            System.out.println(this.getItem().getId());
+            long id = this.getItem().getId();
+            CardList cl=null;
+            try{
+                cl = server.getCardListById(id);
+            }catch(BadRequestException br){
+                System.out.println("tzac");
+                //br.printStackTrace();
+            }
+            List<Card> cards = (cl==null ? new ArrayList<>() : cl.getCards());
+            cardObservableList = FXCollections.observableList(cards);
             cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell());
+            cardsList.setCellFactory(c -> new CardCell(mainCtrl,server));
 
             setText(null);
             setGraphic(titledPane);
