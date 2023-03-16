@@ -3,6 +3,7 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
+import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,20 +17,21 @@ public class Board {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String name;
 
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @ElementCollection
+
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users;
 
     /**
      * Each board has multiple lists of cards
      */
-    @ElementCollection
+    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
     private List<CardList> list;
 
     /**
@@ -48,7 +50,7 @@ public class Board {
     //empty constructor was necessary since post requests do not work for some reasons
     //also when creating a post request, the first name and last name of the person are set to null
     @SuppressWarnings("unused")
-    private Board() {
+    public Board() {
         // for object mappers
     }
 
@@ -57,10 +59,9 @@ public class Board {
      * @param creator the creator of the board
      * @param name the name of the board
      */
-    @SuppressWarnings("unused")
+    @Inject
     public Board(User creator, String name) {
         this.users = new ArrayList<>();
-        users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
     }
@@ -69,7 +70,7 @@ public class Board {
      * Getter for the id of the board
      * @return the id
      */
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -86,12 +87,12 @@ public class Board {
      * Adds a user to the collection of users related to the board
      * @param user the user to be added
      */
-    @SuppressWarnings("unused")
     public void addUser(User user) {
         if (this.users.contains(user)) {
             return;
         }
         users.add(user);
+        user.getBoardList().add(this);
     }
 
     @SuppressWarnings("unused")

@@ -13,8 +13,6 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @Column
     private String name;
 
     public Card(){
@@ -26,6 +24,13 @@ public class Card {
     }
 
     public String getName() { return this.name; }
+    public long getId(){
+        return this.id;
+    }
+    public String setName(String name){
+        this.name=name;
+        return name;
+    }
 
     @Override
     public boolean equals(Object obj) {

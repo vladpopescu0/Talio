@@ -27,8 +27,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
 
 /**
  * not finished yet
@@ -56,11 +58,11 @@ public class BoardsOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty("Admin"));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getUsers().get(0).getUsername()));
     }
 
-    public void addBoard() {
-        mainCtrl.showAdd(); //to be added with addBoard Scene
+    public void createBoard() {
+        mainCtrl.createBoardView(); //to be added with addBoard Scene
     }
 
     public void refresh() {
@@ -74,6 +76,14 @@ public class BoardsOverviewCtrl implements Initializable {
      * It is currently redirecting to the only available Board
      */
     public void joinBoard() {
-        mainCtrl.showBoardView();
+        Board b = table.getSelectionModel().getSelectedItem();
+        if(b == null){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to select a board!");
+            alert.showAndWait();
+            return;
+        }
+            mainCtrl.showBoardView(b);
     }
 }

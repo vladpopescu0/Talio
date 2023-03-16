@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -17,22 +18,51 @@ public class CardList {
     private Long id;
     private String name;
 
-    @OneToMany
+    @ManyToOne(fetch = FetchType.LAZY) //should have optional = false
+    private Board board;
+
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
     public CardList() {
 
     }
 
+    public CardList(String name,Board board) {
+        this.name = name;
+        this.board = board;
+        this.cards = new ArrayList<>();
+    }
+
     /**
-     * @param id id of the specific CardList
+     * constructor for testing frontend
+     * @param name name of board list
+     * @param board the current board (idk if it works properly)
+     * @param id set id for testing
+     */
+    @SuppressWarnings("unused")
+    public CardList(String name,Board board,long id) {
+        this.name = name;
+        this.board = board;
+        this.cards = new ArrayList<>();
+        this.id=id;//temporary
+    }
+    /**
      * @param name name of the specific CardList
      * @param cards the cards in the CardList
      */
-    public CardList(long id,String name, List<Card> cards){
+    @SuppressWarnings("unused")
+    public CardList(String name, List<Card> cards){
         this.id = id;
         this.name = name;
         this.cards = cards;
+    }
+
+    @SuppressWarnings("unused")
+    public CardList(String name, List<Card> cards, Board board){
+        this.name = name;
+        this.cards = cards;
+        this.board = board;
     }
 
     /**
@@ -75,6 +105,13 @@ public class CardList {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /** Sets a new board for a CardList object
+     * @param board board that needs to be appended to object
+     */
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     @Override

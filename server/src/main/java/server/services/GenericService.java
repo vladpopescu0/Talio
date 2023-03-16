@@ -1,6 +1,5 @@
 package server.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -9,7 +8,6 @@ public class GenericService<T> {
 
     final JpaRepository<T, Long> repo;
 
-    @Autowired
     public GenericService(JpaRepository<T, Long> repo) { this.repo = repo;}
 
     /**

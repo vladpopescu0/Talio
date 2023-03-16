@@ -15,6 +15,7 @@
  */
 package client.scenes;
 
+import commons.Board;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -23,18 +24,32 @@ import javafx.util.Pair;
 public class MainCtrl {
 
     private Stage primaryStage;
-
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
 
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
 
-    private AddQuoteCtrl addCtrl;
-    private Scene add;
+    private CreateListCtrl createListCtrl;
+    private Scene createList;
+    public long id;
+    @SuppressWarnings("unused")
+    private CreateBoardViewCtrl createBoardViewCtrl;
+    private Scene createBoard;
+
+    private Scene addCard;
+    private AddCardCtrl addCardCtrl;
+
+    public Board board;
+
+    private Scene editCard;
+    private EditCardCtrl editCardCtrl;
+
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<AddQuoteCtrl, Parent> add) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<CreateBoardViewCtrl, Parent> create,Pair<AddCardCtrl,Parent> addCard,
+                           Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -43,8 +58,18 @@ public class MainCtrl {
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
 
-        this.addCtrl = add.getKey();
-        this.add = new Scene(add.getValue());
+
+        this.createListCtrl = createList.getKey();
+        this.createList = new Scene(createList.getValue());
+
+        this.createBoardViewCtrl = create.getKey();
+        this.createBoard = new Scene(create.getValue());
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard=new Scene(addCard.getValue());
+
+        this.editCard = new Scene(editCard.getValue());
+        this.editCardCtrl = editCard.getKey();
 
         showOverview();
         primaryStage.show();
@@ -53,20 +78,58 @@ public class MainCtrl {
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
-//        overviewCtrl.refresh();
-    }
-
-    public void showAdd() {
-        primaryStage.setTitle("Quotes: Adding Quote");
-        primaryStage.setScene(add);
-        add.setOnKeyPressed(e -> addCtrl.keyPressed(e));
+        this.overviewCtrl.refresh();
     }
 
     /**
      * Redirects to the Board View page
      */
-    public void showBoardView() {
-        primaryStage.setTitle("Board View");
+    public void showBoardView(Board board) {
+        primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
+        this.board=board;
+        this.boardViewCtrl.setBoard(board);
+        this.boardViewCtrl.refresh();
     }
+
+    public void showAddCard(){
+        primaryStage.setTitle("Add Card");
+        primaryStage.setScene(addCard);
+    }
+    public void showEditCard(){
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.updateFields();
+        //must change later for safety measures
+
+    }
+
+
+    public void showCreateList(Board board) {
+        primaryStage.setTitle("Main Page");
+        primaryStage.setScene(createList);
+        this.createListCtrl.setBoard(board);
+//        FXMLLoader loader = new FXMLLoader();
+//        loader.setLocation(Main.class.getResource("ClientView.fxml"));
+//        mainLayout = loader.load();
+//
+//        ClientViewController cvc = loader.getController();
+//        cvc.setClient(client); // Passing the client-object to the ClientViewController
+//        this.createListCtrl.setBoard(board);
+//
+//        Scene scene = new Scene(mainLayout, 900, 600);
+//        primaryStage.setScene(scene);
+//        primaryStage.setResizable(true);
+//        primaryStage.show();
+    }
+
+    @SuppressWarnings("unused")
+    public BoardViewCtrl getBoardViewCtrl() {
+        return boardViewCtrl;
+    }
+    public void createBoardView() {
+        primaryStage.setTitle("New Board");
+        primaryStage.setScene(createBoard);
+    }
+
 }

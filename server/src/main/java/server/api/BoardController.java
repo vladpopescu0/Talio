@@ -8,7 +8,7 @@ import server.services.BoardService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("api/boards")
 public class BoardController {
 
     private final BoardService boardService;
@@ -28,7 +28,6 @@ public class BoardController {
      */
 
     @GetMapping(path = {"", "/"})
-    @SuppressWarnings("unused")
     public List<Board> getAll() {
         return boardService.getAll();
     }
@@ -54,8 +53,7 @@ public class BoardController {
      * @param board the board to add
      * @return a ResponseEntity verifying the board is saved
      */
-    @PostMapping(path = { "", "/"})
-    @SuppressWarnings("unused")
+    @PostMapping(path ="/add")
     public ResponseEntity<Board> add(@RequestBody Board board) {
         Board added = boardService.add(board);
         if(added == null){

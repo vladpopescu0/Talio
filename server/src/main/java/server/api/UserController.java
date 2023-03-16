@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.services.UserService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/users")
+@RequestMapping("api/users")
 public class UserController {
 
     private final UserService userService;
@@ -17,6 +19,11 @@ public class UserController {
      */
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping(path = "/")
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
     @GetMapping("/{id}")
@@ -34,8 +41,7 @@ public class UserController {
      * @param user the user to add
      * @return a ResponseEntity verifying the user is saved
      */
-    @PostMapping(path = {"", "/"})
-    @SuppressWarnings("unused")
+    @PostMapping(path = "/add")
     public ResponseEntity<User> add(@RequestBody User user) {
         User added = userService.add(user);
         if (added == null) {
