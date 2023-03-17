@@ -34,25 +34,6 @@ public class ServerUtils {
 
     //public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
 
-//    public void getQuotesTheHardWay() throws IOException {
-//        var url = new URL("http://localhost:8080/api/quotes");
-//        var is = url.openConnection().getInputStream();
-//        var br = new BufferedReader(new InputStreamReader(is));
-//        String line;
-//        while ((line = br.readLine()) != null) {
-//            System.out.println(line);
-//        }
-//    }
-
-//    public List<Quote> getQuotes() {
-//        return ClientBuilder.newClient(new ClientConfig()) //
-//                .target(SERVER).path("api/quotes") //
-//               .request(APPLICATION_JSON) //
-//             .accept(APPLICATION_JSON) //
-//                .get(new GenericType<>() {
-//                });
-//    }
-
     /**
      *Method that gets all boards from the database
      *through the /boards api
@@ -64,6 +45,18 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
+    }
+
+    /** Returns a board with the specific id, if it exists
+     * @param id id of the searched board
+     * @return the board
+     */
+    public Board getBoardByID(Long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(Board.class);
     }
 
     /**
@@ -78,6 +71,18 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
 
+    }
+
+    /**
+     * @param board the board whose name needs to be modified
+     * @return the modified board
+     */
+    public Board modifyBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/modify") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
     }
 
     /**
@@ -133,23 +138,42 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
     }
+    /**
+     * Get a list of cards by having a list id, solving the recursion problem
+     * @param id the id of the card list
+     * @param card the card that needs to be added
+     * @return the cards that are connected to that card list
+     */
+    public Card addCardToList(Card card, long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/addCard/"+id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card,APPLICATION_JSON),Card.class);
+    }
 
+    /**
+     * @param name name that needs to be updated
+     * @param id id of the card
+     * @return the new name (if it worked)
+     */
+    public String updateCard(String name,long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/"+id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(name,APPLICATION_JSON),String.class);
+    }
 
-//    public void updateQuotes(Consumer<Quote> quote){
-//        Future<Response> future = ClientBuilder.newClient(new ClientConfig()) //
-//                .target(SERVER).path("api/quotes") //
-//                .request(APPLICATION_JSON) //
-//                .accept(APPLICATION_JSON) //
-//                .async()
-//                .get(new InvocationCallback<>() {
-//                            @Override
-//                            public void completed(Response r) {
-//                            }
-//
-//                            @Override
-//                            public void failed(Throwable throwable) {
-//                                System.out.println("Doesn't work");
-//                            }
-//                        });
-//    }
+    /**
+     * @param id id of the searched card
+     * @return the searched card
+     */
+    public Card getCardById(long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
 }

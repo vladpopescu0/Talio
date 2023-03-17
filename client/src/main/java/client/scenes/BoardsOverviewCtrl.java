@@ -41,7 +41,6 @@ public class BoardsOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;//must change mainCtrl
 
     private ObservableList<Board> data;
-
     @FXML
     private TableView<Board> table;
     @FXML

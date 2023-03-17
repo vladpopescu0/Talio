@@ -2,7 +2,6 @@ package server.api;
 
 
 import commons.Card;
-import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardRepository;
@@ -54,41 +53,67 @@ public class CardController {
     }
 
     /**
+     * @param id the id of the searched card
+     * @return a ResponseEntity verifying the card is found
+     */
+    @GetMapping("/addlist/{id}")
+    public ResponseEntity<List<Card>> getCardsByListId(@PathVariable("id") long id){
+        if(id<0 || !repo.existsById(id)){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(null);
+    }
+
+    /**
      * Adds a card if possible
      * @param card the card to be added
      * @return ok if the card is added, a bad request page if the card has empty fields
      */
     @PostMapping("/add")
     public ResponseEntity<Card> add(@RequestBody Card card) {
-        System.out.println(card + "\nthis was BEFORE card should add\n");
-        if (isNullOrEmpty(card.getName()) || card.getCardList()==null) {
+        if (isNullOrEmpty(card.getName())) {
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(card + "\nthis was card should add\n");
         Card saved = repo.save(card);
         return ResponseEntity.ok(saved);
     }
 
-
-     /**
-     * Changes the parent list of a card, could be used when dragged and dropped
-     * @param id id of card that is changed
-     * @param cardList new parent card list
-     * @return response of request
+    /**
+     * @param id the id of the searched card
+     * @param name name that needs to be substituted
+     * @return a ResponseEntity verifying the card's name is changed
      */
-    @PutMapping("/updateParent/{id}")
-    public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
-        //I would like to have a query to get the list but i
-        //do not think it is really necessary and should
-        //put the list in the frontend
-        if(cardList==null || !repo.existsById(id)){
+    @PutMapping(path = "/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<Card> modifyName(@PathVariable("id") long id, @RequestBody String name){
+        if(!repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
-
-        Card updatedCard = repo.getById(id);
-        updatedCard.setList(cardList);
-        return ResponseEntity.ok(updatedCard);
+        Card newChangedCard = repo.getById(id);
+        newChangedCard.setName(name);
+        repo.save(newChangedCard);
+        return ResponseEntity.ok().build();
     }
+
+
+//     /**
+//     * Changes the parent list of a card, could be used when dragged and dropped
+//     * @param id id of card that is changed
+//     * @return response of request
+//     */
+//    @PutMapping("/updateParent/{id}")
+//    public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
+//        //I would like to have a query to get the list but i
+//        //do not think it is really necessary and should
+//        //put the list in the frontend
+//        if(cardList==null || !repo.existsById(id)){
+//            return ResponseEntity.badRequest().build();
+//        }
+//
+//        Card updatedCard = repo.getById(id);
+//        updatedCard.setList(cardList);
+//        return ResponseEntity.ok(updatedCard);
+//    }
 
 
     /**

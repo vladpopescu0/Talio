@@ -16,6 +16,7 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
+
 import client.scenes.*;
 import com.google.inject.Injector;
 
@@ -33,6 +34,7 @@ public class Main extends Application {
 
     /**
      * Main method for client
+    /**
      * @param args an array of Strings used as runtime arguments
      */
     public static void main(String[] args) {
@@ -48,21 +50,27 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-
-        var overview = FXML.load(BoardsOverviewCtrl.class, "client", "scenes", "MainPage.fxml");
-        var boardView = FXML.load(BoardViewCtrl.class, "client", "scenes", "BoardView.fxml");
-
-        var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-
-        var createList = FXML.load(CreateListCtrl.class, "client", "scenes", "CreateList.fxml");
-        var createBoardCtrl = FXML
-                .load(CreateBoardViewCtrl.class, "client", "scenes", "CreateBoard.fxml");
+        var overview = FXML.load(BoardsOverviewCtrl.class,
+                "client", "scenes", "MainPage.fxml");
+        var boardView = FXML.load(BoardViewCtrl.class,
+                "client", "scenes", "BoardView.fxml");
+        var createList = FXML.load(CreateListCtrl.class,
+                "client", "scenes", "CreateList.fxml");
+        var createBoardCtrl = FXML.load(CreateBoardViewCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
+        var changeListNameCtrl = FXML.load(ChangeNameCtrl.class,
+                "client", "scenes", "ChangeListName.fxml");
+        var editCard =  FXML.load(EditCardCtrl.class,
+                "client", "scenes", "EditCard.fxml");
+        var add = FXML.load(AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
         var userCtrl = FXML.load(UserCtrl.class, "client", "scenes", "User.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
+
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
-                createBoardCtrl,add, userCtrl);
+                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl);
     }
 }

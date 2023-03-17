@@ -39,7 +39,6 @@ public class BoardController {
      * If there isn't one, an error page comes up.
      */
     @GetMapping("/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
         Board board = boardService.getById(id);
         if (board == null) {
@@ -55,6 +54,19 @@ public class BoardController {
      */
     @PostMapping(path ="/add")
     public ResponseEntity<Board> add(@RequestBody Board board) {
+        Board added = boardService.add(board);
+        if(added == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(added);
+    }
+
+    /**
+     * @param board the board that is modified
+     * @return a ResponseEntity verifying the board is saved
+     */
+    @PutMapping(path ="/modify")
+    public ResponseEntity<Board> putBoard(@RequestBody Board board) {
         Board added = boardService.add(board);
         if(added == null){
             return ResponseEntity.badRequest().build();

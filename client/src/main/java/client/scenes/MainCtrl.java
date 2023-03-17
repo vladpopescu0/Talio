@@ -22,27 +22,27 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-
+    private Board board;
     private Stage primaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
     private Scene addCard;
-
-    private AddCardCtrl addCtrl;
-    private Scene add;
-    public long id= -1;
-    public Board board;
-
-
     private CreateListCtrl createListCtrl;
     private Scene createList;
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
     private Scene user;
     private UserCtrl userCtrl;
+
+    private long id;
+    private long cardId;
+    private ChangeNameCtrl changeListNameCtrl;
+    private Scene changeListName;
+    private AddCardCtrl addCardCtrl;
+    private Scene editCard;
+    private EditCardCtrl editCardCtrl;
 
 
     /**
@@ -54,12 +54,14 @@ public class MainCtrl {
      * @param createBoard the createBoard scene
      * @param addCard the addCard scene
      * @param userPage the user log in page
+     * @param editCard the editCard scene
+     * @param changeListName the changeListName scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage) {
-
+                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
+                           Pair<EditCardCtrl, Parent> editCard, Pair<ChangeNameCtrl, Parent> changeListName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -75,8 +77,14 @@ public class MainCtrl {
         this.createBoardViewCtrl = createBoard.getKey();
         this.createBoard = new Scene(createBoard.getValue());
 
-        this.addCtrl=addCard.getKey();
-        this.add=new Scene(addCard.getValue());
+        this.changeListNameCtrl = changeListName.getKey();
+        this.changeListName = new Scene(changeListName.getValue());
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard = new Scene(addCard.getValue());
+
+        this.editCard = new Scene(editCard.getValue());
+        this.editCardCtrl = editCard.getKey();
 
         this.userCtrl = userPage.getKey();
         this.user = new Scene(userPage.getValue());
@@ -96,26 +104,40 @@ public class MainCtrl {
 
     /**
      * Redirects to the Board View page
+     *
      * @param board the board to be shown
      */
     public void showBoardView(Board board) {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
-        //this.boardViewCtrl.setBoard(board);
 
-        this.board=board;
+        this.boardViewCtrl.setBoard(board);
+        this.boardViewCtrl.refresh();
     }
 
     /**
      * Shows the add card page
      */
-    public void showAddCard(){
+    public void showAddCard() {
         primaryStage.setTitle("Add Card");
-        primaryStage.setScene(add);
+        primaryStage.setScene(addCard);
     }
 
     /**
+     * Shows the edit card page
+     */
+    public void showEditCard() {
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.updateFields();
+        //must change later for safety measures
+
+    }
+
+
+    /**
      * Shows the createList scene
+     *
      * @param board the board to which the list is to be added
      */
     public void showCreateList(Board board) {
@@ -138,6 +160,7 @@ public class MainCtrl {
 
     /**
      * Getter for boardViewCtrl
+     *
      * @return the boardViewCtrl
      */
     @SuppressWarnings("unused")
@@ -161,4 +184,43 @@ public class MainCtrl {
         primaryStage.setScene(user);
     }
 
+    /** Shows the ChangeListName scene
+     * @param id id of the current cardList
+     */
+    public void showChangeListName(Long id) {
+//        primaryStage.setTitle(list.getName());
+        Board board = getBoardViewCtrl().getBoard();
+        primaryStage.setScene(changeListName);
+        this.changeListNameCtrl.setId(id);
+        this.changeListNameCtrl.setBoard(board);
+//        this.boardViewCtrl.refresh();
+    }
+
+    /**
+     * @return the current cardlist id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id sets the id of the current cardlist
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the current cardlist id
+     */
+    public long getCardId() {
+        return cardId;
+    }
+
+    /**
+     * @param cardId sets the id of the current cardlist
+     */
+    public void setCardId(long cardId) {
+        this.cardId = cardId;
+    }
 }

@@ -9,45 +9,35 @@ import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 
-public class AddCardCtrl {
+public class EditCardCtrl {
 
+    private final CardListCommunication cardListCommunication;
     @FXML
     private TextField title;
-
-    @FXML
-    private Button cancel;
-
-    @FXML
-    private Button add;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private final CardListCommunication cardListCommunication;
-
     /**
-     * Constructor for the AddCardCtrl class
+     * Constructor for EditCardCtrl
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
      * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl,
-                       CardListCommunication cardListCommunication) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl,
+                        CardListCommunication cardListCommunication) {
         this.mainCtrl = mainCtrl;
         this.server = server;
         this.cardListCommunication = cardListCommunication;
-
     }
 
     /**
      * button for cancelling the add card scene, returning to the board
-     * Cancel button that returns back to the boardView
      */
     public void cancel() {
         clearFields();
@@ -57,14 +47,13 @@ public class AddCardCtrl {
     /**
      * The function connected to the add card button, posts the card in the
      * database by adding it to a list with a given id
-     * The method called when pressing the button creating a card
      */
     public void ok() {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 CardList before = cardListCommunication.getCL(mainCtrl.getId());
-                server.addCardToList(toBeAdded,mainCtrl.getId());
+                server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
                 CardList after = cardListCommunication.getCL(mainCtrl.getId());
                 Board board = mainCtrl.getBoardViewCtrl().getBoard();
                 int index = board.getList().indexOf(before);
@@ -83,19 +72,25 @@ public class AddCardCtrl {
     }
 
     /**
-     * Gets a card with the fields filled by the user
-     * @return
+     * Updates all fields for the card
+     */
+    public void updateFields(){
+        this.title.setText(server.getCardById(mainCtrl.getId()).getName());
+        //must change later for safety measures
+    }
+    /**
+     * Create a Card object with fields as the text in the add card scene
+     * @return the string as a parametrized object
      */
     private Card getCard() {
         var name = title.getText();
-        Card newCard = new Card(name);
-        return newCard;
+        return new Card(name);
     }
 
     /**
-     * Checks if a string is null or empty
-     * @param s the string to be checked
-     * @return true is s == null or s = ''
+     * Checks whether a string is "" or null
+     * @param s the string to be tested
+     * @return true if the string is as described, false otherwise
      */
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
@@ -107,4 +102,5 @@ public class AddCardCtrl {
     private void clearFields() {
         title.clear();
     }
+
 }

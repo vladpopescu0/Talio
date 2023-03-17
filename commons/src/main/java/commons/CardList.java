@@ -17,11 +17,7 @@ public class CardList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-
-    @ManyToOne(fetch = FetchType.LAZY) //should have optional = false
-    private Board board;
-
-    @OneToMany(mappedBy = "cllist")
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
     /**
@@ -31,29 +27,23 @@ public class CardList {
 
     }
 
-    /**
-     * Constructor for the CardList class
-     * @param name the name of the CardList
-     * @param board the board to which the list should be added
+    /** Constructor for CardList class
+     * @param name the name of the list
      */
-    public CardList(String name,Board board) {
+    public CardList(String name) {
         this.name = name;
-        this.board = board;
         this.cards = new ArrayList<>();
     }
-
     /**
      * constructor for testing frontend
      * @param name name of board list
-     * @param board the current board (idk if it works properly)
      * @param id set id for testing
      */
     @SuppressWarnings("unused")
-    public CardList(String name,Board board,long id) {
+    public CardList(String name,long id) {
         this.name = name;
-        this.board = board;
         this.cards = new ArrayList<>();
-        this.id=id;//temporary
+        this.id=id;
     }
 
     /**
@@ -65,27 +55,12 @@ public class CardList {
         this.name = name;
         this.cards = cards;
     }
-
-    /**
-     * Constructor for the CardList class
-     * @param name the name of the CardList
-     * @param cards the cards in the CardList
-     * @param board the board to which the CardList belongs
-     */
-    @SuppressWarnings("unused")
-    public CardList(String name, List<Card> cards, Board board){
-        this.name = name;
-        this.cards = cards;
-        this.board = board;
-    }
-
     /**
      * @return the name of the CardList
      */
     public String getName() {
         return name;
     }
-
     /**
      * @return the cards in the list
      */
@@ -121,12 +96,6 @@ public class CardList {
         this.name = name;
     }
 
-    /** Sets a new board for a CardList object
-     * @param board board that needs to be appended to object
-     */
-    public void setBoard(Board board) {
-        this.board = board;
-    }
 
     /**
      * Equals method for the CardList class
@@ -156,4 +125,10 @@ public class CardList {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    /** Sets the id of the cardlist
+     * @param id the id to be set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

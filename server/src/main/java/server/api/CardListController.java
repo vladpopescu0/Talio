@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Card;
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,10 +25,14 @@ public class CardListController {
     /**
      * @return all the CardList objects on the server
      */
-    @GetMapping(path = { "", "/" })
+    @GetMapping(path = { "", "/all" })
     @SuppressWarnings("unused")
-    public List<CardList> getAll() {
-        return cLService.getAll();
+    public ResponseEntity<List<CardList>> getAll() {
+        List<CardList> list = cLService.getAll();
+        if(list == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(list);
     }
 
     /**
@@ -38,14 +43,26 @@ public class CardListController {
      * else a ResponseEntity with the BAD_REQUEST status
      */
     @GetMapping("/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         CardList list = cLService.getById(id);
         if(list == null){
-            System.out.println("this is null");
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(list);
+    }
+
+    /**
+     * @param id id of the cardlist
+     * @param card the card that needs to be added
+     * @return a ResponseEntity verifying the card is added to the list
+     */
+    @PostMapping("/addCard/{id}")
+    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
+        if(card==null){
+            return ResponseEntity.badRequest().build();
+        }
+        cLService.addCard(id,card);
+        return ResponseEntity.ok(card);
     }
 
     /**
@@ -56,12 +73,6 @@ public class CardListController {
     @PostMapping(path = "/add")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
         CardList addedList = cLService.add(list);
-//        if (list == null || isNullOrEmpty(list.getName())){
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        Quote saved = repo.save(quote);
-//        return ResponseEntity.ok(saved);
         if(addedList == null){
             return ResponseEntity.badRequest().build();
         }
@@ -75,12 +86,10 @@ public class CardListController {
      * else a ResponseEntity with the BAD_REQUEST status
      */
     @DeleteMapping(path = "/delete/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> removeList(@PathVariable("id") long id){
         if(!cLService.delete(id)){
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok().build();
     }
 
@@ -94,11 +103,12 @@ public class CardListController {
     @SuppressWarnings("unused")
     public ResponseEntity<CardList> modifyName(@PathVariable("id") long id,
                                                @RequestBody String name){
-        if(!cLService.changeName(cLService.getById(id),name)){
+        CardList cl = cLService.changeName(cLService.getById(id),name);
+        if(cl == null){
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(cl);
     }
 
 }
