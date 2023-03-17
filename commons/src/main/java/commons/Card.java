@@ -13,28 +13,23 @@ public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    @ManyToOne(optional = false,fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private CardList cllist;
-
     private String name;
 
     public Card(){
 
     }
-
     public Card(String name){
         this.name = name;
-        this.cllist = new CardList();
-    }
-    public Card(String name,CardList cllist){
-        this.name = name;
-        this.cllist = cllist;
     }
 
     public String getName() { return this.name; }
-
-    public void setList(CardList cllist) { this.cllist = cllist;}
+    public long getId(){
+        return this.id;
+    }
+    public String setName(String name){
+        this.name=name;
+        return name;
+    }
 
     @Override
     public boolean equals(Object obj) {

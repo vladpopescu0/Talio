@@ -17,8 +17,7 @@ public class CardList {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-
-    @OneToMany(mappedBy = "cllist", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
     public CardList() {
@@ -29,6 +28,18 @@ public class CardList {
         this.name = name;
         this.cards = new ArrayList<>();
     }
+
+    /**
+     * constructor for testing frontend
+     * @param name name of board list
+     * @param id set id for testing
+     */
+    @SuppressWarnings("unused")
+    public CardList(String name,long id) {
+        this.name = name;
+        this.cards = new ArrayList<>();
+        this.id=id;
+    }
     /**
      * @param name name of the specific CardList
      * @param cards the cards in the CardList
@@ -38,13 +49,6 @@ public class CardList {
         this.name = name;
         this.cards = cards;
     }
-
-    @SuppressWarnings("unused")
-    public CardList(String name, List<Card> cards, Board board){
-        this.name = name;
-        this.cards = cards;
-    }
-
     /**
      * @return the name of the CardList
      */

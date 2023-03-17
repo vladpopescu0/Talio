@@ -1,5 +1,6 @@
 package server.api;
 
+import commons.Card;
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +36,23 @@ public class CardListController {
      * @return a ResponseEntity with the status OK and the value of the CardList if the CardList with the searched id is found, else a ResponseEntity with the BAD_REQUEST status
      */
     @GetMapping("/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> getById(@PathVariable("id") long id) {
         CardList list = CLService.getById(id);
         if(list == null){
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/addCard/{id}")
+    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
+        if(card==null){
+            System.out.println("this is null");
+            return ResponseEntity.badRequest().build();
+        }
+        System.out.println(card +"this is card");
+        CLService.addCard(id,card);
+        return ResponseEntity.ok(card);
     }
 
     /**
@@ -57,6 +68,7 @@ public class CardListController {
         return ResponseEntity.ok(addedList);
     }
 
+
     /**
      * @param id the id of the list that is deleted
      * @return a ResponseEntity with the status OK if the deletion is successful, else a ResponseEntity with the BAD_REQUEST status
@@ -66,7 +78,6 @@ public class CardListController {
         if(!CLService.delete(id)){
             return ResponseEntity.badRequest().build();
         }
-
         return ResponseEntity.ok().build();
     }
 
@@ -80,5 +91,6 @@ public class CardListController {
 
         return ResponseEntity.ok(cl);
     }
+
 
     }

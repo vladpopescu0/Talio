@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 package client;
+
+import client.scenes.*;
 import client.scenes.*;
 import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
@@ -31,6 +33,7 @@ public class MyModule implements Module {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardsOverviewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(BoardViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateBoardViewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);

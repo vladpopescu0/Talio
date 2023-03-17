@@ -16,15 +16,18 @@
 package client.utils;
 
 import commons.Board;
+import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
+
+import java.util.List;
+
+import commons.Card;
+import commons.CardList;
+import org.glassfish.jersey.client.ClientConfig;
+
 import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
-import org.glassfish.jersey.client.ClientConfig;
-
-import java.util.List;
-
-import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
@@ -97,6 +100,59 @@ public class ServerUtils {
 
     }
 
+    /**
+     * Get a CardList from the database using its id
+     * @param id the id to search in the database, gets bad request if it is not proper
+     * @return the CardList that was found
+     */
+    public CardList getCardListById(long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+    /**
+     * Adds a card to the database
+     * @param card the card to be added, if not valid will throw error 400
+     * @return The card that was added in a deserialized form
+     */
+    public Card addCard(Card card){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Get a list of cards by having a list id, solving the recursion problem
+     * @param id the id of the card list
+     * @return the cards that are connected to that card list
+     */
+    public Card addCardToList(Card card,long id){
+        System.out.println(card + "card");
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/lists/addCard/"+id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(card,APPLICATION_JSON),Card.class);
+    }
+    public String updateCard(String name,long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/"+id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(name,APPLICATION_JSON),String.class);
+    }
+    public Card getCardById(long id){
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
 
 
 //    public void updateQuotes(Consumer<Quote> quote){

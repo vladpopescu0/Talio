@@ -32,16 +32,22 @@ public class MainCtrl {
 
     private CreateListCtrl createListCtrl;
     private Scene createList;
-    @SuppressWarnings("unused")
+    public long id;
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
-
     private ChangeNameCtrl changeListNameCtrl;
     private Scene changeListName;
+    private Scene addCard;
+    private AddCardCtrl addCardCtrl;
+
+    public Board board;
+
+    private Scene editCard;
+    private EditCardCtrl editCardCtrl;
 
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList, Pair<CreateBoardViewCtrl, Parent> create,
-                           Pair<ChangeNameCtrl, Parent> changeListName) {
+                           Pair<ChangeNameCtrl, Parent> changeListName, Pair<AddCardCtrl, Parent> addCard, Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -59,6 +65,12 @@ public class MainCtrl {
 
         this.changeListNameCtrl = changeListName.getKey();
         this.changeListName = new Scene(changeListName.getValue());
+
+        this.addCardCtrl = addCard.getKey();
+        this.addCard=new Scene(addCard.getValue());
+
+        this.editCard = new Scene(editCard.getValue());
+        this.editCardCtrl = editCard.getKey();
 
         showOverview();
         primaryStage.show();
@@ -78,8 +90,21 @@ public class MainCtrl {
         primaryStage.setScene(boardView);
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
-//        System.out.println(board);
     }
+
+    public void showAddCard(){
+        primaryStage.setTitle("Add Card");
+        primaryStage.setScene(addCard);
+
+    }
+    public void showEditCard(){
+        primaryStage.setTitle("Edit Card");
+        primaryStage.setScene(editCard);
+        editCardCtrl.updateFields();
+        //must change later for safety measures
+
+    }
+
 
     public void showCreateList(Board board) {
         primaryStage.setTitle("Main Page");

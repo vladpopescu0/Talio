@@ -1,6 +1,5 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.*;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.OnDelete;
@@ -23,13 +22,11 @@ public class Board {
     private Long id;
 
     private String name;
-
     /**
      * Each Board has a collection of users that have joined the board
      */
     @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<User> users;
-
     /**
      * Each board has multiple lists of cards
      */

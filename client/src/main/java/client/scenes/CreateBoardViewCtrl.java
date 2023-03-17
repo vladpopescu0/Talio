@@ -35,7 +35,6 @@ public class CreateBoardViewCtrl implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        boardName.setText("Board");
         errorLabel.setVisible(false);
     }
     @SuppressWarnings("unused")
@@ -52,7 +51,6 @@ public class CreateBoardViewCtrl implements Initializable {
 
         try {
             server.addBoard(newBoard);
-//            server.addUser(u1);
         } catch (WebApplicationException e) {
 
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -63,10 +61,12 @@ public class CreateBoardViewCtrl implements Initializable {
         }
 
         mainCtrl.showOverview();
+        boardName.clear();
     }
 
     public void cancel(){
         mainCtrl.showOverview();
+        boardName.clear();
     }
 }
 

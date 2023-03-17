@@ -76,7 +76,7 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
         titledPane.setText(board.getName());
     }
 
@@ -99,7 +99,7 @@ public class BoardViewCtrl implements Initializable {
     public void refresh() {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
     }
 
     /**
@@ -114,10 +114,7 @@ public class BoardViewCtrl implements Initializable {
     }
 
     public void refreshRename() {
-//        System.out.println(board.getList());
-//        cardListObservableList.remove(0,cardListObservableList.size());
-//        cardListObservableList.addAll(board.getList());
         cardListView.setItems(FXCollections.observableList(board.getList()));
-//        System.out.println(cardListCommunication.getAll());
+        refresh();
     }
 }

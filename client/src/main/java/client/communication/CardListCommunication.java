@@ -26,7 +26,6 @@ public class CardListCommunication {
      * @param listid the id of the list to be retrieved
      * @return the card list with the specific id
      */
-    @SuppressWarnings("unused")
     public CardList getCL(long listid) {
         Response res = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
@@ -35,7 +34,6 @@ public class CardListCommunication {
                 .get();
 
         if (res.getStatus() != 200) {
-            System.out.println("error");
             return null;
         } else {
             return res.readEntity(CardList.class);
@@ -55,21 +53,17 @@ public class CardListCommunication {
                 .post(Entity.entity(list, APPLICATION_JSON));
 
         if (res.getStatus() != 200) {
-            System.out.println("error");
+            System.out.println("error"+ res.getStatus());
         }
     }
     public void removeCL(long listid) {
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
+        ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/delete/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
-
-        if (res.getStatus() != 200) {
-            System.out.println("error");
-        }
     }
-    @SuppressWarnings("unused")
+
     public CardList modifyNameCL(long listid, String name) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //

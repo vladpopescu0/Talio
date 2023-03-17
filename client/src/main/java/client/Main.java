@@ -63,11 +63,16 @@ public class Main extends Application {
                 "client", "scenes", "CreateBoard.fxml");
         var changeListNameCtrl = FXML.load(ChangeNameCtrl.class,
                 "client", "scenes", "ChangeListName.fxml");
-
+        var editCard =  FXML.load(EditCardCtrl.class,
+                "client", "scenes", "EditCard.fxml");
+        var add = FXML.load(AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView,
-                createList, createBoardCtrl, changeListNameCtrl);
+                createList, createBoardCtrl, changeListNameCtrl, add, editCard);
+
     }
 }
