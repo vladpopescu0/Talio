@@ -6,9 +6,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="197.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="150.0" text="Card" textAlignment="CENTER">
+        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="181.0" text="Card" textAlignment="CENTER">
             <font>
                 <Font size="15.0" />
             </font>
@@ -16,9 +16,9 @@
                 <Insets left="10.0" />
             </padding>
         </Label>
-      <Button fx:id="editButton" layoutX="115.0" layoutY="12.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" text="edit">
+      <Button fx:id="editButton" layoutX="143.0" layoutY="10.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="47.0" text="edit">
          <font>
-            <Font size="7.0" />
+            <Font size="13.0" />
          </font></Button>
     </children>
 </Pane>

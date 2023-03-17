@@ -16,6 +16,7 @@
 package client;
 
 import static com.google.inject.Guice.createInjector;
+
 import client.scenes.*;
 import com.google.inject.Injector;
 
@@ -31,26 +32,45 @@ public class Main extends Application {
     private static final Injector INJECTOR = createInjector(new MyModule());
     private static final MyFXML FXML = new MyFXML(INJECTOR);
 
+    /**
+     * Main method for client
+    /**
+     * @param args an array of Strings used as runtime arguments
+     */
     public static void main(String[] args) {
-         launch();
+        launch();
     }
 
+    /**
+     * The method that sets up the scenes and scene controllers of the client
+     * @param primaryStage the primary stage for this application, onto which
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
+     */
     @Override
     public void start(Stage primaryStage) {
-
-        var overview = FXML.load(BoardsOverviewCtrl.class, "client", "scenes", "MainPage.fxml");
-        var boardView = FXML.load(BoardViewCtrl.class, "client", "scenes", "BoardView.fxml");
-
-        var add = FXML.load(AddCardCtrl.class, "client", "scenes", "AddCard.fxml");
-
-        var createList = FXML.load(CreateListCtrl.class, "client", "scenes", "CreateList.fxml");
-        var createBoardCtrl = FXML.load(CreateBoardViewCtrl.class, "client", "scenes", "CreateBoard.fxml");
-        var editCard =  FXML.load(EditCardCtrl.class, "client", "scenes", "EditCard.fxml");
+        var overview = FXML.load(BoardsOverviewCtrl.class,
+                "client", "scenes", "MainPage.fxml");
+        var boardView = FXML.load(BoardViewCtrl.class,
+                "client", "scenes", "BoardView.fxml");
+        var createList = FXML.load(CreateListCtrl.class,
+                "client", "scenes", "CreateList.fxml");
+        var createBoardCtrl = FXML.load(CreateBoardViewCtrl.class,
+                "client", "scenes", "CreateBoard.fxml");
+        var changeListNameCtrl = FXML.load(ChangeNameCtrl.class,
+                "client", "scenes", "ChangeListName.fxml");
+        var editCard =  FXML.load(EditCardCtrl.class,
+                "client", "scenes", "EditCard.fxml");
+        var add = FXML.load(AddCardCtrl.class,
+                "client", "scenes", "AddCard.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
-        mainCtrl.initialize(primaryStage, overview, boardView, createList, createBoardCtrl,add,editCard);
+        mainCtrl.initialize(primaryStage, overview, boardView,
+                createList, createBoardCtrl, changeListNameCtrl, add, editCard);
+
     }
 }

@@ -22,33 +22,43 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class MainCtrl {
-
+    private Board board;
     private Stage primaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
-
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
-
+    private Scene addCard;
     private CreateListCtrl createListCtrl;
     private Scene createList;
-    public long id;
-    @SuppressWarnings("unused")
+    private long id;
+    private long cardId;
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
-
-    private Scene addCard;
+    private ChangeNameCtrl changeListNameCtrl;
+    private Scene changeListName;
     private AddCardCtrl addCardCtrl;
-
-    public Board board;
-
     private Scene editCard;
     private EditCardCtrl editCardCtrl;
 
-
+    /**
+     * Initializes the application
+     *
+     * @param primaryStage the primary stage used
+     * @param overview     the boardOverview scene
+     * @param boardView    the boardView scene
+     * @param createList   the createList scene
+     * @param create       the createBoard scene
+     * @param addCard      the addCard scene
+     * @param changeListName the changeListName scene
+     * @param editCard the editCard scene
+     */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
-                           Pair<CreateBoardViewCtrl, Parent> create,Pair<AddCardCtrl,Parent> addCard,
+                           Pair<BoardViewCtrl, Parent> boardView,
+                           Pair<CreateListCtrl, Parent> createList,
+                           Pair<CreateBoardViewCtrl, Parent> create,
+                           Pair<ChangeNameCtrl, Parent> changeListName,
+                           Pair<AddCardCtrl, Parent> addCard,
                            Pair<EditCardCtrl, Parent> editCard) {
         this.primaryStage = primaryStage;
 
@@ -65,8 +75,11 @@ public class MainCtrl {
         this.createBoardViewCtrl = create.getKey();
         this.createBoard = new Scene(create.getValue());
 
+        this.changeListNameCtrl = changeListName.getKey();
+        this.changeListName = new Scene(changeListName.getValue());
+
         this.addCardCtrl = addCard.getKey();
-        this.addCard=new Scene(addCard.getValue());
+        this.addCard = new Scene(addCard.getValue());
 
         this.editCard = new Scene(editCard.getValue());
         this.editCardCtrl = editCard.getKey();
@@ -75,6 +88,9 @@ public class MainCtrl {
         primaryStage.show();
     }
 
+    /**
+     * SHows an overview of all boards
+     */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(overview);
@@ -83,20 +99,29 @@ public class MainCtrl {
 
     /**
      * Redirects to the Board View page
+     *
+     * @param board the board to be shown
      */
     public void showBoardView(Board board) {
         primaryStage.setTitle(board.getName());
         primaryStage.setScene(boardView);
-        this.board=board;
+
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
     }
 
-    public void showAddCard(){
+    /**
+     * Shows the add card page
+     */
+    public void showAddCard() {
         primaryStage.setTitle("Add Card");
         primaryStage.setScene(addCard);
     }
-    public void showEditCard(){
+
+    /**
+     * Shows the edit card page
+     */
+    public void showEditCard() {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
         editCardCtrl.updateFields();
@@ -105,6 +130,11 @@ public class MainCtrl {
     }
 
 
+    /**
+     * Shows the createList scene
+     *
+     * @param board the board to which the list is to be added
+     */
     public void showCreateList(Board board) {
         primaryStage.setTitle("Main Page");
         primaryStage.setScene(createList);
@@ -123,13 +153,61 @@ public class MainCtrl {
 //        primaryStage.show();
     }
 
+    /**
+     * Getter for boardViewCtrl
+     *
+     * @return the boardViewCtrl
+     */
     @SuppressWarnings("unused")
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
     }
+
+    /**
+     * Shows the createBoard scene
+     */
     public void createBoardView() {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
     }
 
+    /** Shows the ChangeListName scene
+     * @param id id of the current cardList
+     */
+    public void showChangeListName(Long id) {
+//        primaryStage.setTitle(list.getName());
+        Board board = getBoardViewCtrl().getBoard();
+        primaryStage.setScene(changeListName);
+        this.changeListNameCtrl.setId(id);
+        this.changeListNameCtrl.setBoard(board);
+//        this.boardViewCtrl.refresh();
+    }
+
+    /**
+     * @return the current cardlist id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id sets the id of the current cardlist
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the current cardlist id
+     */
+    public long getCardId() {
+        return cardId;
+    }
+
+    /**
+     * @param cardId sets the id of the current cardlist
+     */
+    public void setCardId(long cardId) {
+        this.cardId = cardId;
+    }
 }

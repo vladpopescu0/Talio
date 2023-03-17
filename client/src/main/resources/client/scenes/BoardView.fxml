@@ -10,12 +10,13 @@
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
-                <Button layoutX="527.0" layoutY="347.0" mnemonicParsing="false" onAction="#addCardList" text="+ Add List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                <Button layoutX="617.0" layoutY="466.0" mnemonicParsing="false" onAction="#addCardList" text="+ Add List" />
                 <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="442.0" prefWidth="685.0">
                     <content>
                         <ListView fx:id="cardListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="HORIZONTAL" prefHeight="462.0" prefWidth="734.0" />
                     </content>
                 </ScrollPane>
+            <Button layoutX="566.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="Back" />
             </children>
         </AnchorPane>
     </content>

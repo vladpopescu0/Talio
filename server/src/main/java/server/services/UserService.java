@@ -8,6 +8,10 @@ import server.database.UserRepository;
 @Service
 public class UserService extends GenericService<User> {
 
+    /**
+     * Constructor for the UserService
+     * @param repo the repository used
+     */
     @Autowired
     public UserService(UserRepository repo) {
         super(repo);
@@ -21,7 +25,6 @@ public class UserService extends GenericService<User> {
         if (user == null || user.getUsername() == null) {
             return null;
         }
-        System.out.println(user);
         return repo.save(user);
     }
 

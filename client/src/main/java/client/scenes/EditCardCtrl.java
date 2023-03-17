@@ -1,39 +1,39 @@
 package client.scenes;
 
+import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 
 public class EditCardCtrl {
 
+    private final CardListCommunication cardListCommunication;
     @FXML
     private TextField title;
-
-    @FXML
-    private Button cancel;
-
-    @FXML
-    private Button save;
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
     /**
      * Constructor for EditCardCtrl
-     * @param server
-     * @param mainCtrl
+     * @param server the server to be used
+     * @param mainCtrl the mainCtrl of the application
+     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl,
+                        CardListCommunication cardListCommunication) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.cardListCommunication = cardListCommunication;
     }
 
     /**
@@ -41,8 +41,7 @@ public class EditCardCtrl {
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showBoardView(mainCtrl.board);
-        System.out.println(mainCtrl.id);
+        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
     }
 
     /**
@@ -53,9 +52,14 @@ public class EditCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                server.updateCard(toBeAdded.getName(), mainCtrl.id);
+                CardList before = cardListCommunication.getCL(mainCtrl.getId());
+                server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
+                CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                Board board = mainCtrl.getBoardViewCtrl().getBoard();
+                int index = board.getList().indexOf(before);
+                board.getList().set(index,after);
                 clearFields();
-                mainCtrl.showBoardView(mainCtrl.board);
+                mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }
         } catch (WebApplicationException e) {
 
@@ -66,8 +70,12 @@ public class EditCardCtrl {
         }
 
     }
+
+    /**
+     * Updates all fields for the card
+     */
     public void updateFields(){
-        this.title.setText(server.getCardById(mainCtrl.id).getName());
+        this.title.setText(server.getCardById(mainCtrl.getId()).getName());
         //must change later for safety measures
     }
     /**
@@ -76,9 +84,7 @@ public class EditCardCtrl {
      */
     private Card getCard() {
         var name = title.getText();
-        Card newCard = new Card(name);
-        System.out.println(newCard);
-        return newCard;
+        return new Card(name);
     }
 
     /**

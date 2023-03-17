@@ -41,7 +41,6 @@ public class BoardsOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;//must change mainCtrl
 
     private ObservableList<Board> data;
-
     @FXML
     private TableView<Board> table;
     @FXML
@@ -49,22 +48,44 @@ public class BoardsOverviewCtrl implements Initializable {
     @FXML
     private TableColumn<Board, String> colCreator;
 
+    /**
+     * Constructor for the BoardsOverviewCtrl
+     * @param server the server to be used
+     * @param mainCtrl the mainCtrl of the application
+     */
     @Inject
     public BoardsOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initializer for the BoardsOverview scene
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getUsers().get(0).getUsername()));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
+                .getUsers().get(0).getUsername()));
     }
 
+    /**
+     * Redirects to the createBoard scene
+     */
     public void createBoard() {
         mainCtrl.createBoardView(); //to be added with addBoard Scene
     }
 
+    /**
+     * refreshes the page, looking for updates
+     */
     public void refresh() {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
@@ -84,6 +105,6 @@ public class BoardsOverviewCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
-            mainCtrl.showBoardView(b);
+        mainCtrl.showBoardView(b);
     }
 }
