@@ -50,12 +50,10 @@ public class CardCell extends ListCell<Card> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
-                System.out.println(this.getItem().getId());
                 try {
                     fxmlLoader.load();
                     this.editButton.setOnAction(event -> {
-                        mainCtrl.id=this.getItem().getId();
-                        System.out.println(mainCtrl.id);
+                        mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
                 } catch (Exception e) {

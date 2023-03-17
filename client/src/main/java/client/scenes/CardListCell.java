@@ -26,7 +26,7 @@ public class CardListCell extends ListCell<CardList> {
     private final CardListCommunication cardListCommunication;
 
     @FXML
-    private Button EditListButton;
+    private Button editListButton;
 
     @FXML
     private Button deleteList;
@@ -47,12 +47,13 @@ public class CardListCell extends ListCell<CardList> {
     /**
      * useful dependencies for universal variables and server communication
      *
-     * @param serverUtils the utils where the connection to the apis is
-     * @param mainCtrl    the controller of the whole application
+     * @param serverUtils           the utils where the connection to the apis is
+     * @param mainCtrl              the controller of the whole application
      * @param cardListCommunication the utils for CardList class
      */
     @Inject
-    public CardListCell(MainCtrl mainCtrl, CardListCommunication cardListCommunication,ServerUtils serverUtils) {
+    public CardListCell(MainCtrl mainCtrl,
+                        CardListCommunication cardListCommunication, ServerUtils serverUtils) {
         this.server = serverUtils;
         this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
@@ -80,16 +81,19 @@ public class CardListCell extends ListCell<CardList> {
 
                 try {
                     fxmlLoader.load();
-                    EditListButton.setOnAction(event -> rename(cardList.getId()));
+                    editListButton.setOnAction(event -> {
+                        rename(cardList.getId());
+                        mainCtrl.getBoardViewCtrl().refreshRename();
+                    });
                     deleteList.setOnAction(event -> {
-                                delete(cardList.getId());
-                                mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
+                        delete(cardList.getId());
+                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
 
                     });
-                            addCardButton.setOnAction(event -> {
-                                mainCtrl.id = this.getItem().getId();
-                                mainCtrl.showAddCard();
-                            });
+                    addCardButton.setOnAction(event -> {
+                        mainCtrl.setId(this.getItem().getId());
+                        mainCtrl.showAddCard();
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -115,10 +119,16 @@ public class CardListCell extends ListCell<CardList> {
         }
     }
 
+    /** Helper method for renaming a cardlist
+     * @param id the id of the cardList whose name will be modified
+     */
     public void rename(Long id) {
         mainCtrl.showChangeListName(id);
     }
 
+    /** Helper method for renaming a cardlist
+     * @param id the id of the cardList which will be deleted
+     */
     public void delete(Long id) {
         Board b = mainCtrl.getBoardViewCtrl().getBoard();
         cardListCommunication.removeCL(id);

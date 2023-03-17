@@ -30,6 +30,11 @@ public class ChangeNameCtrl {
     @FXML
     private Button change;
 
+    /** Constructor foor ChangeNameCtrl
+     * @param clComm utility service for cardlist communication
+     * @param mainCtrl main controller of the program
+     * @param server utility service for server communication
+     */
     @Inject
     public ChangeNameCtrl(CardListCommunication clComm, MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
@@ -37,6 +42,9 @@ public class ChangeNameCtrl {
         this.clComm = clComm;
     }
 
+    /**
+     * @return the name in the textbox
+     */
     public String getName(){
         return newName.getText();
     }
@@ -45,10 +53,16 @@ public class ChangeNameCtrl {
 //        this.board = board;
 //    }
 
+    /**
+     * Clears all fields so they are empty when the page is entered again
+     */
     private void clearField() {
         newName.clear();
     }
 
+    /**
+     * Method for changing the name of a cardlist in the database
+     */
     public void changeName(){
 
         try{
@@ -69,14 +83,25 @@ public class ChangeNameCtrl {
         mainCtrl.getBoardViewCtrl().refreshRename();
     }
 
+    /**
+     * Sets the id of the current cardlist
+     * @param id id that needs to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * Sets the board of the current cardlist
+     * @param board board that needs to be set
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Goes back to the corresponding board overview page
+     */
     public void cancel(){
         clearField();
         mainCtrl.showBoardView(this.board);

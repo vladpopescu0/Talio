@@ -30,7 +30,9 @@ public class Board {
     /**
      * Each board has multiple lists of cards
      */
-    @OneToMany(targetEntity = CardList.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = CardList.class,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "board_id")
     private List<CardList> list;
@@ -48,8 +50,10 @@ public class Board {
         this.list = list;
         this.name = name;
     }
-    //empty constructor was necessary since post requests do not work for some reasons
-    //also when creating a post request, the first name and last name of the person are set to null
+    /**
+    *empty constructor was necessary since post requests do not work for some reasons
+    *also when creating a post request, the first name and last name of the person are set to null
+     */
     @SuppressWarnings("unused")
     public Board() {
         // for object mappers
@@ -96,6 +100,10 @@ public class Board {
         user.getBoardList().add(this);
     }
 
+    /**
+     * Removes a user from a board
+     * @param user the user to be removed
+     */
     @SuppressWarnings("unused")
     public void removeUser(User user) {
         this.users.remove(user);

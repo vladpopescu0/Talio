@@ -34,25 +34,22 @@ public class Main extends Application {
 
     /**
      * Main method for client
-     *
+    /**
      * @param args an array of Strings used as runtime arguments
      */
-
     public static void main(String[] args) {
         launch();
     }
 
     /**
      * The method that sets up the scenes and scene controllers of the client
-     *
      * @param primaryStage the primary stage for this application, onto which
-     *                     the application scene can be set.
-     *                     Applications may create other stages, if needed, but they will not be
-     *                     primary stages.
+     * the application scene can be set.
+     * Applications may create other stages, if needed, but they will not be
+     * primary stages.
      */
     @Override
     public void start(Stage primaryStage) {
-
         var overview = FXML.load(BoardsOverviewCtrl.class,
                 "client", "scenes", "MainPage.fxml");
         var boardView = FXML.load(BoardViewCtrl.class,
@@ -67,6 +64,7 @@ public class Main extends Application {
                 "client", "scenes", "EditCard.fxml");
         var add = FXML.load(AddCardCtrl.class,
                 "client", "scenes", "AddCard.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
 

@@ -53,9 +53,12 @@ public class BoardViewCtrl implements Initializable {
      * Constructor of the Controller for BoardView
      * @param server Server Utility class
      * @param mainCtrl Main controller of the program
+     * @param board the board to be displayed
+     * @param cardListCommunication the cardlist utility class
      */
     @Inject
-    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board, CardListCommunication cardListCommunication) {
+    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl,
+                         Board board, CardListCommunication cardListCommunication) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.cardListCommunication = cardListCommunication;
@@ -80,10 +83,17 @@ public class BoardViewCtrl implements Initializable {
         titledPane.setText(board.getName());
     }
 
+    /**
+     * Setter for the board
+     * @param board the new board to be assigned to the scene
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * @return the current board
+     */
     public Board getBoard() {
         return board;
     }
@@ -96,6 +106,9 @@ public class BoardViewCtrl implements Initializable {
         refresh();
     }
 
+    /**
+     * refreshes the boardView page
+     */
     public void refresh() {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
@@ -103,18 +116,33 @@ public class BoardViewCtrl implements Initializable {
     }
 
     /**
-     * Refreshes the Board View
+     * Refreshes the Board View and deletes a card
+     * @param cardList the cardlist to be deleted
      */
     public void refreshDelete(CardList cardList) {
         cardListObservableList.remove(cardList);
         refresh();
     }
+
+    /**
+     * Goes back to the overview page
+     */
     public void cancel(){
         mainCtrl.showOverview();
     }
 
+    /**
+     * refreshes page when an object is renamed
+     */
     public void refreshRename() {
         cardListView.setItems(FXCollections.observableList(board.getList()));
         refresh();
     }
+    /**
+     * Redirects the user back to the overview page
+     */
+    public void toOverview() {
+        mainCtrl.showOverview();
+    }
+
 }

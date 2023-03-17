@@ -11,6 +11,10 @@ public class BoardService extends GenericService<Board> {
     @Autowired
     public BoardService(BoardRepository repo) {super(repo);}
 
+    /**
+     * @param id the id of the searched entity
+     * @return the searched board
+     */
     @Override
     public Board getById(long id) {
         return super.getById(id);

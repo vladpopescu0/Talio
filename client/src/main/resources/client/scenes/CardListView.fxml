@@ -18,7 +18,7 @@
                 </ScrollPane>
                 <Button fx:id="addCardButton" mnemonicParsing="false" text="Add Card" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="3.0" />
                 <Button fx:id="deleteList" mnemonicParsing="false" text="Delete List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="147.0" />
-            <Button fx:id="EditListButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Edit List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="79.0" />
+            <Button fx:id="editListButton" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" text="Edit List" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="79.0" />
             </children>
         </AnchorPane>
     </content>

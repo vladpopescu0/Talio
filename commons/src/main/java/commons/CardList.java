@@ -20,15 +20,20 @@ public class CardList {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
+    /**
+     * Empty constructor for the cardList class
+     */
     public CardList() {
 
     }
 
+    /** Constructor for CardList class
+     * @param name the name of the list
+     */
     public CardList(String name) {
         this.name = name;
         this.cards = new ArrayList<>();
     }
-
     /**
      * constructor for testing frontend
      * @param name name of board list
@@ -40,6 +45,7 @@ public class CardList {
         this.cards = new ArrayList<>();
         this.id=id;
     }
+
     /**
      * @param name name of the specific CardList
      * @param cards the cards in the CardList
@@ -91,21 +97,37 @@ public class CardList {
     }
 
 
+    /**
+     * Equals method for the CardList class
+     * @param obj the obj to be compared with this
+     * @return true if-f this == obj
+     */
     @Override
     public boolean equals(Object obj) {
         return EqualsBuilder.reflectionEquals(this, obj);
     }
 
+    /**
+     * Hash code method for the cardList class
+     * @return a generated hashCode
+     */
     @Override
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
 
+    /**
+     * toString method for the CardList class
+     * @return the CardList as a String
+     */
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    /** Sets the id of the cardlist
+     * @param id the id to be set
+     */
     public void setId(Long id) {
         this.id = id;
     }

@@ -61,6 +61,10 @@ public class BoardController {
         return ResponseEntity.ok(added);
     }
 
+    /**
+     * @param board the board that is modified
+     * @return a ResponseEntity verifying the board is saved
+     */
     @PutMapping(path ="/modify")
     public ResponseEntity<Board> putBoard(@RequestBody Board board) {
         Board added = boardService.add(board);

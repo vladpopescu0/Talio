@@ -27,22 +27,35 @@ public class CreateBoardViewCtrl implements Initializable {
     @FXML
     private Label errorLabel;
 
+    /**
+     * Constructor for the CreateBoardViewCtrl class
+     * @param server the server to be used
+     * @param mainCtrl the main controller of the application
+     */
     @Inject
     public CreateBoardViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initializer for the createBoard scene
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         errorLabel.setVisible(false);
     }
-    @SuppressWarnings("unused")
-    public Board getBoard() {
-        User u1 = new User("a");
-        return new Board(u1, boardName.getText());
-    }
 
+    /**
+     * Creates a new board and adds it to the database when the create button is pressed
+     */
     public void createNewBoard() {
         User u1 = new User("C");
         Board newBoard = new Board(u1, boardName.getText());
@@ -60,13 +73,33 @@ public class CreateBoardViewCtrl implements Initializable {
             return;
         }
 
+        toBoardsOverview();
+    }
+
+    /**
+     * Resets the field to 'Board'
+     */
+    public void resetField() {
+        boardName.setText("Board");
+    }
+
+    /**
+     * Redirects the user back to the overview page and
+     * resets the board name field
+     */
+    public void toBoardsOverview() {
+        resetField();
         mainCtrl.showOverview();
         boardName.clear();
     }
 
+    /**
+     * Goes back to the overview
+     */
     public void cancel(){
         mainCtrl.showOverview();
         boardName.clear();
     }
+
 }
 

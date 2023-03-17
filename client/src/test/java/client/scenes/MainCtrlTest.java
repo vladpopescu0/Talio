@@ -16,20 +16,25 @@
 package client.scenes;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
 public class MainCtrlTest {
 
     private MainCtrl sut;
 
+    /**
+     * sets up the mainCtrl for the application
+     */
     @BeforeEach
     public void setup() {
         sut = new MainCtrl();
     }
 
+    /**
+
     @Test
     public void writeSomeTests() {
         // TODO create replacement objects and write some tests
         // sut.initialize(null, null, null);
-    }
+    }*/
 }

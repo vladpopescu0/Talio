@@ -11,11 +11,18 @@ import java.util.List;
 @Service
 public class CardListService extends GenericService<CardList> {
 
+    /**
+     * Constructor for the CardListService class
+     * @param repo the repository used
+     */
     @Autowired
     public CardListService(CardListRepository repo) {
         super(repo);
     }
 
+    /**
+     * @return all CardList entities
+     */
     public List<CardList> getAll() {
         return repo.findAll();
     }
@@ -46,6 +53,11 @@ public class CardListService extends GenericService<CardList> {
         return null;
 
     }
+
+    /**
+     * @param id the id of the list that needs to be deleted
+     * @return true if the deletion was successful, false otherwise
+     */
     public boolean delete(long id) {
         if (id < 0 || !repo.existsById(id)) {
             return false;
@@ -59,6 +71,7 @@ public class CardListService extends GenericService<CardList> {
      * Adds a card to targeted list
      *
      * @param card the card added
+     * @param id the id of the cardlist in which the card needs to be added
      * @return true if successful, otherwise false
      */
     public boolean addCard(long id, Card card) {

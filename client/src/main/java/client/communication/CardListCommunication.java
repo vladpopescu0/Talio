@@ -27,17 +27,11 @@ public class CardListCommunication {
      * @return the card list with the specific id
      */
     public CardList getCL(long listid) {
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
+        return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get();
-
-        if (res.getStatus() != 200) {
-            return null;
-        } else {
-            return res.readEntity(CardList.class);
-        }
+                .get(CardList.class);
 
         // can also use switch statement
     }
@@ -46,16 +40,22 @@ public class CardListCommunication {
      * @param list the list that is posted
      */
     public void addCL(CardList list) {
-         Response res = ClientBuilder.newClient(new ClientConfig()) //
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(list, APPLICATION_JSON));
 
         if (res.getStatus() != 200) {
-            System.out.println("error"+ res.getStatus());
+            System.out.println("error");
         }
     }
+
+    /**
+     * Removes a cardList
+     * @param listid the id of the list to be removed
+     */
+    @SuppressWarnings("unused")
     public void removeCL(long listid) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/delete/" + listid) //
@@ -64,6 +64,13 @@ public class CardListCommunication {
                 .delete();
     }
 
+    /**
+     * Modifies the name of the cardList
+     * @param listid the id of the list to rename
+     * @param name the new name of the cardList
+     * @return the CardList with modified name
+     */
+    @SuppressWarnings("unused")
     public CardList modifyNameCL(long listid, String name) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
@@ -73,6 +80,9 @@ public class CardListCommunication {
 
     }
 
+    /**
+     * @return all lists in the database
+     */
     public List<CardList> getAll() {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/all") //
@@ -81,31 +91,4 @@ public class CardListCommunication {
                 .get(new GenericType<>(){
                 });
     }
-
-
-    //        req.submit(new InvocationCallback<Response>() {
-//            @Override
-//            public void completed(Response response) {
-//                if (response.getStatus() == 200) {
-//                    return response.readEntity(CardList.class);
-//                } else {
-//                    System.out.println("Status: " + response.getStatus());
-//                }
-//            }
-//
-//            @Override
-//            public void failed(Throwable throwable) {
-//                throwable.printStackTrace();
-//            }
-//        });
-
-//        try {
-//            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        if (response.statusCode() != 200) {
-//            System.out.println("Status: " + response.statusCode());
-//        }
 }
