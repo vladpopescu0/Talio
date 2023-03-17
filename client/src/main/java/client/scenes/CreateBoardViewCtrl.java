@@ -58,24 +58,25 @@ public class CreateBoardViewCtrl implements Initializable {
      * Creates a new board and adds it to the database when the create button is pressed
      */
     public void createNewBoard() {
-        User u1 = new User("C");
-        Board newBoard = new Board(u1, boardName.getText());
-        u1.addBoard(newBoard);
-        newBoard.addUser(u1);
-
-        try {
-            server.addBoard(newBoard);
-//            server.addUser(u1);
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
+        if (boardName.getText().isEmpty() || boardName.getText() == null) {
+            errorLabel.setVisible(true);
+        } else {
+            User u1 = new User("C");
+            Board newBoard = new Board(u1, boardName.getText());
+            u1.addBoard(newBoard);
+            newBoard.addUser(u1);
+            try {
+                server.addBoard(newBoard);
+//                server.addUser(u1);
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                return;
+            }
+            mainCtrl.showBoardView(newBoard);
         }
-
-        mainCtrl.showBoardView(newBoard);
     }
 
     /**

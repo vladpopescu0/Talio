@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.UserRepository;
 
+import java.util.List;
+
 @Service
 public class UserService extends GenericService<User> {
 
@@ -43,4 +45,28 @@ public class UserService extends GenericService<User> {
         return false;
     }
 
+    /**
+     * Checks whether there exists a user with a given username
+     * @param username the username in search
+     * @return true if-f there exists a user with the given username
+     */
+    public boolean usernameExists(String username) {
+        UserRepository myRepo = (UserRepository) repo;
+        return myRepo.existsByUsername(username);
+    }
+
+    /**
+     * Getter for a user with a given username
+     * @param username the username in search
+     * @return the user if there is one; null otherwise
+     */
+    public User getByUsername(String username) {
+        UserRepository myRepo = (UserRepository) repo;
+        List<User> found = myRepo.findByUsernameIs(username);
+        if (found.isEmpty()) {
+            return null;
+        } else {
+            return found.get(0);
+        }
+    }
 }

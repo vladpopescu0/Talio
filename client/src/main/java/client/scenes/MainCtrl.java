@@ -39,9 +39,11 @@ public class MainCtrl {
 
     private CreateListCtrl createListCtrl;
     private Scene createList;
-    @SuppressWarnings("unused")
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
+    private Scene user;
+    private UserCtrl userCtrl;
+
 
     /**
      * Initializes the application
@@ -51,11 +53,12 @@ public class MainCtrl {
      * @param createList the createList scene
      * @param createBoard the createBoard scene
      * @param addCard the addCard scene
+     * @param userPage the user log in page
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard) {
+                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage) {
 
         this.primaryStage = primaryStage;
 
@@ -75,7 +78,10 @@ public class MainCtrl {
         this.addCtrl=addCard.getKey();
         this.add=new Scene(addCard.getValue());
 
-        showOverview();
+        this.userCtrl = userPage.getKey();
+        this.user = new Scene(userPage.getValue());
+
+        showUserView();
         primaryStage.show();
     }
 
@@ -145,6 +151,14 @@ public class MainCtrl {
     public void createBoardView() {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
+    }
+
+    /**
+     * Shows the sign-in page
+     */
+    public void showUserView() {
+        primaryStage.setTitle("Sign in");
+        primaryStage.setScene(user);
     }
 
 }

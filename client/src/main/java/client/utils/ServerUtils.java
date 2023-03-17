@@ -120,6 +120,20 @@ public class ServerUtils {
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
     }
 
+    /**
+     * Checks whether a username is already used
+     * @param username the username in search
+     * @return true if the username exists in the database;
+     * false otherwise
+     */
+    public User getUser(String username) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/" + username) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
 
 //    public void updateQuotes(Consumer<Quote> quote){
 //        Future<Response> future = ClientBuilder.newClient(new ClientConfig()) //

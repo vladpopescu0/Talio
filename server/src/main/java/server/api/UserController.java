@@ -52,6 +52,7 @@ public class UserController {
      * @return a ResponseEntity verifying the user is saved
      */
     @PostMapping(path = "/add")
+    @SuppressWarnings("unused")
     public ResponseEntity<User> add(@RequestBody User user) {
         User added = userService.add(user);
         if (added == null) {
@@ -73,5 +74,17 @@ public class UserController {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Checks whether a user with a specific username exists, and returns it if so
+     * @param name the username in search
+     * @return a response entity with a user with the given username
+     * if one exists; null otherwise
+     */
+    @GetMapping("/{name}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<User> getByUsername(@PathVariable("name") String name) {
+        return ResponseEntity.ok(userService.getByUsername(name));
     }
 }
