@@ -181,12 +181,38 @@ public class ServerUtils {
     }
 
     /**
+     * Updates a board in the database
+     * @param board the board to be updated
+     * @return the updated board
+     */
+    public Board updateBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/update/" + board.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    /**
      * @param id id of the searched card
      * @return the searched card
      */
     public Card getCardById(long id){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/cards/"+id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+    /**
+     * Gets all the boards a user has joined
+     * @param id the id of the user
+     * @return the list of all boards the user has joined
+     */
+    public List<Board> getBoardsByUserId(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/user/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});

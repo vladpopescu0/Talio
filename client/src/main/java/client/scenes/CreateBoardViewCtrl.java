@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 
 import commons.Board;
-import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -61,16 +60,10 @@ public class CreateBoardViewCtrl implements Initializable {
         if (boardName.getText().isEmpty() || boardName.getText() == null) {
             errorLabel.setVisible(true);
         } else {
-            User u1 = new User("AD");
-            server.addUser(u1);
-            System.out.println(u1);
-            System.out.println(mainCtrl.getCurrentUser());
-            Board newBoard = new Board(u1, boardName.getText());
-            //mainCtrl.getCurrentUser().addBoard(newBoard);
-            //newBoard.addUser(mainCtrl.getCurrentUser());
+            Board newBoard = new Board(server.getUserById(mainCtrl.getCurrentUser().getId()),
+                    boardName.getText());
             try {
                 server.addBoard(newBoard);
-//                server.addUser(u1);
             } catch (WebApplicationException e) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -78,7 +71,8 @@ public class CreateBoardViewCtrl implements Initializable {
                 alert.showAndWait();
                 return;
             }
-            //mainCtrl.getCurrentUser().addBoard(newBoard);
+            mainCtrl.getCurrentUser().setBoardList(server.
+                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
             mainCtrl.showBoardView(newBoard);
         }
     }

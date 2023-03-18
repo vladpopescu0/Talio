@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javax.inject.Inject;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class UserCtrl implements Initializable {
@@ -75,6 +76,8 @@ public class UserCtrl implements Initializable {
             emptyUsernameWarning.setVisible(false);
         } else {
             mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
+            mainCtrl.getCurrentUser().setBoardList(server.
+                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
             mainCtrl.showOverview();
         }
 
@@ -101,6 +104,7 @@ public class UserCtrl implements Initializable {
                 return;
             }
             mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
+            mainCtrl.getCurrentUser().setBoardList(new ArrayList<>());
             mainCtrl.showOverview();
         }
     }

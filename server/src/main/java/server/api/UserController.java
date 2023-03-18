@@ -103,7 +103,7 @@ public class UserController {
         User newUser = repo.getById(id);
         newUser.setUsername(name);
         repo.save(newUser);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(newUser);
     }
 
     /**
@@ -122,7 +122,9 @@ public class UserController {
         if (!repo.existsByUsername(name)) {
             return ResponseEntity.ok(new ArrayList<>());
         }
-
+        User b = repo.findByUsernameIs(name).get().get(0);
         return ResponseEntity.ok(repo.findByUsernameIs(name).get());
     }
+
+
 }

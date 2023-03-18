@@ -18,14 +18,14 @@ public class Board {
      * so the name is the primary key is their name
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
     /**
      * Each Board has a collection of users that have joined the board
      */
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<User> users;
     /**
      * Each board has multiple lists of cards
@@ -70,14 +70,6 @@ public class Board {
         this.users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
-    }
-
-    /**
-     * Constructor of Board only giving a name
-     * @param name the name of the board
-     */
-    public Board(String name) {
-        this.name = name;
     }
 
     /**

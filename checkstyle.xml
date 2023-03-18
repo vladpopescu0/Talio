@@ -50,10 +50,10 @@
         </module>
 
         <module name="MemberName">
-            <property name="severity" value="warning"/>
+            <property name="severity" value="info"/>
         </module>
         <module name="MethodName">
-            <property name="severity" value="warning"/>
+            <property name="severity" value="info"/>
         </module>
         <module name="ParameterName">
             <property name="severity" value="warning"/>

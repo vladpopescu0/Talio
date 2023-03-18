@@ -105,6 +105,10 @@ public class BoardsOverviewCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
+        b.addUser(mainCtrl.getCurrentUser());
+        server.updateBoard(b);
+        mainCtrl.getCurrentUser().setBoardList(server.
+                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
     }
 }
