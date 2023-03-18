@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Board;
+import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -44,6 +45,8 @@ public class MainCtrl {
     private Scene editCard;
     private EditCardCtrl editCardCtrl;
 
+    private User currentUser;
+
 
     /**
      * Initializes the application
@@ -61,7 +64,8 @@ public class MainCtrl {
             Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
                            Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
-                           Pair<EditCardCtrl, Parent> editCard, Pair<ChangeNameCtrl, Parent> changeListName) {
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<ChangeNameCtrl, Parent> changeListName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -91,6 +95,22 @@ public class MainCtrl {
 
         showUserView();
         primaryStage.show();
+    }
+
+    /**
+     * Setter for the current user
+     * @param user the user to be introduced as current user
+     */
+    public void setCurrentUser (User user) {
+        this.currentUser = user;
+    }
+
+    /**
+     * Getter for the current user
+     * @return the current user
+     */
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     /**

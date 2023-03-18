@@ -131,13 +131,28 @@ public class ServerUtils {
      * @return true if the username exists in the database;
      * false otherwise
      */
-    public User getUser(String username) {
+    public List<User> getUserByUsername(String username) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/users/" + username) //
+                .target(SERVER).path("api/users/username/" + username) //
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
     }
+
+    /**
+     * Gets user by ID
+     * @param id the id in search
+     * @return the user in search
+     */
+    public User getUserById(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+
+    }
+
     /**
      * Get a list of cards by having a list id, solving the recursion problem
      * @param id the id of the card list

@@ -4,14 +4,15 @@ import commons.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
     /**
      * Finds all the users with a specific username
-     * @param name the name in search
+     * @param username the name in search
      * @return the list of all users with that username
      */
-    List<User> findByUsernameIs(String name);
+    Optional<List<User>> findByUsernameIs(String username);
 
     /**
      * Checks whether a user with a given username exists

@@ -24,6 +24,8 @@ public class UserCtrl implements Initializable {
     private Label notFoundWarning;
     @FXML
     private Label alreadyUsedWarning;
+    @FXML
+    private Label emptyUsernameWarning;
 
     /**
      * Constructor for the UserCtrl class
@@ -51,6 +53,7 @@ public class UserCtrl implements Initializable {
         username.setText("");
         notFoundWarning.setVisible(false);
         alreadyUsedWarning.setVisible(false);
+        emptyUsernameWarning.setVisible(false);
     }
 
     /**
@@ -65,18 +68,27 @@ public class UserCtrl implements Initializable {
      * Signs in the user
      */
     public void logUserIn() {
-        //if (!isThereAnotherUser()) {
-        //    notFoundWarning.setVisible(true);
-        //}
-        mainCtrl.showOverview();
+        if (getUsername().isEmpty() || getUsername() == null) {
+            emptyUsernameWarning.setVisible(true);
+        } else if (server.getUserByUsername(getUsername()).isEmpty()) {
+            notFoundWarning.setVisible(true);
+            emptyUsernameWarning.setVisible(false);
+        } else {
+            mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
+            mainCtrl.showOverview();
+        }
+
     }
 
     /**
      * Creates a new user
      */
     public void createUser() {
-        if (server.getUser(getUsername()) == null) {
+        if (getUsername().isEmpty() || getUsername() == null) {
+            emptyUsernameWarning.setVisible(true);
+        } else if (!server.getUserByUsername(getUsername()).isEmpty()) {
             alreadyUsedWarning.setVisible(true);
+            emptyUsernameWarning.setVisible(false);
         } else {
             User newUser = new User(getUsername());
             try {
@@ -88,6 +100,7 @@ public class UserCtrl implements Initializable {
                 alert.showAndWait();
                 return;
             }
+            mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
             mainCtrl.showOverview();
         }
     }

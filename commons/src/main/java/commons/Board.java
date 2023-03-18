@@ -67,8 +67,17 @@ public class Board {
     @Inject
     public Board(User creator, String name) {
         this.users = new ArrayList<>();
+        this.users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
+    }
+
+    /**
+     * Constructor of Board only giving a name
+     * @param name the name of the board
+     */
+    public Board(String name) {
+        this.name = name;
     }
 
     /**
@@ -93,6 +102,10 @@ public class Board {
      * @param user the user to be added
      */
     public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+            users.add(user);
+        }
         if (this.users.contains(user)) {
             return;
         }

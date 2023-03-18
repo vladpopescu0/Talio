@@ -61,10 +61,13 @@ public class CreateBoardViewCtrl implements Initializable {
         if (boardName.getText().isEmpty() || boardName.getText() == null) {
             errorLabel.setVisible(true);
         } else {
-            User u1 = new User("C");
+            User u1 = new User("AD");
+            server.addUser(u1);
+            System.out.println(u1);
+            System.out.println(mainCtrl.getCurrentUser());
             Board newBoard = new Board(u1, boardName.getText());
-            u1.addBoard(newBoard);
-            newBoard.addUser(u1);
+            //mainCtrl.getCurrentUser().addBoard(newBoard);
+            //newBoard.addUser(mainCtrl.getCurrentUser());
             try {
                 server.addBoard(newBoard);
 //                server.addUser(u1);
@@ -75,6 +78,7 @@ public class CreateBoardViewCtrl implements Initializable {
                 alert.showAndWait();
                 return;
             }
+            //mainCtrl.getCurrentUser().addBoard(newBoard);
             mainCtrl.showBoardView(newBoard);
         }
     }

@@ -77,6 +77,9 @@ public class User {
      */
     @SuppressWarnings("unused")
     public void addBoard(Board board) {
+        if (this.boardList == null) {
+            this.boardList = new ArrayList<>();
+        }
         if (this.boardList.contains(board)) {
             return;
         }

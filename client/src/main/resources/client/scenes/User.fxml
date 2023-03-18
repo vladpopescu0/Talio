@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Log in " xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
+<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Log in " xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
          <children>
@@ -16,6 +13,7 @@
             <Button layoutX="316.0" layoutY="187.0" mnemonicParsing="false" onAction="#createUser" text="Create new user" />
             <Label fx:id="notFoundWarning" layoutX="98.0" layoutY="258.0" text="It seems like there is no user with this username. Please create a new user" visible="false" />
             <Label fx:id="alreadyUsedWarning" layoutX="102.0" layoutY="291.0" text="It seems like your username is already used. Please enter a different one" visible="false" />
+            <Label fx:id="emptyUsernameWarning" layoutX="213.0" layoutY="315.0" text="Please enter a valid username" />
          </children></AnchorPane>
   </content>
 </TitledPane>
