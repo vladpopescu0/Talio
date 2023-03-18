@@ -2,6 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -19,17 +20,23 @@ public class CardCell extends ListCell<Card> {
     @FXML
     private Button editButton;
 
+    @FXML
+    private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
-    private ServerUtils serverUtils;
+    private ServerUtils server;
     /**
      * useful dependencies for universal variables and server communication
      * @param serverUtils the utils where the connection to the apis is
      * @param mainCtrl the controller of the whole application
      */
-    public CardCell(MainCtrl mainCtrl, ServerUtils serverUtils){
+    public CardCell(MainCtrl mainCtrl, ServerUtils serverUtils, CardList cardList){
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+        this.server = serverUtils;
+        if(this.getItem()!=null){
+            this.getItem().setCardList(cardList);
+        }
+
     }
 
     /**
@@ -50,13 +57,18 @@ public class CardCell extends ListCell<Card> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
-                System.out.println(this.getItem().getId());
                 try {
                     fxmlLoader.load();
                     this.editButton.setOnAction(event -> {
                         mainCtrl.id=this.getItem().getId();
-                        System.out.println(mainCtrl.id);
                         mainCtrl.showEditCard();
+                    });
+                    this.deleteButton.setOnAction(event -> {
+                        System.out.println(this.getItem()+"LLLLLLLL");
+                        var c = server.deleteCardfromList(this.getItem().getCardList().getId(),this.getItem().getId());
+                        System.out.println(c.getEntity());
+                        //var c = server.deleteCard(this.getItem().getId());
+                        //System.out.println(c.getEntity());
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

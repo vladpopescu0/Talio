@@ -12,7 +12,6 @@ import java.util.List;
 @RequestMapping("/api/cards")
 public class CardController {
     private final CardRepository repo;
-
     public CardController(CardRepository repo){
         this.repo = repo;
     }
@@ -32,13 +31,15 @@ public class CardController {
         }
         return ResponseEntity.ok(repo.findById(id).get());
     }
-
-    @GetMapping("/addlist/{id}")
-    public ResponseEntity<List<Card>> getCardsByListId(@PathVariable("id") long id){
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteCard(@PathVariable("id") long id){
         if(id<0 || !repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(null);
+        System.out.println(repo.getById(id));
+        //repo.deleteInRelationByCardId(id);
+        repo.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/add")
@@ -61,17 +62,6 @@ public class CardController {
         newChangedCard.setName(name);
         repo.save(newChangedCard);
         return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Changes the parent list of a card, could be used when dragged and dropped
-     * @param id id of card that is changed
-     * @return response of request
-     */
-
-    @DeleteMapping(path = "/delete/{id}")
-    public void removeCard(@PathVariable("id") long id){
-        repo.deleteById(id);
     }
 
 }

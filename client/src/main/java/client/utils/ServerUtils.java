@@ -22,6 +22,7 @@ import java.util.List;
 
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.User;
@@ -98,30 +99,23 @@ public class ServerUtils {
     }
 
     /**
-     * Adds a card to the database
-     * @param card the card to be added, if not valid will throw error 400
-     * @return The card that was added in a deserialized form
-     */
-    public Card addCard(Card card){
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/add") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    /**
      * Get a list of cards by having a list id, solving the recursion problem
      * @param id the id of the card list
      * @return the cards that are connected to that card list
      */
     public Card addCardToList(Card card,long id){
-        System.out.println(card + "card");
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/addCard/"+id)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card,APPLICATION_JSON),Card.class);
+    }
+    public Response deleteCardfromList(long id,long cardId){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/lists/"+id + "/delete/"+cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
     }
     public String updateCard(String name,long id){
         return ClientBuilder.newClient(new ClientConfig()) //

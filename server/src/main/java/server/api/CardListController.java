@@ -43,13 +43,12 @@ public class CardListController {
     }
 
     @PostMapping("/addCard/{id}")
-    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
-        if(card==null){
+    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card) {
+        if (card == null || !CLService.addCard(id, card)) {
             System.out.println("this is null");
             return ResponseEntity.badRequest().build();
         }
-        System.out.println(card +"this is card");
-        CLService.addCard(id,card);
+        System.out.println(card + "this is card");
         return ResponseEntity.ok(card);
     }
 
@@ -66,12 +65,11 @@ public class CardListController {
 //        Quote saved = repo.save(quote);
 //        return ResponseEntity.ok(saved);
         CardList addedList = CLService.add(list);
-        if(addedList == null){
+        if (addedList == null) {
             return ResponseEntity.badRequest().build();
         }
         return ResponseEntity.ok(addedList);
     }
-
 
     /**
      * @param id the id of the list that is deleted
@@ -97,5 +95,12 @@ public class CardListController {
         return ResponseEntity.ok().build();
     }
 
-
+    @DeleteMapping(path = "/{id}/delete/{cardId}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<CardList> deleteCardFromList(@PathVariable("id") long id, @PathVariable("cardId") long cardId){
+        if(CLService.removeCard(id,cardId)){
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(CLService.getById(id));
     }
+}

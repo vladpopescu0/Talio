@@ -54,16 +54,22 @@ public class AddCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                server.addCardToList(toBeAdded,mainCtrl.id);
+                var checkIfPossible= server.addCardToList(toBeAdded,mainCtrl.id);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.board);
             }
         } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            if(e.getResponse().getStatus()==400){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("The list does not exist!");
+                alert.showAndWait();
+            }else{
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("There was an error when adding your task!");
+                alert.showAndWait();
+            }
         }
 
     }

@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import server.database.CardListRepository;
 
+import java.util.stream.Collectors;
+
 @Service
 public class CardListService extends GenericService<CardList> {
 
@@ -25,6 +27,7 @@ public class CardListService extends GenericService<CardList> {
 
         return repo.save(cl);
     }
+
 
     /**
      * @param target the CardList whose name needs to be modified
@@ -52,6 +55,19 @@ public class CardListService extends GenericService<CardList> {
             CardList cl = repo.getById(id);
             cl.addCard(card);
             repo.save(cl);
+            return true;
+        }
+        return false;
+    }
+    public boolean removeCard(long id, long cardId){
+        if(repo.existsById(id)){
+            CardList cardList = repo.getById(id);
+            var filteredList = cardList.getCards().stream().filter(card -> card.getId()!=cardId).collect(Collectors.toList());
+            if(cardList.getCards().size()==filteredList.size()){
+                return false;
+            }
+            cardList.setCards(filteredList);
+            repo.save(cardList);
             return true;
         }
         return false;

@@ -53,7 +53,6 @@ public class CardList {
      */
     @SuppressWarnings("unused")
     public CardList(String name, List<Card> cards){
-        this.id = id;
         this.name = name;
         this.cards = cards;
     }
@@ -107,6 +106,13 @@ public class CardList {
         this.name = name;
     }
 
+    /**
+     * setter for the list of cards
+     * @param cards the new list of cards
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+    }
     /** Sets a new board for a CardList object
      * @param board board that needs to be appended to object
      */

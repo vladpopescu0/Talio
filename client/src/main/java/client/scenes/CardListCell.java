@@ -8,10 +8,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -86,7 +83,8 @@ public class CardListCell extends ListCell<CardList> {
             List<Card> cards = (cl==null ? new ArrayList<>() : cl.getCards());
             cardObservableList = FXCollections.observableList(cards);
             cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl,server));
+            System.out.println(this.getItem()+"MMMMMMMMMM");
+            cardsList.setCellFactory(c -> new CardCell(mainCtrl,server,this.getItem()));
 
             setText(null);
             setGraphic(titledPane);
