@@ -126,12 +126,40 @@ public class ServerUtils {
     }
 
     /**
+     * Checks whether a username is already used
+     * @param username the username in search
+     * @return true if the username exists in the database;
+     * false otherwise
+     */
+    public List<User> getUserByUsername(String username) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/username/" + username) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
+
+    /**
+     * Gets user by ID
+     * @param id the id in search
+     * @return the user in search
+     */
+    public User getUserById(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/users/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+
+    }
+
+    /**
      * Get a list of cards by having a list id, solving the recursion problem
      * @param id the id of the card list
      * @param card the card that needs to be added
      * @return the cards that are connected to that card list
      */
-    public Card addCardToList(Card card,long id){
+    public Card addCardToList(Card card, long id){
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/addCard/"+id)//
                 .request(APPLICATION_JSON) //
@@ -153,6 +181,19 @@ public class ServerUtils {
     }
 
     /**
+     * Updates a board in the database
+     * @param board the board to be updated
+     * @return the updated board
+     */
+    public Board updateBoard(Board board) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/update/" + board.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+    }
+
+    /**
      * @param id id of the searched card
      * @return the searched card
      */
@@ -164,5 +205,16 @@ public class ServerUtils {
                 .get(new GenericType<>() {});
     }
 
-
+    /**
+     * Gets all the boards a user has joined
+     * @param id the id of the user
+     * @return the list of all boards the user has joined
+     */
+    public List<Board> getBoardsByUserId(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/user/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>() {});
+    }
 }

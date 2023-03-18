@@ -20,7 +20,7 @@ public class User {
     //@JsonIgnore
 //    @JsonBackReference
     @JsonBackReference
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 //    @JoinTable(
 //            name = "user_board",
 //            joinColumns = @JoinColumn(name = "user_id"),
@@ -77,6 +77,9 @@ public class User {
      */
     @SuppressWarnings("unused")
     public void addBoard(Board board) {
+        if (this.boardList == null) {
+            this.boardList = new ArrayList<>();
+        }
         if (this.boardList.contains(board)) {
             return;
         }
@@ -134,5 +137,13 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 '}';
+    }
+
+    /**
+     * Setter for the boardList
+     * @param boardList the new list of boards of a user
+     */
+    public void setBoardList(List<Board> boardList) {
+        this.boardList = boardList;
     }
 }

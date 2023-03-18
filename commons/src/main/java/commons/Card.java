@@ -16,7 +16,7 @@ public class Card {
     private String name;
 
     /**
-     * Empty consrtuctor
+     * Empty constructor
      */
     public Card(){
 
