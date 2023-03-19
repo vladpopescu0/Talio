@@ -106,7 +106,7 @@ public class CardListCell extends ListCell<CardList> {
             try {
                 cl = cardListCommunication.getCL(id);
             } catch (BadRequestException br) {
-                br.printStackTrace();
+                System.out.println("error");
             }
 
             List<Card> cards = (cl == null ? new ArrayList<>() : cl.getCards());

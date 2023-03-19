@@ -100,7 +100,6 @@ public class CardListController {
      * @return ok if the modification goes through, false otherwise
      */
     @PutMapping(path = "/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<CardList> modifyName(@PathVariable("id") long id,
                                                @RequestBody String name){
         CardList cl = cLService.changeName(cLService.getById(id),name);
