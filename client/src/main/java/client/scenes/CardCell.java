@@ -1,13 +1,27 @@
 package client.scenes;
 
+import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+
+import java.util.List;
+import java.util.Objects;
+
+import static client.scenes.MainCtrl.cardDataFormat;
+import static client.utils.ServerUtils.packCardList;
 
 public class CardCell extends ListCell<Card> {
     @FXML
@@ -22,14 +36,27 @@ public class CardCell extends ListCell<Card> {
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
+
+    private final CardListCommunication cardListCommunication;
+
     /**
      * useful dependencies for universal variables and server communication
-     * @param serverUtils the utils where the connection to the apis is
+     * @param server the utils where the connection to the apis is
+     * @param cardListCommunication the utils for CardList class
      * @param mainCtrl the controller of the whole application
      */
-    public CardCell(MainCtrl mainCtrl, ServerUtils serverUtils){
+    public CardCell(MainCtrl mainCtrl,
+                    CardListCommunication cardListCommunication, ServerUtils server) {
+        serverUtils = server;
+        this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
-        this.serverUtils = serverUtils;
+    }
+
+    /**
+     * Enable drag-and-drop upon initialization
+     */
+    public void initialize() {
+        handleDraggable();
     }
 
     /**
@@ -66,5 +93,98 @@ public class CardCell extends ListCell<Card> {
             setText(null);
             setGraphic(cardPane);
         }
+    }
+
+    /**
+     * Handles drag-and-drop gestures for Card
+     * Object equality is handled by ID equality as Serialized Objects may differ
+     * and yield false for equals method
+     */
+    public void handleDraggable() {
+        this.setOnDragDetected(event -> {
+            Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.put(cardDataFormat, this.getItem());
+
+            db.setContent(content);
+            WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
+            db.setDragView(snapshot);
+
+            event.consume();
+        });
+
+        this.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.ANY);
+
+            event.consume();
+        });
+
+        this.setOnDragDropped(event -> {
+            if (event.getDragboard().hasContent(cardDataFormat)) {
+                Card origin = (Card) event.getDragboard().getContent(cardDataFormat);
+
+                if (origin.getId() != this.getItem().getId()) {
+                    if (Objects.equals(origin.getParentCardList().getId(),
+                            this.getItem().getParentCardList().getId())) {
+                        dragCardToIdentical(origin);
+                    } else {
+                        dragCardToDifferent(origin);
+                    }
+                }
+            }
+            //CardList drag-and-drop is currently disabled
+            /*if (event.getDragboard().hasContent(cardListDataFormat)) {
+                CardList origin = (CardList) event.getDragboard().getContent(cardListDataFormat);
+
+                if (!Objects.equals(origin.getId(), this.getItem().getParentCardList().getId())) {
+                    System.out.println("Drag of CardList: " + origin.getName() + " to CardList: "
+                            + this.getItem().getParentCardList().getName());
+                }
+            }*/
+
+            event.setDropCompleted(true);
+
+            event.consume();
+        });
+    }
+
+    /**
+     * Handles drag-and-drop gesture between Cards of the same CardList
+     * @param origin the Card that the gesture origins from
+     */
+    public void dragCardToIdentical(Card origin) {
+        Board board = mainCtrl.getBoardViewCtrl().getBoard();
+        int parentIndex = board.getList().indexOf(this.getItem().getParentCardList());
+        long parentId = this.getItem().getParentCardList().getId();
+        origin.setParentCardList(null);
+        this.getItem().setParentCardList(null);
+        cardListCommunication.moveCard(parentId,
+                List.of(origin, this.getItem()));
+        board.getList().set(parentIndex, cardListCommunication.getCL(parentId));
+    }
+
+    /**
+     * Handles drag-and-drop gesture between Cards of different CardLists
+     * This method may be improved at a later point
+     * @param origin the Card that the gesture origins from
+     */
+    public void dragCardToDifferent(Card origin) {
+        Board board = mainCtrl.getBoardViewCtrl().getBoard();
+        int oldParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+                origin.getParentCardList().getId()));
+        int newParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+                this.getItem().getParentCardList().getId()));
+        CardList oldParent = origin.getParentCardList();
+        CardList newParent = this.getItem().getParentCardList();
+        packCardList(oldParent);
+        packCardList(newParent);
+        serverUtils.updateParent(origin.getId(), List.of(oldParent, newParent));
+        CardList newCardList = cardListCommunication.getCL(newParent.getId());
+        board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
+        board.getList().set(newParentIndex, newCardList);
+        this.getItem().setParentCardList(newCardList);
+        origin.setParentCardList(newCardList);
+
+        dragCardToIdentical(origin);
     }
 }
