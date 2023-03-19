@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 
 import commons.Board;
-import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -50,6 +49,7 @@ public class CreateBoardViewCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        boardName.setText("Board");
         errorLabel.setVisible(false);
     }
 
@@ -57,23 +57,24 @@ public class CreateBoardViewCtrl implements Initializable {
      * Creates a new board and adds it to the database when the create button is pressed
      */
     public void createNewBoard() {
-        User u1 = new User("C");
-        Board newBoard = new Board(u1, boardName.getText());
-        u1.addBoard(newBoard);
-        newBoard.addUser(u1);
-
-        try {
-            server.addBoard(newBoard);
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
+        if (boardName.getText().isEmpty() || boardName.getText() == null) {
+            errorLabel.setVisible(true);
+        } else {
+            Board newBoard = new Board(server.getUserById(mainCtrl.getCurrentUser().getId()),
+                    boardName.getText());
+            try {
+                server.addBoard(newBoard);
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                return;
+            }
+            mainCtrl.getCurrentUser().setBoardList(server.
+                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+            mainCtrl.showBoardView(newBoard);
         }
-
-        toBoardsOverview();
     }
 
     /**
@@ -90,15 +91,6 @@ public class CreateBoardViewCtrl implements Initializable {
     public void toBoardsOverview() {
         resetField();
         mainCtrl.showOverview();
-        boardName.clear();
-    }
-
-    /**
-     * Goes back to the overview
-     */
-    public void cancel(){
-        mainCtrl.showOverview();
-        boardName.clear();
     }
 
 }

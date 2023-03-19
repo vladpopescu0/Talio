@@ -21,7 +21,7 @@ public class Card implements Serializable {
     private CardList parentCardList;
 
     /**
-     * Empty consrtuctor
+     * Empty constructor
      */
     public Card(){
 

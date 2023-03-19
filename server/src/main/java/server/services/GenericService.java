@@ -24,7 +24,7 @@ public class GenericService<T> {
      * @return the entity if it exists, null otherwise
      */
     public T getById(long id) {
-        if(repo == null || repo.findById(id).isEmpty()){
+        if(repo == null || repo.existsById(id)){
             return null;
         } else {
             return repo.findById(id).get();

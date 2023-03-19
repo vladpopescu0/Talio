@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Board;
+import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
@@ -32,10 +33,13 @@ public class MainCtrl {
     private Scene addCard;
     private CreateListCtrl createListCtrl;
     private Scene createList;
-    private long id;
-    private long cardId;
     private CreateBoardViewCtrl createBoardViewCtrl;
     private Scene createBoard;
+    private Scene user;
+    private UserCtrl userCtrl;
+
+    private long id;
+    private long cardId;
     private ChangeNameCtrl changeListNameCtrl;
     private Scene changeListName;
     private AddCardCtrl addCardCtrl;
@@ -44,26 +48,26 @@ public class MainCtrl {
 
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
+    private User currentUser;
 
     /**
      * Initializes the application
-     *
      * @param primaryStage the primary stage used
-     * @param overview     the boardOverview scene
-     * @param boardView    the boardView scene
-     * @param createList   the createList scene
-     * @param create       the createBoard scene
-     * @param addCard      the addCard scene
-     * @param changeListName the changeListName scene
+     * @param overview the boardOverview scene
+     * @param boardView the boardView scene
+     * @param createList the createList scene
+     * @param createBoard the createBoard scene
+     * @param addCard the addCard scene
+     * @param userPage the user log in page
      * @param editCard the editCard scene
+     * @param changeListName the changeListName scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-                           Pair<BoardViewCtrl, Parent> boardView,
-                           Pair<CreateListCtrl, Parent> createList,
-                           Pair<CreateBoardViewCtrl, Parent> create,
-                           Pair<ChangeNameCtrl, Parent> changeListName,
-                           Pair<AddCardCtrl, Parent> addCard,
-                           Pair<EditCardCtrl, Parent> editCard) {
+            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<CreateBoardViewCtrl, Parent> createBoard,
+                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
+                           Pair<EditCardCtrl, Parent> editCard,
+                           Pair<ChangeNameCtrl, Parent> changeListName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -76,8 +80,8 @@ public class MainCtrl {
         this.createListCtrl = createList.getKey();
         this.createList = new Scene(createList.getValue());
 
-        this.createBoardViewCtrl = create.getKey();
-        this.createBoard = new Scene(create.getValue());
+        this.createBoardViewCtrl = createBoard.getKey();
+        this.createBoard = new Scene(createBoard.getValue());
 
         this.changeListNameCtrl = changeListName.getKey();
         this.changeListName = new Scene(changeListName.getValue());
@@ -88,8 +92,27 @@ public class MainCtrl {
         this.editCard = new Scene(editCard.getValue());
         this.editCardCtrl = editCard.getKey();
 
-        showOverview();
+        this.userCtrl = userPage.getKey();
+        this.user = new Scene(userPage.getValue());
+
+        showUserView();
         primaryStage.show();
+    }
+
+    /**
+     * Setter for the current user
+     * @param user the user to be introduced as current user
+     */
+    public void setCurrentUser (User user) {
+        this.currentUser = user;
+    }
+
+    /**
+     * Getter for the current user
+     * @return the current user
+     */
+    public User getCurrentUser() {
+        return currentUser;
     }
 
     /**
@@ -173,6 +196,14 @@ public class MainCtrl {
     public void createBoardView() {
         primaryStage.setTitle("New Board");
         primaryStage.setScene(createBoard);
+    }
+
+    /**
+     * Shows the sign-in page
+     */
+    public void showUserView() {
+        primaryStage.setTitle("Sign in");
+        primaryStage.setScene(user);
     }
 
     /** Shows the ChangeListName scene
