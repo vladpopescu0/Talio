@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Card;
-import commons.CardList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -20,23 +19,17 @@ public class CardCell extends ListCell<Card> {
     @FXML
     private Button editButton;
 
-    @FXML
-    private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
-    private ServerUtils server;
+    private ServerUtils serverUtils;
     /**
      * useful dependencies for universal variables and server communication
      * @param serverUtils the utils where the connection to the apis is
      * @param mainCtrl the controller of the whole application
      */
-    public CardCell(MainCtrl mainCtrl, ServerUtils serverUtils, CardList cardList){
+    public CardCell(MainCtrl mainCtrl, ServerUtils serverUtils){
         this.mainCtrl = mainCtrl;
-        this.server = serverUtils;
-        if(this.getItem()!=null){
-            this.getItem().setCardList(cardList);
-        }
-
+        this.serverUtils = serverUtils;
     }
 
     /**
@@ -60,15 +53,8 @@ public class CardCell extends ListCell<Card> {
                 try {
                     fxmlLoader.load();
                     this.editButton.setOnAction(event -> {
-                        mainCtrl.id=this.getItem().getId();
+                        mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
-                    });
-                    this.deleteButton.setOnAction(event -> {
-                        System.out.println(this.getItem()+"LLLLLLLL");
-                        var c = server.deleteCardfromList(this.getItem().getCardList().getId(),this.getItem().getId());
-                        System.out.println(c.getEntity());
-                        //var c = server.deleteCard(this.getItem().getId());
-                        //System.out.println(c.getEntity());
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

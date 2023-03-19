@@ -1,5 +1,6 @@
 package client.scenes;
 
+import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -25,70 +26,74 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private final CardListCommunication cardListCommunication;
+
     /**
-     * Constructor for AddCardCtrl
-     * @param server
-     * @param mainCtrl
+     * Constructor for the AddCardCtrl class
+     * @param server the server to be used
+     * @param mainCtrl the mainCtrl of the application
+     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl,
+                       CardListCommunication cardListCommunication) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+        this.cardListCommunication = cardListCommunication;
 
     }
 
     /**
      * button for cancelling the add card scene, returning to the board
+     * Cancel button that returns back to the boardView
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showBoardView(mainCtrl.board);
-        System.out.println(mainCtrl.id);
+        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
     }
 
     /**
      * The function connected to the add card button, posts the card in the
      * database by adding it to a list with a given id
+     * The method called when pressing the button creating a card
      */
     public void ok() {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                var checkIfPossible= server.addCardToList(toBeAdded,mainCtrl.id);
+                //CardList before = cardListCommunication.getCL(mainCtrl.getId());
+                server.addCardToList(toBeAdded,mainCtrl.getId());
+                //CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                //Board board = mainCtrl.getBoardViewCtrl().getBoard();
+                //int index = board.getList().indexOf(before);
+                //board.getList().set(index,after);
                 clearFields();
-                mainCtrl.showBoardView(mainCtrl.board);
+                mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }
         } catch (WebApplicationException e) {
-            if(e.getResponse().getStatus()==400){
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("The list does not exist!");
-                alert.showAndWait();
-            }else{
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText("There was an error when adding your task!");
-                alert.showAndWait();
-            }
+
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
         }
 
     }
 
     /**
-     * Create a Card object with fields as the text in the add card scene
-     * @return the string as a parametrized object
+     * Gets a card with the fields filled by the user
+     * @return
      */
     private Card getCard() {
         var name = title.getText();
         Card newCard = new Card(name);
-        System.out.println(newCard);
         return newCard;
     }
 
     /**
-     * Checks whether a string is "" or null
-     * @param s the string to be tested
-     * @return true if the string is as described, false otherwise
+     * Checks if a string is null or empty
+     * @param s the string to be checked
+     * @return true is s == null or s = ''
      */
     private static boolean isNullOrEmpty(String s) {
         return s == null || s.isEmpty();
@@ -100,5 +105,4 @@ public class AddCardCtrl {
     private void clearFields() {
         title.clear();
     }
-
 }

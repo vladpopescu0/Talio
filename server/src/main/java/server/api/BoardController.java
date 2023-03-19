@@ -3,22 +3,24 @@ package server.api;
 import commons.Board;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.services.BoardService;
+import server.database.BoardRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("api/boards")
 public class BoardController {
 
-    private final BoardService boardService;
+    //private final BoardService boardService;
+    private final BoardRepository repo;
 
     /**
      * Constructor for the BoardController class
-     * @param boardService the board service used
+     * @param repo the repository used
      */
-    public BoardController(BoardService boardService) {
-        this.boardService = boardService;
+    public BoardController(BoardRepository repo) {
+        this.repo = repo;
     }
 
     /**
@@ -29,7 +31,8 @@ public class BoardController {
 
     @GetMapping(path = {"", "/"})
     public List<Board> getAll() {
-        return boardService.getAll();
+        //return boardService.getAll();
+        return repo.findAll();
     }
 
     /**
@@ -39,13 +42,16 @@ public class BoardController {
      * If there isn't one, an error page comes up.
      */
     @GetMapping("/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
-        Board board = boardService.getById(id);
-        if (board == null) {
+        //Board board = boardService.getById(id);
+        //if (board == null) {
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //return ResponseEntity.ok(board);
+        if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(board);
+        return ResponseEntity.ok(repo.findById(id).get());
     }
 
     /**
@@ -55,12 +61,34 @@ public class BoardController {
      */
     @PostMapping(path ="/add")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        Board added = boardService.add(board);
-        if(added == null){
+        //Board added = boardService.add(board);
+        //if(added == null){
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //return ResponseEntity.ok(added);
+        if (board == null || board.getName() == null|| board.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok(added);
+        Board saved = repo.save(board);
+        return ResponseEntity.ok(saved);
     }
+
+    /**
+     * @param board the board that is modified
+     * @return a ResponseEntity verifying the board is saved
+     */
+    //@PutMapping(path ="/modify")
+    //public ResponseEntity<Board> putBoard(@RequestBody Board board) {
+        //Board added = boardService.add(board);
+        //if(added == null){
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //return ResponseEntity.ok(added);
+    //    if (board.getName() == null || board.getName().isEmpty()) {
+    //        return ResponseEntity.badRequest().build();
+    //    }
+
+    //}
 
     /**
      * Deletes a board from the repo
@@ -70,10 +98,16 @@ public class BoardController {
     @DeleteMapping(path = "/delete/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<Board> removeBoard(@PathVariable("id") long id) {
-        if (boardService.delete(id)){
+        //if (boardService.delete(id)){
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //return ResponseEntity.ok().build();
+        if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().build();
+        Board deleted = repo.getById(id);
+        repo.deleteById(id);
+        return ResponseEntity.ok(deleted);
     }
 
     /**
@@ -85,9 +119,47 @@ public class BoardController {
     @PostMapping(path = "/{id}")
     @SuppressWarnings("unused")
     public ResponseEntity<Board> modifyName(@PathVariable("id") long id, @RequestBody String name) {
-        if(!boardService.changeName(boardService.getById(id), name)) {
+        //if(!boardService.changeName(boardService.getById(id), name)) {
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //return ResponseEntity.ok().build();
+        if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().build();
+        Board newBoard = repo.getById(id);
+        newBoard.setName(name);
+        repo.save(newBoard);
+        return ResponseEntity.ok(newBoard);
+    }
+
+    /**
+     * Gets all the boards a user has joined
+     * @param id the id of the user
+     * @return a response entity containing all the boards a user has joined
+     */
+    @GetMapping("/user/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<List<Board>> getBoardsByUser(@PathVariable("id") long id) {
+        if (id < 0 || !repo.existsByUsers_Id(id)) {
+            return ResponseEntity.ok(new ArrayList<>());
+        }
+        return ResponseEntity.ok(repo.findByUsers_Id(id));
+    }
+
+    /**
+     * Updates a board
+     * @param id the id of the board to be updated
+     * @param board the new version of the board
+     * @return a response entity containing the updated board, if the update is possible
+     */
+    @PutMapping("/update/{id}")
+    @SuppressWarnings("unused")
+    public ResponseEntity<Board> updateBoard(@PathVariable("id") long id,
+                                             @RequestBody Board board) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.save(board);
+        return ResponseEntity.ok(board);
     }
 }

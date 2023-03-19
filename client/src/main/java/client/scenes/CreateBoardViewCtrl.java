@@ -3,7 +3,6 @@ package client.scenes;
 import client.utils.ServerUtils;
 
 import commons.Board;
-import commons.User;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,42 +26,72 @@ public class CreateBoardViewCtrl implements Initializable {
     @FXML
     private Label errorLabel;
 
+    /**
+     * Constructor for the CreateBoardViewCtrl class
+     * @param server the server to be used
+     * @param mainCtrl the main controller of the application
+     */
     @Inject
     public CreateBoardViewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
 
+    /**
+     * Initializer for the createBoard scene
+     * @param location
+     * The location used to resolve relative paths for the root object, or
+     * {@code null} if the location is not known.
+     *
+     * @param resources
+     * The resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         boardName.setText("Board");
         errorLabel.setVisible(false);
     }
-    @SuppressWarnings("unused")
-    public Board getBoard() {
-        User u1 = new User("a");
-        return new Board(u1, boardName.getText());
+
+    /**
+     * Creates a new board and adds it to the database when the create button is pressed
+     */
+    public void createNewBoard() {
+        if (boardName.getText().isEmpty() || boardName.getText() == null) {
+            errorLabel.setVisible(true);
+        } else {
+            Board newBoard = new Board(server.getUserById(mainCtrl.getCurrentUser().getId()),
+                    boardName.getText());
+            try {
+                server.addBoard(newBoard);
+            } catch (WebApplicationException e) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+                return;
+            }
+            mainCtrl.getCurrentUser().setBoardList(server.
+                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+            mainCtrl.showBoardView(newBoard);
+        }
     }
 
-    public void createNewBoard() {
-        User u1 = new User("C");
-        Board newBoard = new Board(u1, boardName.getText());
-        u1.addBoard(newBoard);
-        newBoard.addUser(u1);
+    /**
+     * Resets the field to 'Board'
+     */
+    public void resetField() {
+        boardName.setText("Board");
+    }
 
-        try {
-            server.addBoard(newBoard);
-//            server.addUser(u1);
-        } catch (WebApplicationException e) {
-
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            return;
-        }
-
+    /**
+     * Redirects the user back to the overview page and
+     * resets the board name field
+     */
+    public void toBoardsOverview() {
+        resetField();
         mainCtrl.showOverview();
     }
+
 }
 

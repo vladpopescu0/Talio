@@ -14,7 +14,9 @@ public class GenericService<T> {
      * Gets all the entities in the repository
      * @return all the entities in the repo as a list
      */
-    public List<T> getAll() {return repo.findAll();}
+    public List<T> getAll() {
+        return repo.findAll();
+    }
 
     /**
      * Gets an entity with a specific id, if existing
@@ -22,7 +24,7 @@ public class GenericService<T> {
      * @return the entity if it exists, null otherwise
      */
     public T getById(long id) {
-        if(repo == null || repo.findById(id).isEmpty()){
+        if(repo == null || repo.existsById(id)){
             return null;
         } else {
             return repo.findById(id).get();

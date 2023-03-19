@@ -2,6 +2,8 @@ package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.inject.Inject;
 import javax.persistence.*;
@@ -16,22 +18,23 @@ public class Board {
      * so the name is the primary key is their name
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
     private String name;
-
     /**
      * Each Board has a collection of users that have joined the board
      */
-
-    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private List<User> users;
-
     /**
      * Each board has multiple lists of cards
      */
-    @OneToMany(mappedBy = "board", fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = CardList.class,
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "board_id")
     private List<CardList> list;
 
     /**
@@ -47,8 +50,10 @@ public class Board {
         this.list = list;
         this.name = name;
     }
-    //empty constructor was necessary since post requests do not work for some reasons
-    //also when creating a post request, the first name and last name of the person are set to null
+    /**
+    *empty constructor was necessary since post requests do not work for some reasons
+    *also when creating a post request, the first name and last name of the person are set to null
+     */
     @SuppressWarnings("unused")
     public Board() {
         // for object mappers
@@ -62,6 +67,7 @@ public class Board {
     @Inject
     public Board(User creator, String name) {
         this.users = new ArrayList<>();
+        this.users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
     }
@@ -88,6 +94,10 @@ public class Board {
      * @param user the user to be added
      */
     public void addUser(User user) {
+        if (users == null) {
+            users = new ArrayList<>();
+            users.add(user);
+        }
         if (this.users.contains(user)) {
             return;
         }
@@ -95,6 +105,10 @@ public class Board {
         user.getBoardList().add(this);
     }
 
+    /**
+     * Removes a user from a board
+     * @param user the user to be removed
+     */
     @SuppressWarnings("unused")
     public void removeUser(User user) {
         this.users.remove(user);
@@ -122,7 +136,6 @@ public class Board {
      * Getter for the list of CardLists
      * @return the CardLists
      */
-    @SuppressWarnings("unused")
     public List<CardList> getList() {
         return list;
     }

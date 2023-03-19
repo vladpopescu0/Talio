@@ -1,20 +1,34 @@
 package client.scenes;
 
+import client.communication.CardListCommunication;
+import com.google.inject.Inject;
+import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TitledPane;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardListCell extends ListCell<CardList> {
+
+    private final MainCtrl mainCtrl;
+
+    private final CardListCommunication cardListCommunication;
+
+    @FXML
+    private Button editListButton;
+
+    @FXML
+    private Button deleteList;
     @FXML
     private TitledPane titledPane;
 
@@ -28,29 +42,33 @@ public class CardListCell extends ListCell<CardList> {
 
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
-    private MainCtrl mainCtrl;
 
     /**
-     *useful dependencies for universal variables and server communication
-     * @param serverUtils the utils where the connection to the apis is
-     * @param mainCtrl the controller of the whole application
+     * useful dependencies for universal variables and server communication
+     *
+     * @param serverUtils           the utils where the connection to the apis is
+     * @param mainCtrl              the controller of the whole application
+     * @param cardListCommunication the utils for CardList class
      */
     @Inject
-    public CardListCell(ServerUtils serverUtils, MainCtrl mainCtrl){
+    public CardListCell(MainCtrl mainCtrl,
+                        CardListCommunication cardListCommunication, ServerUtils serverUtils) {
         this.server = serverUtils;
+        this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
     }
+
     /**
      * Update method for a custom ListCell
+     *
      * @param cardList The new item for the cell.
-     * @param empty whether or not this cell represents data from the list. If it
-     *        is empty, then it does not represent any domain data, but is a cell
-     *        being used to render an "empty" row.
+     * @param empty    whether or not this cell represents data from the list. If it
+     *                 is empty, then it does not represent any domain data, but is a cell
+     *                 being used to render an "empty" row.
      */
     @Override
     protected void updateItem(CardList cardList, boolean empty) {
         super.updateItem(cardList, empty);
-
         if (empty || cardList == null) {
             setText(null);
             setGraphic(null);
@@ -58,36 +76,69 @@ public class CardListCell extends ListCell<CardList> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
-
                 try {
                     fxmlLoader.load();
-                    System.out.println(this.getItem().getId());
+                    editListButton.setOnAction(event -> {
+                        rename(cardList.getId());
+                        mainCtrl.getBoardViewCtrl().refreshRename();
+                    });
+                    deleteList.setOnAction(event -> {
+                        delete(cardList.getId());
+                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
+
+                    });
                     addCardButton.setOnAction(event -> {
-                        mainCtrl.id=this.getItem().getId();
+                        System.out.println(this.getItem().getId());
+                        mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            refresh();
             titledPane.setText(cardList.getName());
-            System.out.println(this.getItem().getId());
-            long id = this.getItem().getId();
-            CardList cl=null;
-            try{
-                cl = server.getCardListById(id);
-            }catch(BadRequestException br){
-                System.out.println("tzac");
-                //br.printStackTrace();
-            }
-            List<Card> cards = (cl==null ? new ArrayList<>() : cl.getCards());
-            cardObservableList = FXCollections.observableList(cards);
-            cardsList.setItems(cardObservableList);
-            System.out.println(this.getItem()+"MMMMMMMMMM");
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl,server,this.getItem()));
+//            //long id = this.getItem().getId();
+//
+//            CardList cl = null;
+//            try {
+//                System.out.println(id + "this id \n");
+//                //cl = cardListCommunication.getCL(id);
+//            } catch (BadRequestException br) {
+//                br.printStackTrace();
+//            }
 
             setText(null);
             setGraphic(titledPane);
         }
     }
+
+    /** Helper method for renaming a cardlist
+     * @param id the id of the cardList whose name will be modified
+     */
+    public void rename(Long id) {
+        mainCtrl.showChangeListName(id);
+    }
+
+    /**
+     * refresh method for an individual list of cards
+     * on the client
+     */
+    public void refresh(){
+        List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
+        cardObservableList = FXCollections.observableList(cards);
+        cardsList.setItems(cardObservableList);
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server));
+    }
+
+    /** Helper method for renaming a cardlist
+     * @param id the id of the cardList which will be deleted
+     */
+    public void delete(Long id) {
+        Board b = mainCtrl.getBoardViewCtrl().getBoard();
+        cardListCommunication.removeCL(id);
+        mainCtrl.showBoardView(b);
+    }
+
+
 }

@@ -18,6 +18,7 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.communication.CardListCommunication;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -35,6 +36,8 @@ public class BoardViewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
+    private final CardListCommunication cardListCommunication;
+
     private Board board;
 
     @FXML
@@ -50,13 +53,15 @@ public class BoardViewCtrl implements Initializable {
      * Constructor of the Controller for BoardView
      * @param server Server Utility class
      * @param mainCtrl Main controller of the program
+     * @param board the board to be displayed
+     * @param cardListCommunication the cardlist utility class
      */
     @Inject
-    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
+    public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl,
+                         Board board, CardListCommunication cardListCommunication) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-
-        //User user = new User("User"); //Create a front-end only instance of Board
+        this.cardListCommunication = cardListCommunication;
         this.board = board;
     }
 
@@ -74,36 +79,74 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> {
-            CardListCell c = new CardListCell(server,mainCtrl);
-            return c;
-        });
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
         titledPane.setText(board.getName());
     }
 
+    /**
+     * Setter for the board
+     * @param board the new board to be assigned to the scene
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
     /**
+     * @return the current board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
      * Adds a new CardList to the Board
      */
-    public void addCardList() {
-        CardList newCardList = new CardList("list"+(board.getList().size() + 1),board,board.getList().size() + 1);
-        board.addList(newCardList);
-        //System.out.println("sts\n"+cardListView.getItems()+"\nsts");
+    public void addCardList() {//Not that suggestive I would say
+        mainCtrl.showCreateList(board);
         refresh();
     }
 
     /**
-     * Refreshes the Board View
+     * refreshes the boardView page
      */
-    @SuppressWarnings("unused")
     public void refresh() {
+        this.board=server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
+        cardListView.setCellFactory(cl ->
+            new CardListCell(mainCtrl,cardListCommunication,server)
+        );
+        System.out.println("updated");
     }
 
+    /**
+     * Refreshes the Board View and deletes a card
+     * @param cardList the cardlist to be deleted
+     */
+    public void refreshDelete(CardList cardList) {
+        cardListObservableList.remove(cardList);
+        refresh();
+    }
 
+    /**
+     * Goes back to the overview page
+     */
+    public void cancel(){
+        mainCtrl.showOverview();
+    }
+
+    /**
+     * refreshes page when an object is renamed
+     */
+    public void refreshRename() {
+        cardListView.setItems(FXCollections.observableList(board.getList()));
+        refresh();
+    }
+    /**
+     * Redirects the user back to the overview page
+     */
+    public void toOverview() {
+        mainCtrl.showOverview();
+    }
 
 }

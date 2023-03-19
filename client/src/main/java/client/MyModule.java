@@ -28,6 +28,10 @@ import client.scenes.MainCtrl;
 
 public class MyModule implements Module {
 
+    /**
+     * Configures the controllers for the scenes
+     * @param binder binds the controllers
+     */
     @Override
     public void configure(Binder binder) {
         binder.bind(MainCtrl.class).in(Scopes.SINGLETON);
@@ -36,5 +40,7 @@ public class MyModule implements Module {
         binder.bind(AddCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateListCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CreateBoardViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(UserCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);
     }
 }
