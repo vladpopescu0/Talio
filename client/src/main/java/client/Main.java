@@ -72,5 +72,8 @@ public class Main extends Application {
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl);
+
+        primaryStage.setOnCloseRequest(e -> overview.getKey().stop());
+        primaryStage.setOnCloseRequest(e -> boardView.getKey().stop());
     }
 }

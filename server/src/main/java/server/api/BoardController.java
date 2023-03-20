@@ -1,12 +1,17 @@
 package server.api;
 
 import commons.Board;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("api/boards")
@@ -31,8 +36,22 @@ public class BoardController {
 
     @GetMapping(path = {"", "/"})
     public List<Board> getAll() {
-        //return boardService.getAll();
         return repo.findAll();
+    }
+
+    private static Map<Object, Consumer<Board>> listeners = new HashMap<>();
+    @GetMapping(path = {"/updates"})
+    public DeferredResult<ResponseEntity<Board>> getBoardUpdates(){
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(5000L,noContent);
+
+        var key = new Object();
+        listeners.put(key,q ->{
+            res.setResult(ResponseEntity.ok(q));
+        });
+        res.onCompletion(() -> listeners.remove(key));
+
+        return res;
     }
 
     /**
@@ -43,11 +62,6 @@ public class BoardController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Board> getById(@PathVariable("id") long id) {
-        //Board board = boardService.getById(id);
-        //if (board == null) {
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok(board);
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -66,9 +80,11 @@ public class BoardController {
         //    return ResponseEntity.badRequest().build();
         //}
         //return ResponseEntity.ok(added);
+
         if (board == null || board.getName() == null|| board.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
+        listeners.forEach((k,l) -> l.accept(board));
         Board saved = repo.save(board);
         return ResponseEntity.ok(saved);
     }

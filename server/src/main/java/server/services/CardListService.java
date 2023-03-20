@@ -84,4 +84,29 @@ public class CardListService extends GenericService<CardList> {
         return false;
     }
 
+    /**
+     * Checks whether there exists an entity of a given ID in the CardList Repository
+     * @param id ID of the entity to be checked
+     * @return whether such entity exists
+     */
+    public boolean exists(long id) {
+        return repo.existsById(id);
+    }
+
+    /**
+     * Returns the CardList with the given ID
+     * @param id the id of the searched entity
+     * @return the CardList with the given ID
+     */
+    public CardList getThroughId(long id) {
+        return repo.getById(id);
+    }
+
+    /**
+     * Saves the given CardList in the Repository
+     * @param cardList the CardList to be saved
+     */
+    public void save(CardList cardList) {
+        repo.save(cardList);
+    }
 }

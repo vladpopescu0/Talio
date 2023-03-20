@@ -3,7 +3,9 @@ package client.scenes;
 import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
+import commons.Board;
 import commons.Card;
+import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -61,12 +63,12 @@ public class AddCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                //CardList before = cardListCommunication.getCL(mainCtrl.getId());
-                server.addCardToList(toBeAdded,mainCtrl.getId());
-                //CardList after = cardListCommunication.getCL(mainCtrl.getId());
-                //Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                //int index = board.getList().indexOf(before);
-                //board.getList().set(index,after);
+                Board board = mainCtrl.getBoardViewCtrl().getBoard();
+                int index = board.getList().indexOf(cardListCommunication.getCL(mainCtrl.getId()));
+                server.addCardToList(toBeAdded, mainCtrl.getId());
+                CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                toBeAdded.setParentCardList(after);
+                board.getList().set(index,after);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }

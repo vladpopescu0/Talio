@@ -81,6 +81,11 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
         titledPane.setText(board.getName());
+        cardListCommunication.cardListUpdates(q -> {
+            cardListObservableList.add(q);
+            cardListView.setItems(FXCollections.observableList(cardListObservableList));
+        });
+
     }
 
     /**
@@ -101,7 +106,7 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Adds a new CardList to the Board
      */
-    public void addCardList() {//Not that suggestive I would say
+    public void addCardList() {
         mainCtrl.showCreateList(board);
         refresh();
     }
@@ -110,12 +115,21 @@ public class BoardViewCtrl implements Initializable {
      * refreshes the boardView page
      */
     public void refresh() {
-        this.board=server.getBoardByID(board.getId());
+        this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl ->
             new CardListCell(mainCtrl,cardListCommunication,server)
         );
+        cardListCommunication.cardListUpdates(q -> {
+            cardListObservableList.add(q);
+            cardListView.setItems(FXCollections.observableList(cardListObservableList));
+        });
+//        server.boardUpdates(q ->{
+//            CardList list = q.getList().get(q.getList().size() - 1);
+//            cardListObservableList.add(list);
+//            cardListView.setItems(FXCollections.observableList(cardListObservableList));
+//        });
     }
 
     /**
@@ -146,6 +160,10 @@ public class BoardViewCtrl implements Initializable {
      */
     public void toOverview() {
         mainCtrl.showOverview();
+    }
+
+    public void stop(){
+        cardListCommunication.stop();
     }
 
 }

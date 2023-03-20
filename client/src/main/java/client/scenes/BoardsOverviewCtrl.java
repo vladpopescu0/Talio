@@ -16,6 +16,7 @@
 package client.scenes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
@@ -31,6 +32,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
+
+import static client.utils.ServerUtils.unpackBoard;
 
 /**
  * not finished yet
@@ -74,6 +77,8 @@ public class BoardsOverviewCtrl implements Initializable {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
                 .getUsers().get(0).getUsername()));
+
+        server.boardUpdates(q -> data.add(q));
     }
 
     /**
@@ -110,5 +115,9 @@ public class BoardsOverviewCtrl implements Initializable {
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
+    }
+
+    public void stop(){
+        server.stop();
     }
 }
