@@ -46,6 +46,9 @@ public class BoardViewCtrl implements Initializable {
     @FXML
     private ListView<CardList> cardListView;
 
+    @FXML
+    private Button removeButton;
+
     private ObservableList<CardList> cardListObservableList;
 
 
@@ -81,6 +84,11 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
         titledPane.setText(board.getName());
+        if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
+            removeButton.setDisable(false);
+        } else {
+            removeButton.setDisable(true);
+        }
     }
 
     /**
@@ -146,6 +154,17 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user back to the overview page
      */
     public void toOverview() {
+        mainCtrl.showOverview();
+    }
+
+    /**
+     * Removes the current user from the board, in case the user has joined the board
+     */
+    public void removeUser() {
+        board.removeUser(mainCtrl.getCurrentUser());
+        server.updateBoard(board);
+        mainCtrl.getCurrentUser().setBoardList(server.
+                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showOverview();
     }
 
