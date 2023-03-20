@@ -6,7 +6,6 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -70,7 +69,6 @@ public class CardListCell extends ListCell<CardList> {
     @Override
     protected void updateItem(CardList cardList, boolean empty) {
         super.updateItem(cardList, empty);
-
         if (empty || cardList == null) {
             setText(null);
             setGraphic(null);
@@ -78,7 +76,6 @@ public class CardListCell extends ListCell<CardList> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
-
                 try {
                     fxmlLoader.load();
                     editListButton.setOnAction(event -> {
@@ -91,6 +88,7 @@ public class CardListCell extends ListCell<CardList> {
 
                     });
                     addCardButton.setOnAction(event -> {
+                        System.out.println(this.getItem().getId());
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
                     });
@@ -98,21 +96,17 @@ public class CardListCell extends ListCell<CardList> {
                     e.printStackTrace();
                 }
             }
-
+            refresh();
             titledPane.setText(cardList.getName());
-            long id = this.getItem().getId();
-
-            CardList cl = null;
-            try {
-                cl = cardListCommunication.getCL(id);
-            } catch (BadRequestException br) {
-                System.out.println("error");
-            }
-
-            List<Card> cards = (cl == null ? new ArrayList<>() : cl.getCards());
-            cardObservableList = FXCollections.observableList(cards);
-            cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl, server));
+//            //long id = this.getItem().getId();
+//
+//            CardList cl = null;
+//            try {
+//                System.out.println(id + "this id \n");
+//                //cl = cardListCommunication.getCL(id);
+//            } catch (BadRequestException br) {
+//                br.printStackTrace();
+//            }
 
             setText(null);
             setGraphic(titledPane);
@@ -124,6 +118,17 @@ public class CardListCell extends ListCell<CardList> {
      */
     public void rename(Long id) {
         mainCtrl.showChangeListName(id);
+    }
+
+    /**
+     * refresh method for an individual list of cards
+     * on the client
+     */
+    public void refresh(){
+        List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
+        cardObservableList = FXCollections.observableList(cards);
+        cardsList.setItems(cardObservableList);
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server));
     }
 
     /** Helper method for renaming a cardlist

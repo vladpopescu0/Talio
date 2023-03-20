@@ -69,9 +69,10 @@ public class CreateListCtrl {
     public void createList(){
         try{
             CardList list = new CardList(getName());
+            board = server.getBoardByID(board.getId());
             board.addList(list);
-            Board b = server.addBoard(board);
-            list.setId(b.getList().get(b.getList().size() - 1).getId());
+            server.addBoard(board);
+            list.setId(board.getList().get(board.getList().size() - 1).getId());
         } catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);

@@ -66,11 +66,8 @@ public class ChangeNameCtrl {
     public void changeName(){
 
         try{
-            System.out.println("aaaaaa" + id + "baa");
             CardList original = clComm.getCL(id);
-            System.out.println("aaaaaa" + id + "baa");
             int index = board.getList().indexOf(original);
-            System.out.println("aaaaaa" + index);
             CardList cl = clComm.modifyNameCL(id,getName());
             cl.setName(getName());
             board.getList().set(index,cl);
