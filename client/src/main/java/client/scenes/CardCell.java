@@ -161,6 +161,7 @@ public class CardCell extends ListCell<Card> {
         cardListCommunication.moveCard(parentId,
                 List.of(origin, this.getItem()));
         board.getList().set(parentIndex, cardListCommunication.getCL(parentId));
+        mainCtrl.getBoardViewCtrl().refresh();
     }
 
     /**

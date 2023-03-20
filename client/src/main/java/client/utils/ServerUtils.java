@@ -71,12 +71,13 @@ public class ServerUtils {
      * @return the new board
      */
     public Board addBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -175,7 +176,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card,APPLICATION_JSON),Card.class);
-        //Get parent
     }
 
     /**
@@ -197,11 +197,13 @@ public class ServerUtils {
      * @return the updated board
      */
     public Board updateBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/update/" + board.getId()) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -214,11 +216,9 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
-        //Get parent
     }
 
     /**
-<<<<<<< HEAD
      * Updates the parent CardList of a Card with provided ID
      * @param id ID of the Card to be updated
      * @param lists old and new CardList of the provided Card

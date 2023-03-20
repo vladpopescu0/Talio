@@ -129,7 +129,7 @@ public class CardListController {
             return;
         }
 
-        CardList cl = cLService.getThroughId(id);
+        CardList cl = cLService.getById(id);
         Card origin = cards.get(0);
         Card destination = cards.get(1);
         int originIndex = 0;

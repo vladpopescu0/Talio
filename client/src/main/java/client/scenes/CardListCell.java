@@ -158,7 +158,8 @@ public class CardListCell extends ListCell<CardList> {
      * and yield false for equals method
      */
     public void handleDraggable() {
-        this.setOnDragDetected(event -> {
+        //CardList drag-and-drop is currently disabled
+        /*this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.put(cardListDataFormat, this.getItem());
@@ -168,7 +169,7 @@ public class CardListCell extends ListCell<CardList> {
             db.setDragView(snapshot);
 
             event.consume();
-        });
+        });*/
 
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
@@ -219,5 +220,6 @@ public class CardListCell extends ListCell<CardList> {
         server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
         board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
         board.getList().set(newParentIndex, cardListCommunication.getCL(this.getItem().getId()));
+        mainCtrl.getBoardViewCtrl().refresh();
     }
 }
