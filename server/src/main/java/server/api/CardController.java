@@ -2,8 +2,10 @@ package server.api;
 
 
 import commons.Card;
+import commons.CardList;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.database.CardListRepository;
 import server.database.CardRepository;
 
 import java.util.List;
@@ -12,13 +14,16 @@ import java.util.List;
 @RequestMapping("/api/cards")
 public class CardController {
     private final CardRepository repo;
+    private final CardListRepository clRepo;
 
     /**
      * Constructor for the CardController
-     * @param repo the repository to be used
+     * @param repo the Card repository to be used
+     * @param clRepo the Card List repository to be used
      */
-    public CardController(CardRepository repo){
+    public CardController(CardRepository repo, CardListRepository clRepo){
         this.repo = repo;
+        this.clRepo = clRepo;
     }
 
     /**
@@ -95,6 +100,33 @@ public class CardController {
         return ResponseEntity.ok().build();
     }
 
+    /**
+     * Updates the parent CardList of a Card with provided ID
+     * @param id ID of the Card to be updated
+     * @param lists old and new CardList of the provided Card
+     */
+    @PutMapping("/updateParent/{id}")
+    public void updateParent(@PathVariable("id") long id, @RequestBody List<CardList> lists) {
+        if (lists == null || !repo.existsById(id) || lists.size() < 2
+                || !clRepo.existsById(lists.get(0).getId())
+                || !clRepo.existsById(lists.get(1).getId())) {
+            return;
+        }
+
+        Card card = repo.getById(id);
+        CardList oldParent = clRepo.getById(lists.get(0).getId());
+        CardList newParent = clRepo.getById(lists.get(1).getId());
+        for(int x = 0; x < oldParent.getCards().size(); x++) {
+            if (oldParent.getCards().get(x).getId() == id) {
+                oldParent.getCards().remove(x);
+                break;
+            }
+        }
+        newParent.addCard(card);
+        lists.set(0, oldParent);
+        lists.set(1, newParent);
+        clRepo.saveAll(lists);
+    }
 
 //     /**
 //     * Changes the parent list of a card, could be used when dragged and dropped

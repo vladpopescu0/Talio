@@ -32,6 +32,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 
+import static client.utils.ServerUtils.packBoard;
+import static client.utils.ServerUtils.unpackBoard;
+
 /**
  * not finished yet
  */
@@ -106,7 +109,9 @@ public class BoardsOverviewCtrl implements Initializable {
             return;
         }
         b.addUser(mainCtrl.getCurrentUser());
+        packBoard(b);
         server.updateBoard(b);
+        unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);

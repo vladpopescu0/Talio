@@ -19,6 +19,7 @@ import commons.Board;
 import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -45,8 +46,9 @@ public class MainCtrl {
     private Scene editCard;
     private EditCardCtrl editCardCtrl;
 
+    public static final DataFormat cardDataFormat = new DataFormat("card");
+    public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
-
 
     /**
      * Initializes the application
