@@ -141,8 +141,8 @@ public class CardListController {
         }
         for(int x = 0; x < cl.getCards().size(); x++) {
             if (cl.getCards().get(x).getId() == destination.getId()) {
-                Card replaced = cl.getCards().remove(x);
-                cl.getCards().add(originIndex, replaced);
+                Card replaced = cl.getCards().remove(originIndex);
+                cl.getCards().add(x, replaced);
                 break;
             }
         }
