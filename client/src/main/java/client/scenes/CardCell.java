@@ -47,9 +47,11 @@ public class CardCell extends ListCell<Card> {
      * @param server the utils where the connection to the apis is
      * @param cardListCommunication the utils for CardList class
      * @param mainCtrl the controller of the whole application
+     * @param cardList the cardListCell in which this card is
      */
     public CardCell(MainCtrl mainCtrl,
-                    CardListCommunication cardListCommunication, ServerUtils server,CardListCell cardList) {
+                    CardListCommunication cardListCommunication, ServerUtils server
+            ,CardListCell cardList) {
         serverUtils = server;
         this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
@@ -90,7 +92,8 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.showEditCard();
                     });
                     this.deleteButton.setOnAction(event ->{
-                        var c = serverUtils.deleteCardfromList(this.getItem().getParentCardList().getId(),this.getItem().getId());
+                        var c = serverUtils.deleteCardfromList
+                                (this.getItem().getParentCardList().getId(),this.getItem().getId());
                         mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {

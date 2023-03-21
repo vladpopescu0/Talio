@@ -3,8 +3,6 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -147,6 +145,11 @@ public class CardList implements Serializable {
         this.id = id;
     }
 
+    /**
+     * setter for the cards field, useful when deleting cards
+     * on the backend
+     * @param cards
+     */
     public void setCards(List<Card> cards) {
         this.cards=cards;
     }

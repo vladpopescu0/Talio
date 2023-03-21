@@ -102,10 +102,18 @@ public class CardListService extends GenericService<CardList> {
         repo.save(cardList);
     }
 
+    /**
+     * Removes a card from a list in the database relation card_list_cards
+     * @param id the id of the LIST from which the card should be removed
+     * @param cardId the id of the card that should be remoed
+     * @return true if the card was removed properly, false if
+     * the ids cannot be found/the card has already been removed
+     */
     public boolean removeCard(long id, long cardId){
         if(repo.existsById(id)){
             CardList cardList = repo.getById(id);
-            var filteredList = cardList.getCards().stream().filter(card -> card.getId()!=cardId).collect(Collectors.toList());
+            var filteredList = cardList.getCards().stream()
+                    .filter(card -> card.getId()!=cardId).collect(Collectors.toList());
             if(cardList.getCards().size()==filteredList.size()){
                 return false;
             }

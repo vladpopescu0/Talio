@@ -282,6 +282,13 @@ public class ServerUtils {
             c.setParentCardList(null);
         }
     }
+
+    /**
+     * the delete method for a card from a list, mapped to "deleteCardFromList"
+     * @param id the id of the list from which the card should be removed
+     * @param cardId the id of the removed card
+     * @return  200-OK when the card was deleted or an error
+     */
     public Response deleteCardfromList(long id, long cardId){
         return ClientBuilder.newClient(new ClientConfig())
                 .target(SERVER).path("api/lists/"+id + "/delete/"+cardId)

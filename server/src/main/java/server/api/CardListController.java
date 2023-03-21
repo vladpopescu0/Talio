@@ -148,9 +148,17 @@ public class CardListController {
         }
         cLService.save(cl);
     }
+
+    /**
+     * The mapping of the delete card from list
+     * @param id of the list from which to delete the card
+     * @param cardId the id of the card that should be deleted
+     * @return a response with a card list object and 1) 404 if not found
+     * 2) 200 if the card was properly deleted
+     */
     @DeleteMapping(path = "/{id}/delete/{cardId}")
-    @SuppressWarnings("unused")
-    public ResponseEntity<CardList> deleteCardFromList(@PathVariable("id") long id, @PathVariable("cardId") long cardId){
+    public ResponseEntity<CardList> deleteCardFromList
+    (@PathVariable("id") long id, @PathVariable("cardId") long cardId){
         if(cLService.removeCard(id,cardId)){
             return ResponseEntity.notFound().build();
         }
