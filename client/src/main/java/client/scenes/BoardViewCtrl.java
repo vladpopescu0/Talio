@@ -124,7 +124,6 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setCellFactory(cl ->
             new CardListCell(mainCtrl,cardListCommunication,server)
         );
-        System.out.println("updated");
     }
 
     /**

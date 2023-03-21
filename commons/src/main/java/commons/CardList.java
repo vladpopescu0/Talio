@@ -3,21 +3,24 @@ package commons;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class CardList {
+public class CardList implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String name;
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Card> cards;
 
     /**
@@ -54,6 +57,9 @@ public class CardList {
     public CardList(String name, List<Card> cards){
         this.name = name;
         this.cards = cards;
+        for(Card c: this.cards) {
+            c.setParentCardList(this);
+        }
     }
     /**
      * @return the name of the CardList
@@ -85,8 +91,17 @@ public class CardList {
             return false;
         } else {
             this.getCards().add(card);
+            card.setParentCardList(this);
             return true;
         }
+    }
+
+    /**
+     * Removes given Card from the CardList
+     * @param card Card to be removed
+     */
+    public void removeCard(Card card) {
+        cards.remove(card);
     }
 
     /** Sets a new name for a CardList object
@@ -130,5 +145,9 @@ public class CardList {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setCards(List<Card> cards) {
+        this.cards=cards;
     }
 }

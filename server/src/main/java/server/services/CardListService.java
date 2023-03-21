@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import server.database.CardListRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CardListService extends GenericService<CardList> {
@@ -84,4 +85,34 @@ public class CardListService extends GenericService<CardList> {
         return false;
     }
 
+    /**
+     * Checks whether there exists an entity of a given ID in the CardList Repository
+     * @param id ID of the entity to be checked
+     * @return whether such entity exists
+     */
+    public boolean exists(long id) {
+        return repo.existsById(id);
+    }
+
+    /**
+     * Saves the given CardList in the Repository
+     * @param cardList the CardList to be saved
+     */
+    public void save(CardList cardList) {
+        repo.save(cardList);
+    }
+
+    public boolean removeCard(long id, long cardId){
+        if(repo.existsById(id)){
+            CardList cardList = repo.getById(id);
+            var filteredList = cardList.getCards().stream().filter(card -> card.getId()!=cardId).collect(Collectors.toList());
+            if(cardList.getCards().size()==filteredList.size()){
+                return false;
+            }
+            cardList.setCards(filteredList);
+            repo.save(cardList);
+            return true;
+        }
+        return false;
+    }
 }

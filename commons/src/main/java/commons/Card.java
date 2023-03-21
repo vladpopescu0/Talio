@@ -6,14 +6,19 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
+
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card {
+public class Card implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
+
+    @Transient
+    private CardList parentCardList;
 
     /**
      * Empty constructor
@@ -28,6 +33,16 @@ public class Card {
      */
     public Card(String name){
         this.name = name;
+    }
+
+    /**
+     * Extended constructor for the Card class
+     * @param name name of the Card
+     * @param cardList CardList that Card belongs to
+     */
+    public Card(String name, CardList cardList) {
+        this.name = name;
+        parentCardList = cardList;
     }
 
     /**
@@ -52,20 +67,21 @@ public class Card {
         return name;
     }
 
-//    /**
-//     * Setter for the list
-//     * @param cllist the list to which the card belongs
-//     */
-//    public void setList(CardList cllist) { this.cllist = cllist;}
-//
-//    /**
-//     * Getter for the cardList
-//     * @return the cardList to which this card belongs
-//     */
-//    public CardList getCardList(){
-//        return this.cllist;
-//    }
-//>>>>>>> 01db2709de678a4967231964edfbe15ea8ac3175
+    /**
+     * Sets the CardList that Card belongs to
+     * @param cardList the CardList to set as parent
+     */
+    public void setParentCardList(CardList cardList) {
+        parentCardList = cardList;
+    }
+
+    /**
+     * Returns the CardList that Card belongs to
+     * @return the CardList that Card belongs to
+     */
+    public CardList getParentCardList() {
+        return parentCardList;
+    }
 
     /**
      * Equals method for the Card class

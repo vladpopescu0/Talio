@@ -1,5 +1,6 @@
 package client.communication;
 
+import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
@@ -7,9 +8,9 @@ import jakarta.ws.rs.core.GenericType;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-
 import java.util.List;
 
+import static client.utils.ServerUtils.unpackCardList;
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 public class CardListCommunication {
@@ -27,12 +28,13 @@ public class CardListCommunication {
      * @return the card list with the specific id
      */
     public CardList getCL(long listid) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(CardList.class);
-
+        unpackCardList(cl);
+        return cl;
         // can also use switch statement
     }
 
@@ -72,23 +74,42 @@ public class CardListCommunication {
      */
     @SuppressWarnings("unused")
     public CardList modifyNameCL(long listid, String name) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/" + listid) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(name, APPLICATION_JSON), CardList.class);
-
+        unpackCardList(cl);
+        return cl;
     }
 
     /**
      * @return all lists in the database
      */
     public List<CardList> getAll() {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        List<CardList> list = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/all") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>(){
                 });
+        for(CardList cl: list) {
+            unpackCardList(cl);
+        }
+        return list;
     }
+
+    /**
+     * Moves the second given Card in front of the first given Card in CardList of provided ID
+     * @param id ID of the CardList to be updated
+     * @param cards two Cards to be moved
+     */
+    public void moveCard(long id, List<Card> cards) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/lists/moveCard/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(cards, APPLICATION_JSON), Card.class);
+    }
+
 }
