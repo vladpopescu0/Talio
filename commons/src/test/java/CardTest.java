@@ -1,4 +1,5 @@
 import commons.Card;
+import commons.CardList;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -71,5 +72,13 @@ public class CardTest {
         Card c = new Card("c");
         Card c1 = new Card("C");
         assertNotEquals(c.hashCode(), c1.hashCode());
+    }
+
+    @Test
+    public void getParentListTest() {
+        Card c = new Card("a");
+        CardList cl = new CardList("aa");
+        c.setParentCardList(cl);
+        assertEquals(c.getParentCardList(), cl);
     }
 }

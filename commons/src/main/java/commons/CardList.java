@@ -1,15 +1,15 @@
 package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
-public class CardList {
+public class CardList implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -52,6 +52,9 @@ public class CardList {
     public CardList(String name, List<Card> cards){
         this.name = name;
         this.cards = cards;
+        for(Card c: this.cards) {
+            c.setParentCardList(this);
+        }
     }
     /**
      * @return the name of the CardList
@@ -83,8 +86,17 @@ public class CardList {
             return false;
         } else {
             this.getCards().add(card);
+            card.setParentCardList(this);
             return true;
         }
+    }
+
+    /**
+     * Removes given Card from the CardList
+     * @param card Card to be removed
+     */
+    public void removeCard(Card card) {
+        cards.remove(card);
     }
 
     /** Sets a new name for a CardList object
@@ -111,7 +123,7 @@ public class CardList {
      */
     @Override
     public int hashCode() {
-        return HashCodeBuilder.reflectionHashCode(this);
+        return Objects.hash(getId(), getName(), getCards());
     }
 
     /** Sets the id of the cardlist

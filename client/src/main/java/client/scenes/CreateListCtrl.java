@@ -11,6 +11,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
+import static client.utils.ServerUtils.packBoard;
+import static client.utils.ServerUtils.unpackBoard;
+
 public class CreateListCtrl {
 
     private final MainCtrl mainCtrl;
@@ -70,7 +73,9 @@ public class CreateListCtrl {
         try{
             CardList list = new CardList(getName());
             board.addList(list);
+            packBoard(board);
             Board b = server.addBoard(board);
+            unpackBoard(board);
             list.setId(b.getList().get(b.getList().size() - 1).getId());
         } catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);

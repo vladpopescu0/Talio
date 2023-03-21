@@ -11,13 +11,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+//import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
+//import javafx.scene.image.WritableImage;
+//import javafx.scene.input.ClipboardContent;
+//import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static client.scenes.MainCtrl.cardDataFormat;
+//import static client.scenes.MainCtrl.cardListDataFormat;
+import static client.utils.ServerUtils.packCardList;
 
 public class CardListCell extends ListCell<CardList> {
 
@@ -57,6 +67,13 @@ public class CardListCell extends ListCell<CardList> {
         this.server = serverUtils;
         this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
+    }
+
+    /**
+     * Enable drag-and-drop upon initialization
+     */
+    public void initialize() {
+        handleDraggable();
     }
 
     /**
@@ -112,7 +129,7 @@ public class CardListCell extends ListCell<CardList> {
             List<Card> cards = (cl == null ? new ArrayList<>() : cl.getCards());
             cardObservableList = FXCollections.observableList(cards);
             cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl, server));
+            cardsList.setCellFactory(c -> new CardCell(mainCtrl, cardListCommunication, server));
 
             setText(null);
             setGraphic(titledPane);
@@ -135,5 +152,74 @@ public class CardListCell extends ListCell<CardList> {
         mainCtrl.showBoardView(b);
     }
 
+    /**
+     * Handles drag-and-drop gestures for CardList
+     * Object equality is handled by ID equality as Serialized Objects may differ
+     * and yield false for equals method
+     */
+    public void handleDraggable() {
+        //CardList drag-and-drop is currently disabled
+        /*this.setOnDragDetected(event -> {
+            Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
+            ClipboardContent content = new ClipboardContent();
+            content.put(cardListDataFormat, this.getItem());
 
+            db.setContent(content);
+            WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
+            db.setDragView(snapshot);
+
+            event.consume();
+        });*/
+
+        this.setOnDragOver(event -> {
+            event.acceptTransferModes(TransferMode.ANY);
+
+            event.consume();
+        });
+
+        this.setOnDragDropped(event -> {
+            if (event.getDragboard().hasContent(cardDataFormat)) {
+                Card origin = (Card) event.getDragboard().getContent(cardDataFormat);
+
+                if (!Objects.equals(origin.getParentCardList().getId(), this.getItem().getId())) {
+                    dragCardToCardList(origin);
+                }/* else {
+                    System.out.println("Drag of Card: " + origin.getName()
+                            + " into the same CardList: " + this.getItem().getName());
+                }*/
+            }
+            //CardList drag-and-drop is currently disabled
+            /*if (event.getDragboard().hasContent(cardListDataFormat)) {
+                CardList origin = (CardList) event.getDragboard().getContent(cardListDataFormat);
+
+                if (!Objects.equals(origin.getId(), this.getItem().getId())) {
+                    System.out.println("Drag of CardList: " + origin.getName()
+                            + " to CardList: " + this.getItem().getName());
+                }
+            }*/
+
+            event.setDropCompleted(true);
+
+            event.consume();
+        });
+    }
+
+    /**
+     * Handles drag-and-drop gesture from Card to CardList
+     * @param origin the Card that the gesture origins from
+     */
+    public void dragCardToCardList(Card origin) {
+        Board board = mainCtrl.getBoardViewCtrl().getBoard();
+        int oldParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+                origin.getParentCardList().getId()));
+        int newParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+                this.getItem().getId()));
+        CardList oldParent = origin.getParentCardList();
+        packCardList(oldParent);
+        packCardList(this.getItem());
+        server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
+        board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
+        board.getList().set(newParentIndex, cardListCommunication.getCL(this.getItem().getId()));
+        mainCtrl.getBoardViewCtrl().refresh();
+    }
 }

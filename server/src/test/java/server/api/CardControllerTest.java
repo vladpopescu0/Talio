@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.CardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +12,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 public class CardControllerTest {
     private TestCardRepository repo;
-
+    private TestCardListRepository cardListRepository;
     private CardController sut;
 
     /**
@@ -20,7 +21,8 @@ public class CardControllerTest {
     @BeforeEach
     public void setup() {
         repo = new TestCardRepository();
-        sut = new CardController(repo);
+        cardListRepository = new TestCardListRepository();
+        sut = new CardController(repo, cardListRepository);
     }
 
     /**

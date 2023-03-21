@@ -63,11 +63,11 @@ public class AddCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                CardList before = cardListCommunication.getCL(mainCtrl.getId());
-                server.addCardToList(toBeAdded,mainCtrl.getId());
-                CardList after = cardListCommunication.getCL(mainCtrl.getId());
                 Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                int index = board.getList().indexOf(before);
+                int index = board.getList().indexOf(cardListCommunication.getCL(mainCtrl.getId()));
+                server.addCardToList(toBeAdded, mainCtrl.getId());
+                CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                toBeAdded.setParentCardList(after);
                 board.getList().set(index,after);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());

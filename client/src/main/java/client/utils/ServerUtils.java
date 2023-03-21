@@ -40,11 +40,15 @@ public class ServerUtils {
      * @return A list of all boards added to the database
      */
     public List<Board> getBoards() {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        List<Board> boards = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
+        for(Board b: boards) {
+            unpackBoard(b);
+        }
+        return boards;
     }
 
     /** Returns a board with the specific id, if it exists
@@ -52,11 +56,13 @@ public class ServerUtils {
      * @return the board
      */
     public Board getBoardByID(Long id) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board board = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(Board.class);
+        unpackBoard(board);
+        return board;
     }
 
     /**
@@ -65,12 +71,13 @@ public class ServerUtils {
      * @return the new board
      */
     public Board addBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -78,11 +85,13 @@ public class ServerUtils {
      * @return the modified board
      */
     public Board modifyBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/modify") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -105,11 +114,13 @@ public class ServerUtils {
      * @return the CardList that was found
      */
     public CardList getCardListById(long id){
-        return ClientBuilder.newClient(new ClientConfig()) //
+        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/lists/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
+        unpackCardList(cl);
+        return cl;
     }
 
     /**
@@ -186,11 +197,13 @@ public class ServerUtils {
      * @return the updated board
      */
     public Board updateBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/update/" + board.getId()) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -206,7 +219,19 @@ public class ServerUtils {
     }
 
     /**
-     * Gets all the boards a user has joined
+     * Updates the parent CardList of a Card with provided ID
+     * @param id ID of the Card to be updated
+     * @param lists old and new CardList of the provided Card
+     */
+    public void updateParent(long id, List<CardList> lists) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER).path("api/cards/updateParent/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(lists, APPLICATION_JSON), Card.class);
+    }
+
+    /** Gets all the boards a user has joined
      * @param id the id of the user
      * @return the list of all boards the user has joined
      */
@@ -216,5 +241,45 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
+    }
+
+    /**
+     * Updates the Card references to corresponding CardLists in the Board
+     * @param b Board the Cards of which will have updated references to CardLists
+     */
+    public static void unpackBoard(Board b) {
+        for(CardList cl: b.getList()) {
+            unpackCardList(cl);
+        }
+    }
+
+    /**
+     * Removes the Card references to corresponding CardLists in the Board
+     * @param b Board the Cards of which will have removed references to CardLists
+     */
+    public static void packBoard(Board b) {
+        for(CardList cl: b.getList()) {
+            packCardList(cl);
+        }
+    }
+
+    /**
+     * Updates the Card references of a CardList
+     * @param cl CardList the Cards of which will have updated references
+     */
+    public static void unpackCardList(CardList cl) {
+        for(Card c: cl.getCards()) {
+            c.setParentCardList(cl);
+        }
+    }
+
+    /**
+     * Removes the Card references of a CardList
+     * @param cl CardList the Cards of which will have removed references
+     */
+    public static void packCardList(CardList cl) {
+        for(Card c: cl.getCards()) {
+            c.setParentCardList(null);
+        }
     }
 }

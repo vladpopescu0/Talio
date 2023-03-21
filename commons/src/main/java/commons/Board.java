@@ -82,7 +82,6 @@ public class Board {
 
     /**
      * Setter for the id(Used for server tests)
-     * @param id
      */
     public void setId(Long id) {
         this.id = id;

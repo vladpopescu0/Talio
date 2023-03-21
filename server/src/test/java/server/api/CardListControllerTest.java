@@ -5,6 +5,7 @@ import commons.CardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,7 +14,10 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class CardListControllerTest {
 
     private TestCardListRepository repo;
+    private TestCardRepository cardRepository;
     private CardListController sut;
+
+    private CardController cSut;
 
     /**
      * Setup
@@ -21,7 +25,9 @@ public class CardListControllerTest {
     @BeforeEach
     public void setup() {
         repo = new TestCardListRepository();
-        sut = new CardListController(repo);
+        cardRepository = new TestCardRepository();
+        sut = new CardListController(repo, cardRepository);
+        cSut = new CardController(cardRepository, repo);
     }
 
     /**
@@ -243,5 +249,48 @@ public class CardListControllerTest {
         assertEquals(c, actual.getBody());
         var actual1 = sut.getById(1);
         assertTrue(actual1.getBody().getCards().contains(c));
+    }
+
+    /**
+     * Test for moveCard
+     */
+    @Test
+    public void moveCardTest() {
+        CardList c1 = new CardList("a");
+        CardList c2 = new CardList("b");
+        CardList c3 = new CardList("c");
+        c1.setId((long) -1);
+        c2.setId((long) -2);
+        c3.setId((long) -3);
+        sut.add(c1);
+        sut.add(c2);
+        sut.add(c3);
+        Card card1 = new Card("Card1");
+        Card card2 = new Card("Card2");
+        Card card3 = new Card("Card3");
+        Card card4 = new Card("Card4");
+        List<Card> list = new ArrayList<>();
+        list.add(card1);
+        list.add(card2);
+        card1.setId(-1);
+        card2.setId(-2);
+        card3.setId(-3);
+        card4.setId(-4);
+        cSut.add(card1);
+        cSut.add(card2);
+        List<Card> broken1 = new ArrayList<>();
+        broken1.add(card1);
+        broken1.add(card3);
+        List<Card> broken2 = new ArrayList<>();
+        broken2.add(card4);
+        broken2.add(card2);
+        var actual1 = sut.moveCard(1, null);
+        var actual2 = sut.moveCard(-1, list);
+        var actual3 = sut.moveCard(1, broken1);
+        var actual4 = sut.moveCard(1, broken2);
+        assertEquals(BAD_REQUEST, actual1.getStatusCode());
+        assertEquals(BAD_REQUEST, actual2.getStatusCode());
+        assertEquals(BAD_REQUEST, actual3.getStatusCode());
+        assertEquals(BAD_REQUEST, actual4.getStatusCode());
     }
 }

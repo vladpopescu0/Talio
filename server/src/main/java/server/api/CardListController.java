@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardListRepository;
 
+import server.database.CardRepository;
 
 import java.util.List;
 
@@ -14,13 +15,15 @@ import java.util.List;
 public class CardListController {
     //private final CardListService cLService;
     private final CardListRepository repo;
+    private CardRepository cardRepository;
 
     /**
      * Constructor for the CardListController
      * @param repo the repository that is used
      */
-    public CardListController(CardListRepository repo){
+    public CardListController(CardListRepository repo, CardRepository cardRepository){
         this.repo = repo;
+        this.cardRepository = cardRepository;
     }
 
 
@@ -143,5 +146,39 @@ public class CardListController {
         return ResponseEntity.ok(newList);
     }
 
+    /**
+     * Moves the second given Card in front of the first given Card in CardList of provided ID
+     * @param id ID of the CardList to be updated
+     * @param cards two Cards to be moved
+     * @return the new cardList
+     */
+    @PutMapping("/moveCard/{id}")
+    public ResponseEntity<CardList> moveCard(@PathVariable("id") long id, @RequestBody List<Card> cards) {
+       if (cards == null || !repo.existsById(id) || cards.size() < 2
+                    || !cardRepository.existsById(cards.get(0).getId())
+                    || !cardRepository.existsById(cards.get(1).getId())) {
+           return ResponseEntity.badRequest().build();
+       }
+
+       CardList cl = repo.getById(id);
+       Card origin = cards.get(0);
+       Card destination = cards.get(1);
+       int originIndex = 0;
+       for(int x = 0; x < cl.getCards().size(); x++) {
+           if (cl.getCards().get(x).getId() == origin.getId()) {
+               originIndex = x;
+               break;
+            }
+        }
+       for(int x = 0; x < cl.getCards().size(); x++) {
+            if (cl.getCards().get(x).getId() == destination.getId()) {
+                Card replaced = cl.getCards().remove(x);
+                cl.getCards().add(originIndex, replaced);
+                break;
+            }
+       }
+       repo.save(cl);
+       return ResponseEntity.ok(cl);
+    }
 }
 
