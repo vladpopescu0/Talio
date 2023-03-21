@@ -66,11 +66,14 @@ public class Main extends Application {
                 "client", "scenes", "AddCard.fxml");
         var userCtrl = FXML.load(UserCtrl.class, "client", "scenes", "User.fxml");
 
+        var changeServer = FXML.load(ChangeServerCtrl.class,
+                "client", "scenes", "ChangeServer.fxml");
+
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
 
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
-                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl);
+                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl, changeServer);
     }
 }
