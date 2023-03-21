@@ -45,6 +45,8 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene editCard;
     private EditCardCtrl editCardCtrl;
+    private Scene changeServer;
+    private ChangeServerCtrl changeServerCtrl;
 
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
@@ -61,13 +63,15 @@ public class MainCtrl {
      * @param userPage the user log in page
      * @param editCard the editCard scene
      * @param changeListName the changeListName scene
+     * @param changeServer the changeServer scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
             Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
                            Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ChangeNameCtrl, Parent> changeListName) {
+                           Pair<ChangeNameCtrl, Parent> changeListName,
+                           Pair<ChangeServerCtrl, Parent> changeServer) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -94,6 +98,9 @@ public class MainCtrl {
 
         this.userCtrl = userPage.getKey();
         this.user = new Scene(userPage.getValue());
+
+        this.changeServerCtrl = changeServer.getKey();
+        this.changeServer = new Scene(changeServer.getValue());
 
         showUserView();
         primaryStage.show();
@@ -216,6 +223,13 @@ public class MainCtrl {
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
 //        this.boardViewCtrl.refresh();
+    }
+
+    /**
+     * Shows the Change Server scene
+     */
+    public void showChangeServer() {
+        primaryStage.setScene(changeServer);
     }
 
     /**

@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -14,8 +13,6 @@ import javafx.stage.Modality;
 
 
 public class EditCardCtrl {
-
-    private final CardListCommunication cardListCommunication;
     @FXML
     private TextField title;
 
@@ -26,14 +23,11 @@ public class EditCardCtrl {
      * Constructor for EditCardCtrl
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl,
-                        CardListCommunication cardListCommunication) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.cardListCommunication = cardListCommunication;
     }
 
     /**
@@ -53,9 +47,9 @@ public class EditCardCtrl {
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                int index = board.getList().indexOf(cardListCommunication.getCL(mainCtrl.getId()));
+                int index = board.getList().indexOf(server.getCL(mainCtrl.getId()));
                 server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
-                CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                CardList after = server.getCL(mainCtrl.getId());
                 board.getList().set(index,after);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
