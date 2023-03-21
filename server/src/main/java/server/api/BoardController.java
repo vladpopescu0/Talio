@@ -69,8 +69,7 @@ public class BoardController {
         if (board == null || board.getName() == null|| board.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        Board saved = repo.save(board);
-        return ResponseEntity.ok(saved);
+        return ResponseEntity.ok(repo.save(board));
     }
 
     /**
