@@ -1,2 +1,3 @@
-package server.api;public class CardControllerTest {
+package server.api;
+public class CardControllerTest {
 }

@@ -18,7 +18,6 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import client.communication.CardListCommunication;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -35,8 +34,6 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
-    private final CardListCommunication cardListCommunication;
 
     private Board board;
 
@@ -57,14 +54,12 @@ public class BoardViewCtrl implements Initializable {
      * @param server Server Utility class
      * @param mainCtrl Main controller of the program
      * @param board the board to be displayed
-     * @param cardListCommunication the cardlist utility class
      */
     @Inject
     public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl,
-                         Board board, CardListCommunication cardListCommunication) {
+                         Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.cardListCommunication = cardListCommunication;
         this.board = board;
     }
 
@@ -82,7 +77,7 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,server));
         titledPane.setText(board.getName());
         if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
             removeButton.setDisable(false);
@@ -122,7 +117,7 @@ public class BoardViewCtrl implements Initializable {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl ->
-            new CardListCell(mainCtrl,cardListCommunication,server)
+            new CardListCell(mainCtrl,server)
         );
     }
 

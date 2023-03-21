@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import com.google.inject.Inject;
 import commons.Board;
 import client.utils.ServerUtils;
@@ -27,8 +26,6 @@ public class CardListCell extends ListCell<CardList> {
 
     private final MainCtrl mainCtrl;
 
-    private final CardListCommunication cardListCommunication;
-
     @FXML
     private Button editListButton;
 
@@ -53,13 +50,10 @@ public class CardListCell extends ListCell<CardList> {
      *
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
-     * @param cardListCommunication the utils for CardList class
      */
     @Inject
-    public CardListCell(MainCtrl mainCtrl,
-                        CardListCommunication cardListCommunication, ServerUtils serverUtils) {
+    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils) {
         this.server = serverUtils;
-        this.cardListCommunication = cardListCommunication;
         this.mainCtrl = mainCtrl;
     }
 
@@ -113,7 +107,6 @@ public class CardListCell extends ListCell<CardList> {
             titledPane.setText(cardList.getName());
 
             refresh();
-
             setText(null);
             setGraphic(titledPane);
         }
@@ -126,7 +119,7 @@ public class CardListCell extends ListCell<CardList> {
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, cardListCommunication, server,this));
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
     }
 
 
@@ -142,7 +135,7 @@ public class CardListCell extends ListCell<CardList> {
      */
     public void delete(Long id) {
         Board b = mainCtrl.getBoardViewCtrl().getBoard();
-        cardListCommunication.removeCL(id);
+        server.removeCL(id);
         mainCtrl.showBoardView(b);
     }
 
@@ -204,16 +197,16 @@ public class CardListCell extends ListCell<CardList> {
      */
     public void dragCardToCardList(Card origin) {
         Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+        int oldParentIndex = board.getList().indexOf(server.getCL(
                 origin.getParentCardList().getId()));
-        int newParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+        int newParentIndex = board.getList().indexOf(server.getCL(
                 this.getItem().getId()));
         CardList oldParent = origin.getParentCardList();
         packCardList(oldParent);
         packCardList(this.getItem());
         server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
-        board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
-        board.getList().set(newParentIndex, cardListCommunication.getCL(this.getItem().getId()));
+        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
+        board.getList().set(newParentIndex, server.getCL(this.getItem().getId()));
         mainCtrl.getBoardViewCtrl().refresh();
     }
 }

@@ -28,6 +28,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
@@ -44,6 +45,8 @@ public class BoardsOverviewCtrl implements Initializable {
     private final MainCtrl mainCtrl;//must change mainCtrl
 
     private ObservableList<Board> data;
+    @FXML
+    private Label serverLabel;
     @FXML
     private TableView<Board> table;
     @FXML
@@ -93,6 +96,7 @@ public class BoardsOverviewCtrl implements Initializable {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
         table.setItems(data);
+        this.serverLabel.setText(ServerUtils.getServer());
     }
 
     /**
@@ -115,5 +119,12 @@ public class BoardsOverviewCtrl implements Initializable {
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
+    }
+
+    /**
+     * Redirects to change server scene
+     */
+    public void changeServer() {
+        mainCtrl.showChangeServer();
     }
 }

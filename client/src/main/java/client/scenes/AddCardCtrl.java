@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Card;
@@ -26,20 +25,15 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private final CardListCommunication cardListCommunication;
-
     /**
      * Constructor for the AddCardCtrl class
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl,
-                       CardListCommunication cardListCommunication) {
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.cardListCommunication = cardListCommunication;
 
     }
 

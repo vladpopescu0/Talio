@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
@@ -19,8 +18,6 @@ public class CreateListCtrl {
     private final MainCtrl mainCtrl;
     private ServerUtils server;
 
-    private final CardListCommunication clComm;
-
 
     private Board board;
 
@@ -29,15 +26,13 @@ public class CreateListCtrl {
 
     /**
      * Constructor for the CreateListCtrl class
-     * @param clComm the communication used
      * @param mainCtrl the mainCtrl of the application
      * @param board the board to which the cardList is supposed to be added
      * @param server the server utilities
      */
     @Inject
-    public CreateListCtrl(CardListCommunication clComm, MainCtrl mainCtrl,
+    public CreateListCtrl(MainCtrl mainCtrl,
                           Board board, ServerUtils server) {
-        this.clComm = clComm;
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.server = server;
