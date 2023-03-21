@@ -74,6 +74,9 @@ public class CardTest {
         assertNotEquals(c.hashCode(), c1.hashCode());
     }
 
+    /**
+     * Test for getParentList
+     */
     @Test
     public void getParentListTest() {
         Card c = new Card("a");

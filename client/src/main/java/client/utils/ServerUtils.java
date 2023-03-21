@@ -22,6 +22,7 @@ import java.util.List;
 
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
 import commons.User;
@@ -30,7 +31,21 @@ import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 public class ServerUtils {
 
-    private static final String SERVER = "http://localhost:8080/";
+    private static String server = "http://localhost:8080/";
+
+    /**
+     * Sets static server variable
+     * @param server New server host
+     */
+    public static void setServer(String server){
+        ServerUtils.server = server;
+    }
+
+    /**
+     * Get current server host
+     * @return Current server host
+     */
+    public static String getServer() { return ServerUtils.server; };
 
     //public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
 
@@ -41,7 +56,7 @@ public class ServerUtils {
      */
     public List<Board> getBoards() {
         List<Board> boards = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards") //
+                .target(server).path("api/boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -57,7 +72,7 @@ public class ServerUtils {
      */
     public Board getBoardByID(Long id) {
         Board board = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/" + id) //
+                .target(server).path("api/boards/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(Board.class);
@@ -72,7 +87,7 @@ public class ServerUtils {
      */
     public Board addBoard(Board board) {
         Board b = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/add") //
+                .target(server).path("api/boards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -86,7 +101,7 @@ public class ServerUtils {
      */
     public Board modifyBoard(Board board) {
         Board b = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/modify") //
+                .target(server).path("api/boards/modify") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -101,7 +116,7 @@ public class ServerUtils {
      */
     public User addUser(User user) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/users/add") //
+                .target(server).path("api/users/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(user, APPLICATION_JSON), User.class);
@@ -115,7 +130,7 @@ public class ServerUtils {
      */
     public CardList getCardListById(long id){
         CardList cl = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists/"+id) //
+                .target(server).path("api/lists/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -130,7 +145,7 @@ public class ServerUtils {
      */
     public Card addCard(Card card){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/add") //
+                .target(server).path("api/cards/add") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card, APPLICATION_JSON), Card.class);
@@ -144,7 +159,7 @@ public class ServerUtils {
      */
     public List<User> getUserByUsername(String username) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/users/username/" + username) //
+                .target(server).path("api/users/username/" + username) //
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -157,7 +172,7 @@ public class ServerUtils {
      */
     public User getUserById(long id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/users/" + id) //
+                .target(server).path("api/users/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -172,7 +187,7 @@ public class ServerUtils {
      */
     public Card addCardToList(Card card, long id){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/lists/addCard/"+id)//
+                .target(server).path("api/lists/addCard/"+id)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(card,APPLICATION_JSON),Card.class);
@@ -185,7 +200,7 @@ public class ServerUtils {
      */
     public String updateCard(String name,long id){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/"+id)//
+                .target(server).path("api/cards/"+id)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(name,APPLICATION_JSON),String.class);
@@ -198,7 +213,7 @@ public class ServerUtils {
      */
     public Board updateBoard(Board board) {
         Board b = ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/update/" + board.getId()) //
+                .target(server).path("api/boards/update/" + board.getId()) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -212,7 +227,7 @@ public class ServerUtils {
      */
     public Card getCardById(long id){
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/cards/"+id) //
+                .target(server).path("api/cards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -225,7 +240,7 @@ public class ServerUtils {
      */
     public void updateParent(long id, List<CardList> lists) {
         ClientBuilder.newClient(new ClientConfig())
-                .target(SERVER).path("api/cards/updateParent/" + id)
+                .target(server).path("api/cards/updateParent/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(lists, APPLICATION_JSON), Card.class);
@@ -237,7 +252,7 @@ public class ServerUtils {
      */
     public List<Board> getBoardsByUserId(long id) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(SERVER).path("api/boards/user/" + id) //
+                .target(server).path("api/boards/user/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(new GenericType<>() {});
@@ -281,5 +296,94 @@ public class ServerUtils {
         for(Card c: cl.getCards()) {
             c.setParentCardList(null);
         }
+    }
+
+    /**
+     * @param listid the id of the list to be retrieved
+     * @return the card list with the specific id
+     */
+    public CardList getCL(long listid) {
+        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/lists/" + listid) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(CardList.class);
+        unpackCardList(cl);
+        return cl;
+        // can also use switch statement
+    }
+
+    /**
+     * @param list the list that is posted
+     */
+    public void addCL(CardList list) {
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/lists/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(list, APPLICATION_JSON));
+
+        if (res.getStatus() != 200) {
+            System.out.println("error");
+        }
+    }
+
+    /**
+     * Removes a cardList
+     * @param listid the id of the list to be removed
+     */
+    @SuppressWarnings("unused")
+    public void removeCL(long listid) {
+        ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/lists/delete/" + listid) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Modifies the name of the cardList
+     * @param listid the id of the list to rename
+     * @param name the new name of the cardList
+     * @return the CardList with modified name
+     */
+    @SuppressWarnings("unused")
+    public CardList modifyNameCL(long listid, String name) {
+        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/lists/" + listid) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(name, APPLICATION_JSON), CardList.class);
+        unpackCardList(cl);
+        return cl;
+    }
+
+    /**
+     * @return all lists in the database
+     */
+    public List<CardList> getAll() {
+        List<CardList> list = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/lists/all") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(new GenericType<>(){
+                });
+        for(CardList cl: list) {
+            unpackCardList(cl);
+        }
+        return list;
+    }
+
+    /**
+     * Moves the second given Card in front of the first given Card in CardList of provided ID
+     * @param id ID of the CardList to be updated
+     * @param cards two Cards to be moved
+     */
+    public void moveCard(long id, List<Card> cards) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/lists/moveCard/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(cards, APPLICATION_JSON), Card.class);
     }
 }

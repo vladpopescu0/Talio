@@ -20,6 +20,7 @@ public class CardListController {
     /**
      * Constructor for the CardListController
      * @param repo the repository that is used
+     * @param cardRepository card Repository
      */
     public CardListController(CardListRepository repo, CardRepository cardRepository){
         this.repo = repo;
@@ -153,32 +154,33 @@ public class CardListController {
      * @return the new cardList
      */
     @PutMapping("/moveCard/{id}")
-    public ResponseEntity<CardList> moveCard(@PathVariable("id") long id, @RequestBody List<Card> cards) {
-       if (cards == null || !repo.existsById(id) || cards.size() < 2
+    public ResponseEntity<CardList> moveCard(@PathVariable("id") long id,
+                                             @RequestBody List<Card> cards) {
+        if (cards == null || !repo.existsById(id) || cards.size() < 2
                     || !cardRepository.existsById(cards.get(0).getId())
                     || !cardRepository.existsById(cards.get(1).getId())) {
-           return ResponseEntity.badRequest().build();
-       }
-
-       CardList cl = repo.getById(id);
-       Card origin = cards.get(0);
-       Card destination = cards.get(1);
-       int originIndex = 0;
-       for(int x = 0; x < cl.getCards().size(); x++) {
-           if (cl.getCards().get(x).getId() == origin.getId()) {
-               originIndex = x;
-               break;
-            }
+            return ResponseEntity.badRequest().build();
         }
-       for(int x = 0; x < cl.getCards().size(); x++) {
-            if (cl.getCards().get(x).getId() == destination.getId()) {
-                Card replaced = cl.getCards().remove(x);
-                cl.getCards().add(originIndex, replaced);
+
+        CardList cl = repo.getById(id);
+        Card origin = cards.get(0);
+        Card destination = cards.get(1);
+        int originIndex = 0;
+        for(int x = 0; x < cl.getCards().size(); x++) {
+            if (cl.getCards().get(x).getId() == origin.getId()) {
+                originIndex = x;
                 break;
             }
-       }
-       repo.save(cl);
-       return ResponseEntity.ok(cl);
+        }
+        for(int x = 0; x < cl.getCards().size(); x++) {
+            if (cl.getCards().get(x).getId() == destination.getId()) {
+                Card replaced = cl.getCards().remove(originIndex);
+                cl.getCards().add(x, replaced);
+                break;
+            }
+        }
+        repo.save(cl);
+        return ResponseEntity.ok(cl);
     }
 }
 

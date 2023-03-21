@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -28,20 +27,15 @@ public class AddCardCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private final CardListCommunication cardListCommunication;
-
     /**
      * Constructor for the AddCardCtrl class
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl,
-                       CardListCommunication cardListCommunication) {
+    public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.cardListCommunication = cardListCommunication;
 
     }
 
@@ -64,9 +58,9 @@ public class AddCardCtrl {
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                int index = board.getList().indexOf(cardListCommunication.getCL(mainCtrl.getId()));
+                int index = board.getList().indexOf(server.getCL(mainCtrl.getId()));
                 server.addCardToList(toBeAdded, mainCtrl.getId());
-                CardList after = cardListCommunication.getCL(mainCtrl.getId());
+                CardList after = server.getCL(mainCtrl.getId());
                 toBeAdded.setParentCardList(after);
                 board.getList().set(index,after);
                 clearFields();
