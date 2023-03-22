@@ -5,7 +5,6 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-
 import java.io.Serializable;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
@@ -68,6 +67,14 @@ public class Card implements Serializable {
     }
 
     /**
+     * Setter for the id (Used for server tests)
+     * @param id the new id of the board
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
      * Sets the CardList that Card belongs to
      * @param cardList the CardList to set as parent
      */
@@ -103,8 +110,8 @@ public class Card implements Serializable {
     }
 
     /**
-     * toString method for the card
-     * @return the card presented as a String
+     * toString method for the Card class
+     * @return this as a String
      */
     @Override
     public String toString() {

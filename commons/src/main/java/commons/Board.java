@@ -2,6 +2,7 @@ package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -9,6 +10,8 @@ import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class Board {
@@ -44,7 +47,7 @@ public class Board {
      * @param list a CardList
      */
     @SuppressWarnings("unused")
-    private Board(User creator, List<CardList> list, String name) {
+    public Board(User creator, List<CardList> list, String name) {
         this.users = new ArrayList<>();
         users.add(creator);
         this.list = list;
@@ -78,6 +81,30 @@ public class Board {
      */
     public Long getId() {
         return this.id;
+    }
+
+    /**
+     * Setter for the id(Used for server tests)
+     * @param id the id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
+     * Checks whether the board has a user with a
+     * specific id
+     * @param id the id in search
+     * @return true if the board has a user with this id,
+     * false otherwise
+     */
+    public boolean hasUser(long id) {
+        for (User u: this.getUsers()) {
+            if (u.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -175,16 +202,11 @@ public class Board {
     }
 
     /**
-     * toString method for Board
-     * @return the Board object presented as a String
+     * toString method for the board class
+     * @return this as a String
      */
     @Override
     public String toString() {
-        return "Board{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users +
-                ", list=" + list +
-                '}';
+        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 }

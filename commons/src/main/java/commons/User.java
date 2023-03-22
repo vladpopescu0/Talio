@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
 import javax.inject.Inject;
@@ -8,6 +9,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 public class User {
@@ -51,6 +54,14 @@ public class User {
      */
     public long getId() {
         return id;
+    }
+
+    /**
+     * Setter for the id of the user(used for server testing)
+     * @param id the new id of the user
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**
@@ -127,17 +138,6 @@ public class User {
         return Objects.hash(id, username);
     }
 
-    /**
-     * toString method for the User class
-     * @return the current User object as a String
-     */
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                '}';
-    }
 
     /**
      * Setter for the boardList
@@ -145,5 +145,14 @@ public class User {
      */
     public void setBoardList(List<Board> boardList) {
         this.boardList = boardList;
+    }
+
+    /**
+     * toString method for the User class
+     * @return this as a string
+     */
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 }
