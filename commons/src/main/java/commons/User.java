@@ -54,6 +54,14 @@ public class User {
     }
 
     /**
+     * Setter for the id of the user(used for server testing)
+     * @param id the new id of the user
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
      * Getter for the username
      * @return the username of the user
      */
@@ -127,17 +135,6 @@ public class User {
         return Objects.hash(id, username);
     }
 
-    /**
-     * toString method for the User class
-     * @return the current User object as a String
-     */
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                '}';
-    }
 
     /**
      * Setter for the boardList
