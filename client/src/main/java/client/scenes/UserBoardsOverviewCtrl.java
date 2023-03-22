@@ -33,8 +33,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 
-import static client.utils.ServerUtils.packBoard;
-import static client.utils.ServerUtils.unpackBoard;
 
 public class UserBoardsOverviewCtrl implements Initializable {
 
@@ -74,7 +72,7 @@ public class UserBoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
-                .getUsers().get(0).getUsername()));
+                .listUsernames()));
         table.setPlaceholder(new Label("You haven't joined any board"));
     }
 
@@ -95,10 +93,9 @@ public class UserBoardsOverviewCtrl implements Initializable {
     }
 
     /**
-     * Joins the selected Board
-     * It is currently redirecting to the only available Board
+     * Shows the board a user has selected from the table
      */
-    public void joinBoard() {
+    public void showBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
         if(b == null){
             var alert = new Alert(Alert.AlertType.ERROR);
@@ -107,19 +104,13 @@ public class UserBoardsOverviewCtrl implements Initializable {
             alert.showAndWait();
             return;
         }
-        b.addUser(mainCtrl.getCurrentUser());
-        packBoard(b);
-        server.updateBoard(b);
-        unpackBoard(b);
-        mainCtrl.getCurrentUser().setBoardList(server.
-                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
     }
 
     /**
      * Returns to the MainPage with all boards
      */
-    public void returnToMain() {
+    public void toALlBoards() {
         mainCtrl.showOverview();
     }
 }

@@ -1,5 +1,6 @@
 package commons;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -130,6 +131,24 @@ public class Board {
         }
         users.add(user);
         user.getBoardList().add(this);
+    }
+
+    /**
+     * Creates a string with all the users of the board
+     * (used for tables in overviews)
+     * @return all the users of the board
+     */
+    @JsonIgnore
+    public String listUsernames() {
+        if (users.isEmpty()) {
+            return "";
+        }
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < users.size()-1; i++) {
+            s.append(users.get(i).getUsername()).append(", ");
+        }
+        s.append(users.get(users.size() - 1).getUsername());
+        return s.toString();
     }
 
     /**

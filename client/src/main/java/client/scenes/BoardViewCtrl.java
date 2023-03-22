@@ -147,8 +147,8 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Redirects the user back to the overview page
      */
-    public void toOverview() {
-        mainCtrl.showOverview();
+    public void toUserOverview() {
+        mainCtrl.showUserBoardOverview();
     }
 
     /**
@@ -159,7 +159,14 @@ public class BoardViewCtrl implements Initializable {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.showOverview();
+        mainCtrl.showUserBoardOverview();
     }
 
+    /**
+     * Redirects to edit Board name scene, where the user can change the name
+     * of the current user
+     */
+    public void editTitle() {
+        mainCtrl.showEditBoardNameView(board);
+    }
 }
