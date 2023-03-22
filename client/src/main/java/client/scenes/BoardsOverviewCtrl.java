@@ -19,10 +19,14 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
+import commons.CardList;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,6 +37,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 
+import static client.utils.ServerUtils.packBoard;
 import static client.utils.ServerUtils.unpackBoard;
 
 /**
@@ -42,6 +47,7 @@ public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;//must change mainCtrl
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     private ObservableList<Board> data;
     @FXML
@@ -77,8 +83,15 @@ public class BoardsOverviewCtrl implements Initializable {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
                 .getUsers().get(0).getUsername()));
+        socketHandler.registerForUpdates("/topic/boards", Board.class, q -> data.add(q));
+        socketHandler.registerForUpdates("/topic/boardsUpdate", Board.class, q -> Platform.runLater(()->{
+            refresh();
+        }));
+        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd", Long.class, q -> Platform.runLater(()->{
+            refresh();
+            mainCtrl.getBoardViewCtrl().refresh();
+        }));
 
-        server.boardUpdates(q -> data.add(q));
     }
 
     /**
@@ -111,13 +124,13 @@ public class BoardsOverviewCtrl implements Initializable {
             return;
         }
         b.addUser(mainCtrl.getCurrentUser());
+        packBoard(b);
         server.updateBoard(b);
+        unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
+
     }
 
-    public void stop(){
-        server.stop();
-    }
 }

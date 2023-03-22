@@ -19,11 +19,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import client.communication.CardListCommunication;
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -35,8 +38,9 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-
     private final CardListCommunication cardListCommunication;
+
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     private Board board;
 
@@ -45,6 +49,9 @@ public class BoardViewCtrl implements Initializable {
 
     @FXML
     private ListView<CardList> cardListView;
+
+    @FXML
+    private Button removeButton;
 
     private ObservableList<CardList> cardListObservableList;
 
@@ -81,11 +88,20 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
         titledPane.setText(board.getName());
-        cardListCommunication.cardListUpdates(q -> {
+        if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
+            removeButton.setDisable(false);
+        } else {
+            removeButton.setDisable(true);
+        }
+        socketHandler.registerForUpdates("/topic/lists", CardList.class, q -> Platform.runLater(()->{
             cardListObservableList.add(q);
-            cardListView.setItems(FXCollections.observableList(cardListObservableList));
-        });
-
+            refresh();
+            mainCtrl.getOverviewCtrl().refresh();
+        }));
+        socketHandler.registerForUpdates("/topic/updateParent", Long.class, q -> Platform.runLater(()->{
+            refresh();
+            mainCtrl.getOverviewCtrl().refresh();
+        }));
     }
 
     /**
@@ -121,25 +137,8 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setCellFactory(cl ->
             new CardListCell(mainCtrl,cardListCommunication,server)
         );
-        cardListCommunication.cardListUpdates(q -> {
-            cardListObservableList.add(q);
-            cardListView.setItems(FXCollections.observableList(cardListObservableList));
-        });
-//        server.boardUpdates(q ->{
-//            CardList list = q.getList().get(q.getList().size() - 1);
-//            cardListObservableList.add(list);
-//            cardListView.setItems(FXCollections.observableList(cardListObservableList));
-//        });
     }
 
-    /**
-     * Refreshes the Board View and deletes a card
-     * @param cardList the cardlist to be deleted
-     */
-    public void refreshDelete(CardList cardList) {
-        cardListObservableList.remove(cardList);
-        refresh();
-    }
 
     /**
      * Goes back to the overview page
@@ -149,21 +148,20 @@ public class BoardViewCtrl implements Initializable {
     }
 
     /**
-     * refreshes page when an object is renamed
-     */
-    public void refreshRename() {
-        cardListView.setItems(FXCollections.observableList(board.getList()));
-        refresh();
-    }
-    /**
      * Redirects the user back to the overview page
      */
     public void toOverview() {
         mainCtrl.showOverview();
     }
-
-    public void stop(){
-        cardListCommunication.stop();
+    /**
+     * Removes the current user from the board, in case the user has joined the board
+     */
+    public void removeUser() {
+        board.removeUser(mainCtrl.getCurrentUser());
+        server.updateBoard(board);
+        mainCtrl.getCurrentUser().setBoardList(server.
+                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+        mainCtrl.showOverview();
     }
 
 }

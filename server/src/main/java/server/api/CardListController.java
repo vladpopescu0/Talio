@@ -5,6 +5,7 @@ import commons.Card;
 import commons.CardList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.CardRepository;
@@ -21,18 +22,18 @@ public class CardListController {
 
     private final CardRepository repo;
     private final CardListService cLService;
+    private final SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the CardListController
      * @param cLService the service that is used
      * @param repo Card Repository
      */
-    public CardListController(CardListService cLService, CardRepository repo){
+    public CardListController(CardListService cLService, CardRepository repo, SimpMessagingTemplate msgs){
         this.cLService = cLService;
         this.repo = repo;
+        this.msgs = msgs;
     }
-
-
     /**
      * @return all the CardList objects on the server
      */
@@ -68,11 +69,12 @@ public class CardListController {
      * @return a ResponseEntity verifying the card is added to the list
      */
     @PostMapping("/addCard/{id}")
-    public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
+    public ResponseEntity<Card> addCardToList(@PathVariable("id") Long id,@RequestBody Card card){
         if(card==null){
             return ResponseEntity.badRequest().build();
         }
         cLService.addCard(id,card);
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok(card);
     }
 
@@ -87,23 +89,24 @@ public class CardListController {
         if(addedList == null){
             return ResponseEntity.badRequest().build();
         }
+        msgs.convertAndSend("/topic/lists", list);
         return ResponseEntity.ok(addedList);
     }
 
-    private static Map<Object, Consumer<CardList>> listeners = new HashMap<>();
-    @GetMapping(path = {"/updates"})
-    public DeferredResult<ResponseEntity<CardList>> getCLUpdates(){
-        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<CardList>>(5000L,noContent);
-
-        var key = new Object();
-        listeners.put(key,q ->
-            res.setResult(ResponseEntity.ok(q))
-        );
-        res.onCompletion(() -> listeners.remove(key));
-
-        return res;
-    }
+//    private static Map<Object, Consumer<CardList>> listeners = new HashMap<>();
+//    @GetMapping(path = {"/updates"})
+//    public DeferredResult<ResponseEntity<CardList>> getCLUpdates(){
+//        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+//        var res = new DeferredResult<ResponseEntity<CardList>>(5000L,noContent);
+//
+//        var key = new Object();
+//        listeners.put(key,q ->
+//            res.setResult(ResponseEntity.ok(q))
+//        );
+//        res.onCompletion(() -> listeners.remove(key));
+//
+//        return res;
+//    }
 
 
     /**
@@ -112,10 +115,11 @@ public class CardListController {
      * else a ResponseEntity with the BAD_REQUEST status
      */
     @DeleteMapping(path = "/delete/{id}")
-    public ResponseEntity<CardList> removeList(@PathVariable("id") long id){
+    public ResponseEntity<CardList> removeList(@PathVariable("id") Long id){
         if(!cLService.delete(id)){
             return ResponseEntity.badRequest().build();
         }
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok().build();
     }
 
@@ -132,7 +136,7 @@ public class CardListController {
         if(cl == null){
             return ResponseEntity.badRequest().build();
         }
-
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok(cl);
     }
 
@@ -149,7 +153,7 @@ public class CardListController {
             return;
         }
 
-        CardList cl = cLService.getThroughId(id);
+        CardList cl = cLService.getById(id);
         Card origin = cards.get(0);
         Card destination = cards.get(1);
         int originIndex = 0;
@@ -166,6 +170,7 @@ public class CardListController {
                 break;
             }
         }
+        msgs.convertAndSend("/topic/updateParent", id);
         cLService.save(cl);
     }
 }

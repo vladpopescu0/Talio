@@ -1,24 +1,26 @@
 package client.scenes;
 
 import client.communication.CardListCommunication;
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
 import jakarta.ws.rs.BadRequestException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.SnapshotParameters;
+//import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
+//import javafx.scene.image.WritableImage;
+//import javafx.scene.input.ClipboardContent;
+//import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static client.scenes.MainCtrl.cardDataFormat;
-import static client.scenes.MainCtrl.cardListDataFormat;
+//import static client.scenes.MainCtrl.cardListDataFormat;
 import static client.utils.ServerUtils.packCardList;
 
 public class CardListCell extends ListCell<CardList> {
@@ -34,6 +36,7 @@ public class CardListCell extends ListCell<CardList> {
     private final MainCtrl mainCtrl;
 
     private final CardListCommunication cardListCommunication;
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     @FXML
     private Button editListButton;
@@ -100,13 +103,11 @@ public class CardListCell extends ListCell<CardList> {
                     fxmlLoader.load();
                     editListButton.setOnAction(event -> {
                         rename(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshRename();
                     });
                     deleteList.setOnAction(event -> {
                         delete(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
-
                     });
+
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
@@ -126,14 +127,31 @@ public class CardListCell extends ListCell<CardList> {
                 br.printStackTrace();
             }
 
-            List<Card> cards = (cl == null ? new ArrayList<>() : cl.getCards());
-            cardObservableList = FXCollections.observableList(cards);
-            cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl, cardListCommunication, server));
+            refresh();
 
             setText(null);
             setGraphic(titledPane);
+
+//            socketHandler.registerForUpdates("/topic/addCard", Card.class, q -> Platform.runLater(()->{
+//                refresh();
+//
+//                setText(null);
+//                setGraphic(titledPane);
+//                mainCtrl.getBoardViewCtrl().refresh();
+//                mainCtrl.getOverviewCtrl().refresh();
+//            }));
         }
+    }
+
+    /**
+     * refresh method for an individual list of cards
+     * on the client
+     */
+    public void refresh(){
+        List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
+        cardObservableList = FXCollections.observableList(cards);
+        cardsList.setItems(cardObservableList);
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, cardListCommunication, server));
     }
 
     /** Helper method for renaming a cardlist
@@ -158,7 +176,8 @@ public class CardListCell extends ListCell<CardList> {
      * and yield false for equals method
      */
     public void handleDraggable() {
-        this.setOnDragDetected(event -> {
+        //CardList drag-and-drop is currently disabled
+        /*this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.put(cardListDataFormat, this.getItem());
@@ -168,7 +187,7 @@ public class CardListCell extends ListCell<CardList> {
             db.setDragView(snapshot);
 
             event.consume();
-        });
+        });*/
 
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
@@ -201,6 +220,10 @@ public class CardListCell extends ListCell<CardList> {
 
             event.consume();
         });
+
+//        socketHandler.registerForUpdates("/topic/updateParent", Long.class, q -> Platform.runLater(()->{
+//            mainCtrl.getBoardViewCtrl().refresh();
+//        }));
     }
 
     /**
@@ -219,5 +242,6 @@ public class CardListCell extends ListCell<CardList> {
         server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
         board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
         board.getList().set(newParentIndex, cardListCommunication.getCL(this.getItem().getId()));
+        mainCtrl.getBoardViewCtrl().refresh();
     }
 }

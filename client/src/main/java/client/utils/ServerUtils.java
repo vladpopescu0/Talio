@@ -38,34 +38,6 @@ public class ServerUtils {
 
     private static final String SERVER = "http://localhost:8080/";
 
-    //public SocketHandler handler = new SocketHandler("ws://localhost:8080/websocket");
-
-    private static ExecutorService EXEC = Executors.newSingleThreadExecutor();
-
-    public void boardUpdates(Consumer<Board> cons) {
-
-        EXEC.submit(() -> {
-            while (!Thread.interrupted()) {
-                var boards = ClientBuilder.newClient(new ClientConfig()) //
-                        .target(SERVER).path("api/boards/updates") //
-                        .request(APPLICATION_JSON) //
-                        .accept(APPLICATION_JSON) //
-                        .get(Response.class);
-
-                if (boards.getStatus() == 204) {
-                    continue;
-                }
-                var q = boards.readEntity(Board.class);
-                cons.accept(q);
-            }
-        });
-
-    }
-
-    public void stop() {
-        EXEC.shutdownNow();
-    }
-
     /**
      * Method that gets all boards from the database
      * through the /boards api
@@ -108,7 +80,13 @@ public class ServerUtils {
      * @return the new board
      */
     public Board addBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()).target(SERVER).path("api/boards/add").request(APPLICATION_JSON).accept(APPLICATION_JSON).post(Entity.entity(board, APPLICATION_JSON), Board.class);
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(SERVER).path("api/boards/add") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(board, APPLICATION_JSON), Board.class);
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -215,8 +193,7 @@ public class ServerUtils {
                 .target(SERVER).path("api/lists/addCard/" + id)//
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-        //Get parent
+                .post(Entity.entity(card,APPLICATION_JSON),Card.class);
     }
 
     /**
@@ -239,11 +216,13 @@ public class ServerUtils {
      * @return the updated board
      */
     public Board updateBoard(Board board) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(SERVER).path("api/boards/update/" + board.getId()) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        unpackBoard(b);
+        return b;
     }
 
     /**
@@ -261,14 +240,18 @@ public class ServerUtils {
     }
 
     /**
-     * <<<<<<< HEAD
      * Updates the parent CardList of a Card with provided ID
      *
      * @param id    ID of the Card to be updated
      * @param lists old and new CardList of the provided Card
      */
     public void updateParent(long id, List<CardList> lists) {
-        ClientBuilder.newClient(new ClientConfig()).target(SERVER).path("api/cards/updateParent/" + id).request(APPLICATION_JSON).accept(APPLICATION_JSON).put(Entity.entity(lists, APPLICATION_JSON), Card.class);
+        ClientBuilder.newClient(new ClientConfig())
+                .target(SERVER)
+                .path("api/cards/updateParent/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(lists, APPLICATION_JSON), Card.class);
     }
 
     /**

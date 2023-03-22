@@ -29,10 +29,11 @@ public class CreateListCtrl {
 
     /**
      * Constructor for the CreateListCtrl class
-     * @param clComm the communication used
+     *
+     * @param clComm   the communication used
      * @param mainCtrl the mainCtrl of the application
-     * @param board the board to which the cardList is supposed to be added
-     * @param server the server utilities
+     * @param board    the board to which the cardList is supposed to be added
+     * @param server   the server utilities
      */
     @Inject
     public CreateListCtrl(CardListCommunication clComm, MainCtrl mainCtrl,
@@ -45,14 +46,16 @@ public class CreateListCtrl {
 
     /**
      * Getter for the name of the list
+     *
      * @return the name of the list, as entered by the user
      */
-    public String getName(){
+    public String getName() {
         return name.getText();
     }
 
     /**
      * Setter for the board
+     *
      * @param board the board to which the list is added
      */
     public void setBoard(Board board) {
@@ -69,31 +72,31 @@ public class CreateListCtrl {
     /**
      * Creates the list, when the corresponding button is pressed
      */
-    public void createList(){
-        try{
+    public void createList() {
+        try {
             CardList list = new CardList(getName());
+            board = server.getBoardByID(board.getId());
             board.addList(list);
             packBoard(board);
-            Board b = server.addBoard(board);
-//            CardList l = b.getList().get(b.getList().size() - 1);
+            server.updateBoard(board);
             unpackBoard(board);
-            list.setId(b.getList().get(b.getList().size() - 1).getId());
             clComm.addCL(list);
-        } catch (WebApplicationException e){
+        } catch (WebApplicationException e) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
             alert.showAndWait();
         }
+
         clearField();
-        mainCtrl.getBoardViewCtrl().refreshRename();
+        mainCtrl.getBoardViewCtrl().refresh();
         mainCtrl.showBoardView(this.board);
     }
 
     /**
      * Redirects to the board Page
      */
-    public void cancel(){
+    public void cancel() {
         clearField();
         mainCtrl.showBoardView(this.board);
     }

@@ -20,38 +20,6 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 public class CardListCommunication {
 
     private static final String SERVER = "http://localhost:8080/";
-//    @SuppressWarnings("unused")
-//    private final SocketHandler handler; //not using this yet because no synchronization
-
-//    public CardListCommunication(SocketHandler handler) {
-//        this.handler = handler;
-//    }
-
-    private static ExecutorService EXEC = Executors.newSingleThreadExecutor();
-
-    public void cardListUpdates(Consumer<CardList> cons) {
-
-        EXEC.submit(() -> {
-            while (!Thread.interrupted()) {
-                var list = ClientBuilder.newClient(new ClientConfig()) //
-                        .target(SERVER).path("api/lists/updates") //
-                        .request(APPLICATION_JSON) //
-                        .accept(APPLICATION_JSON) //
-                        .get(Response.class);
-
-                if (list.getStatus() == 204) {
-                    continue;
-                }
-                var q = list.readEntity(CardList.class);
-                cons.accept(q);
-            }
-        });
-
-    }
-
-    public void stop(){
-        EXEC.shutdownNow();
-    }
 
     /**
      * @param listid the id of the list to be retrieved

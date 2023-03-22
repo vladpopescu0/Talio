@@ -2,9 +2,11 @@ package client.scenes;
 
 import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
+import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -36,6 +38,7 @@ public class CardCell extends ListCell<Card> {
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
     private ServerUtils serverUtils;
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     private final CardListCommunication cardListCommunication;
 
@@ -161,6 +164,7 @@ public class CardCell extends ListCell<Card> {
         cardListCommunication.moveCard(parentId,
                 List.of(origin, this.getItem()));
         board.getList().set(parentIndex, cardListCommunication.getCL(parentId));
+        mainCtrl.getBoardViewCtrl().refresh();
     }
 
     /**

@@ -189,6 +189,15 @@ public class MainCtrl {
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
     }
+    /**
+     * Getter for boardViewCtrl
+     *
+     * @return the boardViewCtrl
+     */
+    @SuppressWarnings("unused")
+    public BoardsOverviewCtrl getOverviewCtrl() {
+        return overviewCtrl;
+    }
 
     /**
      * Shows the createBoard scene

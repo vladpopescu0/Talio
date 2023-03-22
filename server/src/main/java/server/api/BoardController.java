@@ -3,6 +3,7 @@ package server.api;
 import commons.Board;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
@@ -19,13 +20,15 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      */
-    public BoardController(BoardRepository repo) {
+    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
         this.repo = repo;
+        this.msgs = msgs;
     }
 
     /**
@@ -37,21 +40,6 @@ public class BoardController {
     @GetMapping(path = {"", "/"})
     public List<Board> getAll() {
         return repo.findAll();
-    }
-
-    private static Map<Object, Consumer<Board>> listeners = new HashMap<>();
-    @GetMapping(path = {"/updates"})
-    public DeferredResult<ResponseEntity<Board>> getBoardUpdates(){
-        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        var res = new DeferredResult<ResponseEntity<Board>>(5000L,noContent);
-
-        var key = new Object();
-        listeners.put(key,q ->{
-            res.setResult(ResponseEntity.ok(q));
-        });
-        res.onCompletion(() -> listeners.remove(key));
-
-        return res;
     }
 
     /**
@@ -75,16 +63,10 @@ public class BoardController {
      */
     @PostMapping(path ="/add")
     public ResponseEntity<Board> add(@RequestBody Board board) {
-        //Board added = boardService.add(board);
-        //if(added == null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok(added);
-
         if (board == null || board.getName() == null|| board.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        listeners.forEach((k,l) -> l.accept(board));
+        msgs.convertAndSend("/topic/boards", board);
         Board saved = repo.save(board);
         return ResponseEntity.ok(saved);
     }
@@ -93,18 +75,16 @@ public class BoardController {
      * @param board the board that is modified
      * @return a ResponseEntity verifying the board is saved
      */
-    //@PutMapping(path ="/modify")
-    //public ResponseEntity<Board> putBoard(@RequestBody Board board) {
-        //Board added = boardService.add(board);
-        //if(added == null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok(added);
-    //    if (board.getName() == null || board.getName().isEmpty()) {
-    //        return ResponseEntity.badRequest().build();
-    //    }
+    @PutMapping(path ="/modify")
+    public ResponseEntity<Board> putBoard(@RequestBody Board board) {
+        if (board == null || board.getName() == null|| board.getName().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+//        listeners.forEach((k,l) -> l.accept(board));
+        Board saved = repo.save(board);
+        return ResponseEntity.ok(saved);
 
-    //}
+    }
 
     /**
      * Deletes a board from the repo
@@ -169,13 +149,13 @@ public class BoardController {
      * @return a response entity containing the updated board, if the update is possible
      */
     @PutMapping("/update/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Board> updateBoard(@PathVariable("id") long id,
                                              @RequestBody Board board) {
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
         repo.save(board);
+        msgs.convertAndSend("/topic/boardsUpdate", board);
         return ResponseEntity.ok(board);
     }
 }
