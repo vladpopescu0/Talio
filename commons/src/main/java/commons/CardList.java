@@ -96,6 +96,14 @@ public class CardList implements Serializable {
     }
 
     /**
+     * Setter for the cards field
+     * @param cards the new list that will replace the current list
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+    }
+
+    /**
      * Removes given Card from the CardList
      * @param card Card to be removed
      */

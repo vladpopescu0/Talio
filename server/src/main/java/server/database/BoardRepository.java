@@ -13,6 +13,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      * @return all the boards corresponding
      * to the user as a list
      */
+    @SuppressWarnings("unused")
     List<Board> findByUsers_Id(long id);
 
     /**
@@ -21,5 +22,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
      * @return true if there are any boards joined by the user,
      * false otherwise
      */
+    @SuppressWarnings("unused")
     boolean existsByUsers_Id(long id);
 }

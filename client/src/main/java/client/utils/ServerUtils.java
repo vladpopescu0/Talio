@@ -220,7 +220,6 @@ public class ServerUtils {
         unpackBoard(b);
         return b;
     }
-
     /**
      * @param id id of the searched card
      * @return the searched card
@@ -299,6 +298,19 @@ public class ServerUtils {
     }
 
     /**
+     * the delete method for a card from a list, mapped to "deleteCardFromList"
+     * @param id the id of the list from which the card should be removed
+     * @param cardId the id of the removed card
+     * @return  200-OK when the card was deleted or an error
+     */
+    public Response deleteCardfromList(long id, long cardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/lists/" + id + "/delete/" + cardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+        /**
      * @param listid the id of the list to be retrieved
      * @return the card list with the specific id
      */

@@ -104,7 +104,7 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Adds a new CardList to the Board
      */
-    public void addCardList() {
+    public void addCardList() {//Not that suggestive I would say
         mainCtrl.showCreateList(board);
         refresh();
     }
@@ -113,9 +113,12 @@ public class BoardViewCtrl implements Initializable {
      * refreshes the boardView page
      */
     public void refresh() {
+        this.board=server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,server));
+        cardListView.setCellFactory(cl ->
+            new CardListCell(mainCtrl,server)
+        );
     }
 
     /**

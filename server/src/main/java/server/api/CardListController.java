@@ -9,6 +9,7 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "api/lists")
@@ -181,6 +182,30 @@ public class CardListController {
         }
         repo.save(cl);
         return ResponseEntity.ok(cl);
+    }
+
+    /**
+     * The mapping of the delete card from list
+     * @param id of the list from which to delete the card
+     * @param cardId the id of the card that should be deleted
+     * @return a response with a card list object and 1) 404 if not found
+     * 2) 200 if the card was properly deleted
+     */
+    @DeleteMapping(path = "/{id}/delete/{cardId}")
+    public ResponseEntity<CardList> deleteCardFromList
+    (@PathVariable("id") long id, @PathVariable("cardId") long cardId) {
+        if (repo.existsById(id)) {
+            CardList cardList = repo.getById(id);
+            var filteredList = cardList.getCards().stream()
+                    .filter(card -> card.getId() != cardId).collect(Collectors.toList());
+            if (cardList.getCards().size() == filteredList.size()) {
+                return ResponseEntity.notFound().build();
+            }
+            cardList.setCards(filteredList);
+            repo.save(cardList);
+            return ResponseEntity.ok(repo.getById(id));
+        }
+        return ResponseEntity.notFound().build();
     }
 }
 

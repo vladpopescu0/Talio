@@ -32,6 +32,8 @@ public class CardCell extends ListCell<Card> {
     @FXML
     private Button editButton;
 
+    @FXML
+    private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
     private ServerUtils server;
@@ -40,10 +42,15 @@ public class CardCell extends ListCell<Card> {
      * useful dependencies for universal variables and server communication
      * @param server the utils where the connection to the apis is
      * @param mainCtrl the controller of the whole application
+     * @param cardList the cardListCell in which this card is
      */
-    public CardCell(MainCtrl mainCtrl, ServerUtils server) {
+    public CardCell(MainCtrl mainCtrl, ServerUtils server
+            , CardListCell cardList) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        if(this.getItem()!=null){
+            this.getItem().setParentCardList(cardList.getItem());
+        }
     }
 
     /**
@@ -76,6 +83,11 @@ public class CardCell extends ListCell<Card> {
                     this.editButton.setOnAction(event -> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
+                    });
+                    this.deleteButton.setOnAction(event ->{
+                        var c = server.deleteCardfromList
+                                (this.getItem().getParentCardList().getId(),this.getItem().getId());
+                        mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

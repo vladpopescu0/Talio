@@ -5,19 +5,14 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-//import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
-//import javafx.scene.image.WritableImage;
-//import javafx.scene.input.ClipboardContent;
-//import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 
 import java.util.ArrayList;
@@ -25,7 +20,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static client.scenes.MainCtrl.cardDataFormat;
-//import static client.scenes.MainCtrl.cardListDataFormat;
 import static client.utils.ServerUtils.packCardList;
 
 public class CardListCell extends ListCell<CardList> {
@@ -111,24 +105,23 @@ public class CardListCell extends ListCell<CardList> {
             }
 
             titledPane.setText(cardList.getName());
-            long id = this.getItem().getId();
 
-            CardList cl = null;
-            try {
-                cl = server.getCL(id);
-            } catch (BadRequestException br) {
-                br.printStackTrace();
-            }
-
-            List<Card> cards = (cl == null ? new ArrayList<>() : cl.getCards());
-            cardObservableList = FXCollections.observableList(cards);
-            cardsList.setItems(cardObservableList);
-            cardsList.setCellFactory(c -> new CardCell(mainCtrl, server));
-
+            refresh();
             setText(null);
             setGraphic(titledPane);
         }
     }
+    /**
+     * refresh method for an individual list of cards
+     * on the client
+     */
+    public void refresh(){
+        List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
+        cardObservableList = FXCollections.observableList(cards);
+        cardsList.setItems(cardObservableList);
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
+    }
+
 
     /** Helper method for renaming a cardlist
      * @param id the id of the cardList whose name will be modified

@@ -2,9 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -46,11 +44,7 @@ public class EditCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                int index = board.getList().indexOf(server.getCL(mainCtrl.getId()));
                 server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
-                CardList after = server.getCL(mainCtrl.getId());
-                board.getList().set(index,after);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }
