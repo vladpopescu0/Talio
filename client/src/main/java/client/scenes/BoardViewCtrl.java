@@ -48,6 +48,12 @@ public class BoardViewCtrl implements Initializable {
 
     private ObservableList<CardList> cardListObservableList;
 
+    @FXML
+    private Button editTitle;
+
+    @FXML
+    private Button addList;
+
 
     /**
      * Constructor of the Controller for BoardView
@@ -79,10 +85,23 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,server));
         titledPane.setText(board.getName());
+    }
+
+    /**
+     * Checks if the user has joined this board and if so, allows him to
+     * edit it
+     */
+    public void checkUser() {
         if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
-            removeButton.setDisable(false);
-        } else {
             removeButton.setDisable(true);
+            editTitle.setDisable(true);
+            addList.setDisable(true);
+            cardListView.setDisable(true);
+        } else {
+            removeButton.setDisable(false);
+            editTitle.setDisable(false);
+            addList.setDisable(false);
+            cardListView.setDisable(false);
         }
     }
 
@@ -147,8 +166,8 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Redirects the user back to the overview page
      */
-    public void toOverview() {
-        mainCtrl.showOverview();
+    public void toUserOverview() {
+        mainCtrl.showUserBoardOverview();
     }
 
     /**
@@ -159,7 +178,14 @@ public class BoardViewCtrl implements Initializable {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.showOverview();
+        mainCtrl.showUserBoardOverview();
     }
 
+    /**
+     * Redirects to edit Board name scene, where the user can change the name
+     * of the current user
+     */
+    public void editTitle() {
+        mainCtrl.showEditBoardNameView(board);
+    }
 }

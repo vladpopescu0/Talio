@@ -79,7 +79,7 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
-                .getUsers().get(0).getUsername()));
+                .listUsernames()));
     }
 
     /**
@@ -101,7 +101,7 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Joins the selected Board
-     * It is currently redirecting to the only available Board
+     * It is redirects the user to the Board he has selected and makes him join the board.
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
@@ -118,6 +118,21 @@ public class BoardsOverviewCtrl implements Initializable {
         unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+        mainCtrl.showBoardView(b);
+    }
+
+    /**
+     * Shows the board a user has selected from the table
+     */
+    public void showBoard() {
+        Board b = table.getSelectionModel().getSelectedItem();
+        if(b == null){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to select a board!");
+            alert.showAndWait();
+            return;
+        }
         mainCtrl.showBoardView(b);
     }
 

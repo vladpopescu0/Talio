@@ -2408,3 +2408,6 @@ SELECT * FROM USERS [42102-200]
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "CARD_CARDS" nie istnieje
 Table "CARD_CARDS" not found; SQL statement:
 INSERT INTO CARD_CARDS (CARD_LIST_ID, CARDS_ID) VALUES (3, 98) [42102-200]
+2023-03-22 17:50:08 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL USERS[*]"; expected "OBJECTS"; SQL statement:
+DROP ALL USERS [42001-200]

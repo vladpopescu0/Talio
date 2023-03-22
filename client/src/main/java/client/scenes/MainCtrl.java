@@ -49,6 +49,8 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene changeServer;
     private ChangeServerCtrl changeServerCtrl;
+    private Scene editBoardName;
+    private EditBoardNameViewCtrl editBoardNameViewCtrl;
 
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
@@ -67,6 +69,7 @@ public class MainCtrl {
      * @param changeListName the changeListName scene
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
+     * @param editBoardName the editBoardName scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
@@ -76,7 +79,8 @@ public class MainCtrl {
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
-                           Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview) {
+                           Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
+                           Pair<EditBoardNameViewCtrl, Parent> editBoardName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -109,6 +113,9 @@ public class MainCtrl {
 
         this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
         this.userBoardOverview = new Scene(userBoardsOverview.getValue());
+
+        this.editBoardNameViewCtrl = editBoardName.getKey();
+        this.editBoardName = new Scene(editBoardName.getValue());
 
         showUserView();
         primaryStage.show();
@@ -150,6 +157,18 @@ public class MainCtrl {
 
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
+        this.boardViewCtrl.checkUser();
+    }
+
+    /**
+     * Redirects to the edit Board name page
+     * @param board the board whose name is to be changed
+     */
+    public void showEditBoardNameView(Board board) {
+        primaryStage.setTitle("Edit board name: " + board.getName());
+        primaryStage.setScene(editBoardName);
+
+        this.editBoardNameViewCtrl.setBoard(board);
     }
 
     /**
