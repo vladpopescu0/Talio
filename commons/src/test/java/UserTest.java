@@ -93,7 +93,7 @@ public class UserTest {
      * Test for equals
      */
     @Test
-    public void notequalsUsersTest() {
+    public void notEqualsUsersTest() {
         User u = new User("u");
         User u1 = new User("u1");
         assertNotEquals(u, u1);

@@ -1,11 +1,15 @@
 package commons;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 
 @Entity
@@ -92,6 +96,14 @@ public class CardList implements Serializable {
     }
 
     /**
+     * Setter for the cards field
+     * @param cards the new list that will replace the current list
+     */
+    public void setCards(List<Card> cards){
+        this.cards = cards;
+    }
+
+    /**
      * Removes given Card from the CardList
      * @param card Card to be removed
      */
@@ -134,11 +146,11 @@ public class CardList implements Serializable {
     }
 
     /**
-     * setter for the cards field, useful when deleting cards
-     * on the backend
-     * @param cards
+     * toString method for the CardList class
+     * @return this as a String
      */
-    public void setCards(List<Card> cards) {
-        this.cards=cards;
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 }
