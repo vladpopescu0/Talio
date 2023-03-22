@@ -157,6 +157,7 @@ public class MainCtrl {
 
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
+        this.boardViewCtrl.checkUser();
     }
 
     /**
