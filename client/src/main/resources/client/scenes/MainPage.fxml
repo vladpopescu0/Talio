@@ -8,20 +8,21 @@
     <children>
         <Button fx:id="addBoard" layoutX="429.0" layoutY="213.0" mnemonicParsing="false" onAction="#createBoard" text="Add Board" />
         <Button fx:id="refresh" layoutX="437.0" layoutY="173.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-      <Button layoutX="463.0" layoutY="384.0" mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="105.0" text="Change Server" />
+        <Button layoutX="463.0" layoutY="384.0" mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="105.0" text="Change Server" />
         <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="285.0" prefWidth="400.0">
             <columns>
                 <TableColumn fx:id="colBoardName" editable="false" prefWidth="200.0" text="Board Name" />
-            <TableColumn fx:id="colCreator" editable="false" prefWidth="200.0" text="Creator" />
+                <TableColumn fx:id="colCreator" editable="false" prefWidth="200.0" text="Creator" />
             </columns>
         </TableView>
-      <Label fx:id="pageTitle" layoutX="73.0" layoutY="14.0" prefHeight="60.0" prefWidth="495.0" text="Welcome to Talio" textAlignment="CENTER">
-         <font>
-            <Font size="36.0" />
-         </font>
-      </Label>
-      <Button fx:id="joinBoard" layoutX="428.0" layoutY="252.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
-      <Label fx:id="serverLabel" layoutX="422.0" layoutY="99.0" prefHeight="26.0" prefWidth="147.0" />
-      <Label layoutX="422.0" layoutY="83.0" text="Current Server:" />
+        <Label fx:id="pageTitle" layoutX="73.0" layoutY="14.0" prefHeight="60.0" prefWidth="495.0" text="Welcome to Talio" textAlignment="CENTER">
+            <font>
+                <Font size="36.0" />
+            </font>
+        </Label>
+        <Button fx:id="joinBoard" layoutX="428.0" layoutY="252.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
+        <Label fx:id="serverLabel" layoutX="422.0" layoutY="99.0" prefHeight="26.0" prefWidth="147.0" />
+        <Label layoutX="422.0" layoutY="83.0" text="Current Server:" />
+        <Button fx:id="myBoardsButton" layoutX="430.0" layoutY="289.0" mnemonicParsing="false" onAction="#userBoards" text="My Boards" />
     </children>
 </AnchorPane>

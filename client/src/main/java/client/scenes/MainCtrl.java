@@ -28,6 +28,8 @@ public class MainCtrl {
     private Stage primaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
+    private UserBoardsOverviewCtrl userBoardsOverviewCtrl;
+    private Scene userBoardOverview;
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
     private Scene addCard;
@@ -64,14 +66,17 @@ public class MainCtrl {
      * @param editCard the editCard scene
      * @param changeListName the changeListName scene
      * @param changeServer the changeServer scene
+     * @param userBoardsOverview the userBoardsOverview scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<BoardViewCtrl, Parent> boardView,
+                           Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
                            Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
-                           Pair<ChangeServerCtrl, Parent> changeServer) {
+                           Pair<ChangeServerCtrl, Parent> changeServer,
+                           Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -102,6 +107,9 @@ public class MainCtrl {
         this.changeServerCtrl = changeServer.getKey();
         this.changeServer = new Scene(changeServer.getValue());
 
+        this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
+        this.userBoardOverview = new Scene(userBoardsOverview.getValue());
+
         showUserView();
         primaryStage.show();
     }
@@ -123,7 +131,7 @@ public class MainCtrl {
     }
 
     /**
-     * SHows an overview of all boards
+     * Shows an overview of all boards
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
@@ -230,6 +238,15 @@ public class MainCtrl {
      */
     public void showChangeServer() {
         primaryStage.setScene(changeServer);
+    }
+
+    /**
+     * Shows an overview of all boards for a logged-in user
+     */
+    public void showUserBoardOverview() {
+        primaryStage.setTitle("Your boards");
+        primaryStage.setScene(userBoardOverview);
+        this.userBoardsOverviewCtrl.refresh();
     }
 
     /**
