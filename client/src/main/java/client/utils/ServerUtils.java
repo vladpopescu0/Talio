@@ -390,12 +390,13 @@ public class ServerUtils {
      * Moves the second given Card in front of the first given Card in CardList of provided ID
      * @param id ID of the CardList to be updated
      * @param cards two Cards to be moved
+     * @return modified CardList
      */
-    public void moveCard(long id, List<Card> cards) {
-        ClientBuilder.newClient(new ClientConfig())
+    public CardList moveCard(long id, List<Card> cards) {
+        return ClientBuilder.newClient(new ClientConfig())
                 .target(server).path("api/lists/moveCard/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(cards, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
 }

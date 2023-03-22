@@ -36,17 +36,12 @@ import javafx.stage.Modality;
 import static client.utils.ServerUtils.packBoard;
 import static client.utils.ServerUtils.unpackBoard;
 
-/**
- * not finished yet
- */
-public class BoardsOverviewCtrl implements Initializable {
+public class UserBoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;//must change mainCtrl
+    private final MainCtrl mainCtrl;
 
     private ObservableList<Board> data;
-    @FXML
-    private Label serverLabel;
     @FXML
     private TableView<Board> table;
     @FXML
@@ -60,7 +55,7 @@ public class BoardsOverviewCtrl implements Initializable {
      * @param mainCtrl the mainCtrl of the application
      */
     @Inject
-    public BoardsOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
+    public UserBoardsOverviewCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.server = server;
         this.mainCtrl = mainCtrl;
     }
@@ -80,6 +75,7 @@ public class BoardsOverviewCtrl implements Initializable {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
                 .getUsers().get(0).getUsername()));
+        table.setPlaceholder(new Label("You haven't joined any board"));
     }
 
     /**
@@ -93,10 +89,9 @@ public class BoardsOverviewCtrl implements Initializable {
      * refreshes the page, looking for updates
      */
     public void refresh() {
-        var boards = server.getBoards();
+        var boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
         data = FXCollections.observableList(boards);
         table.setItems(data);
-        this.serverLabel.setText(ServerUtils.getServer());
     }
 
     /**
@@ -122,16 +117,9 @@ public class BoardsOverviewCtrl implements Initializable {
     }
 
     /**
-     * Redirects to change server scene
+     * Returns to the MainPage with all boards
      */
-    public void changeServer() {
-        mainCtrl.showChangeServer();
-    }
-
-    /**
-     * Redirects the user to an overview of the boards they've joined
-     */
-    public void userBoards() {
-        mainCtrl.showUserBoardOverview();
+    public void returnToMain() {
+        mainCtrl.showOverview();
     }
 }
