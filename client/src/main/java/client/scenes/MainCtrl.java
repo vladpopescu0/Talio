@@ -56,6 +56,9 @@ public class MainCtrl {
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
 
+    private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
+    private Scene joinBoardByLink;
+
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
@@ -80,7 +83,8 @@ public class MainCtrl {
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
-                           Pair<EditBoardNameViewCtrl, Parent> editBoardName) {
+                           Pair<EditBoardNameViewCtrl, Parent> editBoardName,
+                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -116,6 +120,9 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
+
+        this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
+        this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
 
         showUserView();
         primaryStage.show();
@@ -285,6 +292,11 @@ public class MainCtrl {
         primaryStage.setTitle("Your boards");
         primaryStage.setScene(userBoardOverview);
         this.userBoardsOverviewCtrl.refresh();
+    }
+
+    public void showJoinBoardByLink(){
+        primaryStage.setTitle("Join A Board By Code");
+        primaryStage.setScene(joinBoardByLink);
     }
 
     /**

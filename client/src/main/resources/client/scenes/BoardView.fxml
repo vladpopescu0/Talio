@@ -23,7 +23,7 @@
             <Button layoutX="126.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
             <Button fx:id="editTitle" layoutX="551.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />
             <Button layoutX="422.0" layoutY="466.0" mnemonicParsing="false" onAction="#copyLink" text="Copy Invite Code" />
-            <Label fx:id="copyLabel" alignment="CENTER" layoutX="390.0" layoutY="409.0" prefHeight="49.0" prefWidth="175.0" textAlignment="CENTER" textFill="#47c93b" wrapText="true">
+            <Label fx:id="copyLabel" alignment="CENTER" layoutX="390.0" layoutY="409.0" prefHeight="49.0" prefWidth="175.0" style="-fx-background-color: white; -fx-background-radius: 10;" textAlignment="CENTER" textFill="#47c93b" visible="false" wrapText="true">
                <font>
                   <Font size="13.0" />
                </font>

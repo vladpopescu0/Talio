@@ -28,6 +28,6 @@
         <Label layoutX="422.0" layoutY="83.0" text="Current Server:" />
         <Button fx:id="myBoardsButton" layoutX="430.0" layoutY="326.0" mnemonicParsing="false" onAction="#userBoards" text="My Boards" />
       <Button layoutX="428.0" layoutY="289.0" mnemonicParsing="false" onAction="#showBoard" text="View Board" />
-      <Button fx:id="joinByCode" layoutX="507.0" layoutY="252.0" mnemonicParsing="false" text="Join by Code" onAction="#toJoinByLink"/>
+      <Button fx:id="joinByCode" layoutX="507.0" layoutY="252.0" mnemonicParsing="false" onAction="#toJoinByLink" text="Join by Code" />
     </children>
 </AnchorPane>

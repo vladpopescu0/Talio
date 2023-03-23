@@ -36,6 +36,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BackgroundFill;
 import javafx.util.Duration;
 
 public class BoardViewCtrl implements Initializable {
@@ -48,6 +49,7 @@ public class BoardViewCtrl implements Initializable {
     private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     private Board board;
+    private boolean isAnimationPlayed = false;
 
     @FXML
     private TitledPane titledPane;
@@ -220,13 +222,22 @@ public class BoardViewCtrl implements Initializable {
                 inviteCode = "0" + inviteCode;
                 break;
         }
-        FadeTransition fade = new FadeTransition();
-        fade.setDuration(Duration.millis(5000));
-        fade.setFromValue(30);
-        fade.setToValue(0);
-        fade.setNode(copyLabel);
-        copyLabel.setText("Board Code Copied!\nThe Code is: "+inviteCode);
-        fade.play();
+        if(!isAnimationPlayed){
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.millis(4000));
+            fade.setFromValue(30);
+            fade.setToValue(0);
+            fade.setNode(copyLabel);
+            fade.setOnFinished(e-> {
+                        copyLabel.setVisible(false);
+                        isAnimationPlayed=false;
+                    }
+            );
+            copyLabel.setVisible(true);
+            copyLabel.setText("Board Code Copied!\nThe Code is: "+inviteCode);
+            fade.play();
+            isAnimationPlayed=true;
+        }
         StringSelection stringSelection = new StringSelection(inviteCode);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
