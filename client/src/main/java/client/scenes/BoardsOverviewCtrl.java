@@ -45,7 +45,7 @@ public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;//must change mainCtrl
-    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private ObservableList<Board> data;
     @FXML
@@ -108,6 +108,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
+        System.out.println(boards);
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
@@ -128,12 +129,13 @@ public class BoardsOverviewCtrl implements Initializable {
         }
         b.addUser(mainCtrl.getCurrentUser());
         packBoard(b);
-        server.updateBoard(b);
+        int index = data.indexOf(b);
+        Board bo = server.updateBoard(b);
+        data.set(index,bo);
         unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
-
     }
 
     /**

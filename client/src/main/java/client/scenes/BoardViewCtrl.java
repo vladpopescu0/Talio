@@ -36,9 +36,8 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-//    private final CardListCommunication cardListCommunication;
 
-    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private Board board;
 

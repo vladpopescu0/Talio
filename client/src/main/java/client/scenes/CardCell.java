@@ -37,7 +37,7 @@ public class CardCell extends ListCell<Card> {
     private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
-    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
 
     /**

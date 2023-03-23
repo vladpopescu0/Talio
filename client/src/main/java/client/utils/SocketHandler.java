@@ -29,10 +29,16 @@ public class SocketHandler {
 
     /**
      * Constructor for the SocketHandler class using a URL
-     * @param URL the URL to which the session should connect
+     * @param server the name of the server
      */
-    public SocketHandler(String URL) {
-        session = connect(URL);
+    public SocketHandler(String server) {
+        if(server.contains("localhost")){
+            String url = server.replace("http","ws") + "websocket";
+            session = connect(url);
+            return;
+        }
+        String url = "ws://" + server + "/websocket";
+        session = connect(url);
     }
 
     /**
