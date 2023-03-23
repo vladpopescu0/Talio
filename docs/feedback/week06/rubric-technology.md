@@ -10,7 +10,7 @@ Application uses dependency injection to connect dependent components. No use of
 
 - *Good:* The application (client and server) uses dependency injection in multiple places to connect dependent components. The server makes use of Spring annotations to access path variables, parameters, and request bodies.
 
-We use dependency injection for all of our scene controllers.
+We use dependency injection for all of our scene controllers which have the @Inject annotation and we make use of path variables and request bodies annotations in our server controllers. Our use of dependency injection could be better, for example we are never using beans.
 
 
 ### Spring Boot
