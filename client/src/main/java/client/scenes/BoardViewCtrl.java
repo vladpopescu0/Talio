@@ -36,7 +36,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BackgroundFill;
 import javafx.util.Duration;
 
 public class BoardViewCtrl implements Initializable {
@@ -229,9 +228,9 @@ public class BoardViewCtrl implements Initializable {
             fade.setToValue(0);
             fade.setNode(copyLabel);
             fade.setOnFinished(e-> {
-                        copyLabel.setVisible(false);
-                        isAnimationPlayed=false;
-                    }
+                    copyLabel.setVisible(false);
+                    isAnimationPlayed=false;
+                }
             );
             copyLabel.setVisible(true);
             copyLabel.setText("Board Code Copied!\nThe Code is: "+inviteCode);

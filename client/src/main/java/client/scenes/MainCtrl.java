@@ -73,6 +73,7 @@ public class MainCtrl {
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
+     * @param joinBoardByLink the JoinBoardByLink scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
@@ -294,6 +295,9 @@ public class MainCtrl {
         this.userBoardsOverviewCtrl.refresh();
     }
 
+    /**
+     * Sets the current screen to the "JoinBoardByLink scene from resources"
+     */
     public void showJoinBoardByLink(){
         primaryStage.setTitle("Join A Board By Code");
         primaryStage.setScene(joinBoardByLink);
