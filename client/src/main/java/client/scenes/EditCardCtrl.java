@@ -62,7 +62,7 @@ public class EditCardCtrl {
      * Updates all fields for the card
      */
     public void updateFields(){
-        this.title.setText(server.getCardById(mainCtrl.getId()).getName());
+        this.title.setText(server.getCardById(mainCtrl.getCardId()).getName());
         //must change later for safety measures
     }
     /**
