@@ -17,20 +17,17 @@ We use dependency injection for all of our scene controllers which have the @Inj
 
 Application makes good use of the presented Spring built-in concepts to configure the server and maintain the lifecycle of the various server components.
 
-- *Excellent:* Additional @Services are defined, which encapsulate business logic or shared state.
 - *Good:* The application contains example of @Controller, @RestController, and a JPA repository.
-- *Sufficient:* The application uses Spring for the server.
-- *Insufficient:* The application uses regular socket communication.
 
+The application makes use of @RestController annotations for all of the server controllers and the database connection is guaranteed using the JPA repository. Our rating is just "good" because we removed all of the @Service annotations and service classes, because the app wasn't working as wanted.
 
 ### JavaFX
 
 Application uses JavaFX for the client and makes good use of available features (use of buttons/images/lists/formatting/…). The connected JavaFX controllers are used with dependency injection.
 
-- *Excellent:* The JavaFX controllers are used with dependency injection.
 - *Good:* The UI contains more than just buttons, text fields, or labels. The application contains images and a non-default layout.
-- *Sufficient:* Application uses JavaFX for the client.
-- *Insufficient:* 
+
+We are using JavaFX for the client and all of the scenes have buttons, text fields and labels. We are also using custom elements for the list on the BoardView page and we are planning on adding images. The only place where we use dependency injection is in the CardListCellCtrl.
 
 
 ### Communication
@@ -38,17 +35,15 @@ Application uses JavaFX for the client and makes good use of available features 
 Application uses communication via REST requests and Websockets. The code is leveraging the canonical Spring techniques for endpoints and websocket that have been introduced in the lectures. The client uses libraries to simplify access.
 
 - *Excellent:* The server defines all REST and webservice endpoints through Spring and uses a client library like Jersey (REST) or Stomp (Webservice) to simplify the server requests.
-- *Good:* All communication between client and server is implemented with REST or websockets.
-- *Sufficient:* The application contains functionality that uses 1) a REST request AND 2) long-polling AND 3) websocket communication (in different places).
-- *Insufficient:* The application does not contain functionality that uses a REST request OR 2) long-polling, OR 3) websocket communication.
 
+We are using REST for all of the controller endpoints and we also synchronized the app for multiple users by means of websockets with Stomp.
 
 ### Data Transfer
 
 Application defines meaningful data structures and uses Jackson to perform the de-/serialization of submitted data.
 
 - *Excellent:* Jackson is used implicitly by Spring or the client library. No explicit Jackson calls are required in the application.
-- *Good:* Application defines data structures and both client and server use Jackson to perform the de-/serialization of submitted data. If required, custom Jackson modules are provided that can de-/serialize external types.
-- *Insufficient:* Client or server manually create or parse String messages.
+
+Every commons class is serialized through the Spring annotations and we do not have explicit Jackson calls except for a @JsonIgnore annotation.
 
 
