@@ -9,8 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="424.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserBoardsOverviewCtrl">
     <children>
-        <Button fx:id="addBoard" layoutX="429.0" layoutY="213.0" mnemonicParsing="false" onAction="#createBoard" text="Add Board" AnchorPane.rightAnchor="51.0" />
-        <Button fx:id="refresh" layoutX="437.0" layoutY="173.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" AnchorPane.rightAnchor="60.0" />
+        <Button fx:id="addBoard" layoutX="453.0" layoutY="174.0" mnemonicParsing="false" onAction="#createBoard" prefHeight="26.0" prefWidth="82.0" text="Add Board" AnchorPane.rightAnchor="64.60000000000002" />
         <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="285.0" prefWidth="400.0">
             <columns>
                 <TableColumn fx:id="colBoardName" editable="false" prefWidth="200.0" text="Board Name" />
@@ -22,7 +21,7 @@
                 <Font size="36.0" />
             </font>
         </Label>
-        <Button fx:id="joinBoard" layoutX="428.0" layoutY="252.0" mnemonicParsing="false" onAction="#showBoard" prefWidth="75.0" text="View Board" AnchorPane.rightAnchor="50.0" />
-        <Button fx:id="backButton" layoutX="475.0" layoutY="290.0" mnemonicParsing="false" onAction="#toALlBoards" prefHeight="26.0" prefWidth="73.0" text="All Boards" />
+        <Button fx:id="joinBoard" layoutX="453.0" layoutY="212.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="26.0" prefWidth="82.0" text="View Board" AnchorPane.rightAnchor="64.60000000000002" />
+        <Button fx:id="backButton" layoutX="453.0" layoutY="252.0" mnemonicParsing="false" onAction="#toALlBoards" prefHeight="26.0" prefWidth="82.0" text="All Boards" />
     </children>
 </AnchorPane>

@@ -13,7 +13,6 @@ import javafx.stage.Modality;
 public class EditCardCtrl {
     @FXML
     private TextField title;
-
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 

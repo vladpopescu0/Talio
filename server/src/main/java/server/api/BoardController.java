@@ -135,6 +135,7 @@ public class BoardController {
         if (id < 0 || !repo.existsByUsers_Id(id)) {
             return ResponseEntity.ok(new ArrayList<>());
         }
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok(repo.findByUsers_Id(id));
     }
 

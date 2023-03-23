@@ -194,7 +194,6 @@ public class MainCtrl {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
         editCardCtrl.updateFields(getCardId());
-        System.out.println(getCardId() + "coi");
         //must change later for safety measures
 
     }
