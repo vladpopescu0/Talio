@@ -4,6 +4,9 @@
 - For each section, please also argument your choice with a small paragraph and some screenshots or links to Git commits.
 - After that I will check how you completed and go through your codebase one more time. (**MY DECISION ON GRADES IS STILL FINAL**)
 - If you do not wish to complete this rubric, you can still do that and I will complete it after Saturday. This means that each element of your codebase will be held to my own scrutiny.
+
+#### The screenshots can be found here: https://imgur.com/a/XdP7mLG
+
 ### Dependency Injection
 
 Application uses dependency injection to connect dependent components. No use of static fields in classes.
