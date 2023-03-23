@@ -16,6 +16,7 @@
 package client.scenes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import client.communication.CardListCommunication;
@@ -32,6 +33,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import org.checkerframework.checker.units.qual.C;
 
 public class BoardViewCtrl implements Initializable {
 
