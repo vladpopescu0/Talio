@@ -8,10 +8,9 @@
 
 Application uses dependency injection to connect dependent components. No use of static fields in classes.
 
-- *Excellent:* The application (client and server) uses dependency injection everywhere to connect dependent components. The projects also binds some external types, so they can be injected.
 - *Good:* The application (client and server) uses dependency injection in multiple places to connect dependent components. The server makes use of Spring annotations to access path variables, parameters, and request bodies.
-- *Sufficient:* There is one example in the client code and one in the server code that uses dependency injection to connect dependent components. Static fields and methods are only sparely used to access other components.
-- *Insufficient:* Static fields or methods are used. Implementation of the singleton pattern.
+
+We use dependency injection for all of our scene controllers.
 
 
 ### Spring Boot
