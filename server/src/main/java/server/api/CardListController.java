@@ -174,7 +174,7 @@ public class CardListController {
     public ResponseEntity<CardList> moveCard(@PathVariable("id") long id,
                                              @RequestBody List<Card> cards) {
         if (cards == null || !repo.existsById(id) || cards.size() < 2
-                || !repo.existsById(cards.get(0).getId())
+                || !cardRepository.existsById(cards.get(0).getId())
                 || !cardRepository.existsById(cards.get(1).getId())) {
             return ResponseEntity.badRequest().build();
         }
