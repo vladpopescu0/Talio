@@ -81,11 +81,12 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-        socketHandler.registerForUpdates("/topic/boards", Board.class,  q -> Platform.runLater(() -> {
-            data.add(q);
-            refresh();
-            mainCtrl.getUserBoardsOverviewCtrl().refresh();
-        }));
+        socketHandler.registerForUpdates("/topic/boards",
+                Board.class, q -> Platform.runLater(() -> {
+                    data.add(q);
+                    refresh();
+                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                }));
         socketHandler.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
@@ -111,7 +112,6 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        System.out.println(boards);
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
@@ -134,7 +134,7 @@ public class BoardsOverviewCtrl implements Initializable {
         packBoard(b);
         int index = data.indexOf(b);
         Board bo = server.updateBoard(b);
-        data.set(index,bo);
+        data.set(index, bo);
         unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));

@@ -1,6 +1,7 @@
 package client.utils;
 
 //import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.simp.stomp.StompFrameHandler;
 import org.springframework.messaging.simp.stomp.StompHeaders;
@@ -23,29 +24,25 @@ public class SocketHandler {
      * Empty Constructor for the socketHandler class
      */
     @SuppressWarnings("unused")
-    public SocketHandler(){
+    public SocketHandler() {
 
     }
 
     /**
      * Constructor for the SocketHandler class using a URL
+     *
      * @param server the name of the server
      */
     public SocketHandler(String server) {
-        if(server.contains("localhost")){
-            String url = server.replace("http","ws") + "websocket";
-            session = connect(url);
-            return;
-        }
-        String url = "ws://" + server + "/websocket";
+        String url = server.replace("http", "ws") + "websocket";
         session = connect(url);
     }
 
     /**
      * Connects the handler to a URL
+     *
      * @param URL the URL to be used
      * @return the session
-     *
      */
     private StompSession connect(String URL) {
         var client = new StandardWebSocketClient();
@@ -64,10 +61,11 @@ public class SocketHandler {
 
     /**
      * Looks for updates
+     *
      * @param destination the target of the updates
-     * @param type the entity type to look for updates
-     * @param consumer the consumer
-     * @param <T> generics
+     * @param type        the entity type to look for updates
+     * @param consumer    the consumer
+     * @param <T>         generics
      */
     public <T> void registerForUpdates(String destination, Class<T> type, Consumer<T> consumer) {
         session.subscribe(destination, new StompFrameHandler() {
@@ -85,8 +83,9 @@ public class SocketHandler {
 
     /**
      * Sends an object
+     *
      * @param destination the destination to which the object is sent
-     * @param o the object to be sent
+     * @param o           the object to be sent
      */
     @SuppressWarnings("unused")
     public void send(String destination, Object o) {
