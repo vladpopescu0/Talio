@@ -16,8 +16,6 @@
 package client;
 
 import client.scenes.*;
-import client.scenes.*;
-import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
 import client.scenes.CreateBoardViewCtrl;
 import com.google.inject.Binder;
