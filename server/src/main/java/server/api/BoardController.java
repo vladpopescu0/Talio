@@ -1,18 +1,14 @@
 package server.api;
 
 import commons.Board;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("api/boards")
@@ -25,6 +21,7 @@ public class BoardController {
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
+     * @param msgs the messages template
      */
     public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
         this.repo = repo;

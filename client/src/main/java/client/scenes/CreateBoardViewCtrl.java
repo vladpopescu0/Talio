@@ -73,7 +73,7 @@ public class CreateBoardViewCtrl implements Initializable {
             }
             mainCtrl.getCurrentUser().setBoardList(server.
                     getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-            toBoardsOverview();
+            mainCtrl.showOverview();
         }
     }
 

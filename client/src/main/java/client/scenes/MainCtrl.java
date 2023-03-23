@@ -28,6 +28,8 @@ public class MainCtrl {
     private Stage primaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
+    private UserBoardsOverviewCtrl userBoardsOverviewCtrl;
+    private Scene userBoardOverview;
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
     private Scene addCard;
@@ -45,6 +47,10 @@ public class MainCtrl {
     private AddCardCtrl addCardCtrl;
     private Scene editCard;
     private EditCardCtrl editCardCtrl;
+    private Scene changeServer;
+    private ChangeServerCtrl changeServerCtrl;
+    private Scene editBoardName;
+    private EditBoardNameViewCtrl editBoardNameViewCtrl;
 
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
@@ -61,13 +67,20 @@ public class MainCtrl {
      * @param userPage the user log in page
      * @param editCard the editCard scene
      * @param changeListName the changeListName scene
+     * @param changeServer the changeServer scene
+     * @param userBoardsOverview the userBoardsOverview scene
+     * @param editBoardName the editBoardName scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
-            Pair<BoardViewCtrl, Parent> boardView, Pair<CreateListCtrl, Parent> createList,
+                           Pair<BoardViewCtrl, Parent> boardView,
+                           Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
                            Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
-                           Pair<ChangeNameCtrl, Parent> changeListName) {
+                           Pair<ChangeNameCtrl, Parent> changeListName,
+                           Pair<ChangeServerCtrl, Parent> changeServer,
+                           Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
+                           Pair<EditBoardNameViewCtrl, Parent> editBoardName) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -95,6 +108,15 @@ public class MainCtrl {
         this.userCtrl = userPage.getKey();
         this.user = new Scene(userPage.getValue());
 
+        this.changeServerCtrl = changeServer.getKey();
+        this.changeServer = new Scene(changeServer.getValue());
+
+        this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
+        this.userBoardOverview = new Scene(userBoardsOverview.getValue());
+
+        this.editBoardNameViewCtrl = editBoardName.getKey();
+        this.editBoardName = new Scene(editBoardName.getValue());
+
         showUserView();
         primaryStage.show();
     }
@@ -116,7 +138,7 @@ public class MainCtrl {
     }
 
     /**
-     * SHows an overview of all boards
+     * Shows an overview of all boards
      */
     public void showOverview() {
         primaryStage.setTitle("Main Page");
@@ -135,6 +157,18 @@ public class MainCtrl {
 
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
+        this.boardViewCtrl.checkUser();
+    }
+
+    /**
+     * Redirects to the edit Board name page
+     * @param board the board whose name is to be changed
+     */
+    public void showEditBoardNameView(Board board) {
+        primaryStage.setTitle("Edit board name: " + board.getName());
+        primaryStage.setScene(editBoardName);
+
+        this.editBoardNameViewCtrl.setBoard(board);
     }
 
     /**
@@ -151,7 +185,8 @@ public class MainCtrl {
     public void showEditCard() {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
-        editCardCtrl.updateFields();
+        editCardCtrl.updateFields(getCardId());
+        System.out.println(getCardId() + "coi");
         //must change later for safety measures
 
     }
@@ -200,6 +235,15 @@ public class MainCtrl {
     }
 
     /**
+     * Getter for userBoardOverviewCtrl
+     *
+     * @return the userBoardOverviewCtrl
+     */
+    public UserBoardsOverviewCtrl getUserBoardsOverviewCtrl() {
+        return userBoardsOverviewCtrl;
+    }
+
+    /**
      * Shows the createBoard scene
      */
     public void createBoardView() {
@@ -225,6 +269,22 @@ public class MainCtrl {
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
 //        this.boardViewCtrl.refresh();
+    }
+
+    /**
+     * Shows the Change Server scene
+     */
+    public void showChangeServer() {
+        primaryStage.setScene(changeServer);
+    }
+
+    /**
+     * Shows an overview of all boards for a logged-in user
+     */
+    public void showUserBoardOverview() {
+        primaryStage.setTitle("Your boards");
+        primaryStage.setScene(userBoardOverview);
+        this.userBoardsOverviewCtrl.refresh();
     }
 
     /**

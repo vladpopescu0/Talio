@@ -1,6 +1,5 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
@@ -17,8 +16,6 @@ public class ChangeNameCtrl {
     private final MainCtrl mainCtrl;
     private ServerUtils server;
 
-    private final CardListCommunication clComm;
-
     private Board board;
 
 
@@ -31,15 +28,13 @@ public class ChangeNameCtrl {
     private Button change;
 
     /** Constructor foor ChangeNameCtrl
-     * @param clComm utility service for cardlist communication
      * @param mainCtrl main controller of the program
      * @param server utility service for server communication
      */
     @Inject
-    public ChangeNameCtrl(CardListCommunication clComm, MainCtrl mainCtrl, ServerUtils server) {
+    public ChangeNameCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.clComm = clComm;
     }
 
     /**
@@ -66,9 +61,9 @@ public class ChangeNameCtrl {
     public void changeName(){
 
         try{
-            CardList original = clComm.getCL(id);
+            CardList original = server.getCL(id);
             int index = board.getList().indexOf(original);
-            CardList cl = clComm.modifyNameCL(id,getName());
+            CardList cl = server.modifyNameCL(id,getName());
             cl.setName(getName());
             board.getList().set(index,cl);
         } catch (WebApplicationException e){

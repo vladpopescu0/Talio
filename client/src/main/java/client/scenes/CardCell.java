@@ -1,12 +1,10 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -35,24 +33,26 @@ public class CardCell extends ListCell<Card> {
     @FXML
     private Button editButton;
 
+    @FXML
+    private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
-    private ServerUtils serverUtils;
     private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
-
-    private final CardListCommunication cardListCommunication;
+    private ServerUtils server;
 
     /**
      * useful dependencies for universal variables and server communication
      * @param server the utils where the connection to the apis is
-     * @param cardListCommunication the utils for CardList class
      * @param mainCtrl the controller of the whole application
+     * @param cardList the cardListCell in which this card is
      */
-    public CardCell(MainCtrl mainCtrl,
-                    CardListCommunication cardListCommunication, ServerUtils server) {
-        serverUtils = server;
-        this.cardListCommunication = cardListCommunication;
+    public CardCell(MainCtrl mainCtrl, ServerUtils server
+            , CardListCell cardList) {
+        this.server = server;
         this.mainCtrl = mainCtrl;
+        if(this.getItem()!=null){
+            this.getItem().setParentCardList(cardList.getItem());
+        }
     }
 
     /**
@@ -84,7 +84,14 @@ public class CardCell extends ListCell<Card> {
                     fxmlLoader.load();
                     this.editButton.setOnAction(event -> {
                         mainCtrl.setCardId(this.getItem().getId());
+                        System.out.println("id: " + this.getItem().getId());
+                        System.out.println("id2: " + mainCtrl.getCardId());
                         mainCtrl.showEditCard();
+                    });
+                    this.deleteButton.setOnAction(event ->{
+                        var c = server.deleteCardfromList
+                                (this.getItem().getParentCardList().getId(),this.getItem().getId());
+                        mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -161,9 +168,9 @@ public class CardCell extends ListCell<Card> {
         long parentId = this.getItem().getParentCardList().getId();
         origin.setParentCardList(null);
         this.getItem().setParentCardList(null);
-        cardListCommunication.moveCard(parentId,
+        server.moveCard(parentId,
                 List.of(origin, this.getItem()));
-        board.getList().set(parentIndex, cardListCommunication.getCL(parentId));
+        board.getList().set(parentIndex, server.getCL(parentId));
         mainCtrl.getBoardViewCtrl().refresh();
     }
 
@@ -174,17 +181,17 @@ public class CardCell extends ListCell<Card> {
      */
     public void dragCardToDifferent(Card origin) {
         Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+        int oldParentIndex = board.getList().indexOf(server.getCL(
                 origin.getParentCardList().getId()));
-        int newParentIndex = board.getList().indexOf(cardListCommunication.getCL(
+        int newParentIndex = board.getList().indexOf(server.getCL(
                 this.getItem().getParentCardList().getId()));
         CardList oldParent = origin.getParentCardList();
         CardList newParent = this.getItem().getParentCardList();
         packCardList(oldParent);
         packCardList(newParent);
-        serverUtils.updateParent(origin.getId(), List.of(oldParent, newParent));
-        CardList newCardList = cardListCommunication.getCL(newParent.getId());
-        board.getList().set(oldParentIndex, cardListCommunication.getCL(oldParent.getId()));
+        server.updateParent(origin.getId(), List.of(oldParent, newParent));
+        CardList newCardList = server.getCL(newParent.getId());
+        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
         board.getList().set(newParentIndex, newCardList);
         this.getItem().setParentCardList(newCardList);
         origin.setParentCardList(newCardList);

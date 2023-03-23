@@ -18,13 +18,11 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import client.communication.CardListCommunication;
 import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.Card;
 import commons.CardList;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -38,7 +36,7 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
-    private final CardListCommunication cardListCommunication;
+//    private final CardListCommunication cardListCommunication;
 
     private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
@@ -55,57 +53,76 @@ public class BoardViewCtrl implements Initializable {
 
     private ObservableList<CardList> cardListObservableList;
 
+    @FXML
+    private Button editTitle;
+
+    @FXML
+    private Button addList;
+
 
     /**
      * Constructor of the Controller for BoardView
-     * @param server Server Utility class
+     *
+     * @param server   Server Utility class
      * @param mainCtrl Main controller of the program
-     * @param board the board to be displayed
-     * @param cardListCommunication the cardlist utility class
+     * @param board    the board to be displayed
      */
     @Inject
     public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl,
-                         Board board, CardListCommunication cardListCommunication) {
+                         Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.cardListCommunication = cardListCommunication;
         this.board = board;
     }
 
     /**
      * Runs upon initialization of the controller
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,cardListCommunication,server));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server));
         titledPane.setText(board.getName());
+    }
+
+    /**
+     * Checks if the user has joined this board and if so, allows him to
+     * edit it
+     */
+    public void checkUser() {
         if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
-            removeButton.setDisable(false);
-        } else {
             removeButton.setDisable(true);
+            editTitle.setDisable(true);
+            addList.setDisable(true);
+            cardListView.setDisable(true);
+        } else {
+            removeButton.setDisable(false);
+            editTitle.setDisable(false);
+            addList.setDisable(false);
+            cardListView.setDisable(false);
         }
-        socketHandler.registerForUpdates("/topic/lists", CardList.class, q -> Platform.runLater(()->{
-            cardListObservableList.add(q);
-            refresh();
-            mainCtrl.getOverviewCtrl().refresh();
-        }));
-        socketHandler.registerForUpdates("/topic/updateParent", Long.class, q -> Platform.runLater(()->{
-            refresh();
-            mainCtrl.getOverviewCtrl().refresh();
-        }));
+        socketHandler.registerForUpdates("/topic/lists",
+                CardList.class, q -> Platform.runLater(() -> {
+                    cardListObservableList.add(q);
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
+        socketHandler.registerForUpdates("/topic/updateParent",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
      * Setter for the board
+     *
      * @param board the new board to be assigned to the scene
      */
     public void setBoard(Board board) {
@@ -135,7 +152,7 @@ public class BoardViewCtrl implements Initializable {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl ->
-                new CardListCell(mainCtrl,cardListCommunication,server)
+                new CardListCell(mainCtrl, server)
         );
     }
 
@@ -143,16 +160,17 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Goes back to the overview page
      */
-    public void cancel(){
+    public void cancel() {
         mainCtrl.showOverview();
     }
 
     /**
      * Redirects the user back to the overview page
      */
-    public void toOverview() {
-        mainCtrl.showOverview();
+    public void toUserOverview() {
+        mainCtrl.showUserBoardOverview();
     }
+
     /**
      * Removes the current user from the board, in case the user has joined the board
      */
@@ -161,7 +179,14 @@ public class BoardViewCtrl implements Initializable {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.showOverview();
+        mainCtrl.showUserBoardOverview();
     }
 
+    /**
+     * Redirects to edit Board name scene, where the user can change the name
+     * of the current user
+     */
+    public void editTitle() {
+        mainCtrl.showEditBoardNameView(board);
+    }
 }

@@ -1,11 +1,8 @@
 package client.scenes;
 
-import client.communication.CardListCommunication;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
-import commons.Board;
 import commons.Card;
-import commons.CardList;
 import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -14,8 +11,6 @@ import javafx.stage.Modality;
 
 
 public class EditCardCtrl {
-
-    private final CardListCommunication cardListCommunication;
     @FXML
     private TextField title;
 
@@ -26,14 +21,11 @@ public class EditCardCtrl {
      * Constructor for EditCardCtrl
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param cardListCommunication the utilities for card list communication
      */
     @Inject
-    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl,
-                        CardListCommunication cardListCommunication) {
+    public EditCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-        this.cardListCommunication = cardListCommunication;
     }
 
     /**
@@ -52,16 +44,12 @@ public class EditCardCtrl {
         Card toBeAdded = getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
-                Board board = mainCtrl.getBoardViewCtrl().getBoard();
-                int index = board.getList().indexOf(cardListCommunication.getCL(mainCtrl.getId()));
                 server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
-                CardList after = cardListCommunication.getCL(mainCtrl.getId());
-                board.getList().set(index,after);
                 clearFields();
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }
         } catch (WebApplicationException e) {
-
+            e.printStackTrace();
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -72,10 +60,10 @@ public class EditCardCtrl {
 
     /**
      * Updates all fields for the card
+     * @param id the id of the card
      */
-    public void updateFields(){
-        this.title.setText(server.getCardById(mainCtrl.getId()).getName());
-        //must change later for safety measures
+    public void updateFields(Long id){
+        this.title.setText(server.getCardById(id).getName());
     }
     /**
      * Create a Card object with fields as the text in the add card scene

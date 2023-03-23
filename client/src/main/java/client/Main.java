@@ -33,7 +33,7 @@ public class Main extends Application {
 
     /**
      * Main method for client
-    /**
+     /**
      * @param args an array of Strings used as runtime arguments
      */
     public static void main(String[] args) {
@@ -64,12 +64,21 @@ public class Main extends Application {
         var add = FXML.load(AddCardCtrl.class,
                 "client", "scenes", "AddCard.fxml");
         var userCtrl = FXML.load(UserCtrl.class, "client", "scenes", "User.fxml");
+        var userBoardOverview = FXML.load(UserBoardsOverviewCtrl.class,
+                "client", "scenes", "UserMainPage.fxml");
+
+        var changeServer = FXML.load(ChangeServerCtrl.class,
+                "client", "scenes", "ChangeServer.fxml");
 
         var mainCtrl = INJECTOR.getInstance(MainCtrl.class);
+
+        var editBoardName = FXML.load(EditBoardNameViewCtrl.class,
+                "client", "scenes", "EditBoardTitleView.fxml");
 
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
-                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl);
+                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
+                changeServer, userBoardOverview, editBoardName);
     }
 }

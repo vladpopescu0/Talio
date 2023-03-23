@@ -3,6 +3,7 @@ package server.api;
 
 import commons.Card;
 import commons.CardList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,10 @@ public class CardController {
      * Constructor for the CardController
      * @param repo the Card repository to be used
      * @param clRepo the Card List repository to be used
+     * @param msgs the messaging template
      */
-    public CardController(CardRepository repo, CardListRepository clRepo, SimpMessagingTemplate msgs){
+    public CardController(CardRepository repo,
+                          CardListRepository clRepo, SimpMessagingTemplate msgs){
         this.repo = repo;
         this.clRepo = clRepo;
         this.msgs = msgs;
@@ -62,25 +65,13 @@ public class CardController {
     }
 
     /**
-     * @param id the id of the searched card
-     * @return a ResponseEntity verifying the card is found
-     */
-    @GetMapping("/addlist/{id}")
-    public ResponseEntity<List<Card>> getCardsByListId(@PathVariable("id") long id){
-        if(id<0 || !repo.existsById(id)){
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(null);
-    }
-
-    /**
      * Adds a card if possible
      * @param card the card to be added
      * @return ok if the card is added, a bad request page if the card has empty fields
      */
     @PostMapping("/add")
     public ResponseEntity<Card> add(@RequestBody Card card) {
-        if (isNullOrEmpty(card.getName())) {
+        if (card == null || isNullOrEmpty(card.getName())) {
             return ResponseEntity.badRequest().build();
         }
         Card saved = repo.save(card);
@@ -97,10 +88,11 @@ public class CardController {
         if(!repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
-        Card newChangedCard = repo.getById(id);
+        Card newChangedCard = repo.findById(id).get();
         newChangedCard.setName(name);
         repo.save(newChangedCard);
-        return ResponseEntity.ok().build();
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
+        return ResponseEntity.ok(newChangedCard);
     }
 
     /**
@@ -128,8 +120,8 @@ public class CardController {
         newParent.addCard(card);
         lists.set(0, oldParent);
         lists.set(1, newParent);
-        msgs.convertAndSend("/topic/updateParent", id);
         clRepo.saveAll(lists);
+        msgs.convertAndSend("/topic/updateParent", id);
     }
 
 //     /**
@@ -155,11 +147,17 @@ public class CardController {
     /**
      * Removes a card from a list(????)
      * @param id the id of the card
+     * @return the removed card
      */
     //Maybe you mean removeCard??
     @DeleteMapping(path = "/delete/{id}")
-    public void removeCard(@PathVariable("id") long id){
+    public ResponseEntity<Card> removeCard(@PathVariable("id") long id){
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card c = repo.findById(id).get();
         repo.deleteById(id);
+        return ResponseEntity.ok(c);
     }
 
 }

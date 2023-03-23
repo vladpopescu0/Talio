@@ -16,7 +16,6 @@
 package client.scenes;
 
 import java.net.URL;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import client.utils.SocketHandler;
@@ -24,8 +23,6 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.Card;
-import commons.CardList;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -33,6 +30,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
@@ -51,6 +49,8 @@ public class BoardsOverviewCtrl implements Initializable {
 
     private ObservableList<Board> data;
     @FXML
+    private Label serverLabel;
+    @FXML
     private TableView<Board> table;
     @FXML
     private TableColumn<Board, String> colBoardName;
@@ -59,7 +59,8 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Constructor for the BoardsOverviewCtrl
-     * @param server the server to be used
+     *
+     * @param server   the server to be used
      * @param mainCtrl the mainCtrl of the application
      */
     @Inject
@@ -70,27 +71,28 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Initializer for the BoardsOverview scene
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
-                .getUsers().get(0).getUsername()));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
+//                .getUsers().get(0).getUsername()));
         socketHandler.registerForUpdates("/topic/boards", Board.class, q -> data.add(q));
-        socketHandler.registerForUpdates("/topic/boardsUpdate", Board.class, q -> Platform.runLater(()->{
-            refresh();
-        }));
-        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd", Long.class, q -> Platform.runLater(()->{
-            refresh();
-            mainCtrl.getBoardViewCtrl().refresh();
-        }));
+        socketHandler.registerForUpdates("/topic/boardsUpdate",
+                Board.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                }));
+        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                }));
 
     }
 
@@ -108,15 +110,16 @@ public class BoardsOverviewCtrl implements Initializable {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
         table.setItems(data);
+        this.serverLabel.setText(ServerUtils.getServer());
     }
 
     /**
      * Joins the selected Board
-     * It is currently redirecting to the only available Board
+     * It is redirects the user to the Board he has selected and makes him join the board.
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("You need to select a board!");
@@ -133,4 +136,32 @@ public class BoardsOverviewCtrl implements Initializable {
 
     }
 
+    /**
+     * Shows the board a user has selected from the table
+     */
+    public void showBoard() {
+        Board b = table.getSelectionModel().getSelectedItem();
+        if (b == null) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to select a board!");
+            alert.showAndWait();
+            return;
+        }
+        mainCtrl.showBoardView(b);
+    }
+
+    /**
+     * Redirects to change server scene
+     */
+    public void changeServer() {
+        mainCtrl.showChangeServer();
+    }
+
+    /**
+     * Redirects the user to an overview of the boards they've joined
+     */
+    public void userBoards() {
+        mainCtrl.showUserBoardOverview();
+    }
 }
