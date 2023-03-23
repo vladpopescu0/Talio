@@ -81,8 +81,11 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-//                .getUsers().get(0).getUsername()));
-        socketHandler.registerForUpdates("/topic/boards", Board.class, q -> data.add(q));
+        socketHandler.registerForUpdates("/topic/boards", Board.class,  q -> Platform.runLater(() -> {
+            data.add(q);
+            refresh();
+            mainCtrl.getUserBoardsOverviewCtrl().refresh();
+        }));
         socketHandler.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
