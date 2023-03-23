@@ -56,6 +56,8 @@ public class MainCtrl {
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
 
+    private boolean isAdmin = false;
+
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
@@ -256,6 +258,7 @@ public class MainCtrl {
      * Shows the Change Server scene
      */
     public void showChangeServer() {
+        this.changeServerCtrl.initialize();
         primaryStage.setScene(changeServer);
     }
 
