@@ -185,7 +185,8 @@ public class MainCtrl {
     public void showEditCard() {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
-        editCardCtrl.updateFields();
+        editCardCtrl.updateFields(getCardId());
+        System.out.println(getCardId() + "coi");
         //must change later for safety measures
 
     }
@@ -222,6 +223,24 @@ public class MainCtrl {
     @SuppressWarnings("unused")
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
+    }
+    /**
+     * Getter for boardViewCtrl
+     *
+     * @return the boardViewCtrl
+     */
+    @SuppressWarnings("unused")
+    public BoardsOverviewCtrl getOverviewCtrl() {
+        return overviewCtrl;
+    }
+
+    /**
+     * Getter for userBoardOverviewCtrl
+     *
+     * @return the userBoardOverviewCtrl
+     */
+    public UserBoardsOverviewCtrl getUserBoardsOverviewCtrl() {
+        return userBoardsOverviewCtrl;
     }
 
     /**
@@ -295,4 +314,5 @@ public class MainCtrl {
     public void setCardId(long cardId) {
         this.cardId = cardId;
     }
+
 }

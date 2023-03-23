@@ -21,12 +21,14 @@ import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
 import javafx.animation.FadeTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,6 +43,9 @@ public class BoardViewCtrl implements Initializable {
     @SuppressWarnings("unused")
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
+//    private final CardListCommunication cardListCommunication;
+
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
 
     private Board board;
 
@@ -66,9 +71,10 @@ public class BoardViewCtrl implements Initializable {
 
     /**
      * Constructor of the Controller for BoardView
-     * @param server Server Utility class
+     *
+     * @param server   Server Utility class
      * @param mainCtrl Main controller of the program
-     * @param board the board to be displayed
+     * @param board    the board to be displayed
      */
     @Inject
     public BoardViewCtrl(ServerUtils server, MainCtrl mainCtrl,
@@ -80,19 +86,17 @@ public class BoardViewCtrl implements Initializable {
 
     /**
      * Runs upon initialization of the controller
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl,server));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server));
         titledPane.setText(board.getName());
     }
 
@@ -112,10 +116,22 @@ public class BoardViewCtrl implements Initializable {
             addList.setDisable(false);
             cardListView.setDisable(false);
         }
+        socketHandler.registerForUpdates("/topic/lists",
+                CardList.class, q -> Platform.runLater(() -> {
+                    cardListObservableList.add(q);
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
+        socketHandler.registerForUpdates("/topic/updateParent",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
      * Setter for the board
+     *
      * @param board the new board to be assigned to the scene
      */
     public void setBoard(Board board) {
@@ -132,7 +148,7 @@ public class BoardViewCtrl implements Initializable {
     /**
      * Adds a new CardList to the Board
      */
-    public void addCardList() {//Not that suggestive I would say
+    public void addCardList() {
         mainCtrl.showCreateList(board);
         refresh();
     }
@@ -141,37 +157,22 @@ public class BoardViewCtrl implements Initializable {
      * refreshes the boardView page
      */
     public void refresh() {
-        this.board=server.getBoardByID(board.getId());
+        this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl ->
-            new CardListCell(mainCtrl,server)
+                new CardListCell(mainCtrl, server)
         );
     }
 
-    /**
-     * Refreshes the Board View and deletes a card
-     * @param cardList the cardlist to be deleted
-     */
-    public void refreshDelete(CardList cardList) {
-        cardListObservableList.remove(cardList);
-        refresh();
-    }
 
     /**
      * Goes back to the overview page
      */
-    public void cancel(){
+    public void cancel() {
         mainCtrl.showOverview();
     }
 
-    /**
-     * refreshes page when an object is renamed
-     */
-    public void refreshRename() {
-        cardListView.setItems(FXCollections.observableList(board.getList()));
-        refresh();
-    }
     /**
      * Redirects the user back to the overview page
      */

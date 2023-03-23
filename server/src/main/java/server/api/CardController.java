@@ -4,6 +4,7 @@ package server.api;
 import commons.Card;
 import commons.CardList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardListRepository;
 import server.database.CardRepository;
@@ -16,14 +17,19 @@ public class CardController {
     private final CardRepository repo;
     private final CardListRepository clRepo;
 
+    private final SimpMessagingTemplate msgs;
+
     /**
      * Constructor for the CardController
      * @param repo the Card repository to be used
      * @param clRepo the Card List repository to be used
+     * @param msgs the messaging template
      */
-    public CardController(CardRepository repo, CardListRepository clRepo){
+    public CardController(CardRepository repo,
+                          CardListRepository clRepo, SimpMessagingTemplate msgs){
         this.repo = repo;
         this.clRepo = clRepo;
+        this.msgs = msgs;
     }
 
     /**
@@ -77,14 +83,14 @@ public class CardController {
      * @return a ResponseEntity verifying the card's name is changed
      */
     @PutMapping(path = "/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Card> modifyName(@PathVariable("id") long id, @RequestBody String name){
         if(!repo.existsById(id)){
             return ResponseEntity.badRequest().build();
         }
-        Card newChangedCard = repo.getById(id);
+        Card newChangedCard = repo.findById(id).get();
         newChangedCard.setName(name);
         repo.save(newChangedCard);
+        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok(newChangedCard);
     }
 
@@ -94,7 +100,7 @@ public class CardController {
      * @param lists old and new CardList of the provided Card
      */
     @PutMapping("/updateParent/{id}")
-    public void updateParent(@PathVariable("id") long id, @RequestBody List<CardList> lists) {
+    public void updateParent(@PathVariable("id") Long id, @RequestBody List<CardList> lists) {
         if (lists == null || !repo.existsById(id) || lists.size() < 2
                 || !clRepo.existsById(lists.get(0).getId())
                 || !clRepo.existsById(lists.get(1).getId())) {
@@ -114,6 +120,7 @@ public class CardController {
         lists.set(0, oldParent);
         lists.set(1, newParent);
         clRepo.saveAll(lists);
+        msgs.convertAndSend("/topic/updateParent", id);
     }
 
 //     /**

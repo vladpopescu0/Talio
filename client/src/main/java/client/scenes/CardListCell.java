@@ -5,6 +5,7 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -25,7 +26,6 @@ import static client.utils.ServerUtils.packCardList;
 public class CardListCell extends ListCell<CardList> {
 
     private final MainCtrl mainCtrl;
-
     @FXML
     private Button editListButton;
 
@@ -88,13 +88,11 @@ public class CardListCell extends ListCell<CardList> {
                     fxmlLoader.load();
                     editListButton.setOnAction(event -> {
                         rename(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshRename();
                     });
                     deleteList.setOnAction(event -> {
                         delete(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
-
                     });
+
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
@@ -106,11 +104,21 @@ public class CardListCell extends ListCell<CardList> {
 
             titledPane.setText(cardList.getName());
 
+            long id = this.getItem().getId();
+
+            CardList cl = null;
+            try {
+                cl = server.getCL(id);
+            } catch (BadRequestException br) {
+                br.printStackTrace();
+            }
+
             refresh();
             setText(null);
             setGraphic(titledPane);
         }
     }
+
     /**
      * refresh method for an individual list of cards
      * on the client
@@ -121,7 +129,6 @@ public class CardListCell extends ListCell<CardList> {
         cardsList.setItems(cardObservableList);
         cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
     }
-
 
     /** Helper method for renaming a cardlist
      * @param id the id of the cardList whose name will be modified

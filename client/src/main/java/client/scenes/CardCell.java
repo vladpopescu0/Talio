@@ -1,6 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -36,6 +37,7 @@ public class CardCell extends ListCell<Card> {
     private Button deleteButton;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
+    private final SocketHandler socketHandler = new SocketHandler("ws://localhost:8080/websocket");
     private ServerUtils server;
 
     /**
@@ -82,6 +84,8 @@ public class CardCell extends ListCell<Card> {
                     fxmlLoader.load();
                     this.editButton.setOnAction(event -> {
                         mainCtrl.setCardId(this.getItem().getId());
+                        System.out.println("id: " + this.getItem().getId());
+                        System.out.println("id2: " + mainCtrl.getCardId());
                         mainCtrl.showEditCard();
                     });
                     this.deleteButton.setOnAction(event ->{

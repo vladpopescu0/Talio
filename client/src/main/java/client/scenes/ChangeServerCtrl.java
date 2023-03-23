@@ -22,11 +22,12 @@ public class ChangeServerCtrl {
 
     /**
      * Injects mainCtrl and ServerUtils to controller
+     *
      * @param mainCtrl Injected main controller
-     * @param server Injected server utils
+     * @param server   Injected server utils
      */
     @Inject
-    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server){
+    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -35,11 +36,21 @@ public class ChangeServerCtrl {
      * Change the server to address in serverField
      * Logs in to user in new server, if it exists, else creates a new User on that server
      */
-    public void changeServer(){
+    public void changeServer() {
         String newServer = serverField.getText();
+
+        if (newServer.isEmpty() || newServer == null) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to input a server!");
+            alert.showAndWait();
+            return;
+        }
+
         ServerUtils.setServer(newServer);
         String currUsername = mainCtrl.getCurrentUser().getUsername();
-        if (server.getUserByUsername(currUsername).isEmpty()){
+
+        if (server.getUserByUsername(currUsername).isEmpty()) {
             User newUser = new User(currUsername);
             try {
                 server.addUser(newUser);
@@ -63,7 +74,7 @@ public class ChangeServerCtrl {
     /**
      * Goes back to the board overview page
      */
-    public void cancel(){
+    public void cancel() {
         serverField.clear();
         mainCtrl.showOverview();
     }

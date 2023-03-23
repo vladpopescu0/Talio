@@ -49,7 +49,7 @@ public class EditCardCtrl {
                 mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
             }
         } catch (WebApplicationException e) {
-
+            e.printStackTrace();
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -60,10 +60,10 @@ public class EditCardCtrl {
 
     /**
      * Updates all fields for the card
+     * @param id the id of the card
      */
-    public void updateFields(){
-        this.title.setText(server.getCardById(mainCtrl.getCardId()).getName());
-        //must change later for safety measures
+    public void updateFields(Long id){
+        this.title.setText(server.getCardById(id).getName());
     }
     /**
      * Create a Card object with fields as the text in the add card scene
