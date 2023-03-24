@@ -1,12 +1,15 @@
 package server.api;
 
 import commons.User;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.database.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("api/users")
@@ -14,6 +17,8 @@ public class UserController {
 
     //private final UserService userService;
     private final UserRepository repo;
+
+    private int passHash;
 
     /**
      * Constructor for the UserController class
@@ -125,6 +130,47 @@ public class UserController {
         User b = repo.findByUsernameIs(name).get().get(0);
         return ResponseEntity.ok(repo.findByUsernameIs(name).get());
     }
+
+    /**
+     * Checks whether given password classifies user as an admin
+     * @param pass the password
+     * @return True if the password is correct, false otherwise
+     */
+    @GetMapping("/admin/{pass}")
+    public ResponseEntity<Boolean> checkAdmin(@PathVariable("pass") String pass){
+        if (pass.hashCode() == passHash){
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
+    }
+
+    /**
+     * Creates a random password and sets the passHash variable to the hash of the password
+     */
+    @EventListener(ApplicationReadyEvent.class)
+    public void startup(){
+        String password = generateRandomPassword(12);
+        passHash = password.hashCode();
+        System.out.println(password);
+    }
+
+    /**
+     * Generates a random String of alphanumeric characters to be used as a password
+     * @param length The length of the required string
+     * @return A random String of characters
+     */
+    private String generateRandomPassword(int length) {
+        Random rnd = new Random();
+        String out = "";
+        final String alphaNumeric =
+                "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        for (int i = 0; i < length; i++){
+            out += alphaNumeric.charAt(rnd.nextInt(alphaNumeric.length()));
+        }
+        return out;
+    }
+
 
 
 }

@@ -11,8 +11,6 @@ import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
-import java.lang.reflect.InvocationTargetException;
-import java.net.ConnectException;
 import java.util.ArrayList;
 
 public class ChangeServerCtrl {
@@ -38,6 +36,10 @@ public class ChangeServerCtrl {
         this.server = server;
     }
 
+    /**
+     * Initializes the scene with the current server in the server field,
+     * as well as setting the error message to be invisible
+     */
     public void initialize(){
         serverField.setText(ServerUtils.getServer());
         errorLabel.setVisible(false);
@@ -46,6 +48,8 @@ public class ChangeServerCtrl {
     /**
      * Change the server to address in serverField
      * Logs in to user in new server, if it exists, else creates a new User on that server
+     * If server doesn't exist, set error label to be visible and change server back to old
+     * address
      */
     public void changeServer() {
         String newServer = serverField.getText();
