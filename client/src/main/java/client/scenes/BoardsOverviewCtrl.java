@@ -108,7 +108,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        System.out.println(boards);
+        //System.out.println(boards);
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());

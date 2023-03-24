@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -20,6 +22,11 @@ public class Card implements Serializable {
     @Transient
     @JsonIgnore
     private CardList parentCardList;
+
+    private String description;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Task> tasks;
 
     /**
      * Empty constructor
@@ -44,6 +51,22 @@ public class Card implements Serializable {
     public Card(String name, CardList cardList) {
         this.name = name;
         parentCardList = cardList;
+        tasks = new ArrayList<>();
+    }
+
+    /**
+     * Constructor for cards also including tasks and descriptions
+     * @param name the name of the card
+     * @param cardList the cardList to which the card belongs
+     * @param tasks the tasks making up the card
+     * @param description the description of the card
+     */
+    public Card(String name, CardList cardList, List<Task> tasks,
+                String description) {
+        this.name = name;
+        this.tasks = tasks;
+        parentCardList = cardList;
+        this.description = description;
     }
 
     /**
@@ -92,6 +115,48 @@ public class Card implements Serializable {
         return parentCardList;
     }
 
+    /**
+     * Getter for the description
+     * @return the description of the card
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Setter for the description
+     * @param description the new description of the card
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Checks if a given card has a description
+     * @return true if the card has a description, false otherwise
+     */
+    public boolean hasDescription() {
+        return !(this.description == null) && !this.description.isEmpty();
+    }
+
+    /**
+     * getter for the tasks
+     * @return the tasks of this card
+     */
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * Adds a new task to the card
+     * @param task the new task to be added
+     */
+    public void addTask(Task task) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        tasks.add(task);
+    }
     /**
      * Equals method for the Card class
      * @param obj the obj to be compared to this

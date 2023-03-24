@@ -17,6 +17,7 @@ public class CardListControllerTest {
 
     private TestCardListRepository repo;
     private TestCardRepository cardRepository;
+    private TestTaskRepository taskRepository;
     private CardListController sut;
     private SimpMessagingTemplate msg;
     private MessageChannel channel;
@@ -32,8 +33,9 @@ public class CardListControllerTest {
         msg = new SimpMessagingTemplate(channel);
         repo = new TestCardListRepository();
         cardRepository = new TestCardRepository();
+        taskRepository = new TestTaskRepository();
         sut = new CardListController(repo, cardRepository, msg);
-        cSut = new CardController(cardRepository, repo, msg);
+        cSut = new CardController(cardRepository, repo, msg, taskRepository);
     }
 
     /**

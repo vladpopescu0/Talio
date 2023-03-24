@@ -41,5 +41,6 @@ public class MyModule implements Module {
         binder.bind(UserCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditBoardNameViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardDetailsViewCtr.class).in(Scopes.SINGLETON);
     }
 }

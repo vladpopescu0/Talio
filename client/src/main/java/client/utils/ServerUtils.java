@@ -15,18 +15,15 @@
  */
 package client.utils;
 
-import commons.Board;
+import commons.*;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
 
-import commons.Card;
-import commons.CardList;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import commons.User;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
@@ -208,6 +205,20 @@ public class ServerUtils {
     }
 
     /**
+     * Adds a task to a card
+     * @param task the task to be added
+     * @param id the id of the card
+     * @return the task
+     */
+    public Task addTaskToCard(Task task, long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/addTask/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(task, APPLICATION_JSON), Task.class);
+    }
+
+    /**
      * @param name name that needs to be updated
      * @param id   id of the card
      * @return the new name (if it worked)
@@ -235,6 +246,32 @@ public class ServerUtils {
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
         unpackBoard(b);
         return b;
+    }
+
+    /**
+     * Updates the details of a card
+     * @param card the card to be updated
+     * @return the card
+     */
+    public Card updateCardDetails(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/update/" + card.getId()) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Updates a task
+     * @param task the task to be updated
+     * @return the task
+     */
+    public Task updateTask(Task task) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tasks/update/" + task.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(task, APPLICATION_JSON), Task.class);
     }
     /**
      * @param id id of the searched card
