@@ -20,7 +20,6 @@ import static com.google.inject.Guice.createInjector;
 import client.scenes.*;
 import com.google.inject.Injector;
 
-import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
 import client.scenes.CreateBoardViewCtrl;
 import client.scenes.MainCtrl;

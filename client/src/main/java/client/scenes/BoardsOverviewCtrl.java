@@ -18,10 +18,12 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,6 +42,7 @@ public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;//must change mainCtrl
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private ObservableList<Board> data;
     @FXML
@@ -53,7 +56,8 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Constructor for the BoardsOverviewCtrl
-     * @param server the server to be used
+     *
+     * @param server   the server to be used
      * @param mainCtrl the mainCtrl of the application
      */
     @Inject
@@ -64,19 +68,33 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Initializer for the BoardsOverview scene
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
-                .listUsernames()));
+        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
+        socketHandler.registerForUpdates("/topic/boards",
+                Board.class, q -> Platform.runLater(() -> {
+                    data.add(q);
+                    refresh();
+                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                }));
+        socketHandler.registerForUpdates("/topic/boardsUpdate",
+                Board.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                }));
+        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                }));
+
     }
 
     /**

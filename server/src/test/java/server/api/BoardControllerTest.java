@@ -4,6 +4,8 @@ import commons.Board;
 import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +16,8 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class BoardControllerTest {
     private TestBoardRepository repo;
     private BoardController sut;
+    private SimpMessagingTemplate msg;
+    private MessageChannel channel;
     private static final User SOME_USER = new User("u");
     private static final User SOME_OTHER_USER = new User("U");
 
@@ -22,8 +26,10 @@ public class BoardControllerTest {
      */
     @BeforeEach
     public void setup() {
+        channel = (message, timeout) -> true;
+        msg = new SimpMessagingTemplate(channel);
         repo = new TestBoardRepository();
-        sut = new BoardController(repo);
+        sut = new BoardController(repo, msg);
     }
 
     /**

@@ -75,7 +75,7 @@ public class ChangeNameCtrl {
 
         clearField();
         mainCtrl.showBoardView(this.board);
-        mainCtrl.getBoardViewCtrl().refreshRename();
+        mainCtrl.getBoardViewCtrl().refresh();
     }
 
     /**

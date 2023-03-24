@@ -4,6 +4,8 @@ import commons.Card;
 import commons.CardList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,8 @@ public class CardListControllerTest {
     private TestCardListRepository repo;
     private TestCardRepository cardRepository;
     private CardListController sut;
+    private SimpMessagingTemplate msg;
+    private MessageChannel channel;
 
     private CardController cSut;
 
@@ -24,10 +28,12 @@ public class CardListControllerTest {
      */
     @BeforeEach
     public void setup() {
+        channel = (message, timeout) -> true;
+        msg = new SimpMessagingTemplate(channel);
         repo = new TestCardListRepository();
         cardRepository = new TestCardRepository();
-        sut = new CardListController(repo, cardRepository);
-        cSut = new CardController(cardRepository, repo);
+        sut = new CardListController(repo, cardRepository, msg);
+        cSut = new CardController(cardRepository, repo, msg);
     }
 
     /**
