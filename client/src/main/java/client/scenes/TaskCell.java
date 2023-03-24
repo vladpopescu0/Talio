@@ -96,6 +96,13 @@ public class TaskCell extends ListCell<Task> {
     public void remove() {
     }
 
-
+    /**
+     * Changes the status of the task,
+     * when the checkbox is checked or unchecked
+     */
+    public void changeStatus() {
+        this.getItem().changeStatus();
+        server.updateTask(this.getItem());
+    }
 
 }
