@@ -21,5 +21,10 @@
             <Font size="13.0" />
          </font></Button>
       <Button fx:id="deleteButton" layoutX="123.0" layoutY="46.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="delete" />
+      <Label fx:id="hasDesc" alignment="CENTER" layoutX="165.0" layoutY="6.0" text="+" visible="false">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
     </children>
 </Pane>

@@ -38,9 +38,6 @@ import javafx.stage.Modality;
 import static client.utils.ServerUtils.packBoard;
 import static client.utils.ServerUtils.unpackBoard;
 
-/**
- * not finished yet
- */
 public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;

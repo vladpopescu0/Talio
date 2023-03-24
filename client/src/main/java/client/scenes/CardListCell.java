@@ -45,16 +45,19 @@ public class CardListCell extends ListCell<CardList> {
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
+    private Board board;
+
     /**
      * useful dependencies for universal variables and server communication
-     *
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
+     * @param board the board to which the cardList belongs
      */
     @Inject
-    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.board = board;
     }
 
     /**
@@ -127,7 +130,7 @@ public class CardListCell extends ListCell<CardList> {
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this, board));
     }
 
     /** Helper method for renaming a cardlist

@@ -3,11 +3,13 @@ package server.api;
 
 import commons.Card;
 import commons.CardList;
+import commons.Task;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.TaskRepository;
 
 import java.util.List;
 
@@ -18,18 +20,22 @@ public class CardController {
     private final CardListRepository clRepo;
 
     private final SimpMessagingTemplate msgs;
+    private final TaskRepository taskRepo;
 
     /**
      * Constructor for the CardController
      * @param repo the Card repository to be used
      * @param clRepo the Card List repository to be used
      * @param msgs the messaging template
+     * @param taskRepo the repository containing all tasks
      */
     public CardController(CardRepository repo,
-                          CardListRepository clRepo, SimpMessagingTemplate msgs){
+                          CardListRepository clRepo, SimpMessagingTemplate msgs,
+                          TaskRepository taskRepo){
         this.repo = repo;
         this.clRepo = clRepo;
         this.msgs = msgs;
+        this.taskRepo = taskRepo;
     }
 
     /**
@@ -159,4 +165,41 @@ public class CardController {
         return ResponseEntity.ok(c);
     }
 
+    /**
+     * Updates the details of the card
+     * @param id the id of the card
+     * @param card the card after changes
+     * @return a response entity containing the new card
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Card> updateCardDetails(@PathVariable("id") long id,
+                                                  @RequestBody Card card) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.save(card);
+        return ResponseEntity.ok(card);
+    }
+
+    /**
+     * Adds a task to a card
+     * @param id the id of the card
+     * @param task the task to be added
+     * @return a response entity containing the task
+     */
+    @PostMapping("addTask/{id}")
+    public ResponseEntity<Task> addTaskToCard(@PathVariable("id") long id,
+                                              @RequestBody Task task) {
+        if (task == null || task.getTitle() == null
+                || task.getTitle().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Card card = repo.getById(id);
+        card.addTask(task);
+        repo.save(card);
+        return ResponseEntity.ok(task);
+    }
 }

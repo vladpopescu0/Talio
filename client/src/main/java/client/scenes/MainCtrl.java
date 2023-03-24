@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Board;
+import commons.Card;
 import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -52,6 +53,9 @@ public class MainCtrl {
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
 
+    private Scene cardDetails;
+    private CardDetailsViewCtr cardDetailsViewCtr;
+
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
@@ -74,6 +78,7 @@ public class MainCtrl {
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
      * @param joinBoardByLink the JoinBoardByLink scene
+     * @param details the cardDetails scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
@@ -85,7 +90,8 @@ public class MainCtrl {
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
-                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink) {
+                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
+                           Pair<CardDetailsViewCtr, Parent> details) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -121,9 +127,10 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
-
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
+        this.cardDetailsViewCtr = details.getKey();
+        this.cardDetails = new Scene(details.getValue());
 
         showUserView();
         primaryStage.show();
@@ -166,6 +173,19 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
+    }
+
+    /**
+     * Shows the detailed view of cards
+     * @param card the card whose details are to be shown
+     * @param board the board to which the card belongs
+     */
+    public void showCardDetailsView(Card card, Board board) {
+        primaryStage.setTitle(card.getName());
+        primaryStage.setScene(cardDetails);
+
+        this.cardDetailsViewCtr.setCard(card);
+        this.cardDetailsViewCtr.setBoard(board);
     }
 
     /**
@@ -317,7 +337,7 @@ public class MainCtrl {
     }
 
     /**
-     * @return the current cardlist id
+     * @return the current cardList id
      */
     public long getCardId() {
         return cardId;

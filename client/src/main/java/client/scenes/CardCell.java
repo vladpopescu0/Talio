@@ -35,7 +35,11 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button deleteButton;
+
+    @FXML
+    private Label hasDesc;
     private FXMLLoader fxmlLoader;
+    private Board board;
     private MainCtrl mainCtrl;
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
@@ -45,21 +49,34 @@ public class CardCell extends ListCell<Card> {
      * @param server the utils where the connection to the apis is
      * @param mainCtrl the controller of the whole application
      * @param cardList the cardListCell in which this card is
+     * @param board the board the card belongs to
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server
-            , CardListCell cardList) {
+            , CardListCell cardList, Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.board = board;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
         }
     }
 
     /**
-     * Enable drag-and-drop upon initialization
+     * Enable drag-and-drop upon initialization and test whether the
+     * card has a description
      */
     public void initialize() {
         handleDraggable();
+        if (this.getItem()!=null && this.getItem().hasDescription()) {
+            hasDesc.setVisible(true);
+        } else {
+            hasDesc.setVisible(false);
+        }
+        cardPane.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                mainCtrl.showCardDetailsView(this.getItem(), board);
+            }
+        });
     }
 
     /**

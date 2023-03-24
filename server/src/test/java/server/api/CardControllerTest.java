@@ -14,6 +14,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 public class CardControllerTest {
     private TestCardRepository repo;
     private TestCardListRepository cardListRepository;
+    private TestTaskRepository taskRepository;
     private CardController sut;
     private SimpMessagingTemplate msg;
     private MessageChannel channel;
@@ -26,8 +27,9 @@ public class CardControllerTest {
         channel = (message, timeout) -> true;
         msg = new SimpMessagingTemplate(channel);
         repo = new TestCardRepository();
+        taskRepository = new TestTaskRepository();
         cardListRepository = new TestCardListRepository();
-        sut = new CardController(repo, cardListRepository,msg);
+        sut = new CardController(repo, cardListRepository,msg, taskRepository);
     }
 
     /**
