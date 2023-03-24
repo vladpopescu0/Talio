@@ -6,7 +6,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskCell">
+
+<!--Pane prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskCell" -->
+
+<Pane fx:id="taskPane" prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <CheckBox fx:id="statusBox" layoutX="11.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeStatus" prefHeight="27.0" prefWidth="24.0">
          <font>

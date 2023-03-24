@@ -4,16 +4,21 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.Task;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 
 public class TaskCell extends ListCell<Task> {
 
     private ServerUtils server;
     private Card card;
     private MainCtrl mainCtrl;
+
+    @FXML
+    private Pane taskPane;
     @FXML
     private CheckBox statusBox;
     @FXML
@@ -26,6 +31,8 @@ public class TaskCell extends ListCell<Task> {
     private Button cancelButton;
     @FXML
     private Button confirmButton;
+
+    private FXMLLoader fxmlLoader;
 
     /**
      * Constructor for the Task Cell class
@@ -43,14 +50,51 @@ public class TaskCell extends ListCell<Task> {
      * Initialize the task cell
      */
     public void initialize() {
-        if (this.getItem() != null) {
-            taskTitle.setText(this.getItem().getTitle());
-            taskTitle.setEditable(false);
-            editButton.setVisible(true);
-            removeButton.setVisible(true);
-            cancelButton.setVisible(false);
-            confirmButton.setVisible(false);
-            statusBox.setSelected(this.getItem().getStatus());
+        System.out.println(this.getItem()+"ID found");
+        try{
+            if (this.getItem() != null) {
+                taskTitle.setText(this.getItem().getTitle());
+                taskTitle.setEditable(false);
+                editButton.setVisible(true);
+                removeButton.setVisible(true);
+                cancelButton.setVisible(false);
+                confirmButton.setVisible(false);
+                statusBox.setSelected(this.getItem().getStatus());
+            }
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * FXML renderer for the custom Task View component
+     * @param task The new item for the cell.
+     * @param empty whether or not this cell represents data from the list. If it
+     *        is empty, then it does not represent any domain data, but is a cell
+     *        being used to render an "empty" row.
+     */
+    @Override
+    protected void updateItem(Task task, boolean empty) {
+        super.updateItem(task, empty);
+
+        if (empty || task == null) {
+            setText(null);
+            setGraphic(null);
+        } else {
+            if (fxmlLoader == null) {
+                fxmlLoader = new FXMLLoader(getClass().getResource("TaskView.fxml"));
+                fxmlLoader.setController(this);
+                try {
+                    fxmlLoader.load();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            System.out.println(this.getItem());
+
+            setText(null);
+            setGraphic(taskPane);
         }
     }
 

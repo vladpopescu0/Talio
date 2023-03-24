@@ -10,11 +10,11 @@
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
          <children>
-            <TextField fx:id="boardName" layoutX="106.0" layoutY="35.0" promptText="Board" />
-            <Label layoutX="44.0" layoutY="39.0" text="Name:" />
-            <Button fx:id="createBoardButton" layoutX="170.0" layoutY="74.0" mnemonicParsing="false" onAction="#createNewBoard" text="Create Board" />
+            <TextField fx:id="boardName" layoutX="105.0" layoutY="40.0" promptText="Board" />
+            <Label layoutX="43.0" layoutY="44.0" text="Name:" />
+            <Button fx:id="createBoardButton" layoutX="170.0" layoutY="87.0" mnemonicParsing="false" onAction="#createNewBoard" text="Create Board" />
             <Label fx:id="errorLabel" layoutX="64.0" layoutY="115.0" text="Please enter a valid board name" visible="false" />
-            <Button layoutX="106.0" layoutY="74.0" mnemonicParsing="false" onAction="#toBoardsOverview" text="Back" />
+            <Button layoutX="106.0" layoutY="87.0" mnemonicParsing="false" onAction="#toBoardsOverview" text="Back" />
          </children></AnchorPane>
   </content>
 </TitledPane>

@@ -60,6 +60,9 @@ public class MainCtrl {
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
 
+    private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
+    private Scene joinBoardByLink;
+
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
@@ -74,6 +77,7 @@ public class MainCtrl {
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
+     * @param joinBoardByLink the JoinBoardByLink scene
      * @param details the cardDetails scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
@@ -86,6 +90,7 @@ public class MainCtrl {
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
+                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
                            Pair<CardDetailsViewCtr, Parent> details) {
         this.primaryStage = primaryStage;
 
@@ -122,7 +127,8 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
-
+        this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
+        this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
         this.cardDetailsViewCtr = details.getKey();
         this.cardDetails = new Scene(details.getValue());
 
@@ -208,7 +214,6 @@ public class MainCtrl {
         primaryStage.setTitle("Edit Card");
         primaryStage.setScene(editCard);
         editCardCtrl.updateFields(getCardId());
-        System.out.println(getCardId() + "coi");
         //must change later for safety measures
 
     }
@@ -307,6 +312,14 @@ public class MainCtrl {
         primaryStage.setTitle("Your boards");
         primaryStage.setScene(userBoardOverview);
         this.userBoardsOverviewCtrl.refresh();
+    }
+
+    /**
+     * Sets the current screen to the "JoinBoardByLink scene from resources"
+     */
+    public void showJoinBoardByLink(){
+        primaryStage.setTitle("Join A Board By Code");
+        primaryStage.setScene(joinBoardByLink);
     }
 
     /**

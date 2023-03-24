@@ -38,9 +38,6 @@ import javafx.stage.Modality;
 import static client.utils.ServerUtils.packBoard;
 import static client.utils.ServerUtils.unpackBoard;
 
-/**
- * not finished yet
- */
 public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
@@ -81,8 +78,12 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-//                .getUsers().get(0).getUsername()));
-        socketHandler.registerForUpdates("/topic/boards", Board.class, q -> data.add(q));
+        socketHandler.registerForUpdates("/topic/boards",
+                Board.class, q -> Platform.runLater(() -> {
+                    data.add(q);
+                    refresh();
+                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                }));
         socketHandler.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
@@ -108,7 +109,6 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void refresh() {
         var boards = server.getBoards();
-        //System.out.println(boards);
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
@@ -120,6 +120,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
+        System.out.println(b);
         if (b == null) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -131,7 +132,7 @@ public class BoardsOverviewCtrl implements Initializable {
         packBoard(b);
         int index = data.indexOf(b);
         Board bo = server.updateBoard(b);
-        data.set(index,bo);
+        data.set(index, bo);
         unpackBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
@@ -165,5 +166,12 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void userBoards() {
         mainCtrl.showUserBoardOverview();
+    }
+
+    /**
+     * Redirects the user to the join board by code scene
+     */
+    public void toJoinByLink(){
+        mainCtrl.showJoinBoardByLink();
     }
 }

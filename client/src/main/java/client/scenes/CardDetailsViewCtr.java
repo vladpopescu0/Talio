@@ -30,7 +30,7 @@ public class CardDetailsViewCtr implements Initializable {
     private Button cancelButton;
 
     @FXML
-    private ListView taskList;
+    private ListView<Task> taskList;
 
     @FXML
     private Button confirmButton;
@@ -76,8 +76,8 @@ public class CardDetailsViewCtr implements Initializable {
         confirmButton.setVisible(true);
         description.setText(card.getDescription());
         description.setEditable(false);
-        List<Task> tasks = ((card == null || card.getTasks() == null ?
-                new ArrayList<>() : card.getTasks()));
+        List<Task> tasks = (card == null || card.getTasks() == null ?
+                new ArrayList<>() : card.getTasks());
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
         taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, card));
@@ -140,6 +140,7 @@ public class CardDetailsViewCtr implements Initializable {
         Task added = new Task("Task name");
         server.addTaskToCard(added, card.getId());
         refresh();
+        mainCtrl.showCardDetailsView(server.getCardById(card.getId()), board);
     }
 
     /**
