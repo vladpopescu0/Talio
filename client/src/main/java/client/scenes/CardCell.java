@@ -35,6 +35,8 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label statusLabel;
 
     @FXML
     private Label hasDesc;
@@ -58,6 +60,8 @@ public class CardCell extends ListCell<Card> {
         this.board = board;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
+            //statusLabel.setText(this.getItem().tasksLabel());
+            statusLabel.setText("AAAA");
         }
     }
 
@@ -72,6 +76,7 @@ public class CardCell extends ListCell<Card> {
         } else {
             hasDesc.setVisible(false);
         }
+        statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 mainCtrl.showCardDetailsView(this.getItem(), board);

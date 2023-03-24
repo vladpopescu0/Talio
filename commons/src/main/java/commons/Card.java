@@ -159,6 +159,24 @@ public class Card implements Serializable {
         }
         tasks.add(task);
     }
+
+    /**
+     * Generates the label that shows the progress of the tasks
+     * @return (completed/total tasks done)
+     */
+    public String tasksLabel() {
+        if (this  == null || tasks == null || tasks.isEmpty()) {
+            return "";
+        } else {
+            int done = 0;
+            for (Task t: tasks) {
+                if (t.getStatus())
+                    done++;
+            }
+            return "(" + done + "/" +tasks.size() + " done)";
+        }
+    }
+
     /**
      * Equals method for the Card class
      * @param obj the obj to be compared to this
