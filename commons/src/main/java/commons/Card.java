@@ -1,17 +1,18 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
-public class Card implements Serializable {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Card {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;

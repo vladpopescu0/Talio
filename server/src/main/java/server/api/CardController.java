@@ -152,4 +152,17 @@ public class CardController {
         return ResponseEntity.ok(c);
     }
 
+    /*/**
+     * Returns the CardList which is the parent of the Card of given ID
+     * @param id ID of the Card the parent of which is to be looked for
+     * @return the CardList which is the parent of the Card of given ID
+     */
+    /*@GetMapping(path = "/getParent/{id}")
+    public ResponseEntity<CardList> getParentById(@PathVariable("id") long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(new CardList());
+    }*/
 }

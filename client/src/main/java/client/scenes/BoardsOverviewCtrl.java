@@ -33,9 +33,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 
-import static client.utils.ServerUtils.packBoard;
-import static client.utils.ServerUtils.unpackBoard;
-
 /**
  * not finished yet
  */
@@ -106,16 +103,18 @@ public class BoardsOverviewCtrl implements Initializable {
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
         if(b == null){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("You need to select a board!");
-            alert.showAndWait();
-            return;
+            if (table.getItems().size() != 1) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("You need to select a board!");
+                alert.showAndWait();
+                return;
+            } else {
+                b = table.getItems().get(0);
+            }
         }
         b.addUser(mainCtrl.getCurrentUser());
-        packBoard(b);
-        server.updateBoard(b);
-        unpackBoard(b);
+        b = server.updateBoard(b);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
@@ -127,11 +126,15 @@ public class BoardsOverviewCtrl implements Initializable {
     public void showBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
         if(b == null){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("You need to select a board!");
-            alert.showAndWait();
-            return;
+            if (table.getItems().size() != 1) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("You need to select a board!");
+                alert.showAndWait();
+                return;
+            } else {
+                b = table.getItems().get(0);
+            }
         }
         mainCtrl.showBoardView(b);
     }

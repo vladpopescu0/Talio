@@ -54,6 +54,9 @@ public class BoardViewCtrl implements Initializable {
     @FXML
     private Button addList;
 
+    @FXML
+    private Button viewTags;
+
 
     /**
      * Constructor of the Controller for BoardView
@@ -97,11 +100,13 @@ public class BoardViewCtrl implements Initializable {
             editTitle.setDisable(true);
             addList.setDisable(true);
             cardListView.setDisable(true);
+            viewTags.setDisable(true);
         } else {
             removeButton.setDisable(false);
             editTitle.setDisable(false);
             addList.setDisable(false);
             cardListView.setDisable(false);
+            viewTags.setDisable(false);
         }
     }
 
@@ -187,5 +192,12 @@ public class BoardViewCtrl implements Initializable {
      */
     public void editTitle() {
         mainCtrl.showEditBoardNameView(board);
+    }
+
+    /**
+     * Redirects the user to the overview of tags for the current Board
+     */
+    public void viewTags() {
+        mainCtrl.showViewTags(board);
     }
 }

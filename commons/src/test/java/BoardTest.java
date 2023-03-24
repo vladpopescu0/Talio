@@ -1,5 +1,6 @@
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import commons.User;
 import org.junit.jupiter.api.Test;
 
@@ -31,9 +32,10 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "b");
+        var b = new Board(SOME_USER, cls, "b", tags);
         assertEquals("b", b.getName());
         assertTrue(b.getUsers().contains(SOME_USER));
         assertEquals(cls, b.getList());
@@ -101,9 +103,10 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b1 = new Board(SOME_USER, cls, "cc");
+        var b1 = new Board(SOME_USER, cls, "cc", tags);
         assertEquals(cls, b1.getList());
     }
 
@@ -126,9 +129,10 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "cc");
+        var b = new Board(SOME_USER, cls, "cc", tags);
         CardList cL3 = new CardList("cL3");
         b.addList(cL3);
         assertTrue(b.getList().contains(cL3));
@@ -152,9 +156,10 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "cc");
+        var b = new Board(SOME_USER, cls, "cc", tags);
         b.addEmptyList();
         assertEquals(b.getList().size(), 3);
         assertEquals(b.getList().get(2), new CardList());
@@ -168,10 +173,11 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "cc");
-        var b1 = new Board(SOME_USER, cls, "cc");
+        var b = new Board(SOME_USER, cls, "cc", tags);
+        var b1 = new Board(SOME_USER, cls, "cc", tags);
         assertEquals(b, b1);
     }
 
@@ -183,10 +189,11 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        Board b = new Board(SOME_USER, cls, "cc");
-        Board b1 = new Board(SOME_USER, cls, "cc");
+        Board b = new Board(SOME_USER, cls, "cc", tags);
+        Board b1 = new Board(SOME_USER, cls, "cc", tags);
         b1.setName("vv");
         assertNotEquals(b, b1);
     }
@@ -199,10 +206,11 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "cc");
-        var b1 = new Board(SOME_USER, cls, "cc");
+        var b = new Board(SOME_USER, cls, "cc", tags);
+        var b1 = new Board(SOME_USER, cls, "cc", tags);
         assertEquals(b.hashCode(), b1.hashCode());
     }
 
@@ -214,10 +222,11 @@ public class BoardTest {
         CardList cL1 = new CardList("cL1");
         CardList cL2 = new CardList("cL2");
         List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
         cls.add(cL1);
         cls.add(cL2);
-        var b = new Board(SOME_USER, cls, "cc");
-        var b1 = new Board(SOME_USER, cls, "c");
+        var b = new Board(SOME_USER, cls, "cc", tags);
+        var b1 = new Board(SOME_USER, cls, "c", tags);
         assertNotEquals(b.hashCode(), b1.hashCode());
     }
 
@@ -231,5 +240,50 @@ public class BoardTest {
         assertTrue(b.hasUser(1));
         SOME_OTHER_USER.setId(22);
         assertFalse(b.hasUser(22));
+    }
+
+    /**
+     * Test for getTags
+     */
+    @Test
+    public void getTagsTest() {
+        var b = new Board(SOME_USER, "b");
+        assertEquals(b.getTags(), new ArrayList<>());
+        Tag t1 = new Tag("t1");
+        Tag t2 = new Tag("t2");
+        List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
+        tags.add(t1);
+        tags.add(t2);
+        var b1 = new Board(SOME_USER, cls, "cc", tags);
+        assertEquals(tags, b1.getTags());
+    }
+
+    /**
+     * Test for addTag
+     */
+    @Test
+    public void addFirstTagTest() {
+        var b = new Board(SOME_USER, "b");
+        Tag t1 = new Tag("t1");
+        b.addTag(t1);
+        assertTrue(b.getTags().contains(t1));
+    }
+
+    /**
+     * Test for addTag
+     */
+    @Test
+    public void addNotFirstTagTest() {
+        Tag t1 = new Tag("t1");
+        Tag t2 = new Tag("t2");
+        List<CardList> cls = new ArrayList<>();
+        List<Tag> tags = new ArrayList<>();
+        tags.add(t1);
+        tags.add(t2);
+        var b = new Board(SOME_USER, cls, "cc", tags);
+        Tag t3 = new Tag("t3");
+        b.addTag(t3);
+        assertTrue(b.getTags().contains(t3));
     }
 }
