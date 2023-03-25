@@ -42,5 +42,7 @@ public class MyModule implements Module {
         binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditBoardNameViewCtrl.class).in(Scopes.SINGLETON);
         binder.bind(CustomizationPageCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(JoinBoardByLinkCtrl.class).in(Scopes.SINGLETON);
     }
 }

@@ -77,10 +77,12 @@ public class Main extends Application {
         var customizationPage = FXML.load(CustomizationPageCtrl.class,
                 "client", "scenes", "CustomizationPage.fxml");
 
+        var joinBoardByLink = FXML.load(JoinBoardByLinkCtrl.class,
+                "client","scenes","JoinBoardByLink.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName, customizationPage);
+                changeServer, userBoardOverview, editBoardName,joinBoardByLink,customizationPage);
     }
 }

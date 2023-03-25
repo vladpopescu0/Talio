@@ -15,6 +15,9 @@
  */
 package client.scenes;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -24,15 +27,19 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.CardList;
+import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.util.Duration;
 
 public class BoardViewCtrl implements Initializable {
 
@@ -43,6 +50,7 @@ public class BoardViewCtrl implements Initializable {
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private Board board;
+    private boolean isAnimationPlayed = false;
 
     private Region content;
     @FXML
@@ -76,6 +84,8 @@ public class BoardViewCtrl implements Initializable {
     @FXML
     private Button allBoardsButton;
 
+    @FXML
+    private Label copyLabel;
 
     /**
      * Constructor of the Controller for BoardView
@@ -210,19 +220,20 @@ public class BoardViewCtrl implements Initializable {
     public void editTitle() {
         mainCtrl.showEditBoardNameView(board);
     }
+
     public void customizeBoard(Board board) {
         this.content = (Region) titledPane.lookup(".title");
         String style = "-fx-background-color: " + board.getColorBGlight() + ";" +
                 "\n-fx-border-color: " + board.getColorBGlight() + ";";
         String darkerStyle = "-fx-background-color: " + board.getColorBGdark() + ";" +
-                "\n-fx-border-color: " + board.getColorBGdark()+ ";";
+                "\n-fx-border-color: " + board.getColorBGdark() + ";";
 
-        setButtonStyle(editTitle, board.getColorLighter(),board.getColorFont());
-        setButtonStyle(removeButton, board.getColorLighter(),board.getColorFont());
-        setButtonStyle(addList, board.getColorLighter(),board.getColorFont());
-        setButtonStyle(allBoardsButton, board.getColorLighter(),board.getColorFont());
-        setButtonStyle(myBoardsButton, board.getColorLighter(),board.getColorFont());
-        setButtonStyle(customizeButton, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(editTitle, board.getColorLighter(), board.getColorFont());
+        setButtonStyle(removeButton, board.getColorLighter(), board.getColorFont());
+        setButtonStyle(addList, board.getColorLighter(), board.getColorFont());
+        setButtonStyle(allBoardsButton, board.getColorLighter(), board.getColorFont());
+        setButtonStyle(myBoardsButton, board.getColorLighter(), board.getColorFont());
+        setButtonStyle(customizeButton, board.getColorLighter(), board.getColorFont());
 
 
         content.setStyle(darkerStyle);
@@ -237,9 +248,51 @@ public class BoardViewCtrl implements Initializable {
         });
     }
 
-    public void setButtonStyle(Button button,String bgColor, String fontColor){
-        String style =  "-fx-background-color: " + bgColor + "; " + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+    public void setButtonStyle(Button button, String bgColor, String fontColor) {
+        String style = "-fx-background-color: " + bgColor + "; " + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
                 "-fx-text-fill:" + fontColor + ";";
         button.setStyle(style);
     }
-}
+
+        /**
+         * Copies an invitation code of at least 4 digits
+         * to the clipboard and uses a fade animation to
+         * display a confirmation pop-up.
+         * The user can type this code to the join board
+         * scene in the Main Page.
+         */
+        public void copyLink () {
+            long boardId = this.board.getId();
+            String inviteCode = String.valueOf(boardId);
+            switch (inviteCode.length()) {
+                case 1:
+                    inviteCode = "000" + inviteCode;
+                    break;
+                case 2:
+                    inviteCode = "00" + inviteCode;
+                    break;
+                case 3:
+                    inviteCode = "0" + inviteCode;
+                    break;
+            }
+            if (!isAnimationPlayed) {
+                FadeTransition fade = new FadeTransition();
+                fade.setDuration(Duration.millis(4000));
+                fade.setFromValue(30);
+                fade.setToValue(0);
+                fade.setNode(copyLabel);
+                fade.setOnFinished(e -> {
+                            copyLabel.setVisible(false);
+                            isAnimationPlayed = false;
+                        }
+                );
+                copyLabel.setVisible(true);
+                copyLabel.setText("Board Code Copied!\nThe Code is: " + inviteCode);
+                fade.play();
+                isAnimationPlayed = true;
+            }
+            StringSelection stringSelection = new StringSelection(inviteCode);
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            clipboard.setContents(stringSelection, null);
+        }
+    }
