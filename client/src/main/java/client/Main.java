@@ -74,11 +74,13 @@ public class Main extends Application {
 
         var editBoardName = FXML.load(EditBoardNameViewCtrl.class,
                 "client", "scenes", "EditBoardTitleView.fxml");
+        var customizationPage = FXML.load(CustomizationPageCtrl.class,
+                "client", "scenes", "CustomizationPage.fxml");
 
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName);
+                changeServer, userBoardOverview, editBoardName, customizationPage);
     }
 }

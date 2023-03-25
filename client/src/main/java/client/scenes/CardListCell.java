@@ -42,6 +42,8 @@ public class CardListCell extends ListCell<CardList> {
 
     private ObservableList<Card> cardObservableList;
 
+    private String color;
+
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
@@ -83,6 +85,7 @@ public class CardListCell extends ListCell<CardList> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
+                setStyle("-fx-background-color:" + color + ";");
 
                 try {
                     fxmlLoader.load();
@@ -215,5 +218,9 @@ public class CardListCell extends ListCell<CardList> {
         board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
         board.getList().set(newParentIndex, server.getCL(this.getItem().getId()));
         mainCtrl.getBoardViewCtrl().refresh();
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

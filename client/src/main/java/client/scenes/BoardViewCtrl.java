@@ -30,6 +30,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
 
 public class BoardViewCtrl implements Initializable {
 
@@ -41,8 +44,15 @@ public class BoardViewCtrl implements Initializable {
 
     private Board board;
 
+    private Region content;
     @FXML
     private TitledPane titledPane;
+
+    @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
+    private AnchorPane border;
 
     @FXML
     private ListView<CardList> cardListView;
@@ -57,6 +67,14 @@ public class BoardViewCtrl implements Initializable {
 
     @FXML
     private Button addList;
+
+    @FXML
+    private Button customizeButton;
+
+    @FXML
+    private Button myBoardsButton;
+    @FXML
+    private Button allBoardsButton;
 
 
     /**
@@ -150,17 +168,21 @@ public class BoardViewCtrl implements Initializable {
         this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl ->
-                new CardListCell(mainCtrl, server)
-        );
+        customizeBoard(board);
     }
-
 
     /**
      * Goes back to the overview page
      */
     public void cancel() {
         mainCtrl.showOverview();
+    }
+
+    /**
+     * Redirects the user back to the overview page
+     */
+    public void toCustomizationPage() {
+        mainCtrl.showCustomizationPage(this.board);
     }
 
     /**
@@ -187,5 +209,37 @@ public class BoardViewCtrl implements Initializable {
      */
     public void editTitle() {
         mainCtrl.showEditBoardNameView(board);
+    }
+    public void customizeBoard(Board board) {
+        this.content = (Region) titledPane.lookup(".title");
+        String style = "-fx-background-color: " + board.getColorBGlight() + ";" +
+                "\n-fx-border-color: " + board.getColorBGlight() + ";";
+        String darkerStyle = "-fx-background-color: " + board.getColorBGdark() + ";" +
+                "\n-fx-border-color: " + board.getColorBGdark()+ ";";
+
+        setButtonStyle(editTitle, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(removeButton, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(addList, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(allBoardsButton, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(myBoardsButton, board.getColorLighter(),board.getColorFont());
+        setButtonStyle(customizeButton, board.getColorLighter(),board.getColorFont());
+
+
+        content.setStyle(darkerStyle);
+        border.setStyle(darkerStyle);
+        cardListView.setStyle(style);
+        scrollPane.setStyle(style);
+        cardListView.setCellFactory(cl -> {
+            CardListCell c = new CardListCell(mainCtrl, server);
+            c.setColor(board.getColorBGlight());
+            c.setStyle(style);
+            return c;
+        });
+    }
+
+    public void setButtonStyle(Button button,String bgColor, String fontColor){
+        String style =  "-fx-background-color: " + bgColor + "; " + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+                "-fx-text-fill:" + fontColor + ";";
+        button.setStyle(style);
     }
 }

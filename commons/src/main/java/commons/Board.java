@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
@@ -40,6 +42,12 @@ public class Board {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "board_id")
     private List<CardList> list;
+
+    private String colorBGlight;
+    private String colorBGdark;
+
+    private String colorLighter;
+    private String colorFont;
 
     /**
      * Constructor for the Board class
@@ -203,6 +211,30 @@ public class Board {
         list.add(new CardList());
     }
 
+    public void setColorBGlight(String colorBGlight) {
+        this.colorBGlight = colorBGlight;
+    }
+
+    public void setColorBGdark(String colorBGdark) {
+        this.colorBGdark = colorBGdark;
+    }
+
+    public void setColorFont(String colorFont) {
+        this.colorFont = colorFont;
+    }
+
+    public String getColorBGlight() {
+        return colorBGlight;
+    }
+
+    public String getColorBGdark() {
+        return colorBGdark;
+    }
+
+    public String getColorFont() {
+        return colorFont;
+    }
+
     /**
      * Equals method for the Board class
      * @param obj the object whose equality we test
@@ -227,5 +259,13 @@ public class Board {
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
+    }
+
+    public String getColorLighter() {
+        return colorLighter;
+    }
+
+    public void setColorLighter(String colorLighter) {
+        this.colorLighter = colorLighter;
     }
 }
