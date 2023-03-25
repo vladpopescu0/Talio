@@ -80,7 +80,7 @@ public class CardDetailsViewCtr implements Initializable {
                 new ArrayList<>() : card.getTasks());
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
-        taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, card));
+        taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
     }
 
     /**
@@ -98,6 +98,14 @@ public class CardDetailsViewCtr implements Initializable {
     public void setCard(Card card) {
         this.card = card;
         refresh();
+    }
+
+    /**
+     *Getter for the card field, used when editing task order,
+     *so that the task cell is dependent on this class
+     */
+    public Card getCard(){
+        return card;
     }
 
     /**

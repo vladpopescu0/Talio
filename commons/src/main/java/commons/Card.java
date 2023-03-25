@@ -178,6 +178,14 @@ public class Card implements Serializable {
     }
 
     /**
+     * Setter for the "tasks" field
+     * @param tasks the new list of cards to replace the old one
+     */
+    public void setTasks(List<Task> tasks){
+        this.tasks = tasks;
+    }
+
+    /**
      * Equals method for the Card class
      * @param obj the obj to be compared to this
      * @return true if-f this == obj

@@ -135,7 +135,6 @@ public class CardCell extends ListCell<Card> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
             content.put(cardDataFormat, this.getItem());
-
             db.setContent(content);
             WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
             db.setDragView(snapshot);

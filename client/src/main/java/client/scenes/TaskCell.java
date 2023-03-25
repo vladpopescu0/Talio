@@ -3,18 +3,19 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.Task;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
+
+import java.util.List;
 
 public class TaskCell extends ListCell<Task> {
 
     private ServerUtils server;
-    private Card card;
+    private CardDetailsViewCtr parentController;
     private MainCtrl mainCtrl;
 
     @FXML
@@ -38,12 +39,12 @@ public class TaskCell extends ListCell<Task> {
      * Constructor for the Task Cell class
      * @param mainCtrl the mainCtrl used
      * @param server the serverUtils
-     * @param card the card to which the task belongs
+     * @param cardDetails the parent Controller in which this component is located
      */
-    public TaskCell(MainCtrl mainCtrl, ServerUtils server, Card card) {
+    public TaskCell(MainCtrl mainCtrl, ServerUtils server, CardDetailsViewCtr cardDetails) {
         this.server = server;
         this.mainCtrl = mainCtrl;
-        this.card = card;
+        this.parentController = cardDetails;
     }
 
     /**
@@ -147,6 +148,69 @@ public class TaskCell extends ListCell<Task> {
     public void changeStatus() {
         this.getItem().changeStatus();
         server.updateTask(this.getItem());
+    }
+
+    public void moveUp(){
+        Task currentTask = this.getItem();
+        try {
+            Card updatedCard = server.getCardById(this.parentController.getCard().getId());
+            List<Task> tasks = updatedCard.getTasks();
+            if(!tasks.contains(currentTask)){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("This task was deleted by another user!");
+                alert.showAndWait();
+            }else{
+                int taskIndex = tasks.indexOf(currentTask);
+                if(taskIndex!=0){
+                    tasks.remove(currentTask);
+                    tasks.add(taskIndex-1,currentTask);
+                    updatedCard.setTasks(tasks);
+                    server.updateCardDetails(updatedCard);
+                    this.parentController.setCard(updatedCard);
+                    this.parentController.refresh();
+                }
+            }
+        }catch (WebApplicationException e){
+            if(e.getResponse().getStatus()==404){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("The parent card of this task was deleted!");
+                alert.showAndWait();
+            }
+        }
+
+    }
+    public void moveDown(){
+        Task currentTask = this.getItem();
+        try {
+            Card updatedCard = server.getCardById(this.parentController.getCard().getId());
+            List<Task> tasks = updatedCard.getTasks();
+            if(!tasks.contains(currentTask)){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("This task was deleted by another user!");
+                alert.showAndWait();
+            }else{
+                int taskIndex = tasks.indexOf(currentTask);
+                if(taskIndex!=tasks.size()-1){
+                    tasks.remove(currentTask);
+                    tasks.add(taskIndex+1,currentTask);
+                    updatedCard.setTasks(tasks);
+                    server.updateCardDetails(updatedCard);
+                    this.parentController.setCard(updatedCard);
+                    this.parentController.refresh();
+                }
+            }
+        }catch (WebApplicationException e){
+            if(e.getResponse().getStatus()==404){
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("The parent card of this task was deleted!");
+                alert.showAndWait();
+            }
+        }
+
     }
 
 }
