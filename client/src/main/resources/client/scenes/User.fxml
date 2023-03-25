@@ -1,19 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Log in " xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
+<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Talio: Get it done with ease - your to-do app for peace" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
   <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2C3E50;">
          <children>
-            <Label layoutX="76.0" layoutY="45.0" text="Please enter your username to log in, or create an account if you do not have one" />
-            <TextField fx:id="username" layoutX="217.0" layoutY="118.0" promptText="Username" />
-            <Button layoutX="193.0" layoutY="187.0" mnemonicParsing="false" onAction="#logUserIn" text="Log in" />
-            <Button layoutX="316.0" layoutY="187.0" mnemonicParsing="false" onAction="#createUser" text="Create new user" />
+            <Label layoutX="19.0" layoutY="45.0" prefHeight="37.0" prefWidth="280.0" text="Please enter your username to log in, or create an account if you do not have one" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
+            <TextField fx:id="username" layoutX="79.0" layoutY="109.0" promptText="Username" style="-fx-background-color: white;" />
+            <Button layoutX="54.0" layoutY="161.0" mnemonicParsing="false" onAction="#logUserIn" style="-fx-background-color: #27AE60;" text="Log in" textFill="WHITE" />
+            <Button layoutX="186.0" layoutY="161.0" mnemonicParsing="false" onAction="#createUser" style="-fx-background-color: #27AE60;" text="Create new user" textFill="WHITE" />
             <Label fx:id="notFoundWarning" layoutX="98.0" layoutY="258.0" text="It seems like there is no user with this username. Please create a new user" visible="false" />
             <Label fx:id="alreadyUsedWarning" layoutX="102.0" layoutY="291.0" text="It seems like your username is already used. Please enter a different one" visible="false" />
-            <Label fx:id="emptyUsernameWarning" layoutX="213.0" layoutY="315.0" text="Please enter a valid username" />
+            <Label fx:id="emptyUsernameWarning" layoutX="79.0" layoutY="222.0" text="Please enter a valid username" textFill="WHITE" />
+            <ImageView fitHeight="382.0" fitWidth="390.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../images/log-in-image.png" />
+               </image>
+            </ImageView>
          </children></AnchorPane>
   </content>
 </TitledPane>

@@ -123,6 +123,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
+        System.out.println(b);
         if (b == null) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -168,5 +169,12 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void userBoards() {
         mainCtrl.showUserBoardOverview();
+    }
+
+    /**
+     * Redirects the user to the join board by code scene
+     */
+    public void toJoinByLink(){
+        mainCtrl.showJoinBoardByLink();
     }
 }
