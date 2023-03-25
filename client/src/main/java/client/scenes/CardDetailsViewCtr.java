@@ -103,6 +103,7 @@ public class CardDetailsViewCtr implements Initializable {
     /**
      *Getter for the card field, used when editing task order,
      *so that the task cell is dependent on this class
+     *@return the card from this controller
      */
     public Card getCard(){
         return card;

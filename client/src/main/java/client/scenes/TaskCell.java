@@ -150,6 +150,11 @@ public class TaskCell extends ListCell<Task> {
         server.updateTask(this.getItem());
     }
 
+    /**
+     * Method assigned to the arrow up button in the Task View Item in fxml
+     * Takes the card from the database and moves the selected task upwards in the list
+     * the order is saved properly, but the description must be saved before.
+     */
     public void moveUp(){
         Task currentTask = this.getItem();
         try {
@@ -181,6 +186,11 @@ public class TaskCell extends ListCell<Task> {
         }
 
     }
+    /**
+     * Method assigned to the arrow down button in the Task View Item in fxml
+     * Takes the card from the database and moves the selected task downwards in the list
+     * the order is saved properly, but the description must be saved before.
+     */
     public void moveDown(){
         Task currentTask = this.getItem();
         try {
