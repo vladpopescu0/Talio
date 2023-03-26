@@ -7,7 +7,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane prefHeight="460.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CustomizationPageCtrl">
    <children>
       <Text layoutX="178.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold; -fx-font-family: Montserrat;" text="Customization">
@@ -36,8 +35,8 @@
          </font>
       </Text>
       <ColorPicker fx:id="boardBG" editable="true" layoutX="95.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="BoardFont" editable="true" layoutX="198.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <Button fx:id="boardReset" layoutX="240.0" layoutY="117.0" mnemonicParsing="false" text="RESET" />
+      <ColorPicker fx:id="boardFont" editable="true" layoutX="198.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <Button fx:id="boardReset" layoutX="240.0" layoutY="117.0" mnemonicParsing="false" onAction="#reset" text="RESET" />
       <Button fx:id="listReset" layoutX="477.0" layoutY="116.0" mnemonicParsing="false" text="RESET" />
       <Text layoutX="430.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
          <font>
@@ -50,7 +49,7 @@
          </font>
       </Text>
       <ColorPicker fx:id="listBG" editable="true" layoutX="366.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="ListFont" editable="true" layoutX="469.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="listFont" editable="true" layoutX="469.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <Line endX="469.0" layoutX="131.0" layoutY="217.0" startX="-130.99998474121094" stroke="#dcd4d4" />
       <Text layoutX="56.0" layoutY="269.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Card colors">
          <font>
@@ -82,15 +81,15 @@
             <Font size="24.0" />
          </font>
       </Text>
-      <ColorPicker fx:id="pres1BG" editable="true" layoutX="281.0" layoutY="295.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="pres1Font" editable="true" layoutX="342.0" layoutY="295.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="pres2BG" editable="true" layoutX="280.0" layoutY="348.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="pres2Font" editable="true" layoutX="342.0" layoutY="348.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="pres3BG" editable="true" layoutX="280.0" layoutY="404.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="pres3Font" editable="true" layoutX="342.0" layoutY="404.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <Button fx:id="set1" layoutX="400.0" layoutY="294.0" mnemonicParsing="false" text="Set as default" />
-      <Button fx:id="set2" layoutX="400.0" layoutY="346.0" mnemonicParsing="false" text="Set as default" />
-      <Button fx:id="set3" layoutX="400.0" layoutY="402.0" mnemonicParsing="false" text="Set as default" />
+      <ColorPicker fx:id="pres1BG" editable="true" layoutX="281.0" layoutY="295.0" onAction="#saveBG1" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="pres1Font" editable="true" layoutX="342.0" layoutY="295.0" onAction="#saveFont1" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="pres2BG" editable="true" layoutX="280.0" layoutY="348.0" onAction="#saveBG2" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="pres2Font" editable="true" layoutX="342.0" layoutY="348.0" onAction="#saveFont2" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="pres3BG" editable="true" layoutX="280.0" layoutY="404.0" onAction="#saveBG3" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="pres3Font" editable="true" layoutX="342.0" layoutY="404.0" onAction="#saveFont3" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <Button fx:id="set1" layoutX="400.0" layoutY="294.0" mnemonicParsing="false" onAction="#selectPreset1" text="Set as default" />
+      <Button fx:id="set2" layoutX="400.0" layoutY="346.0" mnemonicParsing="false" onAction="#selectPreset2" text="Set as default" />
+      <Button fx:id="set3" layoutX="400.0" layoutY="402.0" mnemonicParsing="false" onAction="#selectPreset3" text="Set as default" />
       <Button fx:id="listReset1" layoutX="563.0" layoutY="12.0" mnemonicParsing="false" onAction="#customizeBoard" text="X" />
    </children>
 </AnchorPane>

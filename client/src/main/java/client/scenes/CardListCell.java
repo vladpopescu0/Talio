@@ -44,6 +44,9 @@ public class CardListCell extends ListCell<CardList> {
 
     private String color;
 
+    private String colorCard;
+    private String colorFontCard;
+
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
@@ -86,7 +89,6 @@ public class CardListCell extends ListCell<CardList> {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
                 setStyle("-fx-background-color:" + color + ";");
-
                 try {
                     fxmlLoader.load();
                     editListButton.setOnAction(event -> {
@@ -130,7 +132,12 @@ public class CardListCell extends ListCell<CardList> {
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
+        cardsList.setCellFactory(c -> {
+            CardCell card = new CardCell(mainCtrl, server,this);
+            card.setColor(colorCard);
+            card.setColorFont(colorFontCard);
+            return card;
+        });
     }
 
     /** Helper method for renaming a cardlist
@@ -219,8 +226,22 @@ public class CardListCell extends ListCell<CardList> {
         board.getList().set(newParentIndex, server.getCL(this.getItem().getId()));
         mainCtrl.getBoardViewCtrl().refresh();
     }
-
+    /** Sets the bg color of the list
+     * @param color color to be set
+     */
     public void setColor(String color) {
         this.color = color;
+    }
+    /** Sets the bg color of the card
+     * @param colorCard color to be set for the card
+     */
+    public void setColorCard(String colorCard) {
+        this.colorCard = colorCard;
+    }
+    /** Sets the font color of the card
+     * @param colorFontCard color to be set for the card
+     */
+    public void setColorFontCard(String colorFontCard) {
+        this.colorFontCard = colorFontCard;
     }
 }

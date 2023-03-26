@@ -49,6 +49,16 @@ public class Board {
     private String colorLighter;
     private String colorFont;
 
+    private String cardsBGColor;
+    private String cardsFontColor;
+
+    @ElementCollection
+    private List<String> presetsBGColor;
+    @ElementCollection
+    private List<String> presetsFontColor;
+    @ElementCollection
+    private List<Boolean> buttons;
+
     /**
      * Constructor for the Board class
      * @param creator the creator of the board
@@ -61,6 +71,18 @@ public class Board {
         users.add(creator);
         this.list = list;
         this.name = name;
+        this.presetsBGColor = new ArrayList<>();
+        this.presetsFontColor = new ArrayList<>();
+        for(int i = 0; i < 3; i++){
+            this.presetsBGColor.add("#ffffff");
+            this.presetsFontColor.add("#808080");
+        }
+        this.cardsFontColor = "#808080";
+        this.cardsBGColor = "ffffff";
+        this.buttons = new ArrayList<>();
+        for(int i = 0; i < 3; i++){
+            this.buttons.add(true);
+        }
     }
     /**
     *empty constructor was necessary since post requests do not work for some reasons
@@ -82,6 +104,18 @@ public class Board {
         this.users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
+        this.presetsBGColor = new ArrayList<>();
+        this.presetsFontColor = new ArrayList<>();
+        for(int i = 0; i < 3; i++){
+            this.presetsBGColor.add("#ffffff");
+            this.presetsFontColor.add("#808080");
+        }
+        this.cardsFontColor = "#808080";
+        this.cardsBGColor = "ffffff";
+        this.buttons = new ArrayList<>();
+        for(int i = 0; i < 3; i++){
+            this.buttons.add(true);
+        }
     }
 
     /**
@@ -211,26 +245,41 @@ public class Board {
         list.add(new CardList());
     }
 
+    /** Sets the lighter shade of the board color
+     * @param colorBGlight the lighter shade of the board color
+     */
     public void setColorBGlight(String colorBGlight) {
         this.colorBGlight = colorBGlight;
     }
-
+    /** Sets the darker shade of the board color
+     * @param colorBGdark the darker shade of the board color
+     */
     public void setColorBGdark(String colorBGdark) {
         this.colorBGdark = colorBGdark;
     }
 
+    /** Sets the color of the font of the board
+     * @param colorFont the lighter shade of the board color
+     */
     public void setColorFont(String colorFont) {
         this.colorFont = colorFont;
     }
 
+    /**
+     * @return the lighter color of the board
+     */
     public String getColorBGlight() {
         return colorBGlight;
     }
-
+    /**
+     * @return the darker color of the board
+     */
     public String getColorBGdark() {
         return colorBGdark;
     }
-
+    /**
+     * @return the font color for the board
+     */
     public String getColorFont() {
         return colorFont;
     }
@@ -261,11 +310,65 @@ public class Board {
         return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 
+    /**
+     * @return the lighter color of the board
+     */
     public String getColorLighter() {
         return colorLighter;
     }
 
+    /** Sets the lighter color of the board
+     * @param colorLighter the lighter color of the board
+     */
     public void setColorLighter(String colorLighter) {
         this.colorLighter = colorLighter;
+    }
+
+    /**
+     * @return the current BG color of the card
+     */
+    public String getCardsBGColor() {
+        return cardsBGColor;
+    }
+
+    /** Sets the current color of the BG of the card
+     * @param cardsBGColor the current color of the BG of the card
+     */
+    public void setCardsBGColor(String cardsBGColor) {
+        this.cardsBGColor = cardsBGColor;
+    }
+
+    /**
+     * @return the current font color of the card
+     */
+    public String getCardsFontColor() {
+        return cardsFontColor;
+    }
+    /** Sets the current color of the font of the card
+     * @param cardsFontColor the current color of the font of the card
+     */
+    public void setCardsFontColor(String cardsFontColor) {
+        this.cardsFontColor = cardsFontColor;
+    }
+
+    /**
+     * @return the list of 3 presets for the cards font color
+     */
+    public List<String> getPresetsFontColor() {
+        return this.presetsFontColor;
+    }
+
+    /**
+     * @return the list of 3 presets for the cards BG color
+     */
+    public List<String> getPresetsBGColor() {
+        return this.presetsBGColor;
+    }
+
+    /**
+     * @return a list of booleans that represents if a button is visible or not
+     */
+    public List<Boolean> getButtons() {
+        return buttons;
     }
 }

@@ -16,6 +16,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,9 +33,11 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button editButton;
-
     @FXML
     private Button deleteButton;
+
+    private String color;
+    private String colorFont;
     private FXMLLoader fxmlLoader;
     private MainCtrl mainCtrl;
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
@@ -100,6 +103,11 @@ public class CardCell extends ListCell<Card> {
 
             setText(null);
             setGraphic(cardPane);
+            cardPane.setStyle("-fx-background-color:" + color + ";");
+            paneLabel.setStyle("-fx-text-fill:" + colorFont + ";");
+            String lighter = mainCtrl.colorToHex(Color.valueOf(colorFont).brighter());
+            mainCtrl.setButtonStyle(deleteButton,lighter,color);
+            mainCtrl.setButtonStyle(editButton,lighter,color);
         }
     }
 
@@ -195,5 +203,18 @@ public class CardCell extends ListCell<Card> {
         origin.setParentCardList(newCardList);
 
         dragCardToIdentical(origin);
+    }
+
+    /** Sets the bg color of the card
+     * @param color color to be set
+     */
+    public void setColor(String color) {
+        this.color = color;
+    }
+    /** Sets the font color of the card
+     * @param colorFont color to be set
+     */
+    public void setColorFont(String colorFont) {
+        this.colorFont = colorFont;
     }
 }
