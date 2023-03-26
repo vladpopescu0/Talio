@@ -67,7 +67,7 @@ public class CreateTagCtrl {
                 board = server.getBoardByID(board.getId());
                 board.addTag(tag);
                 board = server.updateBoard(board);
-                tag.setId(board.getList().get(board.getList().size() - 1).getId());
+                tag.setId(board.getTags().get(board.getTags().size() - 1).getId());
             }
         } catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);

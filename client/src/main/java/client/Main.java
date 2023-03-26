@@ -84,12 +84,15 @@ public class Main extends Application {
         var editTag = FXML.load(EditTagCtrl.class,
                 "client", "scenes", "EditTag.fxml");
 
+        var joinBoardByLink = FXML.load(JoinBoardByLinkCtrl.class,
+                "client","scenes","JoinBoardByLink.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         Stage secondaryStage = new Stage();
         secondaryStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName, viewTags, createTag, editTag);
+                changeServer, userBoardOverview, editBoardName, viewTags, createTag,
+                editTag, joinBoardByLink);
     }
 }

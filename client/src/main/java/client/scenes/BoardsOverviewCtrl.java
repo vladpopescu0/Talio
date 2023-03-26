@@ -170,4 +170,11 @@ public class BoardsOverviewCtrl implements Initializable {
     public void userBoards() {
         mainCtrl.showUserBoardOverview();
     }
+
+    /**
+     * Redirects the user to the join board by code scene
+     */
+    public void toJoinByLink(){
+        mainCtrl.showJoinBoardByLink();
+    }
 }

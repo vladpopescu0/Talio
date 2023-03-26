@@ -65,6 +65,9 @@ public class MainCtrl {
     public static final DataFormat cardDataFormat = new DataFormat("card");
     private User currentUser;
 
+    private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
+    private Scene joinBoardByLink;
+
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
@@ -83,6 +86,7 @@ public class MainCtrl {
      * @param createTag the createTag scene
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
+     * @param joinBoardByLink the JoinBoardByLink scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -97,7 +101,8 @@ public class MainCtrl {
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
-                           Pair<EditTagCtrl, Parent> editTag) {
+                           Pair<EditTagCtrl, Parent> editTag,
+                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink) {
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -143,6 +148,9 @@ public class MainCtrl {
 
         this.editTagCtrl = editTag.getKey();
         this.editTag = new Scene(editTag.getValue());
+
+        this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
+        this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
 
         showUserView();
         primaryStage.show();
@@ -327,6 +335,7 @@ public class MainCtrl {
     }
 
     /**
+<<<<<<< HEAD
      * Opens a new window with an overview of all tags for the current board
      * @param board the Board of which Tag overview is to be shown
      */
@@ -359,6 +368,14 @@ public class MainCtrl {
         showSecondaryStage();
         editTagCtrl.setTag(tag);
         editTagCtrl.updateFields();
+    }
+
+    /**
+     * Sets the current screen to the "JoinBoardByLink scene from resources"
+     */
+    public void showJoinBoardByLink(){
+        primaryStage.setTitle("Join A Board By Code");
+        primaryStage.setScene(joinBoardByLink);
     }
 
     /**

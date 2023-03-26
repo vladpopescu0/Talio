@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="714.0" text="Board View" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardViewCtrl">
     <content>
@@ -15,12 +17,18 @@
                         <ListView fx:id="cardListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="HORIZONTAL" prefHeight="462.0" prefWidth="734.0" />
                     </content>
                 </ScrollPane>
-                <Button fx:id="addList" layoutX="628.0" layoutY="466.0" mnemonicParsing="false" onAction="#addCardList" text="+ Add List" />
-            <Button layoutX="218.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />
-            <Button fx:id="removeButton" layoutX="15.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
-            <Button layoutX="119.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
-            <Button fx:id="editTitle" layoutX="558.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />
-            <Button fx:id="viewTags" layoutX="478.0" layoutY="466.0" mnemonicParsing="false" onAction="#viewTags" text="View Tags" />
+                <Button fx:id="addList" layoutX="640.0" layoutY="466.0" mnemonicParsing="false" onAction="#addCardList" text="Add List" />
+                <Button fx:id="viewTags" layoutX="491.0" layoutY="466.0" mnemonicParsing="false" onAction="#viewTags" text="View Tags" />
+                <Button layoutX="218.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />
+                <Button fx:id="removeButton" layoutX="15.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
+                <Button layoutX="119.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
+                <Button fx:id="editTitle" layoutX="570.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />
+                <Button layoutX="374.0" layoutY="466.0" mnemonicParsing="false" onAction="#copyLink" text="Copy Invite Code" />
+                <Label fx:id="copyLabel" alignment="CENTER" layoutX="390.0" layoutY="409.0" prefHeight="49.0" prefWidth="175.0" style="-fx-background-color: white; -fx-background-radius: 10;" textAlignment="CENTER" textFill="#47c93b" visible="false" wrapText="true">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
             </children>
         </AnchorPane>
     </content>
