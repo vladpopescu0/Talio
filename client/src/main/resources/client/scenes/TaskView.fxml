@@ -3,27 +3,38 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-
 <!--Pane prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskCell" -->
 
-<Pane fx:id="taskPane" prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="taskPane" prefHeight="55.0" prefWidth="576.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <CheckBox fx:id="statusBox" layoutX="11.0" layoutY="15.0" mnemonicParsing="false" onAction="#changeStatus" prefHeight="27.0" prefWidth="24.0">
+      <CheckBox fx:id="statusBox" layoutX="59.0" layoutY="14.0" mnemonicParsing="false" onAction="#changeStatus" prefHeight="27.0" prefWidth="24.0">
          <font>
             <Font size="18.0" />
          </font>
       </CheckBox>
-      <Button fx:id="editButton" layoutX="469.0" layoutY="15.0" mnemonicParsing="false" onAction="#edit" text="Edit" />
-      <TextField fx:id="taskTitle" layoutX="51.0" layoutY="15.0" prefHeight="26.0" prefWidth="248.0" text="Task" />
-      <Button fx:id="removeButton" layoutX="532.0" layoutY="16.0" mnemonicParsing="false" onAction="#remove" text="X" textFill="#fc0505">
+      <Button fx:id="editButton" layoutX="492.0" layoutY="15.0" mnemonicParsing="false" onAction="#edit" text="Edit" />
+      <TextField fx:id="taskTitle" layoutX="95.0" layoutY="15.0" prefHeight="26.0" prefWidth="248.0" text="Task" />
+      <Button fx:id="removeButton" layoutX="540.0" layoutY="18.0" mnemonicParsing="false" onAction="#remove" text="X" textFill="#fc0505">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButton" layoutX="313.0" layoutY="16.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <Button fx:id="confirmButton" layoutX="390.0" layoutY="16.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" />
+      <Button fx:id="cancelButton" layoutX="358.0" layoutY="15.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <Button fx:id="confirmButton" layoutX="422.0" layoutY="15.0" mnemonicParsing="false" onAction="#confirm" text="Confirm" />
+      <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="17.0" layoutY="3.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#moveUp">
+         <image>
+            <Image url="@../../images/ArrowUp.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="17.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true" onMouseClicked="#moveDown">
+         <image>
+            <Image url="@../../images/ArrowDown.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

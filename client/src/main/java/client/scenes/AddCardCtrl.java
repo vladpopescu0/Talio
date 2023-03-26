@@ -71,7 +71,7 @@ public class AddCardCtrl {
 
     /**
      * Gets a card with the fields filled by the user
-     * @return
+     * @return the card from the fields
      */
     private Card getCard() {
         var name = title.getText();
