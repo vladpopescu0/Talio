@@ -87,9 +87,9 @@
       <ColorPicker fx:id="pres2Font" editable="true" layoutX="342.0" layoutY="348.0" onAction="#saveFont2" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <ColorPicker fx:id="pres3BG" editable="true" layoutX="280.0" layoutY="404.0" onAction="#saveBG3" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <ColorPicker fx:id="pres3Font" editable="true" layoutX="342.0" layoutY="404.0" onAction="#saveFont3" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <Button fx:id="set1" layoutX="400.0" layoutY="294.0" mnemonicParsing="false" onAction="#selectPreset1" text="Set as default" />
-      <Button fx:id="set2" layoutX="400.0" layoutY="346.0" mnemonicParsing="false" onAction="#selectPreset2" text="Set as default" />
-      <Button fx:id="set3" layoutX="400.0" layoutY="402.0" mnemonicParsing="false" onAction="#selectPreset3" text="Set as default" />
+      <Button layoutX="400.0" layoutY="294.0" mnemonicParsing="false" onAction="#selectPreset1" text="Set as default" />
+      <Button layoutX="400.0" layoutY="346.0" mnemonicParsing="false" onAction="#selectPreset2" text="Set as default" />
+      <Button layoutX="400.0" layoutY="402.0" mnemonicParsing="false" onAction="#selectPreset3" text="Set as default" />
       <Button fx:id="listReset1" layoutX="563.0" layoutY="12.0" mnemonicParsing="false" onAction="#customizeBoard" text="X" />
    </children>
 </AnchorPane>

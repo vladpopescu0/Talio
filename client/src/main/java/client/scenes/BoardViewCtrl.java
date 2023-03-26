@@ -181,13 +181,6 @@ public class BoardViewCtrl implements Initializable {
         this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        if (board.getButtons().get(0) == false) {
-            mainCtrl.getCustomizationPageCtrl().getSet1().setVisible(false);
-        } else if (board.getButtons().get(1) == false) {
-            mainCtrl.getCustomizationPageCtrl().getSet2().setVisible(false);
-        } else if (board.getButtons().get(2) == false) {
-            mainCtrl.getCustomizationPageCtrl().getSet3().setVisible(false);
-        }
         mainCtrl.getCustomizationPageCtrl().getPres1BG()
                 .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
         mainCtrl.getCustomizationPageCtrl().getPres1Font()

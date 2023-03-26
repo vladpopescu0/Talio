@@ -26,13 +26,7 @@ public class CustomizationPageCtrl {
     private ColorPicker boardBG;
 
     @FXML
-    private Button boardReset;
-
-    @FXML
     private ColorPicker listBG;
-
-    @FXML
-    private Button listReset;
 
     @FXML
     private ColorPicker pres1BG;
@@ -51,15 +45,6 @@ public class CustomizationPageCtrl {
 
     @FXML
     private ColorPicker pres3Font;
-
-    @FXML
-    private Button set1;
-
-    @FXML
-    private Button set2;
-
-    @FXML
-    private Button set3;
 
     /**
      * Constructor for the CustomizationPageCtrl class
@@ -86,16 +71,6 @@ public class CustomizationPageCtrl {
      * Customizes the board, list and cards
      */
     public void customizeBoard() {
-        if (!set1.isVisible()) {
-            board.setCardsBGColor(mainCtrl.colorToHex(pres1BG.getValue()));
-            board.setCardsFontColor(mainCtrl.colorToHex(pres1Font.getValue()));
-        } else if (!set2.isVisible()) {
-            board.setCardsBGColor(mainCtrl.colorToHex(pres2BG.getValue()));
-            board.setCardsFontColor(mainCtrl.colorToHex(pres2Font.getValue()));
-        } else if (!set3.isVisible()) {
-            board.setCardsBGColor(mainCtrl.colorToHex(pres3BG.getValue()));
-            board.setCardsFontColor(mainCtrl.colorToHex(pres3Font.getValue()));
-        }
         this.board.setColorLighter(mainCtrl.colorToHex(boardBG.getValue().brighter()));
         this.board.setColorBGlight(mainCtrl.colorToHex(boardBG.getValue()));
         this.board.setColorBGdark(mainCtrl.colorToHex(boardBG.getValue().darker()));
@@ -135,36 +110,24 @@ public class CustomizationPageCtrl {
      * Selects the first preset and makes button disappear
      */
     public void selectPreset1() {
-        set2.setVisible(true);
-        board.getButtons().set(1, true);
-        set3.setVisible(true);
-        board.getButtons().set(2, true);
-        set1.setVisible(false);
-        board.getButtons().set(0, false);
+        board.setCardsBGColor(mainCtrl.colorToHex(pres1BG.getValue()));
+        board.setCardsFontColor(mainCtrl.colorToHex(pres1Font.getValue()));
         this.board = server.addBoard(board);
     }
     /**
      * Selects the second preset and makes button disappear
      */
     public void selectPreset2() {
-        set1.setVisible(true);
-        board.getButtons().set(0, true);
-        set3.setVisible(true);
-        board.getButtons().set(2, true);
-        set2.setVisible(false);
-        board.getButtons().set(1, false);
+        board.setCardsBGColor(mainCtrl.colorToHex(pres2BG.getValue()));
+        board.setCardsFontColor(mainCtrl.colorToHex(pres2Font.getValue()));
         this.board = server.addBoard(board);
     }
     /**
      * Selects the third preset and makes button disappear
      */
     public void selectPreset3() {
-        set2.setVisible(true);
-        board.getButtons().set(1,true);
-        set1.setVisible(true);
-        board.getButtons().set(0,true);
-        set3.setVisible(false);
-        board.getButtons().set(2,false);
+        board.setCardsBGColor(mainCtrl.colorToHex(pres3BG.getValue()));
+        board.setCardsFontColor(mainCtrl.colorToHex(pres3Font.getValue()));
         this.board = server.addBoard(board);
     }
     /**
@@ -245,26 +208,5 @@ public class CustomizationPageCtrl {
      */
     public ColorPicker getPres3Font() {
         return pres3Font;
-    }
-
-    /**
-     * @return the button for setting the first preset
-     */
-    public Button getSet1() {
-        return set1;
-    }
-
-    /**
-     * @return the button for setting the second preset
-     */
-    public Button getSet2() {
-        return set2;
-    }
-
-    /**
-     * @return the button for setting the third preset
-     */
-    public Button getSet3() {
-        return set3;
     }
 }

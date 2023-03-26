@@ -56,8 +56,6 @@ public class Board {
     private List<String> presetsBGColor;
     @ElementCollection
     private List<String> presetsFontColor;
-    @ElementCollection
-    private List<Boolean> buttons;
 
     /**
      * Constructor for the Board class
@@ -79,11 +77,8 @@ public class Board {
         }
         this.cardsFontColor = "#808080";
         this.cardsBGColor = "ffffff";
-        this.buttons = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
-            this.buttons.add(true);
         }
-    }
+
     /**
     *empty constructor was necessary since post requests do not work for some reasons
     *also when creating a post request, the first name and last name of the person are set to null
@@ -112,10 +107,6 @@ public class Board {
         }
         this.cardsFontColor = "#808080";
         this.cardsBGColor = "ffffff";
-        this.buttons = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
-            this.buttons.add(true);
-        }
     }
 
     /**
@@ -363,12 +354,5 @@ public class Board {
      */
     public List<String> getPresetsBGColor() {
         return this.presetsBGColor;
-    }
-
-    /**
-     * @return a list of booleans that represents if a button is visible or not
-     */
-    public List<Boolean> getButtons() {
-        return buttons;
     }
 }
