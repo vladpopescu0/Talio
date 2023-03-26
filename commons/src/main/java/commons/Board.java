@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
@@ -59,9 +58,10 @@ public class Board {
 
     /**
      * Constructor for the Board class
+     *
      * @param creator the creator of the board
-     * @param name the name of the board
-     * @param list a CardList
+     * @param name    the name of the board
+     * @param list    a CardList
      */
     @SuppressWarnings("unused")
     public Board(User creator, List<CardList> list, String name) {
@@ -71,17 +71,17 @@ public class Board {
         this.name = name;
         this.presetsBGColor = new ArrayList<>();
         this.presetsFontColor = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             this.presetsBGColor.add("#ffffff");
             this.presetsFontColor.add("#808080");
         }
         this.cardsFontColor = "#808080";
         this.cardsBGColor = "ffffff";
-        }
+    }
 
     /**
-    *empty constructor was necessary since post requests do not work for some reasons
-    *also when creating a post request, the first name and last name of the person are set to null
+     * empty constructor was necessary since post requests do not work for some reasons
+     * also when creating a post request, the first name and last name of the person are set to null
      */
     @SuppressWarnings("unused")
     public Board() {
@@ -90,8 +90,9 @@ public class Board {
 
     /**
      * Constructor for the Board class without a given list
+     *
      * @param creator the creator of the board
-     * @param name the name of the board
+     * @param name    the name of the board
      */
     @Inject
     public Board(User creator, String name) {
@@ -101,7 +102,7 @@ public class Board {
         this.list = new ArrayList<>();
         this.presetsBGColor = new ArrayList<>();
         this.presetsFontColor = new ArrayList<>();
-        for(int i = 0; i < 3; i++){
+        for (int i = 0; i < 3; i++) {
             this.presetsBGColor.add("#ffffff");
             this.presetsFontColor.add("#808080");
         }
@@ -111,6 +112,7 @@ public class Board {
 
     /**
      * Getter for the id of the board
+     *
      * @return the id
      */
     public Long getId() {
@@ -119,6 +121,7 @@ public class Board {
 
     /**
      * Setter for the id(Used for server tests)
+     *
      * @param id the id
      */
     public void setId(Long id) {
@@ -128,12 +131,13 @@ public class Board {
     /**
      * Checks whether the board has a user with a
      * specific id
+     *
      * @param id the id in search
      * @return true if the board has a user with this id,
      * false otherwise
      */
     public boolean hasUser(long id) {
-        for (User u: this.getUsers()) {
+        for (User u : this.getUsers()) {
             if (u.getId() == id) {
                 return true;
             }
@@ -143,6 +147,7 @@ public class Board {
 
     /**
      * Getter for the list of users
+     *
      * @return the list of users that have joined the board
      */
     @SuppressWarnings("unused")
@@ -152,6 +157,7 @@ public class Board {
 
     /**
      * Adds a user to the collection of users related to the board
+     *
      * @param user the user to be added
      */
     public void addUser(User user) {
@@ -169,6 +175,7 @@ public class Board {
     /**
      * Creates a string with all the users of the board
      * (used for tables in overviews)
+     *
      * @return all the users of the board
      */
     @JsonIgnore
@@ -177,7 +184,7 @@ public class Board {
             return "";
         }
         StringBuilder s = new StringBuilder();
-        for (int i = 0; i < users.size()-1; i++) {
+        for (int i = 0; i < users.size() - 1; i++) {
             s.append(users.get(i).getUsername()).append(", ");
         }
         s.append(users.get(users.size() - 1).getUsername());
@@ -186,6 +193,7 @@ public class Board {
 
     /**
      * Removes a user from a board
+     *
      * @param user the user to be removed
      */
     @SuppressWarnings("unused")
@@ -195,6 +203,7 @@ public class Board {
 
     /**
      * Getter for the name
+     *
      * @return the name of the board
      */
     @SuppressWarnings("unused")
@@ -204,6 +213,7 @@ public class Board {
 
     /**
      * Setter for the name
+     *
      * @param name the new name of the board
      */
     @SuppressWarnings("unused")
@@ -213,6 +223,7 @@ public class Board {
 
     /**
      * Getter for the list of CardLists
+     *
      * @return the CardLists
      */
     public List<CardList> getList() {
@@ -221,6 +232,7 @@ public class Board {
 
     /**
      * Adds a CardList to the board(used for drag and drop feature)
+     *
      * @param cardList the card to be added
      */
     @SuppressWarnings("unused")
@@ -236,20 +248,27 @@ public class Board {
         list.add(new CardList());
     }
 
-    /** Sets the lighter shade of the board color
+    /**
+     * Sets the lighter shade of the board color
+     *
      * @param colorBGlight the lighter shade of the board color
      */
     public void setColorBGlight(String colorBGlight) {
         this.colorBGlight = colorBGlight;
     }
-    /** Sets the darker shade of the board color
+
+    /**
+     * Sets the darker shade of the board color
+     *
      * @param colorBGdark the darker shade of the board color
      */
     public void setColorBGdark(String colorBGdark) {
         this.colorBGdark = colorBGdark;
     }
 
-    /** Sets the color of the font of the board
+    /**
+     * Sets the color of the font of the board
+     *
      * @param colorFont the lighter shade of the board color
      */
     public void setColorFont(String colorFont) {
@@ -262,12 +281,14 @@ public class Board {
     public String getColorBGlight() {
         return colorBGlight;
     }
+
     /**
      * @return the darker color of the board
      */
     public String getColorBGdark() {
         return colorBGdark;
     }
+
     /**
      * @return the font color for the board
      */
@@ -277,14 +298,18 @@ public class Board {
 
     /**
      * Equals method for the Board class
+     *
      * @param obj the object whose equality we test
      * @return true if-f obj == this
      */
     @Override
-    public boolean equals(Object obj) { return EqualsBuilder.reflectionEquals(this, obj); }
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
+    }
 
     /**
      * Hash Code method for Board
+     *
      * @return hash code
      */
     @Override
@@ -294,6 +319,7 @@ public class Board {
 
     /**
      * toString method for the board class
+     *
      * @return this as a String
      */
     @Override
@@ -308,7 +334,9 @@ public class Board {
         return colorLighter;
     }
 
-    /** Sets the lighter color of the board
+    /**
+     * Sets the lighter color of the board
+     *
      * @param colorLighter the lighter color of the board
      */
     public void setColorLighter(String colorLighter) {
@@ -322,7 +350,9 @@ public class Board {
         return cardsBGColor;
     }
 
-    /** Sets the current color of the BG of the card
+    /**
+     * Sets the current color of the BG of the card
+     *
      * @param cardsBGColor the current color of the BG of the card
      */
     public void setCardsBGColor(String cardsBGColor) {
@@ -335,7 +365,10 @@ public class Board {
     public String getCardsFontColor() {
         return cardsFontColor;
     }
-    /** Sets the current color of the font of the card
+
+    /**
+     * Sets the current color of the font of the card
+     *
      * @param cardsFontColor the current color of the font of the card
      */
     public void setCardsFontColor(String cardsFontColor) {
