@@ -8,17 +8,28 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class TestTaskRepository implements TaskRepository {
+
+    public final List<Task> tasks = new ArrayList<>();
+    public final List<String> calledMethods = new ArrayList<>();
+
+    /**
+     * Adds a method to calledMethods
+     * @param name the method
+     */
+    private void call(String name) { calledMethods.add(name); }
     /**
      * @return
      */
     @Override
     public List<Task> findAll() {
-        return null;
+        call("findAll");
+        return tasks;
     }
 
     /**
@@ -61,7 +72,8 @@ public class TestTaskRepository implements TaskRepository {
      */
     @Override
     public void deleteById(Long aLong) {
-
+        call("deleteById");
+        tasks.remove(this.getById(aLong));
     }
 
     /**
@@ -103,7 +115,18 @@ public class TestTaskRepository implements TaskRepository {
      */
     @Override
     public <S extends Task> S save(S entity) {
-        return null;
+        call("save");
+        Optional<Task> opt = find(entity.getId());
+        if (opt.isEmpty()) {
+            entity.setId((long) tasks.size());
+            tasks.add(entity);
+        } else {
+            int ind = tasks.indexOf(opt.get());
+            tasks.remove(opt.get());
+            entity.setId(ind);
+            tasks.add(ind, entity);
+        }
+        return entity;
     }
 
     /**
@@ -122,7 +145,8 @@ public class TestTaskRepository implements TaskRepository {
      */
     @Override
     public Optional<Task> findById(Long aLong) {
-        return Optional.empty();
+        call("findById");
+        return find(aLong);
     }
 
     /**
@@ -131,7 +155,8 @@ public class TestTaskRepository implements TaskRepository {
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        call("existsById");
+        return find(aLong).isPresent();
     }
 
     /**
@@ -201,8 +226,20 @@ public class TestTaskRepository implements TaskRepository {
      */
     @Override
     public Task getById(Long aLong) {
-        return null;
+        call("getById");
+        return find(aLong).get();
     }
+
+    /**
+     * finds a task
+     * @param id the id
+     * @return  Optional containing the task
+     */
+    private Optional<Task> find(Long id) {
+        return tasks.stream()
+                .filter(t -> t.getId() == id).findFirst();
+    }
+
 
     /**
      * @param example must not be {@literal null}.

@@ -5,6 +5,7 @@ import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -111,6 +112,13 @@ public class CardCell extends ListCell<Card> {
                     this.deleteButton.setOnAction(event ->{
                         var c = server.deleteCardfromList
                                 (this.getItem().getParentCardList().getId(),this.getItem().getId());
+                        if (this.getItem().getTasks() != null) {
+                            for (Task t : this.getItem().getTasks()) {
+                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+                                server.deleteTask(t.getId());
+                            }
+                        }
+                        server.deleteCard(this.getItem().getId());
                         mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {

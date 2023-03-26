@@ -262,6 +262,12 @@ public class MainCtrl {
     }
 
     /**
+     * Getter for the CardDetailsViewCtr
+     * @return the CardDetailsViewCtr
+     */
+    public CardDetailsViewCtr getCardDetailsViewCtr() {return cardDetailsViewCtr;}
+
+    /**
      * Getter for userBoardOverviewCtrl
      *
      * @return the userBoardOverviewCtrl

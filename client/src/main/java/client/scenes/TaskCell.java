@@ -88,11 +88,18 @@ public class TaskCell extends ListCell<Task> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    this.removeButton.setOnAction(event -> {
+                        server.deleteTaskFromCard(parentController.getCard().getId(),
+                                this.getItem().getId());
+                        server.deleteTask(this.getItem().getId());
+                        mainCtrl.showCardDetailsView(server.getCardById(parentController
+                                        .getCard().getId()),
+                                parentController.getBoard());
+                    });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println(this.getItem());
 
             setText(null);
             setGraphic(taskPane);
@@ -133,12 +140,6 @@ public class TaskCell extends ListCell<Task> {
         taskTitle.setEditable(false);
         this.getItem().setTitle(taskTitle.getText());
         server.updateTask(this.getItem());
-    }
-
-    /**
-     * Removes the current task
-     */
-    public void remove() {
     }
 
     /**

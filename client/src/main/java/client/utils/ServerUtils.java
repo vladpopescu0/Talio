@@ -372,7 +372,48 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
-        /**
+
+    /**
+     * Deletes a Task from a card
+     * @param id the id of the card
+     * @param taskId the id of the task
+     * @return 200 - Ok if the task is successfully deleted
+     */
+    public Response deleteTaskFromCard(long id, long taskId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/" + id + "/delete/" + taskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Deletes task from the database
+     * @param id the id of the task
+     * @return 200 - ok if the task was deleted
+     */
+    public Response deleteTask(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tasks/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Deletes a card from the database
+     * @param id the id of the card to be deleted
+     * @return 200 - Ok if the card is deleted
+     */
+    public Response deleteCard(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
      * @param listid the id of the list to be retrieved
      * @return the card list with the specific id
      */
