@@ -98,11 +98,15 @@ public class UserBoardsOverviewCtrl implements Initializable {
     public void showBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
         if(b == null){
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("You need to select a board!");
-            alert.showAndWait();
-            return;
+            if (table.getItems().size() != 1) {
+                var alert = new Alert(Alert.AlertType.ERROR);
+                alert.initModality(Modality.APPLICATION_MODAL);
+                alert.setContentText("You need to select a board!");
+                alert.showAndWait();
+                return;
+            } else {
+                b = table.getItems().get(0);
+            }
         }
         mainCtrl.showBoardView(b);
     }
@@ -110,7 +114,7 @@ public class UserBoardsOverviewCtrl implements Initializable {
     /**
      * Returns to the MainPage with all boards
      */
-    public void toALlBoards() {
+    public void toAllBoards() {
         mainCtrl.showOverview();
     }
 }

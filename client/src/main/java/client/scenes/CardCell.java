@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static client.scenes.MainCtrl.cardDataFormat;
-import static client.utils.ServerUtils.packCardList;
 
 public class CardCell extends ListCell<Card> {
     @FXML
@@ -112,7 +111,8 @@ public class CardCell extends ListCell<Card> {
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            content.put(cardDataFormat, this.getItem());
+            content.put(cardDataFormat, List.of(this.getItem().getId(),
+                    this.getItem().getParentCardList().getId()));
 
             db.setContent(content);
             WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
@@ -129,26 +129,19 @@ public class CardCell extends ListCell<Card> {
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                Card origin = (Card) event.getDragboard().getContent(cardDataFormat);
+                //We can opt for passing just a Card ID and retrieve
+                // both the Card and CardList later
+                @SuppressWarnings("unchecked")
+                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
 
-                if (origin.getId() != this.getItem().getId()) {
-                    if (Objects.equals(origin.getParentCardList().getId(),
-                            this.getItem().getParentCardList().getId())) {
-                        dragCardToIdentical(origin);
+                if (ids.get(0) != this.getItem().getId()) {
+                    if (Objects.equals(ids.get(1), this.getItem().getParentCardList().getId())) {
+                        dragCardToIdentical(ids);
                     } else {
-                        dragCardToDifferent(origin);
+                        dragCardToDifferent(ids);
                     }
                 }
             }
-            //CardList drag-and-drop is currently disabled
-            /*if (event.getDragboard().hasContent(cardListDataFormat)) {
-                CardList origin = (CardList) event.getDragboard().getContent(cardListDataFormat);
-
-                if (!Objects.equals(origin.getId(), this.getItem().getParentCardList().getId())) {
-                    System.out.println("Drag of CardList: " + origin.getName() + " to CardList: "
-                            + this.getItem().getParentCardList().getName());
-                }
-            }*/
 
             event.setDropCompleted(true);
 
@@ -158,42 +151,35 @@ public class CardCell extends ListCell<Card> {
 
     /**
      * Handles drag-and-drop gesture between Cards of the same CardList
-     * @param origin the Card that the gesture origins from
+     * @param ids the Card that the gesture origins from
      */
-    public void dragCardToIdentical(Card origin) {
+    public void dragCardToIdentical(List<Long> ids) {
         Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int parentIndex = board.getList().indexOf(this.getItem().getParentCardList());
         long parentId = this.getItem().getParentCardList().getId();
-        origin.setParentCardList(null);
-        this.getItem().setParentCardList(null);
         server.moveCard(parentId,
-                List.of(origin, this.getItem()));
-        board.getList().set(parentIndex, server.getCL(parentId));
+                List.of(server.getCardById(ids.get(0)), this.getItem()));
         mainCtrl.getBoardViewCtrl().refresh();
     }
 
     /**
      * Handles drag-and-drop gesture between Cards of different CardLists
      * This method may be improved at a later point
-     * @param origin the Card that the gesture origins from
+     * @param ids the Card that the gesture origins from
      */
-    public void dragCardToDifferent(Card origin) {
+    public void dragCardToDifferent(List<Long> ids) {
         Board board = mainCtrl.getBoardViewCtrl().getBoard();
         int oldParentIndex = board.getList().indexOf(server.getCL(
-                origin.getParentCardList().getId()));
+                ids.get(1)));
         int newParentIndex = board.getList().indexOf(server.getCL(
                 this.getItem().getParentCardList().getId()));
-        CardList oldParent = origin.getParentCardList();
+        CardList oldParent = server.getCL(ids.get(1));
         CardList newParent = this.getItem().getParentCardList();
-        packCardList(oldParent);
-        packCardList(newParent);
-        server.updateParent(origin.getId(), List.of(oldParent, newParent));
+        server.updateParent(ids.get(0), List.of(oldParent, newParent));
         CardList newCardList = server.getCL(newParent.getId());
         board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
         board.getList().set(newParentIndex, newCardList);
         this.getItem().setParentCardList(newCardList);
-        origin.setParentCardList(newCardList);
 
-        dragCardToIdentical(origin);
+        dragCardToIdentical(ids);
     }
 }

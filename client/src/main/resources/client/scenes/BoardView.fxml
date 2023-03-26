@@ -12,22 +12,23 @@
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
             <children>
-                <Button fx:id="addList" layoutX="628.0" layoutY="466.0" mnemonicParsing="false" onAction="#addCardList" text="+ Add List" />
                 <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="442.0" prefWidth="685.0">
                     <content>
                         <ListView fx:id="cardListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="HORIZONTAL" prefHeight="462.0" prefWidth="734.0" />
                     </content>
                 </ScrollPane>
-            <Button layoutX="229.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />
-            <Button fx:id="removeButton" layoutX="14.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
-            <Button layoutX="126.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
-            <Button fx:id="editTitle" layoutX="551.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />
-            <Button layoutX="422.0" layoutY="466.0" mnemonicParsing="false" onAction="#copyLink" text="Copy Invite Code" />
-            <Label fx:id="copyLabel" alignment="CENTER" layoutX="390.0" layoutY="409.0" prefHeight="49.0" prefWidth="175.0" style="-fx-background-color: white; -fx-background-radius: 10;" textAlignment="CENTER" textFill="#47c93b" visible="false" wrapText="true">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
+                <Button fx:id="addList" layoutX="640.0" layoutY="466.0" mnemonicParsing="false" onAction="#addCardList" text="Add List" />
+                <Button fx:id="viewTags" layoutX="491.0" layoutY="466.0" mnemonicParsing="false" onAction="#viewTags" text="View Tags" />
+                <Button layoutX="218.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />
+                <Button fx:id="removeButton" layoutX="15.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
+                <Button layoutX="119.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
+                <Button fx:id="editTitle" layoutX="570.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />
+                <Button layoutX="374.0" layoutY="466.0" mnemonicParsing="false" onAction="#copyLink" text="Copy Invite Code" />
+                <Label fx:id="copyLabel" alignment="CENTER" layoutX="390.0" layoutY="409.0" prefHeight="49.0" prefWidth="175.0" style="-fx-background-color: white; -fx-background-radius: 10;" textAlignment="CENTER" textFill="#47c93b" visible="false" wrapText="true">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
             </children>
         </AnchorPane>
     </content>

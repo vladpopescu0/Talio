@@ -12,9 +12,6 @@ import javafx.stage.Modality;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static client.utils.ServerUtils.packBoard;
-import static client.utils.ServerUtils.unpackBoard;
-
 
 public class JoinBoardByLinkCtrl {
 
@@ -72,9 +69,7 @@ public class JoinBoardByLinkCtrl {
             if(boards.size()==1){
                 Board foundBoard = boards.get(0);
                 foundBoard.addUser(mainCtrl.getCurrentUser());
-                packBoard(foundBoard);
-                server.updateBoard(foundBoard);
-                unpackBoard(foundBoard);
+                foundBoard = server.updateBoard(foundBoard);
                 mainCtrl.getCurrentUser().setBoardList(server.
                         getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
                 mainCtrl.showBoardView(foundBoard);
