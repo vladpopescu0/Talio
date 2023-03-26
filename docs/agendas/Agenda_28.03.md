@@ -1,13 +1,14 @@
 # Agenda - 7th Week
----
-**Location:** Drebbelweg-PC Hall 1
-**Date:** 28th of March, 2023
-**Time:** 16:45-17:30
+**Location:** Drebbelweg-PC Hall 1\
+**Date:** 28th of March, 2023\
+**Time:** 16:45-17:30\
 **Attendees:** Georgios Kontos, Ioan Leolea, Jakub Matyja, Vlad Popescu, Shashwat Sahay
 
-##### Roles:
-**Chair:** Vlad Popescu
+#### Roles:
+
+**Chair:** Vlad Popescu\
 **Minute-taker:** Shashwat Sahay
+
 ---
 ### Agenda Items:
 
