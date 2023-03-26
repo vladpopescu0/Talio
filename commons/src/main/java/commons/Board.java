@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Board {
 
     /**
@@ -41,17 +43,27 @@ public class Board {
     @JoinColumn(name = "board_id")
     private List<CardList> list;
 
+    @OneToMany(targetEntity =  Tag.class,
+        fetch = FetchType.LAZY,
+        cascade = CascadeType.ALL,
+        orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "board_id")
+    private List<Tag> tags;
+
     /**
      * Constructor for the Board class
      * @param creator the creator of the board
      * @param name the name of the board
      * @param list a CardList
+     * @param tags the list of Tags
      */
     @SuppressWarnings("unused")
-    public Board(User creator, List<CardList> list, String name) {
+    public Board(User creator, List<CardList> list, String name, List<Tag> tags) {
         this.users = new ArrayList<>();
         users.add(creator);
         this.list = list;
+        this.tags = tags;
         this.name = name;
     }
     /**
@@ -74,6 +86,7 @@ public class Board {
         this.users.add(creator);
         this.name = name;
         this.list = new ArrayList<>();
+        this.tags = new ArrayList<>();
     }
 
     /**
@@ -201,6 +214,22 @@ public class Board {
     @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
+    }
+
+    /**
+     * Getter for the list of Tags
+     * @return list of Tags
+     */
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    /**
+     * Adds a Tag to the list of Tags
+     * @param tag Tag to be added to the list
+     */
+    public void addTag(Tag tag) {
+        tags.add(tag);
     }
 
     /**

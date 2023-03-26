@@ -17,6 +17,7 @@ package client.scenes;
 
 import commons.Board;
 import commons.Card;
+import commons.Tag;
 import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -24,9 +25,12 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.List;
+
 public class MainCtrl {
     private Board board;
     private Stage primaryStage;
+    private Stage secondaryStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
     private UserBoardsOverviewCtrl userBoardsOverviewCtrl;
@@ -43,6 +47,7 @@ public class MainCtrl {
 
     private long id;
     private long cardId;
+    private List<Long> draggableData;
     private ChangeNameCtrl changeListNameCtrl;
     private Scene changeListName;
     private AddCardCtrl addCardCtrl;
@@ -52,12 +57,15 @@ public class MainCtrl {
     private ChangeServerCtrl changeServerCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
-
     private Scene cardDetails;
     private CardDetailsViewCtr cardDetailsViewCtr;
-
+    private Scene viewTags;
+    private ViewTagsCtrl viewTagsCtrl;
+    private Scene createTag;
+    private CreateTagCtrl createTagCtrl;
+    private Scene editTag;
+    private EditTagCtrl editTagCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
-    public static final DataFormat cardListDataFormat = new DataFormat("cardList");
     private User currentUser;
 
     private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
@@ -66,6 +74,7 @@ public class MainCtrl {
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
+     * @param secondaryStage the secondary stage used
      * @param overview the boardOverview scene
      * @param boardView the boardView scene
      * @param createList the createList scene
@@ -77,10 +86,14 @@ public class MainCtrl {
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
+     * @param createTag the createTag scene
+     * @param viewTags the viewTags scene
+     * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
      * @param details the cardDetails scene
      */
-    public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
+    public void initialize(Stage primaryStage, Stage secondaryStage,
+                           Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
@@ -91,8 +104,12 @@ public class MainCtrl {
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
-                           Pair<CardDetailsViewCtr, Parent> details) {
+                           Pair<CardDetailsViewCtr, Parent> details,
+                           Pair<ViewTagsCtrl, Parent> viewTags,
+                           Pair<CreateTagCtrl, Parent> createTag,
+                           Pair<EditTagCtrl, Parent> editTag) {
         this.primaryStage = primaryStage;
+        this.secondaryStage = secondaryStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -127,6 +144,14 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
+        this.viewTagsCtrl = viewTags.getKey();
+        this.viewTags = new Scene(viewTags.getValue());
+
+        this.createTagCtrl = createTag.getKey();
+        this.createTag = new Scene(createTag.getValue());
+
+        this.editTagCtrl = editTag.getKey();
+        this.editTag = new Scene(editTag.getValue());
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
         this.cardDetailsViewCtr = details.getKey();
@@ -134,6 +159,10 @@ public class MainCtrl {
 
         showUserView();
         primaryStage.show();
+
+        primaryStage.setOnCloseRequest(event -> {
+            closeSecondaryStage();
+        });
     }
 
     /**
@@ -277,6 +306,15 @@ public class MainCtrl {
     }
 
     /**
+     * Getter for viewTagsCtrl
+     * @return the viewTagsCtrl
+     */
+    @SuppressWarnings("unused")
+    public ViewTagsCtrl getViewTagsCtrl() {
+        return viewTagsCtrl;
+    }
+
+    /**
      * Shows the createBoard scene
      */
     public void createBoardView() {
@@ -321,6 +359,42 @@ public class MainCtrl {
     }
 
     /**
+<<<<<<< HEAD
+     * Opens a new window with an overview of all tags for the current board
+     * @param board the Board of which Tag overview is to be shown
+     */
+    public void showViewTags(Board board) {
+        primaryStage.setTitle("Tags Overview");
+        primaryStage.setScene(viewTags);
+
+        viewTagsCtrl.setBoard(board);
+        viewTagsCtrl.refresh();
+    }
+
+    /**
+     * Shows the add Tag page
+     * @param board the Board to add a Tag to
+     */
+    public void showAddTag(Board board) {
+        secondaryStage.setTitle("Add Tag");
+        secondaryStage.setScene(createTag);
+        showSecondaryStage();
+        createTagCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the edit Tag page
+     * @param tag Tag to be edited
+     */
+    public void showEditTag(Tag tag) {
+        secondaryStage.setTitle("Edit Tag");
+        secondaryStage.setScene(editTag);
+        showSecondaryStage();
+        editTagCtrl.setTag(tag);
+        editTagCtrl.updateFields();
+    }
+
+    /**
      * Sets the current screen to the "JoinBoardByLink scene from resources"
      */
     public void showJoinBoardByLink(){
@@ -356,4 +430,21 @@ public class MainCtrl {
         this.cardId = cardId;
     }
 
+    /**
+     * Closes the secondary stage if it's visible
+     */
+    public void closeSecondaryStage() {
+        if (secondaryStage.isShowing()) {
+            secondaryStage.close();
+        }
+    }
+
+    /**
+     * Shows the secondary stage if it's not visible
+     */
+    private void showSecondaryStage() {
+        if (!secondaryStage.isShowing()) {
+            secondaryStage.show();
+        }
+    }
 }
