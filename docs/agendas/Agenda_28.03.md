@@ -21,7 +21,7 @@
     + Where should we add more text? (Quantity)
     + Which parts were not on point? (Quality)
     + Google form? [Decision making]
-    + Lack of feedback from the other team. [Discuss]
+    + Lack of feedback from the other team / Solve the found issues. [Discuss]
 7. (7 min) Feedback on the Technology Rubric. [Inform]
     + Are our estimations correct?
     + Are the screenshots correctly referring to the categories?
