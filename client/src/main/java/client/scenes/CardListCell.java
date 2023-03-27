@@ -5,16 +5,21 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import commons.ColorScheme;
 import jakarta.ws.rs.BadRequestException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
+import javafx.scene.Node;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,16 +28,23 @@ import java.util.Objects;
 import static client.scenes.MainCtrl.cardDataFormat;
 import static client.utils.ServerUtils.packCardList;
 
-public class CardListCell extends ListCell<CardList> {
+public class CardListCell extends ListCell<CardList>{
 
     private final MainCtrl mainCtrl;
     @FXML
     private Button editListButton;
 
     @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
     private Button deleteList;
+
     @FXML
     private TitledPane titledPane;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private ListView<Card> cardsList;
@@ -41,6 +53,8 @@ public class CardListCell extends ListCell<CardList> {
     private Button addCardButton;
 
     private ObservableList<Card> cardObservableList;
+
+    private ColorScheme colorScheme;
 
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
@@ -58,6 +72,7 @@ public class CardListCell extends ListCell<CardList> {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.colorScheme= board.getListsColorScheme();
     }
 
     /**
@@ -86,16 +101,23 @@ public class CardListCell extends ListCell<CardList> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
-
                 try {
                     fxmlLoader.load();
+                    cardsList.setStyle("");
+                    //i want to find a better solution :((((
+                    Platform.runLater(() -> {
+                        Pane title = (Pane) titledPane.lookup(".title");
+                        if (title != null) {
+                            title.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";");
+                            System.out.println(title.getStyle());
+                        }
+                    });
                     editListButton.setOnAction(event -> {
                         rename(cardList.getId());
                     });
                     deleteList.setOnAction(event -> {
                         delete(cardList.getId());
                     });
-
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
@@ -104,21 +126,23 @@ public class CardListCell extends ListCell<CardList> {
                     e.printStackTrace();
                 }
             }
-
             titledPane.setText(cardList.getName());
-
-            long id = this.getItem().getId();
-
-            CardList cl = null;
-            try {
-                cl = server.getCL(id);
-            } catch (BadRequestException br) {
-                br.printStackTrace();
-            }
-
             refresh();
-            setText(null);
             setGraphic(titledPane);
+            titledPane.setStyle(" -fx-text-fill: " + colorScheme.getColorFont() + ";");
+            anchorPane.setStyle("-fx-background-color: "+colorScheme.getColorBGdark()+";"
+                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+            editListButton.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
+                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+            addCardButton.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
+                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+            deleteList.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
+                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
+                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+            cardsList.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";");
         }
     }
 

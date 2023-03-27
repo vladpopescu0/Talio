@@ -21,6 +21,7 @@ import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -52,9 +53,11 @@ public class MainCtrl {
     private ChangeServerCtrl changeServerCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
-
     private Scene cardDetails;
     private CardDetailsViewCtr cardDetailsViewCtr;
+    private CustomizationPageCtrl customizationPageCtrl;
+
+    private Scene customizationPage;
 
     public static final DataFormat cardDataFormat = new DataFormat("card");
     public static final DataFormat cardListDataFormat = new DataFormat("cardList");
@@ -91,7 +94,8 @@ public class MainCtrl {
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
-                           Pair<CardDetailsViewCtr, Parent> details) {
+                           Pair<CardDetailsViewCtr, Parent> details,Pair<CustomizationPageCtrl, Parent> customizationPage) {
+
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -127,8 +131,13 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
+
+        this.customizationPageCtrl = customizationPage.getKey();
+        this.customizationPage = new Scene(customizationPage.getValue());
+
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
+
         this.cardDetailsViewCtr = details.getKey();
         this.cardDetails = new Scene(details.getValue());
 
@@ -286,16 +295,23 @@ public class MainCtrl {
         primaryStage.setScene(user);
     }
 
+    /**
+     * Shows the customization page
+     */
+    public void showCustomizationPage(Board board) {
+        primaryStage.setTitle("Customize Your Board");
+        primaryStage.setScene(customizationPage);
+        this.customizationPageCtrl.setBoard(board);
+    }
+
     /** Shows the ChangeListName scene
      * @param id id of the current cardList
      */
     public void showChangeListName(Long id) {
-//        primaryStage.setTitle(list.getName());
         Board board = getBoardViewCtrl().getBoard();
         primaryStage.setScene(changeListName);
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
-//        this.boardViewCtrl.refresh();
     }
 
     /**
@@ -350,4 +366,14 @@ public class MainCtrl {
         this.cardId = cardId;
     }
 
+    public String colorToHex(Color color){
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
+
+    public CustomizationPageCtrl getCustomizationPageCtrl() {
+        return customizationPageCtrl;
+    }
 }

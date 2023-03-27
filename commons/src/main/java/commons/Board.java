@@ -12,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
@@ -40,6 +42,19 @@ public class Board {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "board_id")
     private List<CardList> list;
+
+
+    private ColorScheme colorScheme = new ColorScheme();
+    private ColorScheme listsColorScheme = new ColorScheme();
+
+    public ColorScheme getListsColorScheme() {
+        return listsColorScheme;
+    }
+
+    public void setListsColorScheme(ColorScheme listsColorScheme) {
+        this.listsColorScheme = listsColorScheme;
+    }
+
 
     /**
      * Constructor for the Board class
@@ -100,7 +115,7 @@ public class Board {
      * false otherwise
      */
     public boolean hasUser(long id) {
-        for (User u: this.getUsers()) {
+        for (User u: this.getUsers()) {//should be changed to a stream
             if (u.getId() == id) {
                 return true;
             }
@@ -193,6 +208,14 @@ public class Board {
     @SuppressWarnings("unused")
     public void addList(CardList cardList) {
         list.add(cardList);
+    }
+
+    public ColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    public void setColorScheme(ColorScheme colorScheme) {
+        this.colorScheme = colorScheme;
     }
 
     /**
