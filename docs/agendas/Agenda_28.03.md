@@ -14,7 +14,7 @@
 
 1. (2 min) Opening by chair.
 2. (1 min) Check-in - What is the current status of everyone’s progress.
-3. (1-2 min) Announcements, current state of the project.
+3. (1-4 min) Announcements, current state of the project.
 4. (1 min) Approval of the agenda.
 5. (<1 min) Approval of the minutes.
 6. (7 min) Feedback on the Heuristics Usability Evaluation Draft. [Inform]
