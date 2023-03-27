@@ -38,9 +38,9 @@
     + UI changes, when? [Decision making]
 11. (10 min) Stand-up session. [Inform]
     + Show the current product.
-    + Everyone’s last week contribution.
+    + Everyone’s last week's contribution.
 12. (2 min) Summary action points.
-    + What should we have by the end of this week.
+    + What should we have by the end of this week?
 13. (1-3 min) Extra questions
 14. (3 min) Feedback round - last week
 15. (1 min) Closure
