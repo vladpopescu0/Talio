@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="79.0" prefWidth="197.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="96.0" prefWidth="197.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <Label fx:id="paneLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="-6.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="197.0" text="card" textAlignment="CENTER">
             <font>
@@ -16,10 +16,16 @@
                 <Insets left="10.0" />
             </padding>
         </Label>
-      <Button fx:id="editButton" layoutX="14.0" layoutY="46.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="edit">
+      <Button fx:id="editButton" layoutX="14.0" layoutY="59.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="edit">
          <font>
             <Font size="13.0" />
          </font></Button>
-      <Button fx:id="deleteButton" layoutX="123.0" layoutY="46.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="delete" />
+      <Button fx:id="deleteButton" layoutX="122.0" layoutY="59.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="60.0" text="delete" />
+      <Label fx:id="hasDesc" alignment="CENTER" layoutX="165.0" layoutY="6.0" text="+" visible="false">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Label>
+      <Label fx:id="statusLabel" layoutX="122.0" layoutY="34.0" text="(a/ b done)" />
     </children>
 </Pane>

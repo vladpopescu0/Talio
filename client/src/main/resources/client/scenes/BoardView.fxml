@@ -19,7 +19,8 @@
                     </content>
                 </ScrollPane>
             <Button fx:id="allBoardsButton" layoutX="226.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />
-            <Button fx:id="removeButton" layoutX="14.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
+                <Button fx:id="viewTags" layoutX="491.0" layoutY="466.0" mnemonicParsing="false" onAction="#viewTags" text="View Tags" />
+                <Button fx:id="removeButton" layoutX="14.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Remove Board" />
             <Button fx:id="myBoardsButton" layoutX="123.0" layoutY="466.0" mnemonicParsing="false" onAction="#toUserOverview" text="To my Boards" />
             <Button fx:id="customizeButton" layoutX="476.0" layoutY="466.0" mnemonicParsing="false" onAction="#toCustomizationPage" text="Customize" />
             <Button fx:id="editTitle" layoutX="558.0" layoutY="466.0" mnemonicParsing="false" onAction="#editTitle" text="Edit title" />

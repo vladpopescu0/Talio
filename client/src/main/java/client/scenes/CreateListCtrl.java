@@ -10,9 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 
-import static client.utils.ServerUtils.packBoard;
-import static client.utils.ServerUtils.unpackBoard;
-
 public class CreateListCtrl {
 
     private final MainCtrl mainCtrl;
@@ -70,11 +67,9 @@ public class CreateListCtrl {
             CardList list = new CardList(getName());
             board = server.getBoardByID(board.getId());
             board.addList(list);
-            packBoard(board);
-            server.updateBoard(board);
-            unpackBoard(board);
-            server.addCL(list);
-        } catch (WebApplicationException e) {
+            board = server.updateBoard(board);
+            list.setId(board.getList().get(board.getList().size() - 1).getId());
+        } catch (WebApplicationException e){
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());

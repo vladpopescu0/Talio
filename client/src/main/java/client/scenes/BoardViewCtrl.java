@@ -87,6 +87,9 @@ public class BoardViewCtrl implements Initializable {
     @FXML
     private Button copyInviteButton;
     @FXML
+    private Button viewTags;
+
+    @FXML
     private Label copyLabel;
     private Region scrollbar;
 
@@ -117,7 +120,7 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
         titledPane.setText(board.getName());
     }
 
@@ -131,11 +134,13 @@ public class BoardViewCtrl implements Initializable {
             editTitle.setDisable(true);
             addList.setDisable(true);
             cardListView.setDisable(true);
+            viewTags.setDisable(true);
         } else {
             removeButton.setDisable(false);
             editTitle.setDisable(false);
             addList.setDisable(false);
             cardListView.setDisable(false);
+            viewTags.setDisable(false);
         }
         socketHandler.registerForUpdates("/topic/lists",
                 CardList.class, q -> Platform.runLater(() -> {
@@ -193,6 +198,9 @@ public class BoardViewCtrl implements Initializable {
                 .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
         mainCtrl.getCustomizationPageCtrl().getPres3Font()
                 .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
+//        cardListView.setCellFactory(cl ->
+//                new CardListCell(mainCtrl, server, board)
+//        );
         customizeBoard(board);
     }
 
@@ -290,7 +298,7 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setStyle(style);
         scrollPane.setStyle(style);
         cardListView.setCellFactory(cl -> {
-            CardListCell c = new CardListCell(mainCtrl, server);
+            CardListCell c = new CardListCell(mainCtrl, server,board);
             c.setColor(board.getColorBGlight());
             c.setStyle(style);
             c.setColorCard(board.getCardsBGColor());
@@ -303,6 +311,13 @@ public class BoardViewCtrl implements Initializable {
 //        String style = "-fx-background-color: " + bgColor + ";";
 //        scrollbar.setStyle(style);
 //    }
+
+    /**
+     * Redirects the user to the overview of tags for the current Board
+     */
+    public void viewTags() {
+        mainCtrl.showViewTags(board);
+    }
 
     /**
      * Copies an invitation code of at least 4 digits

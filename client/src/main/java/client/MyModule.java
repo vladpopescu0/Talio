@@ -44,5 +44,6 @@ public class MyModule implements Module {
         binder.bind(CustomizationPageCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
         binder.bind(JoinBoardByLinkCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardDetailsViewCtr.class).in(Scopes.SINGLETON);
     }
 }

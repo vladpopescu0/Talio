@@ -1,93 +1,67 @@
 package server.api;
 
-import commons.User;
+import commons.Tag;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.UserRepository;
+import server.database.TagRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class TestUserRepository implements UserRepository {
+public class TestTagRepository implements TagRepository {
 
-    public final List<User> users = new ArrayList<>();
+    public final List<Tag> tags = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
-    private void call(String name) { calledMethods.add(name); }
-    /**
-     * @param username the name in search
-     * @return
-     */
-    @Override
-    public Optional<List<User>> findByUsernameIs(String username) {
-        List<User> search = new ArrayList<>();
-        for (User u: users) {
-            if (u.getUsername().equals(username)) {
-                search.add(u);
-            }
-        }
-        call("findByUsernameIs");
-        return Optional.of(search);
-    }
+    public void call(String name) { calledMethods.add(name); }
 
     /**
-     * @param name the name of the user in search
-     * @return
+     * @return All tags found in the repository
      */
     @Override
-    public boolean existsByUsername(String name) {
-        call("existsByUsername");
-        return findByUsernameIs(name).isPresent() &&
-                findByUsernameIs(name).get().size() > 0;
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public List<User> findAll() {
+    public List<Tag> findAll() {
         call("findAll");
-        return users;
+        return tags;
     }
 
     /**
-     * @param sort
-     * @return
+     * @param sort Sort option for queries
+     * @return All tags found in the repository under given Sort
      */
     @Override
-    public List<User> findAll(Sort sort) {
-        return null;
+    public List<Tag> findAll(Sort sort) {
+        return this.findAll(sort);
     }
 
     /**
-     * @param pageable
-     * @return
+     * @param pageable pagination information
+     * @return All tags found in the repository as paginated information
      */
     @Override
-    public Page<User> findAll(Pageable pageable) {
-        return null;
+    public Page<Tag> findAll(Pageable pageable) {
+        return this.findAll(pageable);
     }
 
     /**
      * @param longs must not be {@literal null} nor contain any {@literal null} values.
-     * @return
+     * @return All tags found in the repository with matching ids longs
      */
     @Override
-    public List<User> findAllById(Iterable<Long> longs) {
-        return null;
+    public List<Tag> findAllById(Iterable<Long> longs) {
+        return this.findAllById(longs);
     }
 
     /**
-     * @return
+     * @return the number of records in the repository
      */
     @Override
     public long count() {
-        return 0;
+        return this.count();
     }
 
     /**
@@ -96,14 +70,14 @@ public class TestUserRepository implements UserRepository {
     @Override
     public void deleteById(Long aLong) {
         call("deleteById");
-        users.remove(this.getById(aLong));
+        tags.remove(this.getById(aLong));
     }
 
     /**
      * @param entity must not be {@literal null}.
      */
     @Override
-    public void delete(User entity) {
+    public void delete(Tag entity) {
 
     }
 
@@ -119,7 +93,7 @@ public class TestUserRepository implements UserRepository {
      * @param entities must not be {@literal null}. Must not contain {@literal null} elements.
      */
     @Override
-    public void deleteAll(Iterable<? extends User> entities) {
+    public void deleteAll(Iterable<? extends Tag> entities) {
 
     }
 
@@ -133,45 +107,45 @@ public class TestUserRepository implements UserRepository {
 
     /**
      * @param entity must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return the entity to be saved
      */
     @Override
-    public <S extends User> S save(S entity) {
+    public <S extends Tag> S save(S entity) {
         call("save");
-        entity.setId((long) users.size());
-        users.add(entity);
+        entity.setId((long) tags.size());
+        tags.add(entity);
         return entity;
     }
 
     /**
      * @param entities must not be {@literal null} nor must it contain {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return the entities to be saved
      */
     @Override
-    public <S extends User> List<S> saveAll(Iterable<S> entities) {
-        return null;
+    public <S extends Tag> List<S> saveAll(Iterable<S> entities) {
+        return this.saveAll(entities);
     }
 
     /**
      * @param aLong must not be {@literal null}.
-     * @return
+     * @return Optional of Tag with given ID
      */
     @Override
-    public Optional<User> findById(Long aLong) {
+    public Optional<Tag> findById(Long aLong) {
         call("findById");
         return find(aLong);
     }
 
-    private Optional<User> find(long id) {
-        return users.stream()
+    private Optional<Tag> find(long id) {
+        return tags.stream()
                 .filter(u -> u.getId() == id).findFirst();
     }
 
     /**
      * @param aLong must not be {@literal null}.
-     * @return
+     * @return whether a record with the given ID exists in the repository
      */
     @Override
     public boolean existsById(Long aLong) {
@@ -189,29 +163,31 @@ public class TestUserRepository implements UserRepository {
 
     /**
      * @param entity entity to be saved. Must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return the entity to be saved
      */
     @Override
-    public <S extends User> S saveAndFlush(S entity) {
-        return null;
+    public <S extends Tag> S saveAndFlush(S entity) {
+        return entity;
     }
 
     /**
      * @param entities entities to be saved. Must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return entities to be saved
      */
     @Override
-    public <S extends User> List<S> saveAllAndFlush(Iterable<S> entities) {
-        return null;
+    public <S extends Tag> List<S> saveAllAndFlush(Iterable<S> entities) {
+        List<S> result = new ArrayList<>();
+        entities.forEach(result::add);
+        return result;
     }
 
     /**
      * @param entities entities to be deleted. Must not be {@literal null}.
      */
     @Override
-    public void deleteAllInBatch(Iterable<User> entities) {
+    public void deleteAllInBatch(Iterable<Tag> entities) {
 
     }
 
@@ -233,99 +209,100 @@ public class TestUserRepository implements UserRepository {
 
     /**
      * @param aLong must not be {@literal null}.
-     * @return
+     * @return record from the repository with the given ID
      */
     @Override
-    public User getOne(Long aLong) {
-        return null;
+    public Tag getOne(Long aLong) {
+        return this.getOne(aLong);
     }
 
     /**
      * @param aLong must not be {@literal null}.
-     * @return
+     * @return a record from the repository with a matching ID
      */
     @Override
-    public User getById(Long aLong) {
+    public Tag getById(Long aLong) {
         call("getById");
         return find(aLong).get();
     }
 
     /**
      * @param example must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return an entity from the repository that matches example
      */
     @Override
-    public <S extends User> Optional<S> findOne(Example<S> example) {
-        return Optional.empty();
+    public <S extends Tag> Optional<S> findOne(Example<S> example) {
+        return this.findOne(example);
     }
 
     /**
      * @param example must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return all entities from the repository that match entries example
      */
     @Override
-    public <S extends User> List<S> findAll(Example<S> example) {
-        return null;
+    public <S extends Tag> List<S> findAll(Example<S> example) {
+        return this.findAll(example);
     }
 
     /**
      * @param example must not be {@literal null}.
      * @param sort    the {@link Sort} specification to sort
      *               the results by, must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return all entities from the repository that match entries from example under given Sort
      */
     @Override
-    public <S extends User> List<S> findAll(Example<S> example, Sort sort) {
-        return null;
+    public <S extends Tag> List<S> findAll(Example<S> example, Sort sort) {
+        return this.findAll(example, sort);
     }
 
     /**
      * @param example  must not be {@literal null}.
      * @param pageable can be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return all entities from the repository
+     * that match entries from example as paginated information
      */
     @Override
-    public <S extends User> Page<S> findAll(Example<S> example, Pageable pageable) {
-        return null;
+    public <S extends Tag> Page<S> findAll(Example<S> example, Pageable pageable) {
+        return this.findAll(example, pageable);
     }
 
     /**
      * @param example the {@link Example} to count instances for. Must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return number of entities that match entries from example
      */
     @Override
-    public <S extends User> long count(Example<S> example) {
-        return 0;
+    public <S extends Tag> long count(Example<S> example) {
+        return this.count(example);
     }
 
     /**
      * @param example the {@link Example} to use for the
      *                existence check. Must not be {@literal null}.
-     * @param <S>
-     * @return
+     * @param <S> subclass of Tag
+     * @return whether example exists in the repository
      */
     @Override
-    public <S extends User> boolean exists(Example<S> example) {
-        return false;
+    public <S extends Tag> boolean exists(Example<S> example) {
+        return this.exists(example);
     }
 
     /**
      * @param example       must not be {@literal null}.
      * @param queryFunction the query function defining projection, sorting, and the result type
-     * @param <S>
-     * @param <R>
-     * @return
+     * @param <S> subclass of Tag
+     * @param <R> generic type
+     * @return result of the given query
      */
     @Override
-    public <S extends User, R> R findBy(Example<S> example,
+    public <S extends Tag, R> R findBy(Example<S> example,
                                         Function<FluentQuery
                                                 .FetchableFluentQuery<S>, R>
                                                 queryFunction) {
-        return null;
+        return this.findBy(example, queryFunction);
     }
 }
