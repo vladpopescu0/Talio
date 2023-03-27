@@ -203,6 +203,20 @@ public class ServerUtils {
     }
 
     /**
+     * Adds a task to a card
+     * @param task the task to be added
+     * @param id the id of the card
+     * @return the task
+     */
+    public Task addTaskToCard(Task task, long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/addTask/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(task, APPLICATION_JSON), Task.class);
+    }
+
+    /**
      * @param name name that needs to be updated
      * @param id   id of the card
      * @return the new name (if it worked)
@@ -230,6 +244,32 @@ public class ServerUtils {
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
         setCardsParent(b);
         return b;
+    }
+
+    /**
+     * Updates the details of a card
+     * @param card the card to be updated
+     * @return the card
+     */
+    public Card updateCardDetails(Card card) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/update/" + card.getId()) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Updates a task
+     * @param task the task to be updated
+     * @return the task
+     */
+    public Task updateTask(Task task) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tasks/update/" + task.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(task, APPLICATION_JSON), Task.class);
     }
     /**
      * @param id id of the searched card
@@ -308,7 +348,48 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
-        /**
+
+    /**
+     * Deletes a Task from a card
+     * @param id the id of the card
+     * @param taskId the id of the task
+     * @return 200 - Ok if the task is successfully deleted
+     */
+    public Response deleteTaskFromCard(long id, long taskId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/" + id + "/delete/" + taskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Deletes task from the database
+     * @param id the id of the task
+     * @return 200 - ok if the task was deleted
+     */
+    public Response deleteTask(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tasks/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Deletes a card from the database
+     * @param id the id of the card to be deleted
+     * @return 200 - Ok if the card is deleted
+     */
+    public Response deleteCard(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
      * @param listid the id of the list to be retrieved
      * @return the card list with the specific id
      */

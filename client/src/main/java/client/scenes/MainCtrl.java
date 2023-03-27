@@ -16,6 +16,7 @@
 package client.scenes;
 
 import commons.Board;
+import commons.Card;
 import commons.Tag;
 import commons.User;
 import javafx.scene.Parent;
@@ -56,6 +57,8 @@ public class MainCtrl {
     private ChangeServerCtrl changeServerCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
+    private Scene cardDetails;
+    private CardDetailsViewCtr cardDetailsViewCtr;
     private Scene viewTags;
     private ViewTagsCtrl viewTagsCtrl;
     private Scene createTag;
@@ -87,6 +90,7 @@ public class MainCtrl {
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
+     * @param details the cardDetails scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -99,10 +103,11 @@ public class MainCtrl {
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
+                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
+                           Pair<CardDetailsViewCtr, Parent> details,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
-                           Pair<EditTagCtrl, Parent> editTag,
-                           Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink) {
+                           Pair<EditTagCtrl, Parent> editTag) {
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -139,7 +144,6 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
-
         this.viewTagsCtrl = viewTags.getKey();
         this.viewTags = new Scene(viewTags.getValue());
 
@@ -148,9 +152,10 @@ public class MainCtrl {
 
         this.editTagCtrl = editTag.getKey();
         this.editTag = new Scene(editTag.getValue());
-
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
+        this.cardDetailsViewCtr = details.getKey();
+        this.cardDetails = new Scene(details.getValue());
 
         showUserView();
         primaryStage.show();
@@ -197,6 +202,19 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
+    }
+
+    /**
+     * Shows the detailed view of cards
+     * @param card the card whose details are to be shown
+     * @param board the board to which the card belongs
+     */
+    public void showCardDetailsView(Card card, Board board) {
+        primaryStage.setTitle(card.getName());
+        primaryStage.setScene(cardDetails);
+
+        this.cardDetailsViewCtr.setCard(card);
+        this.cardDetailsViewCtr.setBoard(board);
     }
 
     /**
@@ -271,6 +289,12 @@ public class MainCtrl {
     public BoardsOverviewCtrl getOverviewCtrl() {
         return overviewCtrl;
     }
+
+    /**
+     * Getter for the CardDetailsViewCtr
+     * @return the CardDetailsViewCtr
+     */
+    public CardDetailsViewCtr getCardDetailsViewCtr() {return cardDetailsViewCtr;}
 
     /**
      * Getter for userBoardOverviewCtrl
@@ -393,7 +417,7 @@ public class MainCtrl {
     }
 
     /**
-     * @return the current cardlist id
+     * @return the current cardList id
      */
     public long getCardId() {
         return cardId;

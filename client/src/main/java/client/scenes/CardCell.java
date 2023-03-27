@@ -5,6 +5,7 @@ import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -34,7 +35,13 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label statusLabel;
+
+    @FXML
+    private Label hasDesc;
     private FXMLLoader fxmlLoader;
+    private Board board;
     private MainCtrl mainCtrl;
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
@@ -44,21 +51,37 @@ public class CardCell extends ListCell<Card> {
      * @param server the utils where the connection to the apis is
      * @param mainCtrl the controller of the whole application
      * @param cardList the cardListCell in which this card is
+     * @param board the board the card belongs to
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server
-            , CardListCell cardList) {
+            , CardListCell cardList, Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
+        this.board = board;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
+            //statusLabel.setText(this.getItem().tasksLabel());
+            statusLabel.setText("AAAA");
         }
     }
 
     /**
-     * Enable drag-and-drop upon initialization
+     * Enable drag-and-drop upon initialization and test whether the
+     * card has a description
      */
     public void initialize() {
         handleDraggable();
+        if (this.getItem()!=null && this.getItem().hasDescription()) {
+            hasDesc.setVisible(true);
+        } else {
+            hasDesc.setVisible(false);
+        }
+        statusLabel.setText(this.getItem().tasksLabel());
+        cardPane.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                mainCtrl.showCardDetailsView(this.getItem(), board);
+            }
+        });
     }
 
     /**
@@ -88,6 +111,13 @@ public class CardCell extends ListCell<Card> {
                     this.deleteButton.setOnAction(event ->{
                         var c = server.deleteCardfromList
                                 (this.getItem().getParentCardList().getId(),this.getItem().getId());
+                        if (this.getItem().getTasks() != null) {
+                            for (Task t : this.getItem().getTasks()) {
+                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+                                server.deleteTask(t.getId());
+                            }
+                        }
+                        server.deleteCard(this.getItem().getId());
                         mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {
@@ -113,7 +143,6 @@ public class CardCell extends ListCell<Card> {
             ClipboardContent content = new ClipboardContent();
             content.put(cardDataFormat, List.of(this.getItem().getId(),
                     this.getItem().getParentCardList().getId()));
-
             db.setContent(content);
             WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
             db.setDragView(snapshot);

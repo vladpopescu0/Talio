@@ -1,57 +1,35 @@
 package server.api;
 
-import commons.Board;
+import commons.Task;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
-import server.database.BoardRepository;
+import server.database.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
-public class TestBoardRepository implements BoardRepository {
+public class TestTaskRepository implements TaskRepository {
 
-    public final List<Board> boards = new ArrayList<>();
+    public final List<Task> tasks = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
+    /**
+     * Adds a method to calledMethods
+     * @param name the method
+     */
     private void call(String name) { calledMethods.add(name); }
     /**
-     * @param id the id of the user
      * @return
      */
     @Override
-    public List<Board> findByUsers_Id(long id) {
-        call("findByUsers_Id");
-        return findByUser(id);
-    }
-
-    /**
-     * @param id the id of the user
-     * @return
-     */
-    @Override
-    public boolean existsByUsers_Id(long id) {
-        call("existsByUsers_Id");
-        return findByUser(id).size() > 0;
-    }
-
-    private List<Board> findByUser(long id) {
-        return boards.stream().filter(b -> b.hasUser(id))
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public List<Board> findAll() {
+    public List<Task> findAll() {
         call("findAll");
-        return boards;
+        return tasks;
     }
 
     /**
@@ -59,7 +37,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public List<Board> findAll(Sort sort) {
+    public List<Task> findAll(Sort sort) {
         return null;
     }
 
@@ -68,7 +46,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public Page<Board> findAll(Pageable pageable) {
+    public Page<Task> findAll(Pageable pageable) {
         return null;
     }
 
@@ -77,7 +55,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public List<Board> findAllById(Iterable<Long> longs) {
+    public List<Task> findAllById(Iterable<Long> longs) {
         return null;
     }
 
@@ -95,14 +73,14 @@ public class TestBoardRepository implements BoardRepository {
     @Override
     public void deleteById(Long aLong) {
         call("deleteById");
-        boards.remove(this.getById(aLong));
+        tasks.remove(this.getById(aLong));
     }
 
     /**
      * @param entity must not be {@literal null}.
      */
     @Override
-    public void delete(Board entity) {
+    public void delete(Task entity) {
 
     }
 
@@ -118,7 +96,7 @@ public class TestBoardRepository implements BoardRepository {
      * @param entities must not be {@literal null}. Must not contain {@literal null} elements.
      */
     @Override
-    public void deleteAll(Iterable<? extends Board> entities) {
+    public void deleteAll(Iterable<? extends Task> entities) {
 
     }
 
@@ -136,17 +114,17 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> S save(S entity) {
+    public <S extends Task> S save(S entity) {
         call("save");
-        Optional<Board> opt = find(entity.getId());
+        Optional<Task> opt = find(entity.getId());
         if (opt.isEmpty()) {
-            entity.setId((long) boards.size());
-            boards.add(entity);
+            entity.setId((long) tasks.size());
+            tasks.add(entity);
         } else {
-            int ind = boards.indexOf(opt.get());
-            boards.remove(opt.get());
-            entity.setId((long) ind);
-            boards.add(ind, entity);
+            int ind = tasks.indexOf(opt.get());
+            tasks.remove(opt.get());
+            entity.setId(ind);
+            tasks.add(ind, entity);
         }
         return entity;
     }
@@ -157,7 +135,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> List<S> saveAll(Iterable<S> entities) {
+    public <S extends Task> List<S> saveAll(Iterable<S> entities) {
         return null;
     }
 
@@ -166,14 +144,9 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public Optional<Board> findById(Long aLong) {
+    public Optional<Task> findById(Long aLong) {
         call("findById");
         return find(aLong);
-    }
-
-    private Optional<Board> find(Long id) {
-        return boards.stream()
-            .filter(b -> b.getId() == id).findFirst();
     }
 
     /**
@@ -200,7 +173,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> S saveAndFlush(S entity) {
+    public <S extends Task> S saveAndFlush(S entity) {
         return null;
     }
 
@@ -210,7 +183,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> List<S> saveAllAndFlush(Iterable<S> entities) {
+    public <S extends Task> List<S> saveAllAndFlush(Iterable<S> entities) {
         return null;
     }
 
@@ -218,7 +191,7 @@ public class TestBoardRepository implements BoardRepository {
      * @param entities entities to be deleted. Must not be {@literal null}.
      */
     @Override
-    public void deleteAllInBatch(Iterable<Board> entities) {
+    public void deleteAllInBatch(Iterable<Task> entities) {
 
     }
 
@@ -243,7 +216,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public Board getOne(Long aLong) {
+    public Task getOne(Long aLong) {
         return null;
     }
 
@@ -252,10 +225,21 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public Board getById(Long aLong) {
+    public Task getById(Long aLong) {
         call("getById");
         return find(aLong).get();
     }
+
+    /**
+     * finds a task
+     * @param id the id
+     * @return  Optional containing the task
+     */
+    private Optional<Task> find(Long id) {
+        return tasks.stream()
+                .filter(t -> t.getId() == id).findFirst();
+    }
+
 
     /**
      * @param example must not be {@literal null}.
@@ -263,7 +247,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> Optional<S> findOne(Example<S> example) {
+    public <S extends Task> Optional<S> findOne(Example<S> example) {
         return Optional.empty();
     }
 
@@ -273,7 +257,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> List<S> findAll(Example<S> example) {
+    public <S extends Task> List<S> findAll(Example<S> example) {
         return null;
     }
 
@@ -285,7 +269,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> List<S> findAll(Example<S> example, Sort sort) {
+    public <S extends Task> List<S> findAll(Example<S> example, Sort sort) {
         return null;
     }
 
@@ -296,7 +280,7 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> Page<S> findAll(Example<S> example, Pageable pageable) {
+    public <S extends Task> Page<S> findAll(Example<S> example, Pageable pageable) {
         return null;
     }
 
@@ -306,18 +290,18 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board> long count(Example<S> example) {
+    public <S extends Task> long count(Example<S> example) {
         return 0;
     }
 
     /**
      * @param example the {@link Example} to use for the existence check.
-     *                Must not be {@literal null}.
+     *               Must not be {@literal null}.
      * @param <S>
      * @return
      */
     @Override
-    public <S extends Board> boolean exists(Example<S> example) {
+    public <S extends Task> boolean exists(Example<S> example) {
         return false;
     }
 
@@ -330,10 +314,10 @@ public class TestBoardRepository implements BoardRepository {
      * @return
      */
     @Override
-    public <S extends Board, R> R findBy(Example<S> example,
-                                         Function<FluentQuery
-                                                 .FetchableFluentQuery<S>, R>
-                                                 queryFunction) {
+    public <S extends Task, R> R findBy(Example<S> example,
+                                        Function<FluentQuery.
+                                                FetchableFluentQuery<S>, R>
+                                                queryFunction) {
         return null;
     }
 }

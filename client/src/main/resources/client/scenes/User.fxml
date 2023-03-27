@@ -19,7 +19,7 @@
             <Label fx:id="notFoundWarning" layoutX="98.0" layoutY="258.0" text="It seems like there is no user with this username. Please create a new user" visible="false" />
             <Label fx:id="alreadyUsedWarning" layoutX="102.0" layoutY="291.0" text="It seems like your username is already used. Please enter a different one" visible="false" />
             <Label fx:id="emptyUsernameWarning" layoutX="79.0" layoutY="222.0" text="Please enter a valid username" textFill="WHITE" />
-            <ImageView fitHeight="382.0" fitWidth="390.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="382.0" fitWidth="390.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" >
                <image>
                   <Image url="@../../images/log-in-image.png" />
                </image>

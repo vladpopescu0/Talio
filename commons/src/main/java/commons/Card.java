@@ -7,6 +7,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -21,6 +23,11 @@ public class Card {
     @Transient
     @JsonIgnore
     private CardList parentCardList;
+
+    private String description;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Task> tasks;
 
     /**
      * Empty constructor
@@ -45,6 +52,22 @@ public class Card {
     public Card(String name, CardList cardList) {
         this.name = name;
         parentCardList = cardList;
+        tasks = new ArrayList<>();
+    }
+
+    /**
+     * Constructor for cards also including tasks and descriptions
+     * @param name the name of the card
+     * @param cardList the cardList to which the card belongs
+     * @param tasks the tasks making up the card
+     * @param description the description of the card
+     */
+    public Card(String name, CardList cardList, List<Task> tasks,
+                String description) {
+        this.name = name;
+        this.tasks = tasks;
+        parentCardList = cardList;
+        this.description = description;
     }
 
     /**
@@ -91,6 +114,74 @@ public class Card {
      */
     public CardList getParentCardList() {
         return parentCardList;
+    }
+
+    /**
+     * Getter for the description
+     * @return the description of the card
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Setter for the description
+     * @param description the new description of the card
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * Checks if a given card has a description
+     * @return true if the card has a description, false otherwise
+     */
+    public boolean hasDescription() {
+        return !(this.description == null) && !this.description.isEmpty();
+    }
+
+    /**
+     * getter for the tasks
+     * @return the tasks of this card
+     */
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    /**
+     * Adds a new task to the card
+     * @param task the new task to be added
+     */
+    public void addTask(Task task) {
+        if (tasks == null) {
+            tasks = new ArrayList<>();
+        }
+        tasks.add(task);
+    }
+
+    /**
+     * Generates the label that shows the progress of the tasks
+     * @return (completed/total tasks done)
+     */
+    public String tasksLabel() {
+        if (this  == null || tasks == null || tasks.isEmpty()) {
+            return "";
+        } else {
+            int done = 0;
+            for (Task t: tasks) {
+                if (t.getStatus())
+                    done++;
+            }
+            return "(" + done + "/" +tasks.size() + " done)";
+        }
+    }
+
+    /**
+     * Setter for the "tasks" field
+     * @param tasks the new list of cards to replace the old one
+     */
+    public void setTasks(List<Task> tasks){
+        this.tasks = tasks;
     }
 
     /**

@@ -99,7 +99,7 @@ public class BoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
         titledPane.setText(board.getName());
     }
 
@@ -166,7 +166,7 @@ public class BoardViewCtrl implements Initializable {
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl ->
-                new CardListCell(mainCtrl, server)
+                new CardListCell(mainCtrl, server, board)
         );
     }
 
