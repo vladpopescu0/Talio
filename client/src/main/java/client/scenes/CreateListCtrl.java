@@ -15,7 +15,6 @@ public class CreateListCtrl {
     private final MainCtrl mainCtrl;
     private ServerUtils server;
 
-
     private Board board;
 
     @FXML

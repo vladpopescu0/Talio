@@ -74,6 +74,8 @@ public class Main extends Application {
 
         var editBoardName = FXML.load(EditBoardNameViewCtrl.class,
                 "client", "scenes", "EditBoardTitleView.fxml");
+        var customizationPage = FXML.load(CustomizationPageCtrl.class,
+                "client", "scenes", "CustomizationPage.fxml");
 
         var viewTags = FXML.load(ViewTagsCtrl.class,
                 "client", "scenes", "ViewTags.fxml");
@@ -94,7 +96,8 @@ public class Main extends Application {
         secondaryStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName,joinBoardByLink,
+                changeServer, userBoardOverview, editBoardName,
+                joinBoardByLink,customizationPage,
                 details, viewTags, createTag, editTag);
     }
 }

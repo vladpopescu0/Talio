@@ -21,7 +21,9 @@ import commons.Tag;
 import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.DataFormat;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -57,6 +59,9 @@ public class MainCtrl {
     private ChangeServerCtrl changeServerCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
+    private CustomizationPageCtrl customizationPageCtrl;
+
+    private Scene customizationPage;
     private Scene cardDetails;
     private CardDetailsViewCtr cardDetailsViewCtr;
     private Scene viewTags;
@@ -90,6 +95,7 @@ public class MainCtrl {
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
+     * @param customizationPage the CustomizationPage scene
      * @param details the cardDetails scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
@@ -104,6 +110,7 @@ public class MainCtrl {
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
+                           Pair<CustomizationPageCtrl, Parent> customizationPage,
                            Pair<CardDetailsViewCtr, Parent> details,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
@@ -146,6 +153,9 @@ public class MainCtrl {
         this.editBoardName = new Scene(editBoardName.getValue());
         this.viewTagsCtrl = viewTags.getKey();
         this.viewTags = new Scene(viewTags.getValue());
+
+        this.customizationPageCtrl = customizationPage.getKey();
+        this.customizationPage = new Scene(customizationPage.getValue());
 
         this.createTagCtrl = createTag.getKey();
         this.createTag = new Scene(createTag.getValue());
@@ -202,6 +212,7 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
+
     }
 
     /**
@@ -330,16 +341,25 @@ public class MainCtrl {
         primaryStage.setScene(user);
     }
 
+    /**
+     * Shows the customization page
+     * @param board the board to be customized
+     */
+    public void showCustomizationPage(Board board) {
+        primaryStage.setTitle("Customize Your Board");
+
+        this.customizationPageCtrl.setBoard(board);
+        primaryStage.setScene(customizationPage);
+    }
+
     /** Shows the ChangeListName scene
      * @param id id of the current cardList
      */
     public void showChangeListName(Long id) {
-//        primaryStage.setTitle(list.getName());
         Board board = getBoardViewCtrl().getBoard();
         primaryStage.setScene(changeListName);
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
-//        this.boardViewCtrl.refresh();
     }
 
     /**
@@ -430,6 +450,37 @@ public class MainCtrl {
         this.cardId = cardId;
     }
 
+    /**
+<<<<<<< HEAD
+     * @param color the color the needs to be transformed to hex format
+     * @return a hex format of the color
+     */
+    public String colorToHex(Color color){
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
+
+    /**
+     * @return the controller of the customization page
+     */
+    public CustomizationPageCtrl getCustomizationPageCtrl() {
+        return customizationPageCtrl;
+    }
+
+    /** Sets the style for a button
+     * @param button the button for which the style is set
+     * @param bgColor the bg color of the button
+     * @param fontColor the cont color of the button
+     */
+    public void setButtonStyle(Button button, String bgColor, String fontColor) {
+        String style = "-fx-background-color: " + bgColor + "; "
+                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
+                + "-fx-background-radius: 5px;" +
+                "-fx-text-fill:" + fontColor + ";";
+        button.setStyle(style);
+    }
     /**
      * Closes the secondary stage if it's visible
      */

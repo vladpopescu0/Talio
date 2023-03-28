@@ -505,6 +505,19 @@ public class ServerUtils {
                 .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
 
+    /**
+     * Updates the details of a card
+     * @param colorPair the card to be updated
+     * @return the card
+     */
+    public ColorPair updateColorPair(ColorPair colorPair) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/updateColorPair/" + colorPair.getId()) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(colorPair, APPLICATION_JSON), ColorPair.class);
+    }
+
     /*/**
      * Returns the CardList which is the parent of the Card of given ID
      * @param id ID of the Card the parent of which is to be looked for
