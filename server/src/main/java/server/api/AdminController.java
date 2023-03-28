@@ -62,8 +62,8 @@ public class AdminController {
                                                @PathVariable("bid") long bid){
 
         if (pass.hashCode() != passHash) return ResponseEntity.badRequest().build();
+        if (!boardRepo.existsById(bid)) return ResponseEntity.ok(false);
         Board b = boardRepo.getById(bid);
-        if (b == null) return ResponseEntity.ok(false);
         for (CardList c : b.getList()){
             cardListRepo.deleteById(c.getId());
         }
@@ -73,12 +73,14 @@ public class AdminController {
 
     /**
      * Creates a random password and sets the passHash variable to the hash of the password
+     * @return The generated password (for testing purposes)
      */
     @EventListener(ApplicationReadyEvent.class)
-    public void startup(){
+    public String startup(){
         String password = generateRandomPassword(12);
         passHash = password.hashCode();
         System.out.println(password);
+        return password;
     }
 
     /**
