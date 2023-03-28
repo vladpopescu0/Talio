@@ -3,17 +3,35 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.ColorPair;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 
-public class CustomizationPageCtrl {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class CustomizationPageCtrl implements Initializable {
 
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
 
     private Board board;
+
+    @FXML
+    private Button addPreset;
+
+    private ObservableList<ColorPair> colorPairObservableList;
+    @FXML
+    private ListView<ColorPair> colorPairList;
 
     @FXML
     private ColorPicker boardFont;
@@ -59,11 +77,37 @@ public class CustomizationPageCtrl {
         this.server = server;
     }
 
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        List<ColorPair> colors = (board == null || board.getColors() == null ?
+                new ArrayList<>() : board.getColors());
+        colorPairObservableList = FXCollections.observableList(colors);
+        colorPairList.setItems(colorPairObservableList);
+        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+    }
+
     /** Sets the board to be customized
      * @param board the board that is going to be customized
      */
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    /**
+     * Updates the tasks and description
+     */
+    public void refresh() {
+        List<ColorPair> colors = (board == null || board.getColors() == null ?
+                new ArrayList<>() : board.getColors());
+        colorPairObservableList = FXCollections.observableList(colors);
+        colorPairList.setItems(colorPairObservableList);
+        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
     }
 
     /**
@@ -73,6 +117,9 @@ public class CustomizationPageCtrl {
         this.board.setColorLighter(mainCtrl.colorToHex(boardBG.getValue().brighter()));
         this.board.setColorBGlight(mainCtrl.colorToHex(boardBG.getValue()));
         this.board.setColorBGdark(mainCtrl.colorToHex(boardBG.getValue().darker()));
+
+        this.board.setCardsBGColor(board.getCardsBGColor());
+        this.board.setCardsFontColor(board.getCardsFontColor());
         boardBG.setValue(boardBG.getValue());
         this.board.setColorFont(mainCtrl.colorToHex(boardFont.getValue()));
         boardFont.setValue(boardFont.getValue());
@@ -172,40 +219,59 @@ public class CustomizationPageCtrl {
         this.board = server.addBoard(board);
     }
 
+//    /**
+//     * @return the first preset for the card's background
+//     */
+//    public ColorPicker getPres1BG() {
+//        return this.pres1BG;
+//    }
+//    /**
+//     * @return the first preset for the card's font
+//     */
+//    public ColorPicker getPres1Font() {
+//        return this.pres1Font;
+//    }
+//    /**
+//     * @return the second preset for the card's background
+//     */
+//    public ColorPicker getPres2BG() {
+//        return pres2BG;
+//    }
+//    /**
+//     * @return the second preset for the card's font
+//     */
+//    public ColorPicker getPres2Font() {
+//        return pres2Font;
+//    }
+//    /**
+//     * @return the third preset for the card's background
+//     */
+//    public ColorPicker getPres3BG() {
+//        return pres3BG;
+//    }
+//    /**
+//     * @return the third preset for the card's font
+//     */
+//    public ColorPicker getPres3Font() {
+//        return pres3Font;
+//    }
+
     /**
-     * @return the first preset for the card's background
+     * @return the current board
      */
-    public ColorPicker getPres1BG() {
-        return this.pres1BG;
+    public Board getBoard() {
+        return board;
     }
+
     /**
-     * @return the first preset for the card's font
+     * Adds a new preset to the board
      */
-    public ColorPicker getPres1Font() {
-        return this.pres1Font;
-    }
-    /**
-     * @return the second preset for the card's background
-     */
-    public ColorPicker getPres2BG() {
-        return pres2BG;
-    }
-    /**
-     * @return the second preset for the card's font
-     */
-    public ColorPicker getPres2Font() {
-        return pres2Font;
-    }
-    /**
-     * @return the third preset for the card's background
-     */
-    public ColorPicker getPres3BG() {
-        return pres3BG;
-    }
-    /**
-     * @return the third preset for the card's font
-     */
-    public ColorPicker getPres3Font() {
-        return pres3Font;
+    public void addPreset(){
+        board.getColors().add(new ColorPair("#ffffff","#808080"));
+
+        server.addBoard(board);
+
+        refresh();
+        this.mainCtrl.showCustomizationPage(board);
     }
 }

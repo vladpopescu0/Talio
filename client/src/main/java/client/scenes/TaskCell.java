@@ -51,7 +51,6 @@ public class TaskCell extends ListCell<Task> {
      * Initialize the task cell
      */
     public void initialize() {
-        System.out.println(this.getItem()+"ID found");
         try{
             if (this.getItem() != null) {
                 taskTitle.setText(this.getItem().getTitle());

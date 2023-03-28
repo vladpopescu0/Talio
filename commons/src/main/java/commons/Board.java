@@ -53,6 +53,10 @@ public class Board {
     private String cardsBGColor;
     private String cardsFontColor;
 
+    @OneToMany(targetEntity =  ColorPair.class,fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<ColorPair> colors;
     @ElementCollection
     private List<String> presetsBGColor;
     @ElementCollection
@@ -88,6 +92,8 @@ public class Board {
         }
         this.cardsFontColor = "#808080";
         this.cardsBGColor = "ffffff";
+        this.colors = new ArrayList<>();
+        this.colors.add(new ColorPair("#ffffff","#808080"));
     }
 
     /**
@@ -120,6 +126,8 @@ public class Board {
         this.cardsFontColor = "#808080";
         this.cardsBGColor = "ffffff";
         this.tags = new ArrayList<>();
+        this.colors = new ArrayList<>();
+        this.colors.add(new ColorPair("#ffffff","#808080"));
     }
 
     /**
@@ -261,7 +269,6 @@ public class Board {
     }
 
     /**
-<<<<<<< HEAD
      * Sets the lighter shade of the board color
      *
      * @param colorBGlight the lighter shade of the board color
@@ -415,5 +422,12 @@ public class Board {
      */
     public List<String> getPresetsBGColor() {
         return this.presetsBGColor;
+    }
+
+    /**
+     * @return all the color pairs in the board
+     */
+    public List<ColorPair> getColors() {
+        return colors;
     }
 }

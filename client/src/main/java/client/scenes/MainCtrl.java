@@ -347,8 +347,9 @@ public class MainCtrl {
      */
     public void showCustomizationPage(Board board) {
         primaryStage.setTitle("Customize Your Board");
-        primaryStage.setScene(customizationPage);
+
         this.customizationPageCtrl.setBoard(board);
+        primaryStage.setScene(customizationPage);
     }
 
     /** Shows the ChangeListName scene

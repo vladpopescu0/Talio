@@ -1,10 +1,12 @@
 package server.api;
 
 import commons.Board;
+import commons.ColorPair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
+import server.database.ColorPairRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +17,20 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
+    private final ColorPairRepository colorPairRepository;
     private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      * @param msgs the messages template
+     * @param colorPairRepository the colorpair repository
      */
-    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
+    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs,
+                           ColorPairRepository colorPairRepository) {
         this.repo = repo;
         this.msgs = msgs;
+        this.colorPairRepository = colorPairRepository;
     }
 
     /**
@@ -154,5 +160,22 @@ public class BoardController {
         repo.save(board);
         msgs.convertAndSend("/topic/boardsUpdate", board);
         return ResponseEntity.ok(board);
+    }
+
+    /**
+     * Updates a board
+     * @param id the id of the board to be updated
+     * @param colorPair the new version of the board
+     * @return a response entity containing the updated board, if the update is possible
+     */
+    @PutMapping("/updateColorPair/{id}")
+    public ResponseEntity<ColorPair> updateColorPair(@PathVariable("id") long id,
+                                             @RequestBody ColorPair colorPair) {
+        if (!colorPairRepository.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        colorPairRepository.save(colorPair);
+//      msgs.convertAndSend("/topic/boardsUpdate", board);
+        return ResponseEntity.ok(colorPair);
     }
 }

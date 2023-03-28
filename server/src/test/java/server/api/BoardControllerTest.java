@@ -29,7 +29,7 @@ public class BoardControllerTest {
         channel = (message, timeout) -> true;
         msg = new SimpMessagingTemplate(channel);
         repo = new TestBoardRepository();
-        sut = new BoardController(repo, msg);
+        sut = new BoardController(repo, msg,null);
     }
 
     /**
