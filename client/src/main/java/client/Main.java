@@ -20,7 +20,6 @@ import static com.google.inject.Guice.createInjector;
 import client.scenes.*;
 import com.google.inject.Injector;
 
-import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
 import client.scenes.CreateBoardViewCtrl;
 import client.scenes.MainCtrl;
@@ -79,10 +78,26 @@ public class Main extends Application {
         var adminCheck = FXML.load(AdminCheckCtrl.class,
                 "client", "scenes", "AdminCheck.fxml");
 
+        var viewTags = FXML.load(ViewTagsCtrl.class,
+                "client", "scenes", "ViewTags.fxml");
+
+        var createTag = FXML.load(CreateTagCtrl.class,
+                "client", "scenes", "CreateTag.fxml");
+
+        var editTag = FXML.load(EditTagCtrl.class,
+                "client", "scenes", "EditTag.fxml");
+
+        var joinBoardByLink = FXML.load(JoinBoardByLinkCtrl.class,
+                "client","scenes","JoinBoardByLink.fxml");
+        var details = FXML.load(CardDetailsViewCtr.class, "client",
+                "scenes", "CardDetailsView.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
-        mainCtrl.initialize(primaryStage, overview, boardView, createList,
+        Stage secondaryStage = new Stage();
+        secondaryStage.setResizable(false);
+        mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName, adminCheck);
+                changeServer, userBoardOverview, editBoardName, adminCheck,
+                joinBoardByLink, details, viewTags, createTag, editTag);
     }
 }

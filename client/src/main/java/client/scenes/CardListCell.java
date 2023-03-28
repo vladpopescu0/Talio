@@ -5,6 +5,7 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
+import jakarta.ws.rs.BadRequestException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,17 +16,13 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.input.TransferMode;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static client.scenes.MainCtrl.cardDataFormat;
-import static client.utils.ServerUtils.packCardList;
 
 public class CardListCell extends ListCell<CardList> {
 
     private final MainCtrl mainCtrl;
-
     @FXML
     private Button editListButton;
 
@@ -45,16 +42,19 @@ public class CardListCell extends ListCell<CardList> {
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
+    private Board board;
+
     /**
      * useful dependencies for universal variables and server communication
-     *
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
+     * @param board the board to which the cardList belongs
      */
     @Inject
-    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.board = board;
     }
 
     /**
@@ -88,13 +88,11 @@ public class CardListCell extends ListCell<CardList> {
                     fxmlLoader.load();
                     editListButton.setOnAction(event -> {
                         rename(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshRename();
                     });
                     deleteList.setOnAction(event -> {
                         delete(cardList.getId());
-                        mainCtrl.getBoardViewCtrl().refreshDelete(cardList);
-
                     });
+
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
@@ -106,11 +104,21 @@ public class CardListCell extends ListCell<CardList> {
 
             titledPane.setText(cardList.getName());
 
+            long id = this.getItem().getId();
+
+            CardList cl = null;
+            try {
+                cl = server.getCL(id);
+            } catch (BadRequestException br) {
+                br.printStackTrace();
+            }
+
             refresh();
             setText(null);
             setGraphic(titledPane);
         }
     }
+
     /**
      * refresh method for an individual list of cards
      * on the client
@@ -119,9 +127,8 @@ public class CardListCell extends ListCell<CardList> {
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this));
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this, board));
     }
-
 
     /** Helper method for renaming a cardlist
      * @param id the id of the cardList whose name will be modified
@@ -145,19 +152,6 @@ public class CardListCell extends ListCell<CardList> {
      * and yield false for equals method
      */
     public void handleDraggable() {
-        //CardList drag-and-drop is currently disabled
-        /*this.setOnDragDetected(event -> {
-            Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.put(cardListDataFormat, this.getItem());
-
-            db.setContent(content);
-            WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
-            db.setDragView(snapshot);
-
-            event.consume();
-        });*/
-
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
 
@@ -166,24 +160,15 @@ public class CardListCell extends ListCell<CardList> {
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                Card origin = (Card) event.getDragboard().getContent(cardDataFormat);
+                //We can opt for passing just a Card ID and retrieve
+                // both the Card and CardList later
+                @SuppressWarnings("unchecked")
+                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
 
-                if (!Objects.equals(origin.getParentCardList().getId(), this.getItem().getId())) {
-                    dragCardToCardList(origin);
-                }/* else {
-                    System.out.println("Drag of Card: " + origin.getName()
-                            + " into the same CardList: " + this.getItem().getName());
-                }*/
-            }
-            //CardList drag-and-drop is currently disabled
-            /*if (event.getDragboard().hasContent(cardListDataFormat)) {
-                CardList origin = (CardList) event.getDragboard().getContent(cardListDataFormat);
-
-                if (!Objects.equals(origin.getId(), this.getItem().getId())) {
-                    System.out.println("Drag of CardList: " + origin.getName()
-                            + " to CardList: " + this.getItem().getName());
+                if (!Objects.equals(ids.get(1), this.getItem().getId())) {
+                    dragCardToCardList(ids);
                 }
-            }*/
+            }
 
             event.setDropCompleted(true);
 
@@ -193,20 +178,11 @@ public class CardListCell extends ListCell<CardList> {
 
     /**
      * Handles drag-and-drop gesture from Card to CardList
-     * @param origin the Card that the gesture origins from
+     * @param ids the Card that the gesture origins from
      */
-    public void dragCardToCardList(Card origin) {
-        Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(server.getCL(
-                origin.getParentCardList().getId()));
-        int newParentIndex = board.getList().indexOf(server.getCL(
-                this.getItem().getId()));
-        CardList oldParent = origin.getParentCardList();
-        packCardList(oldParent);
-        packCardList(this.getItem());
-        server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
-        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
-        board.getList().set(newParentIndex, server.getCL(this.getItem().getId()));
+    public void dragCardToCardList(List<Long> ids) {
+        CardList oldParent = server.getCL(ids.get(1));
+        server.updateParent(ids.get(0), List.of(oldParent, this.getItem()));
         mainCtrl.getBoardViewCtrl().refresh();
     }
 }

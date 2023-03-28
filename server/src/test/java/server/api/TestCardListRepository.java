@@ -22,7 +22,7 @@ public class TestCardListRepository implements CardListRepository {
      * Calls a method
      * @param name the name of the method
      */
-    public void call(String name) { calledMethods.add(name); }
+    private void call(String name) { calledMethods.add(name); }
 
     /**
      * @return all the cardLists

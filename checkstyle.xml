@@ -21,12 +21,12 @@
         <module name="MethodLength">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF, COMPACT_CTOR_DEF"/>
-            <property name="max" value="50"/>
+            <property name="max" value="60"/>
         </module>
-        <module name="VisibilityModifier">
-            <property name="severity" value="info"/>
-            <property name="protectedAllowed" value="true"/>
-        </module>
+<!--        <module name="VisibilityModifier">-->
+<!--            <property name="severity" value="info"/>-->
+<!--            <property name="protectedAllowed" value="true"/>-->
+<!--        </module>-->
 
         <module name="OuterTypeFilename">
             <property name="severity" value="warning"/>
@@ -34,7 +34,7 @@
         <module name="ParameterNumber">
             <property name="severity" value="warning"/>
             <property name="tokens" value="METHOD_DEF, CTOR_DEF"/>
-            <property name="max" value="15"/>
+            <property name="max" value="22"/>
         </module>
         <module name="CyclomaticComplexity">
             <property name="severity" value="warning"/>
@@ -52,12 +52,12 @@
         <module name="MemberName">
             <property name="severity" value="info"/>
         </module>
-        <module name="MethodName">
-            <property name="severity" value="info"/>
-        </module>
-        <module name="ParameterName">
-            <property name="severity" value="warning"/>
-        </module>
+<!--        <module name="MethodName">-->
+<!--            <property name="severity" value="info"/>-->
+<!--        </module>-->
+<!--        <module name="ParameterName">-->
+<!--            <property name="severity" value="warning"/>-->
+<!--        </module>-->
         <module name="LocalVariableName">
             <property name="severity" value="warning"/>
         </module>

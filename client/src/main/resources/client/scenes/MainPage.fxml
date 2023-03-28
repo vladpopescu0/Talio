@@ -1,31 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="424.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardsOverviewCtrl">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="424.0" prefWidth="600.0" style="-fx-background-color: #2C3E50;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardsOverviewCtrl">
     <children>
-        <Button fx:id="addBoard" layoutX="429.0" layoutY="199.0" mnemonicParsing="false" onAction="#createBoard" text="Add Board" />
-        <Button fx:id="refresh" layoutX="435.0" layoutY="161.0" mnemonicParsing="false" onAction="#refresh" text="Refresh" />
-        <Button layoutX="463.0" layoutY="384.0" mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="105.0" text="Change Server" />
-        <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="285.0" prefWidth="400.0">
+        <Button fx:id="addBoard" layoutX="334.0" layoutY="112.0" mnemonicParsing="false" onAction="#createBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="Add Board" AnchorPane.topAnchor="112.0" />
+        <Button layoutX="481.0" layoutY="384.0" mnemonicParsing="false" onAction="#changeServer" prefHeight="26.0" prefWidth="105.0" style="-fx-background-color: #3498DB;" text="Change Server" />
+        <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="285.0" prefWidth="314.0">
             <columns>
-                <TableColumn fx:id="colBoardName" editable="false" prefWidth="200.0" text="Board Name" />
-                <TableColumn fx:id="colCreator" editable="false" prefWidth="200.0" text="Users" />
+                <TableColumn fx:id="colBoardName" editable="false" prefWidth="156.0" text="Board Name" />
+                <TableColumn fx:id="colCreator" editable="false" prefWidth="156.0" text="Users" />
             </columns>
         </TableView>
-        <Label fx:id="pageTitle" layoutX="73.0" layoutY="14.0" prefHeight="60.0" prefWidth="495.0" text="Welcome to Talio" textAlignment="CENTER">
+        <Label fx:id="pageTitle" layoutX="40.0" layoutY="14.0" prefHeight="60.0" prefWidth="263.0" text="Welcome to Talio" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font size="36.0" />
             </font>
         </Label>
-        <Button fx:id="joinBoard" layoutX="428.0" layoutY="233.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="75.0" text="Join board" />
-        <Label fx:id="serverLabel" layoutX="422.0" layoutY="99.0" prefHeight="26.0" prefWidth="147.0" />
-        <Label layoutX="422.0" layoutY="83.0" text="Current Server:" />
-        <Button fx:id="myBoardsButton" layoutX="430.0" layoutY="298.0" mnemonicParsing="false" onAction="#userBoards" text="My Boards" />
-      <Button layoutX="428.0" layoutY="266.0" mnemonicParsing="false" onAction="#showBoard" text="View Board" />
       <Button fx:id="deleteButton" layoutX="424.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteBoard" text="Delete Board" />
       <Button fx:id="adminButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#checkAdmin" text="Admin Login" />
+
+        <Button fx:id="joinBoard" layoutX="334.0" layoutY="262.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join board" AnchorPane.topAnchor="262.0" />
+        <Label fx:id="serverLabel" layoutX="439.0" layoutY="31.0" prefHeight="26.0" prefWidth="147.0" textFill="WHITE" />
+        <Label layoutX="472.0" layoutY="14.0" text="Current Server:" textFill="WHITE" />
+        <Button fx:id="myBoardsButton" layoutX="334.0" layoutY="156.0" mnemonicParsing="false" onAction="#userBoards" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="My Boards" AnchorPane.topAnchor="162.0" />
+      <Button layoutX="334.0" layoutY="226.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="View Board" AnchorPane.topAnchor="212.0" />
+      <Button fx:id="joinByCode" layoutX="436.0" layoutY="262.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join by Code" textAlignment="CENTER" AnchorPane.topAnchor="262.0" />
     </children>
 </AnchorPane>

@@ -18,7 +18,7 @@ public class TestUserRepository implements UserRepository {
     public final List<User> users = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
-    public void call(String name) { calledMethods.add(name); }
+    private void call(String name) { calledMethods.add(name); }
     /**
      * @param username the name in search
      * @return

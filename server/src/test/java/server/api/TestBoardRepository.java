@@ -19,7 +19,7 @@ public class TestBoardRepository implements BoardRepository {
     public final List<Board> boards = new ArrayList<>();
     public final List<String> calledMethods = new ArrayList<>();
 
-    public void call(String name) { calledMethods.add(name); }
+    private void call(String name) { calledMethods.add(name); }
     /**
      * @param id the id of the user
      * @return

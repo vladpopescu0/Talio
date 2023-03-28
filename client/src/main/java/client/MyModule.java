@@ -16,8 +16,6 @@
 package client;
 
 import client.scenes.*;
-import client.scenes.*;
-import client.scenes.BoardViewCtrl;
 import client.scenes.BoardsOverviewCtrl;
 import client.scenes.CreateBoardViewCtrl;
 import com.google.inject.Binder;
@@ -43,5 +41,8 @@ public class MyModule implements Module {
         binder.bind(UserCtrl.class).in(Scopes.SINGLETON);
         binder.bind(ChangeNameCtrl.class).in(Scopes.SINGLETON);
         binder.bind(EditBoardNameViewCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(EditCardCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(JoinBoardByLinkCtrl.class).in(Scopes.SINGLETON);
+        binder.bind(CardDetailsViewCtr.class).in(Scopes.SINGLETON);
     }
 }
