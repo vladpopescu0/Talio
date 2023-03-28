@@ -19,8 +19,6 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import client.utils.SocketHandler;
@@ -289,7 +287,8 @@ public class BoardViewCtrl implements Initializable {
 
         String style = "-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";";
-        String darkerStyle = "-fx-background-color: " + board.getColorScheme().getColorBGdark() + ";" +
+        String darkerStyle = "-fx-background-color: "
+                + board.getColorScheme().getColorBGdark() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGdark() + ";";
 
         mainCtrl.setButtonStyle(editTitle, board.getColorScheme().getColorLighter()

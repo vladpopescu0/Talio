@@ -55,6 +55,7 @@ public class CardCell extends ListCell<Card> {
      * @param mainCtrl the controller of the whole application
      * @param cardList the cardListCell in which this card is
      * @param board the board the card belongs to
+     * @param colorScheme the colorscheme of this card
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server
             , CardListCell cardList, Board board,ColorScheme colorScheme) {
@@ -128,7 +129,8 @@ public class CardCell extends ListCell<Card> {
             setGraphic(cardPane);
             cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             paneLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
-            String lighter = mainCtrl.colorToHex(Color.valueOf(colorSchemeCustom.getColorBGdark()).brighter());
+            String lighter = mainCtrl.colorToHex(Color
+                    .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
             mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
             mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
         }
@@ -226,6 +228,11 @@ public class CardCell extends ListCell<Card> {
 
         dragCardToIdentical(origin);
     }
+
+    /**
+     * getter for the colorscheme if this cell
+     * @return the colorscheme of this card cell, can be customized by the user
+     */
     public ColorScheme getColorSchemeCustom() {
         return this.colorSchemeCustom;
     }

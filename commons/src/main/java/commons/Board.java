@@ -48,10 +48,18 @@ public class Board {
 
     private ColorScheme cardsColorScheme = new ColorScheme();
 
+    /**
+     * getter for the lists color scheme
+     * @return the listsColorScheme
+     */
     public ColorScheme getListsColorScheme() {
         return listsColorScheme;
     }
 
+    /**
+     * setter for
+     * @param listsColorScheme
+     */
     public void setListsColorScheme(ColorScheme listsColorScheme) {
         this.listsColorScheme = listsColorScheme;
     }
@@ -234,20 +242,18 @@ public class Board {
 
     /**
      * Adds a CardList to the board(used for drag and drop feature)
-     *
      * @param cardList the card to be added
      */
-    @SuppressWarnings("unused")
     public void addList(CardList cardList) {
         list.add(cardList);
     }
 
+    /**
+     * getter for the main colorScheme
+     * @return the colorScheme of the board
+     */
     public ColorScheme getColorScheme() {
         return colorScheme;
-    }
-
-    public void setColorScheme(ColorScheme colorScheme) {
-        this.colorScheme = colorScheme;
     }
 
     /**
@@ -302,10 +308,19 @@ public class Board {
     public List<String> getPresetsBGColor() {
         return this.presetsBGColor;
     }
+
+    /**
+     * getter for the color scheme of the board's cards
+     * @return the cardsColorScheme
+     */
     public ColorScheme getCardsColorScheme() {
         return cardsColorScheme;
     }
 
+    /**
+     *
+     * @param cardsColorScheme
+     */
     public void setCardsColorScheme(ColorScheme cardsColorScheme) {
         this.cardsColorScheme = cardsColorScheme;
     }

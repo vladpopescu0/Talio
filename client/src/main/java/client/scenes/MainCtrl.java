@@ -99,7 +99,8 @@ public class MainCtrl {
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
-                           Pair<CardDetailsViewCtr, Parent> details,Pair<CustomizationPageCtrl, Parent> customizationPage) {
+                           Pair<CardDetailsViewCtr, Parent> details,
+                           Pair<CustomizationPageCtrl, Parent> customizationPage) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
