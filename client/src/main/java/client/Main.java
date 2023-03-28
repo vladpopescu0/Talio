@@ -77,6 +77,15 @@ public class Main extends Application {
         var customizationPage = FXML.load(CustomizationPageCtrl.class,
                 "client", "scenes", "CustomizationPage.fxml");
 
+        var viewTags = FXML.load(ViewTagsCtrl.class,
+                "client", "scenes", "ViewTags.fxml");
+
+        var createTag = FXML.load(CreateTagCtrl.class,
+                "client", "scenes", "CreateTag.fxml");
+
+        var editTag = FXML.load(EditTagCtrl.class,
+                "client", "scenes", "EditTag.fxml");
+
         var joinBoardByLink = FXML.load(JoinBoardByLinkCtrl.class,
                 "client","scenes","JoinBoardByLink.fxml");
         var details = FXML.load(CardDetailsViewCtr.class, "client",
@@ -85,9 +94,11 @@ public class Main extends Application {
                 "client", "scenes", "AdminCheck.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
-        mainCtrl.initialize(primaryStage, overview, boardView, createList,
+        Stage secondaryStage = new Stage();
+        secondaryStage.setResizable(false);
+        mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                        details,customizationPage,adminCheck);
+                        details,customizationPage,adminCheck, viewTags, createTag, editTag);
     }
 }

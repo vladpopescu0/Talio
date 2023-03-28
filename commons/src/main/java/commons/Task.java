@@ -64,10 +64,18 @@ public class Task implements Serializable {
     }
 
     /**
+     * Setter for the id of the task (Used for testing the server)
+     * @param id the new id of the task
+     */
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    /**
      * Getter for the status of the task
      * @return the status of the task
      */
-    public Boolean getStatus() {
+    public boolean getStatus() {
         return status;
     }
 

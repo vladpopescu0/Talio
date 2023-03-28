@@ -110,6 +110,12 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
+     * Getter for the board to which the card belongs
+     * @return the board to which this card belongs
+     */
+    public Board getBoard() {return board; }
+
+    /**
      * Allows to edit the description
      */
     public void edit() {

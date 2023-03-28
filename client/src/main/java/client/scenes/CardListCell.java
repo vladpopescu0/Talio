@@ -16,12 +16,9 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static client.scenes.MainCtrl.cardDataFormat;
-import static client.utils.ServerUtils.packCardList;
 
 public class CardListCell extends ListCell<CardList>{
 
@@ -181,19 +178,6 @@ public class CardListCell extends ListCell<CardList>{
      * and yield false for equals method
      */
     public void handleDraggable() {
-        //CardList drag-and-drop is currently disabled
-        /*this.setOnDragDetected(event -> {
-            Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.put(cardListDataFormat, this.getItem());
-
-            db.setContent(content);
-            WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
-            db.setDragView(snapshot);
-
-            event.consume();
-        });*/
-
         this.setOnDragOver(event -> {
             event.acceptTransferModes(TransferMode.ANY);
 
@@ -202,24 +186,15 @@ public class CardListCell extends ListCell<CardList>{
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                Card origin = (Card) event.getDragboard().getContent(cardDataFormat);
+                //We can opt for passing just a Card ID and retrieve
+                // both the Card and CardList later
+                @SuppressWarnings("unchecked")
+                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
 
-                if (!Objects.equals(origin.getParentCardList().getId(), this.getItem().getId())) {
-                    dragCardToCardList(origin);
-                }/* else {
-                    System.out.println("Drag of Card: " + origin.getName()
-                            + " into the same CardList: " + this.getItem().getName());
-                }*/
-            }
-            //CardList drag-and-drop is currently disabled
-            /*if (event.getDragboard().hasContent(cardListDataFormat)) {
-                CardList origin = (CardList) event.getDragboard().getContent(cardListDataFormat);
-
-                if (!Objects.equals(origin.getId(), this.getItem().getId())) {
-                    System.out.println("Drag of CardList: " + origin.getName()
-                            + " to CardList: " + this.getItem().getName());
+                if (!Objects.equals(ids.get(1), this.getItem().getId())) {
+                    dragCardToCardList(ids);
                 }
-            }*/
+            }
 
             event.setDropCompleted(true);
 
@@ -229,20 +204,11 @@ public class CardListCell extends ListCell<CardList>{
 
     /**
      * Handles drag-and-drop gesture from Card to CardList
-     * @param origin the Card that the gesture origins from
+     * @param ids the Card that the gesture origins from
      */
-    public void dragCardToCardList(Card origin) {
-        Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(server.getCL(
-                origin.getParentCardList().getId()));
-        int newParentIndex = board.getList().indexOf(server.getCL(
-                this.getItem().getId()));
-        CardList oldParent = origin.getParentCardList();
-        packCardList(oldParent);
-        packCardList(this.getItem());
-        server.updateParent(origin.getId(), List.of(oldParent, this.getItem()));
-        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
-        board.getList().set(newParentIndex, server.getCL(this.getItem().getId()));
+    public void dragCardToCardList(List<Long> ids) {
+        CardList oldParent = server.getCL(ids.get(1));
+        server.updateParent(ids.get(0), List.of(oldParent, this.getItem()));
         mainCtrl.getBoardViewCtrl().refresh();
     }
 }

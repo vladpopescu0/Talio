@@ -12,6 +12,7 @@ import server.database.CardRepository;
 import server.database.TaskRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/cards")
@@ -150,11 +151,10 @@ public class CardController {
 
 
     /**
-     * Removes a card from a list(????)
+     * Removes a card from the database
      * @param id the id of the card
      * @return the removed card
      */
-    //Maybe you mean removeCard??
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<Card> removeCard(@PathVariable("id") long id){
         if (!repo.existsById(id)) {
@@ -182,6 +182,26 @@ public class CardController {
     }
 
     /**
+     * Deletes a task from a card
+     * @param id the id of the card
+     * @param taskId the id of the task
+     * @return 200 -OK if the task was successfully deleted
+     */
+    @DeleteMapping(path = "/{id}/delete/{taskId}")
+    public ResponseEntity<Card> deleteTaskFromCard (
+            @PathVariable("id") long id, @PathVariable("taskId") long taskId) {
+        if (repo.existsById(id)) {
+            Card card = repo.findById(id).get();
+            var filteredTasks = card.getTasks().stream()
+                    .filter(task -> task.getId() != taskId).collect(Collectors.toList());
+            card.setTasks(filteredTasks);
+            repo.save(card);
+            return ResponseEntity.ok(repo.getById(id));
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    /**
      * Adds a task to a card
      * @param id the id of the card
      * @param task the task to be added
@@ -202,4 +222,19 @@ public class CardController {
         repo.save(card);
         return ResponseEntity.ok(task);
     }
+
+    /*/**
+     * Returns the CardList which is the parent of the Card of given ID
+     * @param id ID of the Card the parent of which is to be looked for
+     * @return the CardList which is the parent of the Card of given ID
+     */
+    /*@GetMapping(path = "/getParent/{id}")
+    public ResponseEntity<CardList> getParentById(@PathVariable("id") long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity.ok(new CardList());
+    }*/
+
 }

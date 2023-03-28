@@ -87,6 +87,9 @@ public class BoardViewCtrl implements Initializable {
     @FXML
     private Button copyInviteButton;
     @FXML
+    private Button viewTags;
+
+    @FXML
     private Label copyLabel;
 
     /**
@@ -130,11 +133,13 @@ public class BoardViewCtrl implements Initializable {
             editTitle.setDisable(true);
             addList.setDisable(true);
             cardListView.setDisable(true);
+            viewTags.setDisable(true);
         } else {
             removeButton.setDisable(false);
             editTitle.setDisable(false);
             addList.setDisable(false);
             cardListView.setDisable(false);
+            viewTags.setDisable(false);
         }
         socketHandler.registerForUpdates("/topic/lists",
                 CardList.class, q -> Platform.runLater(() -> {
@@ -305,6 +310,8 @@ public class BoardViewCtrl implements Initializable {
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(copyInviteButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
         System.out.println(board.getColorScheme().getColorLighter()+"first");
 //        setScrollBarStyle(scrollbar,board.getColorLighter());
         content.setVisible(false);
@@ -318,7 +325,12 @@ public class BoardViewCtrl implements Initializable {
 //        String style = "-fx-background-color: " + bgColor + ";";
 //        scrollbar.setStyle(style);
 //    }
-
+    /**
+     * Redirects the user to the overview of tags for the current Board
+     */
+    public void viewTags() {
+        mainCtrl.showViewTags(board);
+    }
     /**
      * Copies an invitation code of at least 4 digits
      * to the clipboard and uses a fade animation to

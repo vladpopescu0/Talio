@@ -57,10 +57,9 @@ public class ServerUtils {
                 .target(server).path("api/boards") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-        for (Board b : boards) {
-            unpackBoard(b);
+                .get(new GenericType<>() {});
+        for(Board b: boards) {
+            setCardsParent(b);
         }
         return boards;
     }
@@ -77,7 +76,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(Board.class);
-        unpackBoard(board);
+        setCardsParent(board);
         return board;
     }
 
@@ -93,7 +92,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .post(Entity.entity(board, APPLICATION_JSON), Board.class);
-        unpackBoard(b);
+        setCardsParent(b);
         return b;
     }
 
@@ -107,7 +106,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
-        unpackBoard(b);
+        setCardsParent(b);
         return b;
     }
 
@@ -137,9 +136,8 @@ public class ServerUtils {
                 .target(server).path("api/lists/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {
-                });
-        unpackCardList(cl);
+                .get(new GenericType<>() {});
+        setCardsParent(cl);
         return cl;
     }
 
@@ -244,7 +242,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
-        unpackBoard(b);
+        setCardsParent(b);
         return b;
     }
 
@@ -320,20 +318,9 @@ public class ServerUtils {
      *
      * @param b Board the Cards of which will have updated references to CardLists
      */
-    public static void unpackBoard(Board b) {
-        for (CardList cl : b.getList()) {
-            unpackCardList(cl);
-        }
-    }
-
-    /**
-     * Removes the Card references to corresponding CardLists in the Board
-     *
-     * @param b Board the Cards of which will have removed references to CardLists
-     */
-    public static void packBoard(Board b) {
-        for (CardList cl : b.getList()) {
-            packCardList(cl);
+    public static void setCardsParent(Board b) {
+        for(CardList cl: b.getList()) {
+            setCardsParent(cl);
         }
     }
 
@@ -342,20 +329,9 @@ public class ServerUtils {
      *
      * @param cl CardList the Cards of which will have updated references
      */
-    public static void unpackCardList(CardList cl) {
-        for (Card c : cl.getCards()) {
+    public static void setCardsParent(CardList cl) {
+        for(Card c: cl.getCards()) {
             c.setParentCardList(cl);
-        }
-    }
-
-    /**
-     * Removes the Card references of a CardList
-     *
-     * @param cl CardList the Cards of which will have removed references
-     */
-    public static void packCardList(CardList cl) {
-        for (Card c : cl.getCards()) {
-            c.setParentCardList(null);
         }
     }
 
@@ -372,7 +348,48 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .delete();
     }
-        /**
+
+    /**
+     * Deletes a Task from a card
+     * @param id the id of the card
+     * @param taskId the id of the task
+     * @return 200 - Ok if the task is successfully deleted
+     */
+    public Response deleteTaskFromCard(long id, long taskId) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/" + id + "/delete/" + taskId) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Deletes task from the database
+     * @param id the id of the task
+     * @return 200 - ok if the task was deleted
+     */
+    public Response deleteTask(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/tasks/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Deletes a card from the database
+     * @param id the id of the card to be deleted
+     * @return 200 - Ok if the card is deleted
+     */
+    public Response deleteCard(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/cards/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
      * @param listid the id of the list to be retrieved
      * @return the card list with the specific id
      */
@@ -382,7 +399,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(CardList.class);
-        unpackCardList(cl);
+        setCardsParent(cl);
         return cl;
         // can also use switch statement
     }
@@ -428,8 +445,34 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(name, APPLICATION_JSON), CardList.class);
-        unpackCardList(cl);
+        setCardsParent(cl);
         return cl;
+    }
+
+    /**
+     * Removes a Tag with a given ID
+     * @param id ID of the Tag to be removed
+     */
+    public void removeTag(long id) {
+        ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/tags/delete/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete();
+    }
+
+    /**
+     * Modifies the Tag of the given ID to the given Tag
+     * @param id ID of the Tag to be modified
+     * @param tag Tag that the target Tag will be modified to
+     * @return modified Tag
+     */
+    public Tag modifyTag(long id, Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/tags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
     }
 
     /**
@@ -443,7 +486,7 @@ public class ServerUtils {
                 .get(new GenericType<>(){
                 });
         for(CardList cl: list) {
-            unpackCardList(cl);
+            setCardsParent(cl);
         }
         return list;
     }
