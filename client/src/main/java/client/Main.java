@@ -81,11 +81,13 @@ public class Main extends Application {
                 "client","scenes","JoinBoardByLink.fxml");
         var details = FXML.load(CardDetailsViewCtr.class, "client",
                 "scenes", "CardDetailsView.fxml");
+        var adminCheck = FXML.load(AdminCheckCtrl.class,
+                "client", "scenes", "AdminCheck.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         mainCtrl.initialize(primaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details,customizationPage);
+                        details,customizationPage,adminCheck);
     }
 }

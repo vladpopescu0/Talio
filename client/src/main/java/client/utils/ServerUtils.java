@@ -461,4 +461,32 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
+
+    /**
+     * Sends a request to the server to check if the given password classifies the user
+     * as an admin
+     * @param password Given password to check for
+     * @return True if password is correct, false otherwise
+     */
+    public boolean isAdmin(String password){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/admin/" + password)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Boolean.class);
+    }
+
+    /**
+     * Sends a request to the server to delete a board with admin privileges
+     * @param password Admin password
+     * @param boardId Board ID
+     * @return True if successful, false otherwise
+     */
+    public boolean adminDelete(String password, long boardId){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/admin/" + password + "/delete/" + boardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Boolean.class);
+    }
 }
