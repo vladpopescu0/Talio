@@ -42,6 +42,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
+import javafx.scene.paint.Color;
 
 public class BoardViewCtrl implements Initializable {
 
@@ -85,7 +86,8 @@ public class BoardViewCtrl implements Initializable {
     private Button myBoardsButton;
     @FXML
     private Button allBoardsButton;
-
+    @FXML
+    private Button copyInviteButton;
     @FXML
     private Label copyLabel;
 
@@ -183,6 +185,19 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setCellFactory(cl ->
                 new CardListCell(mainCtrl, server, board)
         );
+        //Lord have mercy
+        mainCtrl.getCustomizationPageCtrl().getPres1BG()
+                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
+        mainCtrl.getCustomizationPageCtrl().getPres1Font()
+                .setValue(Color.valueOf(board.getPresetsFontColor().get(0)));
+        mainCtrl.getCustomizationPageCtrl().getPres2BG()
+                .setValue(Color.valueOf(board.getPresetsBGColor().get(1)));
+        mainCtrl.getCustomizationPageCtrl().getPres2Font()
+                .setValue(Color.valueOf(board.getPresetsFontColor().get(1)));
+        mainCtrl.getCustomizationPageCtrl().getPres3BG()
+                .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
+        mainCtrl.getCustomizationPageCtrl().getPres3Font()
+                .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
         customizeBoard(board);
     }
 
@@ -197,6 +212,30 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
+        if (board.getColorScheme().getColorLighter() == null) {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG()
+                    .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
+        }
+        if (board.getColorScheme().getColorFont() == null) {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.WHITE);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getBoardFont()
+                    .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
+        }
+        if (board.getListsColorScheme().getColorBGlight() == null) {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getListBG()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
+        }
+        if (board.getListsColorScheme().getColorFont() == null) {
+            mainCtrl.getCustomizationPageCtrl().getListFont().setValue(Color.WHITE);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getListFont()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
+        }
         mainCtrl.showCustomizationPage(this.board);
     }
 
@@ -226,72 +265,99 @@ public class BoardViewCtrl implements Initializable {
         mainCtrl.showEditBoardNameView(board);
     }
 
+    /**
+     * Customizes the board, list and cards
+     *
+     * @param board the board to be customized
+     */
     public void customizeBoard(Board board) {
+        if (board.getColorScheme().getColorBGlight() == null) {
+            board.getColorScheme().setColorBGlight(mainCtrl.colorToHex(Color.WHITE));
+        }
+        if (board.getColorScheme().getColorBGdark() == null) {
+            board.getColorScheme().setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
+        }
+        if (board.getColorScheme().getColorFont() == null) {
+            board.getColorScheme().setColorFont(mainCtrl.colorToHex(Color.BLACK));
+        }
+        if (board.getColorScheme().getColorLighter() == null) {
+            board.getColorScheme().setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+        }
+
         this.content = (Region) titledPane.lookup(".title");
+//        this.scrollbar = (Region) cardListView.lookup(".virtual-flow > .corner");
+
         String style = "-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";";
         String darkerStyle = "-fx-background-color: " + board.getColorScheme().getColorBGdark() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGdark() + ";";
 
-        setButtonStyle(editTitle, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-        setButtonStyle(removeButton, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-        setButtonStyle(addList, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-        setButtonStyle(allBoardsButton, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-        setButtonStyle(myBoardsButton, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-        setButtonStyle(customizeButton, board.getColorScheme().getColorBGlight(), board.getColorScheme().getColorFont());
-
-
-        content.setStyle(darkerStyle);
+        mainCtrl.setButtonStyle(editTitle, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(removeButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(addList, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(allBoardsButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(myBoardsButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(customizeButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(copyInviteButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        System.out.println(board.getColorScheme().getColorLighter()+"first");
+//        setScrollBarStyle(scrollbar,board.getColorLighter());
+        content.setVisible(false);
         border.setStyle(darkerStyle);
         cardListView.setStyle(style);
         scrollPane.setStyle(style);
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server,board));
     }
 
-    public void setButtonStyle(Button button, String bgColor, String fontColor) {
-        String style = "-fx-background-color: " + bgColor + "; " + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
-                "-fx-text-fill:" + fontColor + ";";
-        button.setStyle(style);
-    }
+//    public void setScrollBarStyle(Region scrollbar, String bgColor) {
+//        String style = "-fx-background-color: " + bgColor + ";";
+//        scrollbar.setStyle(style);
+//    }
 
-        /**
-         * Copies an invitation code of at least 4 digits
-         * to the clipboard and uses a fade animation to
-         * display a confirmation pop-up.
-         * The user can type this code to the join board
-         * scene in the Main Page.
-         */
-        public void copyLink () {
-            long boardId = this.board.getId();
-            String inviteCode = String.valueOf(boardId);
-            switch (inviteCode.length()) {
-                case 1:
-                    inviteCode = "000" + inviteCode;
-                    break;
-                case 2:
-                    inviteCode = "00" + inviteCode;
-                    break;
-                case 3:
-                    inviteCode = "0" + inviteCode;
-                    break;
-            }
-            if (!isAnimationPlayed) {
-                FadeTransition fade = new FadeTransition();
-                fade.setDuration(Duration.millis(4000));
-                fade.setFromValue(30);
-                fade.setToValue(0);
-                fade.setNode(copyLabel);
-                fade.setOnFinished(e -> {
-                            copyLabel.setVisible(false);
-                            isAnimationPlayed = false;
-                        }
-                );
-                copyLabel.setVisible(true);
-                copyLabel.setText("Board Code Copied!\nThe Code is: " + inviteCode);
-                fade.play();
-                isAnimationPlayed = true;
-            }
-            StringSelection stringSelection = new StringSelection(inviteCode);
-            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-            clipboard.setContents(stringSelection, null);
+    /**
+     * Copies an invitation code of at least 4 digits
+     * to the clipboard and uses a fade animation to
+     * display a confirmation pop-up.
+     * The user can type this code to the join board
+     * scene in the Main Page.
+     */
+    public void copyLink() {
+        long boardId = this.board.getId();
+        String inviteCode = String.valueOf(boardId);
+        switch (inviteCode.length()) {
+            case 1:
+                inviteCode = "000" + inviteCode;
+                break;
+            case 2:
+                inviteCode = "00" + inviteCode;
+                break;
+            case 3:
+                inviteCode = "0" + inviteCode;
+                break;
         }
+        if (!isAnimationPlayed) {
+            FadeTransition fade = new FadeTransition();
+            fade.setDuration(Duration.millis(4000));
+            fade.setFromValue(30);
+            fade.setToValue(0);
+            fade.setNode(copyLabel);
+            fade.setOnFinished(e -> {
+                copyLabel.setVisible(false);
+                isAnimationPlayed = false;
+            });
+            copyLabel.setVisible(true);
+            copyLabel.setText("Board Code Copied!\nThe Code is: " + inviteCode);
+            fade.play();
+            isAnimationPlayed = true;
+        }
+        StringSelection stringSelection = new StringSelection(inviteCode);
+        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+        clipboard.setContents(stringSelection, null);
     }
+}

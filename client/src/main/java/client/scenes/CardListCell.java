@@ -55,7 +55,6 @@ public class CardListCell extends ListCell<CardList>{
     private ObservableList<Card> cardObservableList;
 
     private ColorScheme colorScheme;
-
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
@@ -103,7 +102,6 @@ public class CardListCell extends ListCell<CardList>{
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
-                    cardsList.setStyle("");
                     //i want to find a better solution :((((
                     Platform.runLater(() -> {
                         Pane title = (Pane) titledPane.lookup(".title");
@@ -133,16 +131,10 @@ public class CardListCell extends ListCell<CardList>{
             anchorPane.setStyle("-fx-background-color: "+colorScheme.getColorBGdark()+";"
                     + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
                     "-fx-text-fill:" + colorScheme.getColorFont() + ";");
-            editListButton.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
-                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
-                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
-            addCardButton.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
-                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
-                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
-            deleteList.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";"
-                    + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;" + "-fx-background-radius: 5px;" +
-                    "-fx-text-fill:" + colorScheme.getColorFont() + ";");
             cardsList.setStyle("-fx-background-color: "+colorScheme.getColorBGlight()+";");
+            mainCtrl.setButtonStyle(editListButton,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+            mainCtrl.setButtonStyle(addCardButton,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+            mainCtrl.setButtonStyle(deleteList,colorScheme.getColorBGlight(),colorScheme.getColorFont());
         }
     }
 
@@ -154,7 +146,7 @@ public class CardListCell extends ListCell<CardList>{
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this, board));
+        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this, board,board.getCardsColorScheme()));
     }
 
     /** Helper method for renaming a cardlist

@@ -21,10 +21,10 @@ public class ColorScheme implements Serializable {
         this.colorFont = colorFont;
     }
     public ColorScheme(){
-        this.colorBGlight = "#FFFFFF"; //white
+        this.colorBGlight = "#000000"; //black
         this.colorBGdark = "#000000"; //black
-        this.colorLighter = "#808080"; // grey
-        this.colorFont = "#000000"; //black
+        this.colorLighter = "#121212"; // grey
+        this.colorFont = "#FFFFFF"; //white
     }
     public String getColorBGlight() {
         return colorBGlight;

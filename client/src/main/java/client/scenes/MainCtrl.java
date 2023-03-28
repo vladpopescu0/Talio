@@ -20,6 +20,7 @@ import commons.Card;
 import commons.User;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.DataFormat;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -81,7 +82,11 @@ public class MainCtrl {
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
      * @param joinBoardByLink the JoinBoardByLink scene
+<<<<<<< HEAD
      * @param details the cardDetails scene
+=======
+     * @param customizationPage the CustomizationPage scene
+>>>>>>> e3bd475188823fc0794923e8e027f00c3d84dc1d
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
@@ -95,7 +100,6 @@ public class MainCtrl {
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
                            Pair<CardDetailsViewCtr, Parent> details,Pair<CustomizationPageCtrl, Parent> customizationPage) {
-
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -182,6 +186,7 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
+
     }
 
     /**
@@ -297,6 +302,7 @@ public class MainCtrl {
 
     /**
      * Shows the customization page
+     * @param board the board to be customized
      */
     public void showCustomizationPage(Board board) {
         primaryStage.setTitle("Customize Your Board");
@@ -366,6 +372,10 @@ public class MainCtrl {
         this.cardId = cardId;
     }
 
+    /**
+     * @param color the color the needs to be transformed to hex format
+     * @return a hex format of the color
+     */
     public String colorToHex(Color color){
         return String.format( "#%02X%02X%02X",
                 (int)( color.getRed() * 255 ),
@@ -373,7 +383,25 @@ public class MainCtrl {
                 (int)( color.getBlue() * 255 ) );
     }
 
+    /**
+     * @return the controller of the customization page
+     */
     public CustomizationPageCtrl getCustomizationPageCtrl() {
         return customizationPageCtrl;
+    }
+
+    /** Sets the style for a button
+     * @param button the button for which the style is set
+     * @param bgColor the bg color of the button
+     * @param fontColor the cont color of the button
+     */
+    public void setButtonStyle(Button button, String bgColor, String fontColor) {
+        String style = "-fx-background-color: " + bgColor + "; "
+                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
+                + "-fx-background-radius: 5px;" +
+                "-fx-text-fill:" + fontColor + ";"+
+                "-fx-border-color: " + fontColor+";"+
+                "-fx-border-radius: 5%;";
+        button.setStyle(style);
     }
 }

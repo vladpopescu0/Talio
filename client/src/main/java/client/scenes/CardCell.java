@@ -5,6 +5,7 @@ import client.utils.SocketHandler;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import commons.ColorScheme;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -16,6 +17,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.Objects;
@@ -32,7 +34,6 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button editButton;
-
     @FXML
     private Button deleteButton;
     @FXML
@@ -40,6 +41,8 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Label hasDesc;
+
+    private ColorScheme colorSchemeCustom;
     private FXMLLoader fxmlLoader;
     private Board board;
     private MainCtrl mainCtrl;
@@ -54,7 +57,7 @@ public class CardCell extends ListCell<Card> {
      * @param board the board the card belongs to
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server
-            , CardListCell cardList, Board board) {
+            , CardListCell cardList, Board board,ColorScheme colorScheme) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
@@ -63,6 +66,7 @@ public class CardCell extends ListCell<Card> {
             //statusLabel.setText(this.getItem().tasksLabel());
             statusLabel.setText("AAAA");
         }
+        this.colorSchemeCustom = colorScheme;
     }
 
     /**
@@ -119,9 +123,14 @@ public class CardCell extends ListCell<Card> {
             }
 
             paneLabel.setText(card.getName());
-
+            setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);
+            cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
+            paneLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
+            String lighter = mainCtrl.colorToHex(Color.valueOf(colorSchemeCustom.getColorBGdark()).brighter());
+            mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
+            mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
         }
     }
 
@@ -216,5 +225,8 @@ public class CardCell extends ListCell<Card> {
         origin.setParentCardList(newCardList);
 
         dragCardToIdentical(origin);
+    }
+    public ColorScheme getColorSchemeCustom() {
+        return this.colorSchemeCustom;
     }
 }

@@ -13,7 +13,7 @@
             <children>
                 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                     <content>
-                        <ListView fx:id="cardsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"/>
+                        <ListView fx:id="cardsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                     </content>
                 </ScrollPane>
                 <Button fx:id="addCardButton" mnemonicParsing="false" text="Add Card" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="3.0" />
