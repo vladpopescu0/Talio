@@ -408,7 +408,21 @@ public class ServerUtils {
      */
     public boolean isAdmin(String password){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/users/admin/" + password)
+                .target(server).path("api/admin/" + password)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Boolean.class);
+    }
+
+    /**
+     * Sends a request to the server to delete a board with admin privileges
+     * @param password Admin password
+     * @param boardId Board ID
+     * @return True if successful, false otherwise
+     */
+    public boolean adminDelete(String password, long boardId){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/admin/" + password + "/delete/" + boardId)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Boolean.class);

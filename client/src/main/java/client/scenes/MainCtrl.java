@@ -49,6 +49,8 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene changeServer;
     private ChangeServerCtrl changeServerCtrl;
+    private Scene adminCheck;
+    private AdminCheckCtrl adminCheckCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
 
@@ -57,6 +59,8 @@ public class MainCtrl {
     private User currentUser;
 
     private boolean isAdmin = false;
+
+    private String adminPass = "";
 
     /**
      * Initializes the application
@@ -72,6 +76,7 @@ public class MainCtrl {
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
+     * @param adminCheck the adminCheck scene
      */
     public void initialize(Stage primaryStage, Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
@@ -82,7 +87,8 @@ public class MainCtrl {
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
-                           Pair<EditBoardNameViewCtrl, Parent> editBoardName) {
+                           Pair<EditBoardNameViewCtrl, Parent> editBoardName,
+                           Pair<AdminCheckCtrl, Parent> adminCheck) {
         this.primaryStage = primaryStage;
 
         this.overviewCtrl = overview.getKey();
@@ -112,6 +118,9 @@ public class MainCtrl {
 
         this.changeServerCtrl = changeServer.getKey();
         this.changeServer = new Scene(changeServer.getValue());
+
+        this.adminCheckCtrl = adminCheck.getKey();
+        this.adminCheck = new Scene(adminCheck.getValue());
 
         this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
         this.userBoardOverview = new Scene(userBoardsOverview.getValue());
@@ -242,6 +251,14 @@ public class MainCtrl {
         primaryStage.setScene(user);
     }
 
+    /**
+     * Shows the admin login page
+     */
+    public void showAdminCheck(){
+        primaryStage.setTitle("Admin Password");
+        primaryStage.setScene(adminCheck);
+    }
+
     /** Shows the ChangeListName scene
      * @param id id of the current cardList
      */
@@ -298,4 +315,12 @@ public class MainCtrl {
     public void setCardId(long cardId) {
         this.cardId = cardId;
     }
+
+    public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    public boolean isAdmin() { return this.isAdmin; }
+
+    public String getAdminPass() { return adminPass; }
+
+    public void setAdminPass(String pass) { this.adminPass = pass; }
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" text="Admin Password" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminCheckCtrl">
+   <content>
+      <AnchorPane prefHeight="313.0" prefWidth="298.0">
+         <children>
+            <Button fx:id="backButton" layoutX="40.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancel" text="Back" />
+            <Button fx:id="submitButton" layoutX="212.0" layoutY="96.0" mnemonicParsing="false" onAction="#checkAdmin" text="Submit" />
+            <TextField fx:id="passField" layoutX="40.0" layoutY="65.0" prefHeight="26.0" prefWidth="226.0" />
+            <Label fx:id="messageLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="40.0" layoutY="127.0" prefHeight="30.0" prefWidth="226.0" textAlignment="CENTER" textFill="#3c963c" visible="false" wrapText="true" />
+         </children>
+      </AnchorPane>
+   </content>
+</TitledPane>
