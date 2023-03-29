@@ -5,10 +5,13 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -28,6 +31,11 @@ public class Card {
 
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    //@OneToMany(cascade = CascadeType.ALL)
+    private List<Tag> tags;
 
     /**
      * Empty constructor
@@ -53,6 +61,7 @@ public class Card {
         this.name = name;
         parentCardList = cardList;
         tasks = new ArrayList<>();
+        tags = new ArrayList<>();
     }
 
     /**
@@ -60,13 +69,15 @@ public class Card {
      * @param name the name of the card
      * @param cardList the cardList to which the card belongs
      * @param tasks the tasks making up the card
+     * @param tags the Tags attached to the Card
      * @param description the description of the card
      */
     public Card(String name, CardList cardList, List<Task> tasks,
-                String description) {
+                List<Tag> tags, String description) {
         this.name = name;
         this.tasks = tasks;
         parentCardList = cardList;
+        this.tags = tags;
         this.description = description;
     }
 
@@ -182,6 +193,38 @@ public class Card {
      */
     public void setTasks(List<Task> tasks){
         this.tasks = tasks;
+    }
+
+    /**
+     * Getter for the Tags attached to the Card
+     * @return list of Tags
+     */
+    public List<Tag> getTags() {
+        return tags;
+    }
+
+    /**
+     * Setter for the Tags attached to the Card
+     * @param tags list of Tags to be attached to the Card
+     */
+    public void setTags(List<Tag> tags) {
+        this.tags = tags;
+    }
+
+    /**
+     * Adds a Tag to the Card
+     * @param tag Tag to be added
+     */
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
+
+    /**
+     * Removes the specified Tag from the list of Tags attached to the Card
+     * @param tag Tag to be removed from the list
+     */
+    public void removeTag(Tag tag) {
+        tags = tags.stream().filter(t -> t.getId() != tag.getId()).collect(Collectors.toList());
     }
 
     /**

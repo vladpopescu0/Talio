@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
+import commons.Tag;
 import commons.Task;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,12 +26,16 @@ public class CardDetailsViewCtr implements Initializable {
 
     private  Board board;
     private ObservableList<Task> taskObservableList;
+    private ObservableList<Tag> tagObservableList;
 
     @FXML
     private Button cancelButton;
 
     @FXML
     private ListView<Task> taskList;
+
+    @FXML
+    private ListView<Tag> tagList;
 
     @FXML
     private Button confirmButton;
@@ -68,7 +73,7 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
-     * Updates the tasks and description
+     * Updates the tasks, description and tags
      */
     public void refresh() {
         editButton.setVisible(true);
@@ -81,6 +86,18 @@ public class CardDetailsViewCtr implements Initializable {
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
         taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+        tagObservableList = FXCollections.observableList(card == null || card.getTags() == null?
+                new ArrayList<>() : card.getTags());
+        tagList.setItems(tagObservableList);
+        tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+    }
+
+    /**
+     * Updates the Tags when changes were made to them
+     */
+    public void refreshTagChange() {
+        card = server.getCardById(card.getId());
+        refresh();
     }
 
     /**
@@ -159,9 +176,17 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
+     * Pops up a secondary page on which tag to be added can be selected
+     */
+    public void addTag() {
+        mainCtrl.showViewAddTag(board, card, false);
+    }
+
+    /**
      * Goes back to the board view
      */
     public void back() {
         mainCtrl.showBoardView(board);
+        mainCtrl.closeSecondaryStage();
     }
 }

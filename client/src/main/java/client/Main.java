@@ -93,12 +93,15 @@ public class Main extends Application {
         var adminCheck = FXML.load(AdminCheckCtrl.class,
                 "client", "scenes", "AdminCheck.fxml");
 
+        var viewAddTag = FXML.load(ViewAddTagsCtrl.class,
+                "client", "scenes", "ViewAddTags.fxml");
+
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         Stage secondaryStage = new Stage();
         secondaryStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details,customizationPage,adminCheck, viewTags, createTag, editTag);
+                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag);
     }
 }

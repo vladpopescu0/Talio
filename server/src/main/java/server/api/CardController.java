@@ -3,12 +3,14 @@ package server.api;
 
 import commons.Card;
 import commons.CardList;
+import commons.Tag;
 import commons.Task;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.CardListRepository;
 import server.database.CardRepository;
+import server.database.TagRepository;
 import server.database.TaskRepository;
 
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 public class CardController {
     private final CardRepository repo;
     private final CardListRepository clRepo;
+    private final TagRepository tagRepo;
 
     private final SimpMessagingTemplate msgs;
     private final TaskRepository taskRepo;
@@ -29,14 +32,16 @@ public class CardController {
      * @param clRepo the Card List repository to be used
      * @param msgs the messaging template
      * @param taskRepo the repository containing all tasks
+     * @param tagRepo the repository containing all Tags
      */
     public CardController(CardRepository repo,
                           CardListRepository clRepo, SimpMessagingTemplate msgs,
-                          TaskRepository taskRepo){
+                          TaskRepository taskRepo, TagRepository tagRepo){
         this.repo = repo;
         this.clRepo = clRepo;
         this.msgs = msgs;
         this.taskRepo = taskRepo;
+        this.tagRepo = tagRepo;
     }
 
     /**
@@ -221,6 +226,55 @@ public class CardController {
         card.addTask(task);
         repo.save(card);
         return ResponseEntity.ok(task);
+    }
+
+    /**
+     * Adds the Tags from the list to the specified Card
+     * @param id ID of the Card
+     * @param tags list of Tags to be added to the Card
+     * @return updated Card
+     */
+    @PostMapping("addTags/{id}")
+    public ResponseEntity<Card> addTags(@PathVariable("id") long id,
+                                        @RequestBody List<Tag> tags) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (tags == null || tags.size() == 0) {
+            return ResponseEntity.badRequest().build();
+        } else {
+            for(Tag t: tags) {
+                if (!tagRepo.existsById(t.getId())) {
+                    return ResponseEntity.badRequest().build();
+                }
+            }
+        }
+
+        Card card = repo.getById(id);
+        for(Tag t: tags) {
+            card.addTag(t);
+        }
+        repo.save(card);
+        return ResponseEntity.ok(card);
+    }
+
+    /**
+     * Removes the Tag from the list of the specified Card
+     * @param id ID of the Card
+     * @param tag Tag to be removed from the Card
+     * @return updated Card
+     */
+    @PutMapping("removeTag/{id}")
+    public ResponseEntity<Card> removeTag(@PathVariable("id") long id,
+                                          @RequestBody Tag tag) {
+        if (!repo.existsById(id) || tag == null || !tagRepo.existsById(tag.getId())) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Card card = repo.getById(id);
+        card.removeTag(tag);
+        repo.save(card);
+        return ResponseEntity.ok(card);
     }
 
     /*/**

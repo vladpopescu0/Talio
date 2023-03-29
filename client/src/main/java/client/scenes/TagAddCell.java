@@ -7,9 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 
-public class TagCell extends ListCell<Tag> {
+public class TagAddCell extends ListCell<Tag> {
 
     private final MainCtrl mainCtrl;
 
@@ -20,30 +20,28 @@ public class TagCell extends ListCell<Tag> {
     private Label paneLabel;
 
     @FXML
-    private Button editButton;
+    private Button removeButton;
 
     @FXML
-    private Button deleteButton;
-
-    @FXML
-    private ColorPicker tagColor;
+    private Circle colorCircle;
 
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
-    private ViewTagsCtrl tagCtrl;
+
+    private boolean visibleRemove;
 
     /**
      * useful dependencies for universal variables and server communication
      *
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
-     * @param tagCtrl               the controller of the parent
+     * @param visibleRemove whether the remove button is visible or not
      */
     @Inject
-    public TagCell(MainCtrl mainCtrl, ServerUtils serverUtils, ViewTagsCtrl tagCtrl) {
+    public TagAddCell(MainCtrl mainCtrl, ServerUtils serverUtils, boolean visibleRemove) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
-        this.tagCtrl = tagCtrl;
+        this.visibleRemove = visibleRemove;
     }
 
     /**
@@ -63,29 +61,17 @@ public class TagCell extends ListCell<Tag> {
             setGraphic(null);
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("TagView.fxml"));
+                fxmlLoader = new FXMLLoader(getClass().getResource("TagAddView.fxml"));
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
-                    this.tagColor.setValue(Color.valueOf(this.getItem().getColor()));
-                    this.editButton.setOnAction(event -> {
-                        mainCtrl.showEditTag(this.getItem());
-                    });
-                    this.deleteButton.setOnAction(event ->{
-                        server.removeTag(tag.getId());
-
-                        if (mainCtrl.isSecondaryFromTagCell(tag)) {
-                            mainCtrl.closeSecondaryStage();
-                        }
-
-                        mainCtrl.getViewTagsCtrl().refreshEdit();
-                    });
-                    this.tagColor.setOnAction(event->{
-                        String newColor = mainCtrl.colorToHex(this.tagColor.getValue());
-                        this.getItem().setColor(newColor);
-                        server.modifyTag(this.getItem().getId(),this.getItem());
-                        this.tagColor.setValue(Color.valueOf(this.getItem().getColor()));
-                        tagCtrl.refresh();
+                    colorCircle.setStyle("-fx-fill: "+this.getItem().getColor()+";");
+                    this.removeButton.setVisible(visibleRemove);
+                    this.removeButton.setOnAction(event ->{
+                        server.removeTagFromCard(mainCtrl.getCardDetailsViewCtr().getCard().getId(),
+                                this.getItem());
+                        mainCtrl.getCardDetailsViewCtr().refreshTagChange();
+                        mainCtrl.getViewAddTagsCtrl().refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -32,7 +32,7 @@ public class EditCardCtrl {
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
@@ -45,7 +45,12 @@ public class EditCardCtrl {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
                 clearFields();
-                mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
+                mainCtrl.closeSecondaryStage();
+
+                BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
+                ctrl.setBoard(mainCtrl.getBoardViewCtrl().getBoard());
+                ctrl.refresh();
+                ctrl.checkUser();
             }
         } catch (WebApplicationException e) {
             e.printStackTrace();

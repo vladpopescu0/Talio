@@ -45,7 +45,7 @@ public class JoinBoardByLinkCtrl {
      */
     public void cancel() {
         clearFields();
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
@@ -72,6 +72,7 @@ public class JoinBoardByLinkCtrl {
                 foundBoard = server.updateBoard(foundBoard);
                 mainCtrl.getCurrentUser().setBoardList(server.
                         getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+                mainCtrl.closeSecondaryStage();
                 mainCtrl.showBoardView(foundBoard);
             }else{
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -85,8 +86,6 @@ public class JoinBoardByLinkCtrl {
             alert.setContentText("Enter a numeric code with at least 4 digits!");
             alert.showAndWait();
         }
-
-        //mainCtrl.showBoardView();
     }
 
     /**

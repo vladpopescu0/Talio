@@ -73,7 +73,8 @@ public class CreateBoardViewCtrl implements Initializable {
             }
             mainCtrl.getCurrentUser().setBoardList(server.
                     getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-            mainCtrl.showOverview();
+            mainCtrl.getOverviewCtrl().refresh();
+            mainCtrl.closeSecondaryStage();
         }
     }
 
@@ -90,8 +91,7 @@ public class CreateBoardViewCtrl implements Initializable {
      */
     public void toBoardsOverview() {
         resetField();
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
     }
-
 }
 

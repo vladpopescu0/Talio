@@ -26,6 +26,6 @@
                 <Font size="10.0" />
             </font>
         </Button>
-        <ColorPicker fx:id="tagColor" editable="true" layoutX="55.0" layoutY="12.0" prefHeight="25.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+        <ColorPicker fx:id="tagColor" editable="true" layoutX="55.0" layoutY="12.0" prefHeight="25.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" AnchorPane.rightAnchor="91.66796875" />
     </children>
 </AnchorPane>

@@ -210,6 +210,7 @@ public class BoardViewCtrl implements Initializable {
      * Goes back to the overview page
      */
     public void cancel() {
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showOverview();
     }
 
@@ -248,6 +249,7 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user back to the overview page
      */
     public void toUserOverview() {
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showUserBoardOverview();
     }
 
@@ -259,6 +261,7 @@ public class BoardViewCtrl implements Initializable {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showUserBoardOverview();
     }
 
@@ -331,6 +334,7 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user to the overview of tags for the current Board
      */
     public void viewTags() {
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showViewTags(board);
     }
 
