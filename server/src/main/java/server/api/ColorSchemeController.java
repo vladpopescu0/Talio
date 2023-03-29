@@ -32,7 +32,7 @@ public class ColorSchemeController {
     }
     /**
      * Adds a colorScheme if possible
-     * @param colorScheme the card to be added
+     * @param colorScheme the colorScheme to be added
      * @return ok if the colorScheme is added, a bad request page if the colorScheme is null
      */
     @PostMapping("/add")
@@ -42,5 +42,19 @@ public class ColorSchemeController {
         }
         ColorScheme saved = repo.save(colorScheme);
         return ResponseEntity.ok(saved);
+    }
+    /**
+     * Deletes a colorScheme if possible
+     * @param id the id of the colorScheme
+     * @return ok if the colorScheme is deleted, a bad request if the colorScheme is not found
+     */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ColorScheme> deleteColorSchemeById(@PathVariable("id") long id) {
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        ColorScheme deleted = repo.getById(id);
+        repo.deleteById(id);
+        return ResponseEntity.ok(deleted);
     }
 }

@@ -361,6 +361,7 @@ public class MainCtrl {
         primaryStage.setTitle("Customize Your Board");
 
         this.customizationPageCtrl.setBoard(board);
+        this.customizationPageCtrl.refresh();
         primaryStage.setScene(customizationPage);
     }
     /**

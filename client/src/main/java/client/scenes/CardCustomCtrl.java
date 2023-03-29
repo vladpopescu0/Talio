@@ -59,8 +59,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     public void initialize() {
         try{
             if (this.getItem() != null) {
-                System.out.println(this.getItem()+"BBBBBBBB");
-                System.out.println(this.parent.getBoard()+"AAAAAA");
                 this.board = server.getBoardByID(parent.getBoard().getId());
 //                int i = board.getColors().indexOf(this.getItem());
                 presBG.setVisible(true);
@@ -111,14 +109,17 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
         this.getItem().setColorBGdark(mainCtrl.colorToHex(presBG.getValue().darker()));
         this.getItem().setColorLighter(mainCtrl.colorToHex(presBG.getValue().brighter()));
         server.updateColorScheme(this.getItem());
+        board = server.getBoardByID(board.getId());
         mainCtrl.showCustomizationPage(board);
     }
     /**
      * Saves the selected color in the colopicker
+     * refreshes the board to the current state in the database
      */
     public void saveFont() {
         this.getItem().setColorFont(mainCtrl.colorToHex(presFont.getValue()));
         server.updateColorScheme(this.getItem());
+        board = server.getBoardByID(board.getId());
         mainCtrl.showCustomizationPage(board);
     }
 
@@ -131,6 +132,17 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
         board.getCardsColorScheme().setColorLighter(this.getItem().getColorLighter());
         board.getCardsColorScheme().setColorBGdark(this.getItem().getColorBGdark());
         board.getCardsColorScheme().setColorBGlight(this.getItem().getColorBGlight());
+        server.updateBoard(board);
+        mainCtrl.showCustomizationPage(board);
+    }
+
+    /**
+     * Action for the delete button,
+     * refreshes the view and deletes this colorScheme
+     */
+    public void deletePreset(){
+        board = server.getBoardByID(board.getId());
+        board.getCardsColorSchemesList().remove(this.getItem());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }

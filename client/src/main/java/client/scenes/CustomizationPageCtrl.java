@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.ColorScheme;
+import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -147,10 +148,24 @@ public class CustomizationPageCtrl implements Initializable {
         boardFont.setValue(Color.WHITE);
         boardBG.setValue(Color.BLACK);
     }
-
+    /**
+     * Resets the lists' colors
+     */
+    public void resetLists() {
+        board.getListsColorScheme()
+                .setColorFont(mainCtrl.colorToHex(Color.WHITE));
+        board.getListsColorScheme()
+                .setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
+        board.getListsColorScheme()
+                .setColorBGlight(mainCtrl.colorToHex(Color.BLACK));
+        board.getListsColorScheme()
+                .setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+        listFont.setValue(Color.WHITE);
+        listBG.setValue(Color.BLACK);
+    }
 
     /**
-     * @return the current board
+     * @return the current board state
      */
     public Board getBoard() {
         return board;
@@ -160,8 +175,12 @@ public class CustomizationPageCtrl implements Initializable {
      * Adds a new preset to the board
      */
     public void addPreset(){
-
-        board = server.getBoardByID(board.getId());
+        try{
+            board = server.getBoardByID(board.getId());
+        }catch (WebApplicationException e){
+            e.printStackTrace();
+            return;
+        }
         //!!!MIGHT NOT WORK IF THERE IS NO SUCH BOARD
         ColorScheme newDefaultColorScheme = server.addColorScheme(new ColorScheme());
         board.getCardsColorSchemesList().add(newDefaultColorScheme);
