@@ -94,6 +94,7 @@ public class TagController {
         }
         Tag newTag = repo.getById(id);
         newTag.setName(tag.getName());
+        newTag.setColor(tag.getColor());
         repo.save(newTag);
         return ResponseEntity.ok(newTag);
     }

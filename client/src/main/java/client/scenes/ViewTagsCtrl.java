@@ -75,7 +75,7 @@ public class ViewTagsCtrl implements Initializable {
         tagObservableList = FXCollections.observableList(board.getTags());
         tagsView.setItems(tagObservableList);
         tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server)
+                new TagCell(mainCtrl, server,this)
         );
     }
 
@@ -87,7 +87,7 @@ public class ViewTagsCtrl implements Initializable {
         tagObservableList = FXCollections.observableList(board.getTags());
         tagsView.setItems(tagObservableList);
         tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server)
+                new TagCell(mainCtrl, server,this)
         );
     }
 
