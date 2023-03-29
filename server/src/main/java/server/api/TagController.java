@@ -4,7 +4,7 @@ import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import server.database.BoardRepository;
+import server.database.CardRepository;
 import server.database.TagRepository;
 
 import java.util.List;
@@ -13,16 +13,16 @@ import java.util.List;
 @RequestMapping(path = "api/tags")
 public class TagController {
     private final TagRepository repo;
-    private BoardRepository boardRepository;
+    private final CardRepository cardRepo;
 
     /**
      * Constructor for the TagController
      * @param repo the repository that is used
-     * @param boardRepository Board Repository
+     * @param cardRepo Card Repository
      */
-    public TagController(TagRepository repo, BoardRepository boardRepository){
+    public TagController(TagRepository repo, CardRepository cardRepo){
         this.repo = repo;
-        this.boardRepository = boardRepository;
+        this.cardRepo = cardRepo;
     }
 
 
@@ -76,6 +76,10 @@ public class TagController {
             return ResponseEntity.badRequest().build();
         }
         Tag tag = repo.getById(id);
+        cardRepo.findByTags_Id(id).forEach(c -> {
+            c.removeTag(tag);
+            cardRepo.save(c);
+        });
         repo.deleteById(id);
         return ResponseEntity.ok(tag);
     }

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class TestCardRepository implements CardRepository {
 
@@ -343,5 +344,27 @@ public class TestCardRepository implements CardRepository {
                                                 .FetchableFluentQuery<S>, R>
                                                 queryFunction) {
         return null;
+    }
+
+    /**
+     * Finds all Cards which have a Tag of given ID attached to them
+     * @param id ID of the Tag
+     * @return a list of Cards with Tag of given ID attached to them
+     */
+    @Override
+    public List<Card> findByTags_Id(long id) {
+        call("findByTags_Id");
+        return findByTagId(id);
+    }
+
+    /**
+     * Helper method for findByTags_Id finding all Cards
+     * which have a Tag of given ID attached to them
+     * @param id ID of the Tag
+     * @return a list of Cards with Tag of given ID attached to them
+     */
+    private List<Card> findByTagId(long id) {
+        return cards.stream().filter(c -> c.getTags().stream().anyMatch(t -> t.getId() == id))
+                .collect(Collectors.toList());
     }
 }

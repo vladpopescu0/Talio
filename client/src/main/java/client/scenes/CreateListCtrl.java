@@ -78,8 +78,8 @@ public class CreateListCtrl {
         }
 
         clearField();
+        mainCtrl.closeSecondaryStage();
         mainCtrl.getBoardViewCtrl().refresh();
-        mainCtrl.showBoardView(this.board);
     }
 
     /**
@@ -87,6 +87,6 @@ public class CreateListCtrl {
      */
     public void cancel() {
         clearField();
-        mainCtrl.showBoardView(this.board);
+        mainCtrl.closeSecondaryStage();
     }
 }

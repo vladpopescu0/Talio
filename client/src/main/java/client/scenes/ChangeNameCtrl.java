@@ -74,8 +74,12 @@ public class ChangeNameCtrl {
         }
 
         clearField();
-        mainCtrl.showBoardView(this.board);
-        mainCtrl.getBoardViewCtrl().refresh();
+        mainCtrl.closeSecondaryStage();
+
+        BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
+        ctrl.setBoard(board);
+        ctrl.refresh();
+        ctrl.checkUser();
     }
 
     /**
@@ -84,6 +88,14 @@ public class ChangeNameCtrl {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * Getter for the id
+     * @return current id
+     */
+    public Long getId() {
+        return id;
     }
 
     /**
@@ -99,6 +111,6 @@ public class ChangeNameCtrl {
      */
     public void cancel(){
         clearField();
-        mainCtrl.showBoardView(this.board);
+        mainCtrl.closeSecondaryStage();
     }
 }

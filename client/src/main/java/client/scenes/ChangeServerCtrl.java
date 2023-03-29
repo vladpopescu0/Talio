@@ -66,7 +66,7 @@ public class ChangeServerCtrl {
             return;
         }
 
-        if (newServer.isEmpty() || newServer == null) {
+        if (newServer == null || newServer.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("You need to input a server!");
@@ -94,8 +94,10 @@ public class ChangeServerCtrl {
             mainCtrl.getCurrentUser().setBoardList(server.getBoardsByUserId(
                     mainCtrl.getCurrentUser().getId()));
         }
+
         errorLabel.setVisible(false);
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
+        mainCtrl.getOverviewCtrl().refresh();
     }
 
     /**
@@ -104,6 +106,6 @@ public class ChangeServerCtrl {
     public void cancel() {
         serverField.clear();
         errorLabel.setVisible(false);
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
     }
 }

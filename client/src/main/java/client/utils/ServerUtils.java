@@ -506,6 +506,34 @@ public class ServerUtils {
     }
 
     /**
+     * Adds the Tags from the list to the specified Card
+     * @param id ID of the Card
+     * @param tags list of Tags to be added to the Card
+     * @return updated Card
+     */
+    public Card addTagsToCard(long id, List<Tag> tags) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/addTags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tags, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Removes the Tag from the list of the specified Card
+     * @param id ID of the Card
+     * @param tag Tag to be removed from the Card
+     * @return updated Card
+     */
+    public Card removeTagFromCard(long id, Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/removeTag/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Card.class);
+    }
+
+    /**
      * Sends a request to the server to check if the given password classifies the user
      * as an admin
      * @param password Given password to check for
@@ -532,16 +560,4 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .get(Boolean.class);
     }
-    /*/**
-     * Returns the CardList which is the parent of the Card of given ID
-     * @param id ID of the Card the parent of which is to be looked for
-     * @return the CardList which is the parent of the Card of given ID
-     */
-    /*public CardList getParentByCardId(long id) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/cards/getParent/" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(CardList.class);
-    }*/
 }
