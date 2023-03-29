@@ -29,10 +29,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Modality;
 
 public class BoardsOverviewCtrl implements Initializable {
@@ -50,6 +47,8 @@ public class BoardsOverviewCtrl implements Initializable {
     private TableColumn<Board, String> colBoardName;
     @FXML
     private TableColumn<Board, String> colCreator;
+    @FXML
+    private Button deleteButton;
 
     /**
      * Constructor for the BoardsOverviewCtrl
@@ -102,13 +101,14 @@ public class BoardsOverviewCtrl implements Initializable {
     }
 
     /**
-     * refreshes the page, looking for updates
+     * refreshes the page, looking for updates, and checks for admin privileges
      */
     public void refresh() {
         var boards = server.getBoards();
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
+        deleteButton.setVisible(mainCtrl.isAdmin());
     }
 
     /**
@@ -154,6 +154,29 @@ public class BoardsOverviewCtrl implements Initializable {
         }
         mainCtrl.showBoardView(b);
         mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Deletes the selected board, given the user has admin privileges
+     */
+    public void deleteBoard(){
+        Board b = table.getSelectionModel().getSelectedItem();
+        if(b == null){
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to select a board!");
+            alert.showAndWait();
+            return;
+        }
+        boolean deleted = server.adminDelete(mainCtrl.getAdminPass(), b.getId());
+        refresh();
+    }
+
+    /**
+     * Opens the Admin Login scene
+     */
+    public void checkAdmin() {
+        mainCtrl.showAdminCheck();
     }
 
     /**

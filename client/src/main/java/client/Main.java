@@ -75,6 +75,9 @@ public class Main extends Application {
         var editBoardName = FXML.load(EditBoardNameViewCtrl.class,
                 "client", "scenes", "EditBoardTitleView.fxml");
 
+        var adminCheck = FXML.load(AdminCheckCtrl.class,
+                "client", "scenes", "AdminCheck.fxml");
+
         var viewTags = FXML.load(ViewTagsCtrl.class,
                 "client", "scenes", "ViewTags.fxml");
 
@@ -97,7 +100,7 @@ public class Main extends Application {
         secondaryStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details, viewTags, createTag, editTag, viewAddTag);
+                changeServer, userBoardOverview, editBoardName, adminCheck,
+                joinBoardByLink, details, viewTags, createTag, editTag, viewAddTag);
     }
 }

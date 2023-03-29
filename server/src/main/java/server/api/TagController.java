@@ -77,10 +77,10 @@ public class TagController {
             return ResponseEntity.badRequest().build();
         }
         Tag tag = repo.getById(id);
-        for(Card c: cardRepo.findByTags_Id(id)) {
+        cardRepo.findByTags_Id(id).forEach(c -> {
             c.removeTag(tag);
             cardRepo.save(c);
-        }
+        });
         repo.deleteById(id);
         return ResponseEntity.ok(tag);
     }
