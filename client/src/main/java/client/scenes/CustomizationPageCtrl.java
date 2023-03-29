@@ -3,17 +3,35 @@ package client.scenes;
 import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
+import commons.ColorScheme;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 
-public class CustomizationPageCtrl {
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
+
+public class CustomizationPageCtrl implements Initializable {
 
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
 
     private Board board;
+
+    @FXML
+    private Button addPreset;
+
+    private ObservableList<ColorScheme> colorPairObservableList;
+    @FXML
+    private ListView<ColorScheme> colorPairList;
 
     @FXML
     private ColorPicker boardFont;
@@ -26,24 +44,6 @@ public class CustomizationPageCtrl {
 
     @FXML
     private ColorPicker listBG;
-
-    @FXML
-    private ColorPicker pres1BG;
-
-    @FXML
-    private ColorPicker pres1Font;
-
-    @FXML
-    private ColorPicker pres2BG;
-
-    @FXML
-    private ColorPicker pres2Font;
-
-    @FXML
-    private ColorPicker pres3BG;
-
-    @FXML
-    private ColorPicker pres3Font;
 
     /**
      * Constructor for the CustomizationPageCtrl class
@@ -59,6 +59,21 @@ public class CustomizationPageCtrl {
         this.server = server;
     }
 
+    /**
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
+                new ArrayList<>() : board.getCardsColorSchemesList());
+        colorPairObservableList = FXCollections.observableList(colors);
+        colorPairList.setItems(colorPairObservableList);
+        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+    }
+
     /** Sets the board to be customized
      * @param board the board that is going to be customized
      */
@@ -71,6 +86,7 @@ public class CustomizationPageCtrl {
      * to a board and the components of it
      */
     public void customizeBoard(){
+        board = server.getBoardByID(board.getId());
         this.board.getColorScheme()
                 .setColorLighter(mainCtrl.colorToHex(boardBG.getValue().brighter()));
         this.board.getColorScheme()
@@ -105,6 +121,16 @@ public class CustomizationPageCtrl {
     public ColorPicker getBoardBG() {
         return boardBG;
     }
+    /**
+    * Updates the tasks and description
+     */
+    public void refresh() {
+        List<ColorScheme> colorsCards = (board == null || board.getCardsColorSchemesList() == null ?
+                new ArrayList<>() : board.getCardsColorSchemesList());
+        colorPairObservableList = FXCollections.observableList(colorsCards);
+        colorPairList.setItems(colorPairObservableList);
+        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+    }
 
     /**
      * Resets the board's colors
@@ -121,120 +147,27 @@ public class CustomizationPageCtrl {
         boardFont.setValue(Color.WHITE);
         boardBG.setValue(Color.BLACK);
     }
+
+
     /**
-     * Selects the first preset and makes button disappear
+     * @return the current board
      */
-    public void selectPreset1() {
-        board.getCardsColorScheme()
-                .setColorBGdark(mainCtrl.colorToHex(pres1BG.getValue()));
-        board.getCardsColorScheme()
-                .setColorFont(mainCtrl.colorToHex(pres1Font.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Selects the second preset and makes button disappear
-     */
-    public void selectPreset2() {
-        board.getCardsColorScheme()
-                .setColorBGdark(mainCtrl.colorToHex(pres2BG.getValue()));
-        board.getCardsColorScheme()
-                .setColorFont(mainCtrl.colorToHex(pres2Font.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Selects the third preset and makes button disappear
-     */
-    public void selectPreset3() {
-        board.getCardsColorScheme()
-                .setColorBGdark(mainCtrl.colorToHex(pres3BG.getValue()));
-        board.getCardsColorScheme()
-                .setColorFont(mainCtrl.colorToHex(pres3Font.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveBG1() {
-        board.getPresetsBGColor()
-                .set(0, mainCtrl.colorToHex(pres1BG.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveFont1() {
-        board.getPresetsFontColor()
-                .set(0, mainCtrl.colorToHex(pres1Font.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveBG2() {
-        board.getPresetsBGColor()
-                .set(1, mainCtrl.colorToHex(pres2BG.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveFont2() {
-        board.getPresetsFontColor()
-                .set(1, mainCtrl.colorToHex(pres2Font.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveBG3() {
-        board.getPresetsBGColor()
-                .set(2, mainCtrl.colorToHex(pres3BG.getValue()));
-        this.board = server.addBoard(board);
-    }
-    /**
-     * Saves the selected color in the colopicker
-     */
-    public void saveFont3() {
-        board.getPresetsFontColor()
-                .set(2, mainCtrl.colorToHex(pres3Font.getValue()));
-        this.board = server.addBoard(board);
+    public Board getBoard() {
+        return board;
     }
 
     /**
-     * @return the first preset for the card's background
+     * Adds a new preset to the board
      */
-    public ColorPicker getPres1BG() {
-        return this.pres1BG;
-    }
-    /**
-     * @return the first preset for the card's font
-     */
-    public ColorPicker getPres1Font() {
-        return this.pres1Font;
-    }
-    /**
-     * @return the second preset for the card's background
-     */
-    public ColorPicker getPres2BG() {
-        return pres2BG;
-    }
-    /**
-     * @return the second preset for the card's font
-     */
-    public ColorPicker getPres2Font() {
-        return pres2Font;
-    }
-    /**
-     * @return the third preset for the card's background
-     */
-    public ColorPicker getPres3BG() {
-        return pres3BG;
-    }
-    /**
-     * @return the third preset for the card's font
-     */
-    public ColorPicker getPres3Font() {
-        return pres3Font;
+    public void addPreset(){
+
+        board = server.getBoardByID(board.getId());
+        //!!!MIGHT NOT WORK IF THERE IS NO SUCH BOARD
+        ColorScheme newDefaultColorScheme = server.addColorScheme(new ColorScheme());
+        board.getCardsColorSchemesList().add(newDefaultColorScheme);
+        server.updateBoard(board);
+        refresh();
+        this.mainCtrl.showCustomizationPage(board);
     }
 
     /**

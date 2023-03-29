@@ -160,12 +160,11 @@ public class ColorSchemeTest {
     @Test
     public void fourParamConstructor_toStringTest(){
         ColorScheme colorScheme = new ColorScheme("red","green","blue","yellow");
-        assertTrue(colorScheme.toString().contains("[\n" +
+        assertTrue(colorScheme.toString().contains(
                 "  colorBGdark=green\n" +
                 "  colorBGlight=red\n" +
                 "  colorFont=yellow\n" +
-                "  colorLighter=blue\n" +
-                "]"));
+                "  colorLighter=blue\n"));
     }
 
 }

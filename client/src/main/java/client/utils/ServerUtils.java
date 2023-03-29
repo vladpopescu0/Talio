@@ -505,6 +505,21 @@ public class ServerUtils {
                 .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
 
+
+    /**
+     * Updates the colorScheme of the board
+     * @param colorScheme the object to be updated
+     * @return the ColorScheme response
+     */
+    public ColorScheme updateColorScheme(ColorScheme colorScheme) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/updateColorScheme/" + colorScheme.getId()) //
+                .request(APPLICATION_JSON)//
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(colorScheme, APPLICATION_JSON), ColorScheme.class);
+    }
+
+
     /**
      * Sends a request to the server to check if the given password classifies the user
      * as an admin
@@ -531,5 +546,31 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .get(Boolean.class);
+    }
+
+    /**
+     * adds a colorScheme to the database
+     * @param colorScheme the posted colorScheme
+     * @return the posted entity
+     */
+    public ColorScheme addColorScheme(ColorScheme colorScheme){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/add")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(colorScheme,APPLICATION_JSON), ColorScheme.class);
+    }
+    /**
+     * gets a colorScheme by id
+     * @param id of the searched colorscheme
+     * @return the given entity, can throw
+     * server exception if not found
+     */
+    public ColorScheme getColorSchemeById(long id){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ColorScheme.class);
     }
 }

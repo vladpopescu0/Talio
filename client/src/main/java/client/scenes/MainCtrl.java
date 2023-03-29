@@ -121,6 +121,7 @@ public class MainCtrl {
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag) {
+
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -129,7 +130,6 @@ public class MainCtrl {
 
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
-
 
         this.createListCtrl = createList.getKey();
         this.createList = new Scene(createList.getValue());
@@ -160,8 +160,10 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
+
         this.customizationPageCtrl = customizationPage.getKey();
         this.customizationPage = new Scene(customizationPage.getValue());
+
         this.viewTagsCtrl = viewTags.getKey();
         this.viewTags = new Scene(viewTags.getValue());
 
@@ -170,6 +172,7 @@ public class MainCtrl {
 
         this.editTagCtrl = editTag.getKey();
         this.editTag = new Scene(editTag.getValue());
+
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
 
@@ -356,8 +359,9 @@ public class MainCtrl {
      */
     public void showCustomizationPage(Board board) {
         primaryStage.setTitle("Customize Your Board");
-        primaryStage.setScene(customizationPage);
+
         this.customizationPageCtrl.setBoard(board);
+        primaryStage.setScene(customizationPage);
     }
     /**
      * Shows the admin login page
@@ -504,7 +508,8 @@ public class MainCtrl {
     public String getAdminPass() { return adminPass; }
 
     public void setAdminPass(String pass) { this.adminPass = pass; }
-        /**
+
+    /**
      * Closes the secondary stage if it's visible
      */
     public void closeSecondaryStage() {

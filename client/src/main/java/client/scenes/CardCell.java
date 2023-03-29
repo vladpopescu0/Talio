@@ -223,11 +223,4 @@ public class CardCell extends ListCell<Card> {
         dragCardToIdentical(ids);
     }
 
-    /**
-     * getter for the colorscheme if this cell
-     * @return the colorscheme of this card cell, can be customized by the user
-     */
-    public ColorScheme getColorSchemeCustom() {
-        return this.colorSchemeCustom;
-    }
 }

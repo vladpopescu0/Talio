@@ -188,19 +188,21 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setCellFactory(cl ->
                 new CardListCell(mainCtrl, server, board)
         );
-        //Lord have mercy
-        mainCtrl.getCustomizationPageCtrl().getPres1BG()
-                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
-        mainCtrl.getCustomizationPageCtrl().getPres1Font()
-                .setValue(Color.valueOf(board.getPresetsFontColor().get(0)));
-        mainCtrl.getCustomizationPageCtrl().getPres2BG()
-                .setValue(Color.valueOf(board.getPresetsBGColor().get(1)));
-        mainCtrl.getCustomizationPageCtrl().getPres2Font()
-                .setValue(Color.valueOf(board.getPresetsFontColor().get(1)));
-        mainCtrl.getCustomizationPageCtrl().getPres3BG()
-                .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
-        mainCtrl.getCustomizationPageCtrl().getPres3Font()
-                .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
+//        mainCtrl.getCustomizationPageCtrl().getPres1BG()
+//                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
+//        mainCtrl.getCustomizationPageCtrl().getPres1Font()
+//                .setValue(Color.valueOf(board.getPresetsFontColor().get(0)));
+//        mainCtrl.getCustomizationPageCtrl().getPres2BG()
+//                .setValue(Color.valueOf(board.getPresetsBGColor().get(1)));
+//        mainCtrl.getCustomizationPageCtrl().getPres2Font()
+//                .setValue(Color.valueOf(board.getPresetsFontColor().get(1)));
+//        mainCtrl.getCustomizationPageCtrl().getPres3BG()
+//                .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
+//        mainCtrl.getCustomizationPageCtrl().getPres3Font()
+//                .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
+//        cardListView.setCellFactory(cl ->
+//                new CardListCell(mainCtrl, server, board)
+//        );
         customizeBoard(board);
     }
 
@@ -331,6 +333,7 @@ public class BoardViewCtrl implements Initializable {
     public void viewTags() {
         mainCtrl.showViewTags(board);
     }
+
     /**
      * Copies an invitation code of at least 4 digits
      * to the clipboard and uses a fade animation to

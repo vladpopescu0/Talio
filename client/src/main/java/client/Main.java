@@ -99,6 +99,6 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                        details,customizationPage,adminCheck, viewTags, createTag, editTag);
+                details,customizationPage,adminCheck, viewTags, createTag, editTag);
     }
 }

@@ -43,11 +43,15 @@ public class Board {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "board_id")
     private List<CardList> list;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ColorScheme colorScheme;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ColorScheme listsColorScheme;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private ColorScheme cardsColorScheme;
 
-    private ColorScheme colorScheme = new ColorScheme();
-    private ColorScheme listsColorScheme = new ColorScheme();
-
-    private ColorScheme cardsColorScheme = new ColorScheme();
+    @OneToMany(cascade = CascadeType.ALL,targetEntity = ColorScheme.class,orphanRemoval = true)
+    private List<ColorScheme> cardsColorSchemesList;
 
     /**
      * getter for the lists color scheme
@@ -57,19 +61,7 @@ public class Board {
         return listsColorScheme;
     }
 
-    /**
-     * setter for
-     * @param listsColorScheme
-     */
-    public void setListsColorScheme(ColorScheme listsColorScheme) {
-        this.listsColorScheme = listsColorScheme;
-    }
 
-
-    @ElementCollection
-    private List<String> presetsBGColor;
-    @ElementCollection
-    private List<String> presetsFontColor;
     @OneToMany(targetEntity =  Tag.class,
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL,
@@ -93,12 +85,10 @@ public class Board {
         this.list = list;
         this.tags = tags;
         this.name = name;
-        this.presetsBGColor = new ArrayList<>();
-        this.presetsFontColor = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            this.presetsBGColor.add("#ffffff");
-            this.presetsFontColor.add("#000000");
-        }
+        this.colorScheme = new ColorScheme();
+        this.listsColorScheme = new ColorScheme();
+        this.cardsColorScheme = new ColorScheme();
+        this.cardsColorSchemesList = new ArrayList<>();
     }
 
     /**
@@ -121,14 +111,12 @@ public class Board {
         this.users = new ArrayList<>();
         this.users.add(creator);
         this.name = name;
-        this.list = new ArrayList<>();
-        this.presetsBGColor = new ArrayList<>();
-        this.presetsFontColor = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            this.presetsBGColor.add("#ffffff");
-            this.presetsFontColor.add("#000000");
-        }
         this.tags = new ArrayList<>();
+        this.list = new ArrayList<>();
+        this.colorScheme = new ColorScheme();
+        this.listsColorScheme = new ColorScheme();
+        this.cardsColorScheme = new ColorScheme();
+        this.cardsColorSchemesList = new ArrayList<>();
     }
 
     /**
@@ -270,7 +258,6 @@ public class Board {
     /**
      * Adds a new, empty CardList to the board
      */
-    @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
     }
@@ -325,15 +312,8 @@ public class Board {
     /**
      * @return the list of 3 presets for the cards font color
      */
-    public List<String> getPresetsFontColor() {
-        return this.presetsFontColor;
-    }
-
-    /**
-     * @return the list of 3 presets for the cards BG color
-     */
-    public List<String> getPresetsBGColor() {
-        return this.presetsBGColor;
+    public List<ColorScheme> getCardsColorSchemesList() {
+        return this.cardsColorSchemesList;
     }
 
     /**
@@ -351,4 +331,5 @@ public class Board {
     public void setCardsColorScheme(ColorScheme cardsColorScheme) {
         this.cardsColorScheme = cardsColorScheme;
     }
+
 }
