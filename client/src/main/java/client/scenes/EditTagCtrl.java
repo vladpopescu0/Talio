@@ -108,4 +108,12 @@ public class EditTagCtrl {
     public void setTag(Tag tag) {
         this.tag = tag;
     }
+
+    /**
+     * Getter method for tag
+     * @return the current tag to be edited
+     */
+    public Tag getTag() {
+        return tag;
+    }
 }

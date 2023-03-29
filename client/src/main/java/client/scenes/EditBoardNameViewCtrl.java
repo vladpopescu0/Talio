@@ -63,7 +63,12 @@ public class EditBoardNameViewCtrl implements Initializable {
         } else {
             board.setName(newName.getText());
             server.updateBoard(board);
-            mainCtrl.showBoardView(board);
+            mainCtrl.closeSecondaryStage();
+
+            BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
+            ctrl.setBoard(board);
+            ctrl.refresh();
+            ctrl.checkUser();
         }
     }
 
@@ -71,6 +76,6 @@ public class EditBoardNameViewCtrl implements Initializable {
      * Redirects the user to the BoardView
      */
     public void cancel() {
-        mainCtrl.showBoardView(board);
+        mainCtrl.closeSecondaryStage();
     }
 }

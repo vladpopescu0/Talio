@@ -78,7 +78,6 @@ public class CreateTagCtrl {
         clearField();
         mainCtrl.closeSecondaryStage();
         mainCtrl.getViewTagsCtrl().refreshEdit();
-        mainCtrl.showViewTags(board);
     }
 
     /**

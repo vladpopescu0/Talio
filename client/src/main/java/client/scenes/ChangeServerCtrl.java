@@ -39,7 +39,7 @@ public class ChangeServerCtrl {
     public void changeServer() {
         String newServer = serverField.getText();
 
-        if (newServer.isEmpty() || newServer == null) {
+        if (newServer == null || newServer.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("You need to input a server!");
@@ -68,7 +68,8 @@ public class ChangeServerCtrl {
             mainCtrl.getCurrentUser().setBoardList(server.getBoardsByUserId(
                     mainCtrl.getCurrentUser().getId()));
         }
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
+        mainCtrl.getOverviewCtrl().refresh();
     }
 
     /**
@@ -76,6 +77,6 @@ public class ChangeServerCtrl {
      */
     public void cancel() {
         serverField.clear();
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
     }
 }

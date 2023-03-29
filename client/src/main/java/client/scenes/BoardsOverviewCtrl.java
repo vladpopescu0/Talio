@@ -133,6 +133,7 @@ public class BoardsOverviewCtrl implements Initializable {
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showBoardView(b);
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
@@ -152,6 +153,7 @@ public class BoardsOverviewCtrl implements Initializable {
             }
         }
         mainCtrl.showBoardView(b);
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
@@ -166,6 +168,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void userBoards() {
         mainCtrl.showUserBoardOverview();
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
