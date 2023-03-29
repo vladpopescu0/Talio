@@ -1,12 +1,12 @@
 package server.api;
 
 import commons.Board;
-import commons.ColorPair;
+import commons.ColorScheme;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.BoardRepository;
-import server.database.ColorPairRepository;
+import server.database.ColorSchemeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,20 +17,20 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
-    private final ColorPairRepository colorPairRepository;
+    private final ColorSchemeRepository colorSchemeRepository;
     private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      * @param msgs the messages template
-     * @param colorPairRepository the colorpair repository
+     * @param colorSchemeRepository the colorScheme repository
      */
     public BoardController(BoardRepository repo, SimpMessagingTemplate msgs,
-                           ColorPairRepository colorPairRepository) {
+                           ColorSchemeRepository colorSchemeRepository) {
         this.repo = repo;
         this.msgs = msgs;
-        this.colorPairRepository = colorPairRepository;
+        this.colorSchemeRepository = colorSchemeRepository;
     }
 
     /**
@@ -165,17 +165,17 @@ public class BoardController {
     /**
      * Updates a board
      * @param id the id of the board to be updated
-     * @param colorPair the new version of the board
+     * @param colorScheme the new version of the board
      * @return a response entity containing the updated board, if the update is possible
      */
-    @PutMapping("/updateColorPair/{id}")
-    public ResponseEntity<ColorPair> updateColorPair(@PathVariable("id") long id,
-                                             @RequestBody ColorPair colorPair) {
-        if (!colorPairRepository.existsById(id)) {
+    @PutMapping("/updateColorScheme/{id}")
+    public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
+                                                       @RequestBody ColorScheme colorScheme) {
+        if (!colorSchemeRepository.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
-        colorPairRepository.save(colorPair);
+        colorSchemeRepository.save(colorScheme);
 //      msgs.convertAndSend("/topic/boardsUpdate", board);
-        return ResponseEntity.ok(colorPair);
+        return ResponseEntity.ok(colorScheme);
     }
 }

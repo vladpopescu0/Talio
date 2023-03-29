@@ -57,13 +57,15 @@ public class MainCtrl {
     private EditCardCtrl editCardCtrl;
     private Scene changeServer;
     private ChangeServerCtrl changeServerCtrl;
+    private Scene adminCheck;
+    private AdminCheckCtrl adminCheckCtrl;
     private Scene editBoardName;
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
+    private Scene cardDetails;
+    private CardDetailsViewCtr cardDetailsViewCtr;
     private CustomizationPageCtrl customizationPageCtrl;
 
     private Scene customizationPage;
-    private Scene cardDetails;
-    private CardDetailsViewCtr cardDetailsViewCtr;
     private Scene viewTags;
     private ViewTagsCtrl viewTagsCtrl;
     private Scene createTag;
@@ -72,9 +74,11 @@ public class MainCtrl {
     private EditTagCtrl editTagCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
     private User currentUser;
-
     private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
     private Scene joinBoardByLink;
+    private boolean isAdmin = false;
+
+    private String adminPass = "";
 
     /**
      * Initializes the application
@@ -95,8 +99,9 @@ public class MainCtrl {
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
-     * @param customizationPage the CustomizationPage scene
      * @param details the cardDetails scene
+     * @param customizationPage the CustomizationPage scene
+     * @param adminCheck the adminCheck scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -110,11 +115,13 @@ public class MainCtrl {
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
-                           Pair<CustomizationPageCtrl, Parent> customizationPage,
                            Pair<CardDetailsViewCtr, Parent> details,
+                           Pair<CustomizationPageCtrl, Parent> customizationPage,
+                           Pair<AdminCheckCtrl, Parent> adminCheck,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag) {
+
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -123,7 +130,6 @@ public class MainCtrl {
 
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
-
 
         this.createListCtrl = createList.getKey();
         this.createList = new Scene(createList.getValue());
@@ -146,24 +152,30 @@ public class MainCtrl {
         this.changeServerCtrl = changeServer.getKey();
         this.changeServer = new Scene(changeServer.getValue());
 
+        this.adminCheckCtrl = adminCheck.getKey();
+        this.adminCheck = new Scene(adminCheck.getValue());
+
         this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
         this.userBoardOverview = new Scene(userBoardsOverview.getValue());
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
-        this.viewTagsCtrl = viewTags.getKey();
-        this.viewTags = new Scene(viewTags.getValue());
 
         this.customizationPageCtrl = customizationPage.getKey();
         this.customizationPage = new Scene(customizationPage.getValue());
+
+        this.viewTagsCtrl = viewTags.getKey();
+        this.viewTags = new Scene(viewTags.getValue());
 
         this.createTagCtrl = createTag.getKey();
         this.createTag = new Scene(createTag.getValue());
 
         this.editTagCtrl = editTag.getKey();
         this.editTag = new Scene(editTag.getValue());
+
         this.joinBoardByLinkCtrl = joinBoardByLink.getKey();
         this.joinBoardByLink = new Scene(joinBoardByLink.getValue());
+
         this.cardDetailsViewCtr = details.getKey();
         this.cardDetails = new Scene(details.getValue());
 
@@ -349,7 +361,15 @@ public class MainCtrl {
         primaryStage.setTitle("Customize Your Board");
 
         this.customizationPageCtrl.setBoard(board);
+        this.customizationPageCtrl.refresh();
         primaryStage.setScene(customizationPage);
+    }
+    /**
+     * Shows the admin login page
+     */
+    public void showAdminCheck(){
+        primaryStage.setTitle("Admin Password");
+        primaryStage.setScene(adminCheck);
     }
 
     /** Shows the ChangeListName scene
@@ -366,6 +386,7 @@ public class MainCtrl {
      * Shows the Change Server scene
      */
     public void showChangeServer() {
+        this.changeServerCtrl.initialize();
         primaryStage.setScene(changeServer);
     }
 
@@ -379,7 +400,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * Opens a new window with an overview of all tags for the current board
      * @param board the Board of which Tag overview is to be shown
      */
@@ -451,7 +471,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * @param color the color the needs to be transformed to hex format
      * @return a hex format of the color
      */
@@ -478,9 +497,19 @@ public class MainCtrl {
         String style = "-fx-background-color: " + bgColor + "; "
                 + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
                 + "-fx-background-radius: 5px;" +
-                "-fx-text-fill:" + fontColor + ";";
+                "-fx-text-fill:" + fontColor + ";"+
+                "-fx-border-color: " + fontColor+";"+
+                "-fx-border-radius: 5%;";
         button.setStyle(style);
     }
+    public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    public boolean isAdmin() { return this.isAdmin; }
+
+    public String getAdminPass() { return adminPass; }
+
+    public void setAdminPass(String pass) { this.adminPass = pass; }
+
     /**
      * Closes the secondary stage if it's visible
      */

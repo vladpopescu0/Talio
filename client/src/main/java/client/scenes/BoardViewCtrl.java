@@ -185,6 +185,9 @@ public class BoardViewCtrl implements Initializable {
         this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
+        cardListView.setCellFactory(cl ->
+                new CardListCell(mainCtrl, server, board)
+        );
 //        mainCtrl.getCustomizationPageCtrl().getPres1BG()
 //                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
 //        mainCtrl.getCustomizationPageCtrl().getPres1Font()
@@ -214,19 +217,30 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
-        if (board.getColorBGlight() == null) {
-            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.WHITE);
+        if (board.getColorScheme().getColorLighter() == null) {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {
             mainCtrl.getCustomizationPageCtrl().getBoardBG()
-                    .setValue(Color.valueOf(board.getColorBGlight()));
+                    .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
         }
-        if (board.getColorFont() == null) {
+        if (board.getColorScheme().getColorFont() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.WHITE);
         } else {
             mainCtrl.getCustomizationPageCtrl().getBoardFont()
-                    .setValue(Color.valueOf(board.getColorFont()));
+                    .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
         }
-
+        if (board.getListsColorScheme().getColorBGlight() == null) {
+            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getListBG()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
+        }
+        if (board.getListsColorScheme().getColorFont() == null) {
+            mainCtrl.getCustomizationPageCtrl().getListFont().setValue(Color.WHITE);
+        } else {
+            mainCtrl.getCustomizationPageCtrl().getListFont()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
+        }
         mainCtrl.showCustomizationPage(this.board);
     }
 
@@ -262,55 +276,57 @@ public class BoardViewCtrl implements Initializable {
      * @param board the board to be customized
      */
     public void customizeBoard(Board board) {
-        if (board.getColorBGlight() == null) {
-            board.setColorBGlight(mainCtrl.colorToHex(Color.LIGHTGRAY));
+        if (board.getColorScheme().getColorBGlight() == null) {
+            board.getColorScheme().setColorBGlight(mainCtrl.colorToHex(Color.WHITE));
         }
-        if (board.getColorBGdark() == null) {
-            board.setColorBGdark(mainCtrl.colorToHex(Color.GRAY));
+        if (board.getColorScheme().getColorBGdark() == null) {
+            board.getColorScheme().setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
         }
-        if (board.getColorFont() == null) {
-            board.setColorFont(mainCtrl.colorToHex(Color.BLACK));
+        if (board.getColorScheme().getColorFont() == null) {
+            board.getColorScheme().setColorFont(mainCtrl.colorToHex(Color.BLACK));
         }
-        if (board.getColorLighter() == null) {
-            board.setColorLighter(mainCtrl.colorToHex(Color.LIGHTGRAY.brighter()));
+        if (board.getColorScheme().getColorLighter() == null) {
+            board.getColorScheme().setColorLighter(mainCtrl.colorToHex(Color.GRAY));
         }
 
         this.content = (Region) titledPane.lookup(".title");
 //        this.scrollbar = (Region) cardListView.lookup(".virtual-flow > .corner");
 
-        String style = "-fx-background-color: " + board.getColorBGlight() + ";" +
-                "\n-fx-border-color: " + board.getColorBGlight() + ";";
-        String darkerStyle = "-fx-background-color: " + board.getColorBGdark() + ";" +
-                "\n-fx-border-color: " + board.getColorBGdark() + ";";
+        String style = "-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
+                "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";";
+        String darkerStyle = "-fx-background-color: "
+                + board.getColorScheme().getColorBGdark() + ";" +
+                "\n-fx-border-color: " + board.getColorScheme().getColorBGdark() + ";";
 
-        mainCtrl.setButtonStyle(editTitle, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(removeButton, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(addList, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(allBoardsButton, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(myBoardsButton, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(customizeButton, board.getColorLighter(), board.getColorFont());
-        mainCtrl.setButtonStyle(copyInviteButton, board.getColorLighter(), board.getColorFont());
-
+        mainCtrl.setButtonStyle(editTitle, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(removeButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(addList, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(allBoardsButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(myBoardsButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(customizeButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(copyInviteButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        System.out.println(board.getColorScheme().getColorLighter()+"first");
 //        setScrollBarStyle(scrollbar,board.getColorLighter());
-        content.setStyle(darkerStyle);
+        content.setVisible(false);
         border.setStyle(darkerStyle);
         cardListView.setStyle(style);
         scrollPane.setStyle(style);
-        cardListView.setCellFactory(cl -> {
-            CardListCell c = new CardListCell(mainCtrl, server,board);
-            c.setColor(board.getColorBGlight());
-            c.setStyle(style);
-            c.setColorCard(board.getCardsBGColor());
-            c.setColorFontCard(board.getCardsFontColor());
-            return c;
-        });
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server,board));
     }
 
 //    public void setScrollBarStyle(Region scrollbar, String bgColor) {
 //        String style = "-fx-background-color: " + bgColor + ";";
 //        scrollbar.setStyle(style);
 //    }
-
     /**
      * Redirects the user to the overview of tags for the current Board
      */

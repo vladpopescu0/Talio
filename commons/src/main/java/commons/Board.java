@@ -43,24 +43,25 @@ public class Board {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "board_id")
     private List<CardList> list;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ColorScheme colorScheme;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ColorScheme listsColorScheme;
+    @OneToOne(cascade = {CascadeType.ALL})
+    private ColorScheme cardsColorScheme;
 
-    private String colorBGlight;
-    private String colorBGdark;
+    @OneToMany(cascade = CascadeType.ALL,targetEntity = ColorScheme.class,orphanRemoval = true)
+    private List<ColorScheme> cardsColorSchemesList;
 
-    private String colorLighter;
-    private String colorFont;
+    /**
+     * getter for the lists color scheme
+     * @return the listsColorScheme
+     */
+    public ColorScheme getListsColorScheme() {
+        return listsColorScheme;
+    }
 
-    private String cardsBGColor;
-    private String cardsFontColor;
 
-    @OneToMany(targetEntity =  ColorPair.class,fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
-    private List<ColorPair> colors;
-    @ElementCollection
-    private List<String> presetsBGColor;
-    @ElementCollection
-    private List<String> presetsFontColor;
     @OneToMany(targetEntity =  Tag.class,
         fetch = FetchType.LAZY,
         cascade = CascadeType.ALL,
@@ -84,16 +85,10 @@ public class Board {
         this.list = list;
         this.tags = tags;
         this.name = name;
-        this.presetsBGColor = new ArrayList<>();
-        this.presetsFontColor = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            this.presetsBGColor.add("#ffffff");
-            this.presetsFontColor.add("#808080");
-        }
-        this.cardsFontColor = "#808080";
-        this.cardsBGColor = "ffffff";
-        this.colors = new ArrayList<>();
-        this.colors.add(new ColorPair("#ffffff","#808080"));
+        this.colorScheme = new ColorScheme();
+        this.listsColorScheme = new ColorScheme();
+        this.cardsColorScheme = new ColorScheme();
+        this.cardsColorSchemesList = new ArrayList<>();
     }
 
     /**
@@ -116,18 +111,12 @@ public class Board {
         this.users = new ArrayList<>();
         this.users.add(creator);
         this.name = name;
-        this.list = new ArrayList<>();
-        this.presetsBGColor = new ArrayList<>();
-        this.presetsFontColor = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            this.presetsBGColor.add("#ffffff");
-            this.presetsFontColor.add("#808080");
-        }
-        this.cardsFontColor = "#808080";
-        this.cardsBGColor = "ffffff";
         this.tags = new ArrayList<>();
-        this.colors = new ArrayList<>();
-        this.colors.add(new ColorPair("#ffffff","#808080"));
+        this.list = new ArrayList<>();
+        this.colorScheme = new ColorScheme();
+        this.listsColorScheme = new ColorScheme();
+        this.cardsColorScheme = new ColorScheme();
+        this.cardsColorSchemesList = new ArrayList<>();
     }
 
     /**
@@ -157,7 +146,7 @@ public class Board {
      * false otherwise
      */
     public boolean hasUser(long id) {
-        for (User u : this.getUsers()) {
+        for (User u: this.getUsers()) {//should be changed to a stream
             if (u.getId() == id) {
                 return true;
             }
@@ -252,69 +241,27 @@ public class Board {
 
     /**
      * Adds a CardList to the board(used for drag and drop feature)
-     *
      * @param cardList the card to be added
      */
-    @SuppressWarnings("unused")
     public void addList(CardList cardList) {
         list.add(cardList);
     }
 
     /**
+     * getter for the main colorScheme
+     * @return the colorScheme of the board
+     */
+    public ColorScheme getColorScheme() {
+        return colorScheme;
+    }
+
+    /**
      * Adds a new, empty CardList to the board
      */
-    @SuppressWarnings("unused")
     public void addEmptyList() {
         list.add(new CardList());
     }
 
-    /**
-     * Sets the lighter shade of the board color
-     *
-     * @param colorBGlight the lighter shade of the board color
-     */
-    public void setColorBGlight(String colorBGlight) {
-        this.colorBGlight = colorBGlight;
-    }
-
-    /**
-     * Sets the darker shade of the board color
-     *
-     * @param colorBGdark the darker shade of the board color
-     */
-    public void setColorBGdark(String colorBGdark) {
-        this.colorBGdark = colorBGdark;
-    }
-
-    /**
-     * Sets the color of the font of the board
-     *
-     * @param colorFont the lighter shade of the board color
-     */
-    public void setColorFont(String colorFont) {
-        this.colorFont = colorFont;
-    }
-
-    /**
-     * @return the lighter color of the board
-     */
-    public String getColorBGlight() {
-        return colorBGlight;
-    }
-
-    /**
-     * @return the darker color of the board
-     */
-    public String getColorBGdark() {
-        return colorBGdark;
-    }
-
-    /**
-     * @return the font color for the board
-     */
-    public String getColorFont() {
-        return colorFont;
-    }
     /**
      * Getter for the list of Tags
      * @return list of Tags
@@ -363,71 +310,26 @@ public class Board {
     }
 
     /**
-     * @return the lighter color of the board
-     */
-    public String getColorLighter() {
-        return colorLighter;
-    }
-
-    /**
-     * Sets the lighter color of the board
-     *
-     * @param colorLighter the lighter color of the board
-     */
-    public void setColorLighter(String colorLighter) {
-        this.colorLighter = colorLighter;
-    }
-
-    /**
-     * @return the current BG color of the card
-     */
-    public String getCardsBGColor() {
-        return cardsBGColor;
-    }
-
-    /**
-     * Sets the current color of the BG of the card
-     *
-     * @param cardsBGColor the current color of the BG of the card
-     */
-    public void setCardsBGColor(String cardsBGColor) {
-        this.cardsBGColor = cardsBGColor;
-    }
-
-    /**
-     * @return the current font color of the card
-     */
-    public String getCardsFontColor() {
-        return cardsFontColor;
-    }
-
-    /**
-     * Sets the current color of the font of the card
-     *
-     * @param cardsFontColor the current color of the font of the card
-     */
-    public void setCardsFontColor(String cardsFontColor) {
-        this.cardsFontColor = cardsFontColor;
-    }
-
-    /**
      * @return the list of 3 presets for the cards font color
      */
-    public List<String> getPresetsFontColor() {
-        return this.presetsFontColor;
+    public List<ColorScheme> getCardsColorSchemesList() {
+        return this.cardsColorSchemesList;
     }
 
     /**
-     * @return the list of 3 presets for the cards BG color
+     * getter for the color scheme of the board's cards
+     * @return the cardsColorScheme
      */
-    public List<String> getPresetsBGColor() {
-        return this.presetsBGColor;
+    public ColorScheme getCardsColorScheme() {
+        return cardsColorScheme;
     }
 
     /**
-     * @return all the color pairs in the board
+     *
+     * @param cardsColorScheme
      */
-    public List<ColorPair> getColors() {
-        return colors;
+    public void setCardsColorScheme(ColorScheme cardsColorScheme) {
+        this.cardsColorScheme = cardsColorScheme;
     }
+
 }

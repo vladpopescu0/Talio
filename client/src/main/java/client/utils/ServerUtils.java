@@ -505,29 +505,86 @@ public class ServerUtils {
                 .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
 
+
     /**
-     * Updates the details of a card
-     * @param colorPair the card to be updated
-     * @return the card
+     * Updates the colorScheme of the board
+     * @param colorScheme the object to be updated
+     * @return the ColorScheme response
      */
-    public ColorPair updateColorPair(ColorPair colorPair) {
+    public ColorScheme updateColorScheme(ColorScheme colorScheme) {
         return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/boards/updateColorPair/" + colorPair.getId()) //
+                .target(server).path("api/boards/updateColorScheme/" + colorScheme.getId()) //
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON) //
-                .put(Entity.entity(colorPair, APPLICATION_JSON), ColorPair.class);
+                .put(Entity.entity(colorScheme, APPLICATION_JSON), ColorScheme.class);
     }
 
-    /*/**
-     * Returns the CardList which is the parent of the Card of given ID
-     * @param id ID of the Card the parent of which is to be looked for
-     * @return the CardList which is the parent of the Card of given ID
+
+    /**
+     * Sends a request to the server to check if the given password classifies the user
+     * as an admin
+     * @param password Given password to check for
+     * @return True if password is correct, false otherwise
      */
-    /*public CardList getParentByCardId(long id) {
+    public boolean isAdmin(String password){
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/cards/getParent/" + id)
+                .target(server).path("api/admin/" + password)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .get(CardList.class);
-    }*/
+                .get(Boolean.class);
+    }
+
+    /**
+     * Sends a request to the server to delete a board with admin privileges
+     * @param password Admin password
+     * @param boardId Board ID
+     * @return True if successful, false otherwise
+     */
+    public boolean adminDelete(String password, long boardId){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/admin/" + password + "/delete/" + boardId)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(Boolean.class);
+    }
+
+    /**
+     * adds a colorScheme to the database
+     * @param colorScheme the posted colorScheme
+     * @return the posted entity
+     */
+    public ColorScheme addColorScheme(ColorScheme colorScheme){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/add")
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .post(Entity.entity(colorScheme,APPLICATION_JSON), ColorScheme.class);
+    }
+    /**
+     * gets a colorScheme by id
+     * @param id of the searched colorscheme
+     * @return the given entity, can throw
+     * server exception if not found
+     */
+    public ColorScheme getColorSchemeById(long id){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ColorScheme.class);
+    }
+
+    /**
+     * deletes a colorScheme by id
+     * @param id of the colorScheme
+     * @return the colorScheme if it was deleted,
+     * throws an exception if not found
+     */
+    public ColorScheme deleteColorSchemeById(long id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/delete/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(ColorScheme.class);
+    }
 }

@@ -2,14 +2,15 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.Board;
-import commons.ColorPair;
+import commons.ColorScheme;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-public class CardCustomCtrl extends ListCell<ColorPair> {
+public class CardCustomCtrl extends ListCell<ColorScheme> {
 
     private final CustomizationPageCtrl parent;
     private ServerUtils server;
@@ -62,8 +63,8 @@ public class CardCustomCtrl extends ListCell<ColorPair> {
 //                int i = board.getColors().indexOf(this.getItem());
                 presBG.setVisible(true);
                 presFont.setVisible(true);
-//                presBG.setValue(Color.valueOf(board.getColors().get(i).getColorBG()));
-//                presFont.setValue(Color.valueOf(board.getColors().get(i).getColorFont()));
+                presBG.setValue(Color.valueOf(this.getItem().getColorBGlight()));
+                presFont.setValue(Color.valueOf(this.getItem().getColorFont()));
                 set.setVisible(true);
                 delete.setVisible(true);
             }
@@ -73,7 +74,7 @@ public class CardCustomCtrl extends ListCell<ColorPair> {
     }
 
     @Override
-    protected void updateItem(ColorPair colors, boolean empty) {
+    protected void updateItem(ColorScheme colors, boolean empty) {
         super.updateItem(colors, empty);
 //trebuie sa fac o metoda getbyid pt colorpair
         if (empty || colors == null) {
@@ -95,7 +96,6 @@ public class CardCustomCtrl extends ListCell<ColorPair> {
                     e.printStackTrace();
                 }
             }
-
             setText(null);
             setGraphic(presetsPane);
         }
@@ -105,33 +105,45 @@ public class CardCustomCtrl extends ListCell<ColorPair> {
      * Saves the selected color in the colopicker
      */
     public void saveBG() {
-        int i = board.getColors().indexOf(this.getItem());
-        this.getItem().setColorBG(mainCtrl.colorToHex(presBG.getValue()));
-        server.updateColorPair(this.getItem());
-//        board.getColors().set(i,new ColorPair(mainCtrl.colorToHex(presBG.getValue()),
-//        mainCtrl.colorToHex(presFont.getValue())));
-//        server.addBoard(board);
-        this.board = server.getBoardByID(board.getId());
+        this.getItem().setColorBGlight(mainCtrl.colorToHex(presBG.getValue()));
+        this.getItem().setColorBGdark(mainCtrl.colorToHex(presBG.getValue().darker()));
+        this.getItem().setColorLighter(mainCtrl.colorToHex(presBG.getValue().brighter()));
+        server.updateColorScheme(this.getItem());
+        board = server.getBoardByID(board.getId());
+        mainCtrl.showCustomizationPage(board);
     }
     /**
      * Saves the selected color in the colopicker
+     * refreshes the board to the current state in the database
      */
     public void saveFont() {
-        int i = board.getColors().indexOf(this.getItem());
-        board.getColors().set(i,new ColorPair(mainCtrl.colorToHex(presBG.getValue())
-                ,mainCtrl.colorToHex(presFont.getValue())));
-        server.addBoard(board);
+        this.getItem().setColorFont(mainCtrl.colorToHex(presFont.getValue()));
+        server.updateColorScheme(this.getItem());
+        board = server.getBoardByID(board.getId());
+        mainCtrl.showCustomizationPage(board);
     }
 
     /**
      * Selects the respective preset
      */
     public void selectPreset() {
-        int i = board.getColors().indexOf(this.getItem());
-        board.getColors().set(i, new ColorPair(mainCtrl.colorToHex(presBG.getValue()),
-                mainCtrl.colorToHex(presFont.getValue())));
-        board.setCardsBGColor(mainCtrl.colorToHex(presBG.getValue()));
-        board.setCardsFontColor(mainCtrl.colorToHex(presFont.getValue()));
-        this.board = server.addBoard(board);
+        board = server.getBoardByID(board.getId());
+        board.getCardsColorScheme().setColorFont(this.getItem().getColorFont());
+        board.getCardsColorScheme().setColorLighter(this.getItem().getColorLighter());
+        board.getCardsColorScheme().setColorBGdark(this.getItem().getColorBGdark());
+        board.getCardsColorScheme().setColorBGlight(this.getItem().getColorBGlight());
+        server.updateBoard(board);
+        mainCtrl.showCustomizationPage(board);
+    }
+
+    /**
+     * Action for the delete button,
+     * refreshes the view and deletes this colorScheme
+     */
+    public void deletePreset(){
+        board = server.getBoardByID(board.getId());
+        board.getCardsColorSchemesList().remove(this.getItem());
+        server.updateBoard(board);
+        mainCtrl.showCustomizationPage(board);
     }
 }
