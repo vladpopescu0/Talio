@@ -15,7 +15,6 @@ import server.database.TaskRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/api/cards")
