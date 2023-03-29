@@ -22,6 +22,9 @@
                 <Font size="36.0" />
             </font>
         </Label>
+      <Button fx:id="deleteButton" layoutX="424.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteBoard" text="Delete Board" />
+      <Button fx:id="adminButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#checkAdmin" text="Admin Login" />
+
         <Button fx:id="joinBoard" layoutX="334.0" layoutY="262.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join board" AnchorPane.topAnchor="262.0" />
         <Label fx:id="serverLabel" layoutX="439.0" layoutY="31.0" prefHeight="26.0" prefWidth="147.0" textFill="WHITE" />
         <Label layoutX="472.0" layoutY="14.0" text="Current Server:" textFill="WHITE" />
