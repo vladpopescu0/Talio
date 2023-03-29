@@ -109,7 +109,8 @@ public class MainCtrl {
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
+                           Pair<AddCardCtrl,Parent> addCard,
+                           Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
@@ -380,6 +381,7 @@ public class MainCtrl {
      * Shows the Change Server scene
      */
     public void showChangeServer() {
+        this.changeServerCtrl.initialize();
         showSecondaryStage(changeServer, "Change Server");
     }
 
@@ -510,7 +512,6 @@ public class MainCtrl {
     public String getAdminPass() { return adminPass; }
 
     public void setAdminPass(String pass) { this.adminPass = pass; }
-
     /**
      * Closes the secondary stage if it's visible
      */

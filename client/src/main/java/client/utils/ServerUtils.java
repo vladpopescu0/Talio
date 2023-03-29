@@ -516,7 +516,7 @@ public class ServerUtils {
                 .target(server).path("api/cards/addTags/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(tags, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(tags, APPLICATION_JSON), Card.class);
     }
 
     /**
@@ -532,7 +532,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(tag, APPLICATION_JSON), Card.class);
     }
-
 
     /**
      * Updates the colorScheme of the board

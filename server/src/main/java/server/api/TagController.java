@@ -1,6 +1,5 @@
 package server.api;
 
-import commons.Card;
 import commons.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -77,10 +76,10 @@ public class TagController {
             return ResponseEntity.badRequest().build();
         }
         Tag tag = repo.getById(id);
-        for(Card c: cardRepo.findByTags_Id(id)) {
+        cardRepo.findByTags_Id(id).forEach(c -> {
             c.removeTag(tag);
             cardRepo.save(c);
-        }
+        });
         repo.deleteById(id);
         return ResponseEntity.ok(tag);
     }

@@ -234,7 +234,7 @@ public class CardController {
      * @param tags list of Tags to be added to the Card
      * @return updated Card
      */
-    @PostMapping("addTags/{id}")
+    @PutMapping("addTags/{id}")
     public ResponseEntity<Card> addTags(@PathVariable("id") long id,
                                         @RequestBody List<Tag> tags) {
         if (!repo.existsById(id)) {
@@ -251,9 +251,7 @@ public class CardController {
         }
 
         Card card = repo.getById(id);
-        for(Tag t: tags) {
-            card.addTag(t);
-        }
+        tags.forEach(card::addTag);
         repo.save(card);
         return ResponseEntity.ok(card);
     }

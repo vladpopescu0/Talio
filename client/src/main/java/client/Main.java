@@ -76,7 +76,6 @@ public class Main extends Application {
                 "client", "scenes", "EditBoardTitleView.fxml");
         var customizationPage = FXML.load(CustomizationPageCtrl.class,
                 "client", "scenes", "CustomizationPage.fxml");
-
         var viewTags = FXML.load(ViewTagsCtrl.class,
                 "client", "scenes", "ViewTags.fxml");
 
