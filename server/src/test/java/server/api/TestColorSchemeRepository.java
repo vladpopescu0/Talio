@@ -8,11 +8,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.FluentQuery;
 import server.database.ColorSchemeRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class TestColorSchemeRepository implements ColorSchemeRepository {
+
+    public final List<ColorScheme> colorSchemes = new ArrayList<>();
+    public final List<String> calledMethods = new ArrayList<>();
+
+    private void call(String name) { calledMethods.add(name); }
     /**
      * find all mock
      * @return all
@@ -101,7 +108,18 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
      */
     @Override
     public <S extends ColorScheme> S save(S entity) {
-        return null;
+        call("save");
+        Optional<ColorScheme> opt = find(entity.getId());
+        if (opt.isEmpty()) {
+            entity.setId((long) colorSchemes.size());
+            colorSchemes.add(entity);
+        } else {
+            int ind = colorSchemes.indexOf(opt.get());
+            colorSchemes.remove(opt.get());
+            entity.setId(ind);
+            colorSchemes.add(ind, entity);
+        }
+        return entity;
     }
 
     /**
@@ -294,5 +312,16 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
     public <S extends ColorScheme, R> R findBy(Example<S> example
             , Function<FluentQuery.FetchableFluentQuery<S>, R> queryFunction) {
         return null;
+    }
+
+    /**
+     * Universal method find by id
+     * @param id the id of the colorscheme
+     * @return an optional object on whether it was found
+     * or not
+     */
+    private Optional<ColorScheme> find(Long id) {
+        return colorSchemes.stream()
+                .filter(c -> Objects.equals(c.getId(), id)).findFirst();
     }
 }

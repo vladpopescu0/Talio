@@ -143,6 +143,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     public void deletePreset(){
         board = server.getBoardByID(board.getId());
         board.getCardsColorSchemesList().remove(this.getItem());
+        board.setCardsColorScheme(new ColorScheme());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }

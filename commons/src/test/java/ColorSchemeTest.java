@@ -1,6 +1,7 @@
 import commons.ColorScheme;
 import org.junit.jupiter.api.Test;
 
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ColorSchemeTest {
@@ -166,5 +167,22 @@ public class ColorSchemeTest {
                 "  colorFont=yellow\n" +
                 "  colorLighter=blue\n"));
     }
-
+    /**
+     * test for setId, relevant only for backend tests
+     */
+    @Test
+    public void setIdTest(){
+        ColorScheme test = new ColorScheme();
+        test.setId(890987);
+        assertNotNull(test.getId());
+    }
+    /**
+     * test for getId, rarely relevant for client only objects
+     */
+    @Test
+    public void getIdTest(){
+        ColorScheme test = new ColorScheme();
+        test.setId(7);
+        assertEquals(test.getId(),7);
+    }
 }
