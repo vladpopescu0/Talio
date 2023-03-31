@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class TagCell extends ListCell<Tag> {
 
@@ -24,19 +25,25 @@ public class TagCell extends ListCell<Tag> {
     @FXML
     private Button deleteButton;
 
+    @FXML
+    private ColorPicker tagColor;
+
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
+    private ViewTagsCtrl tagCtrl;
 
     /**
      * useful dependencies for universal variables and server communication
      *
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
+     * @param tagCtrl               the controller of the parent
      */
     @Inject
-    public TagCell(MainCtrl mainCtrl, ServerUtils serverUtils) {
+    public TagCell(MainCtrl mainCtrl, ServerUtils serverUtils, ViewTagsCtrl tagCtrl) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
+        this.tagCtrl = tagCtrl;
     }
 
     /**
@@ -60,8 +67,9 @@ public class TagCell extends ListCell<Tag> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    this.tagColor.setValue(Color.valueOf(this.getItem().getColor()));
                     this.editButton.setOnAction(event -> {
-                        mainCtrl.showEditTag(tag);
+                        mainCtrl.showEditTag(this.getItem());
                     });
                     this.deleteButton.setOnAction(event ->{
                         server.removeTag(tag.getId());
@@ -71,6 +79,13 @@ public class TagCell extends ListCell<Tag> {
                         }
 
                         mainCtrl.getViewTagsCtrl().refreshEdit();
+                    });
+                    this.tagColor.setOnAction(event->{
+                        String newColor = mainCtrl.colorToHex(this.tagColor.getValue());
+                        this.getItem().setColor(newColor);
+                        server.modifyTag(this.getItem().getId(),this.getItem());
+                        this.tagColor.setValue(Color.valueOf(this.getItem().getColor()));
+                        tagCtrl.refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

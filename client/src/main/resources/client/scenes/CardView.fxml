@@ -27,27 +27,27 @@
          </font>
       </Label>
       <Label fx:id="statusLabel" layoutX="128.0" layoutY="34.0" text="(a/ b done)" />
-      <Label fx:id="tagLabel1" alignment="CENTER" contentDisplay="CENTER" layoutY="73.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="52.0" textAlignment="CENTER">
+      <Label fx:id="tagLabel1" alignment="CENTER" contentDisplay="CENTER" layoutY="62.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="52.0" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="tagLabel2" alignment="CENTER" contentDisplay="CENTER" layoutY="56.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="52.0" textAlignment="CENTER">
+      <Label fx:id="tagLabel2" alignment="CENTER" contentDisplay="CENTER" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="52.0" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="tagLabel3" alignment="CENTER" contentDisplay="CENTER" layoutY="39.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="52.0" textAlignment="CENTER">
+      <Label fx:id="tagLabel3" alignment="CENTER" contentDisplay="CENTER" layoutY="32.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="52.0" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="tagLabel4" alignment="CENTER" contentDisplay="CENTER" layoutY="22.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="52.0" textAlignment="CENTER">
+      <Label fx:id="tagLabel4" alignment="CENTER" contentDisplay="CENTER" layoutY="17.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="52.0" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>
       </Label>
-      <Label fx:id="tagLabel5" alignment="CENTER" contentDisplay="CENTER" layoutY="5.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="17.0" prefWidth="52.0" textAlignment="CENTER">
+      <Label fx:id="tagLabel5" alignment="CENTER" contentDisplay="CENTER" layoutY="2.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="52.0" textAlignment="CENTER">
          <font>
             <Font size="11.0" />
          </font>

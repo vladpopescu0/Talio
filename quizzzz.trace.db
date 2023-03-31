@@ -2471,6 +2471,41 @@ select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [4
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL USERS[*]"; expected "OBJECTS"; SQL statement:
 DROP ALL USERS [42001-200]
 >>>>>>> 357cd6d871e3bfa152cad2db95f9d8c8109dade9
+<<<<<<< HEAD
+2023-03-25 14:53:59 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:10 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:10 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:10 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-25 14:54:12 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "USER" not found; SQL statement:
+select user0_.id as col_0_0_ from user user0_ where user0_.username=? limit ? [42102-200]
+2023-03-28 03:01:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientConnectionException: The database is open in exclusive mode; can not open additional connections [90135-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.engine.Session.checkSuspended(Session.java:1369)
+	at org.h2.engine.Session.transitionToState(Session.java:1361)
+	at org.h2.engine.Session.setCurrentCommand(Session.java:1343)
+	at org.h2.engine.Session.endStatement(Session.java:1887)
+	at org.h2.command.Command.executeUpdate(Command.java:285)
+=======
 2023-03-29 16:46:02 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "TAG_CARDS" nie istnieje
 Table "TAG_CARDS" not found; SQL statement:
@@ -2493,15 +2528,23 @@ alter table card_tags add constraint FKnmoi66ttdls2ekxyd5chlgi1f foreign key (ta
 	at org.h2.command.ddl.AlterTableAddConstraint.update(AlterTableAddConstraint.java:78)
 	at org.h2.command.CommandContainer.update(CommandContainer.java:198)
 	at org.h2.command.Command.executeUpdate(Command.java:251)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:228)
 	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
 	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:581)
+<<<<<<< HEAD
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:602)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.migrateTable(AbstractSchemaMigrator.java:314)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:78)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:220)
+=======
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:526)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:452)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:263)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:123)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:192)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:81)
@@ -2531,6 +2574,19 @@ alter table card_tags add constraint FKnmoi66ttdls2ekxyd5chlgi1f foreign key (ta
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
 	at server.Main.main(Main.java:31)
+<<<<<<< HEAD
+2023-03-28 03:01:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1514)
+	at org.h2.jdbc.JdbcStatement.checkClosed(JdbcStatement.java:1211)
+	at org.h2.jdbc.JdbcStatement.checkClosedForWrite(JdbcStatement.java:1196)
+	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:209)
+=======
 2023-03-29 19:26:09 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Kolumna "TAGS_ID" nie istnieje
 Column "TAGS_ID" not found; SQL statement:
@@ -2546,14 +2602,20 @@ alter table card_tags add constraint UK_54b4ajesbhnqi16sebagdrbry unique (tags_i
 	at org.h2.command.CommandContainer.update(CommandContainer.java:198)
 	at org.h2.command.Command.executeUpdate(Command.java:251)
 	at org.h2.jdbc.JdbcStatement.executeInternal(JdbcStatement.java:228)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.h2.jdbc.JdbcStatement.execute(JdbcStatement.java:201)
 	at com.zaxxer.hikari.pool.ProxyStatement.execute(ProxyStatement.java:94)
 	at com.zaxxer.hikari.pool.HikariProxyStatement.execute(HikariProxyStatement.java)
 	at org.hibernate.tool.schema.internal.exec.GenerationTargetToDatabase.accept(GenerationTargetToDatabase.java:54)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlString(AbstractSchemaMigrator.java:581)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:526)
+<<<<<<< HEAD
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.createTable(AbstractSchemaMigrator.java:293)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:74)
+=======
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyUniqueKeys(AbstractSchemaMigrator.java:401)
 	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:90)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:220)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:123)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:192)
@@ -2584,6 +2646,28 @@ alter table card_tags add constraint UK_54b4ajesbhnqi16sebagdrbry unique (tags_i
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
 	at server.Main.main(Main.java:31)
+<<<<<<< HEAD
+2023-03-28 03:01:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1514)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1490)
+	at org.h2.jdbc.JdbcDatabaseMetaData.checkClosed(JdbcDatabaseMetaData.java:3111)
+	at org.h2.jdbc.JdbcDatabaseMetaData.getIndexInfo(JdbcDatabaseMetaData.java:456)
+	at com.zaxxer.hikari.pool.ProxyDatabaseMetaData.getIndexInfo(ProxyDatabaseMetaData.java:208)
+	at com.zaxxer.hikari.pool.HikariProxyDatabaseMetaData.getIndexInfo(HikariProxyDatabaseMetaData.java)
+	at org.hibernate.tool.schema.extract.internal.InformationExtractorJdbcDatabaseMetaDataImpl.processIndexInfoResultSet(InformationExtractorJdbcDatabaseMetaDataImpl.java:112)
+	at org.hibernate.tool.schema.extract.internal.AbstractInformationExtractorImpl.getIndexes(AbstractInformationExtractorImpl.java:1121)
+	at org.hibernate.tool.schema.extract.internal.TableInformationImpl.indexes(TableInformationImpl.java:122)
+	at org.hibernate.tool.schema.extract.internal.TableInformationImpl.getIndex(TableInformationImpl.java:138)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyUniqueKeys(AbstractSchemaMigrator.java:388)
+	at org.hibernate.tool.schema.internal.GroupedSchemaMigratorImpl.performTablesMigration(GroupedSchemaMigratorImpl.java:90)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:220)
+=======
 2023-03-29 19:26:09 jdbc[3]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Kolumna "TAGS_ID" nie istnieje
 Column "TAGS_ID" not found; SQL statement:
@@ -2607,6 +2691,7 @@ alter table card_tags add constraint FKnmoi66ttdls2ekxyd5chlgi1f foreign key (ta
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applySqlStrings(AbstractSchemaMigrator.java:526)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:452)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:263)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:123)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:192)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:81)
@@ -2636,6 +2721,23 @@ alter table card_tags add constraint FKnmoi66ttdls2ekxyd5chlgi1f foreign key (ta
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1303)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1292)
 	at server.Main.main(Main.java:31)
+<<<<<<< HEAD
+2023-03-28 03:01:02 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLNonTransientConnectionException: Database is already closed (to disable automatic closing at VM shutdown, add ";DB_CLOSE_ON_EXIT=FALSE" to the db URL) [90121-200]
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:622)
+	at org.h2.message.DbException.getJdbcSQLException(DbException.java:429)
+	at org.h2.message.DbException.get(DbException.java:205)
+	at org.h2.message.DbException.get(DbException.java:181)
+	at org.h2.message.DbException.get(DbException.java:170)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1514)
+	at org.h2.jdbc.JdbcConnection.checkClosed(JdbcConnection.java:1490)
+	at org.h2.jdbc.JdbcConnection.clearWarnings(JdbcConnection.java:703)
+	at com.zaxxer.hikari.pool.ProxyConnection.close(ProxyConnection.java:267)
+	at org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl.closeConnection(DatasourceConnectionProviderImpl.java:127)
+	at org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$ConnectionProviderJdbcConnectionAccess.releaseConnection(JdbcEnvironmentInitiator.java:186)
+	at org.hibernate.resource.transaction.backend.jdbc.internal.DdlTransactionIsolatorNonJtaImpl.release(DdlTransactionIsolatorNonJtaImpl.java:99)
+	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:147)
+=======
 2023-03-29 19:28:36 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Błąd składniowy w wyrażeniu SQL "CARD_TAGS[*]"; oczekiwano "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"
 Syntax error in SQL statement "CARD_TAGS[*]"; expected "COMMIT, CREATE, CALL, CHECKPOINT, COMMENT"; SQL statement:
@@ -2780,6 +2882,7 @@ alter table card_tags add constraint FK3d8m6ot8d661jw391k45btejs foreign key (ca
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.applyForeignKeys(AbstractSchemaMigrator.java:452)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.performMigration(AbstractSchemaMigrator.java:263)
 	at org.hibernate.tool.schema.internal.AbstractSchemaMigrator.doMigration(AbstractSchemaMigrator.java:123)
+>>>>>>> ad26e9659b7ac7d3578781115362a99bcd9edf55
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.performDatabaseAction(SchemaManagementToolCoordinator.java:192)
 	at org.hibernate.tool.schema.spi.SchemaManagementToolCoordinator.process(SchemaManagementToolCoordinator.java:81)
 	at org.hibernate.internal.SessionFactoryImpl.<init>(SessionFactoryImpl.java:335)

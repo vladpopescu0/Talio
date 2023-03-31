@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Circle;
 
 public class TagAddCell extends ListCell<Tag> {
 
@@ -20,6 +21,9 @@ public class TagAddCell extends ListCell<Tag> {
 
     @FXML
     private Button removeButton;
+
+    @FXML
+    private Circle colorCircle;
 
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
@@ -61,6 +65,7 @@ public class TagAddCell extends ListCell<Tag> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    colorCircle.setStyle("-fx-fill: "+this.getItem().getColor()+";");
                     this.removeButton.setVisible(visibleRemove);
                     this.removeButton.setOnAction(event ->{
                         server.removeTagFromCard(mainCtrl.getCardDetailsViewCtr().getCard().getId(),

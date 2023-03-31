@@ -14,6 +14,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +30,6 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Button editButton;
-
     @FXML
     private Button deleteButton;
     @FXML
@@ -48,6 +48,8 @@ public class CardCell extends ListCell<Card> {
 
     @FXML
     private Label hasDesc;
+
+    private ColorScheme colorSchemeCustom;
     private FXMLLoader fxmlLoader;
     private Board board;
     private MainCtrl mainCtrl;
@@ -60,9 +62,10 @@ public class CardCell extends ListCell<Card> {
      * @param mainCtrl the controller of the whole application
      * @param cardList the cardListCell in which this card is
      * @param board the board the card belongs to
+     * @param colorScheme the colorscheme of this card
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server
-            , CardListCell cardList, Board board) {
+            , CardListCell cardList, Board board,ColorScheme colorScheme) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
@@ -71,6 +74,7 @@ public class CardCell extends ListCell<Card> {
             //statusLabel.setText(this.getItem().tasksLabel());
             statusLabel.setText("AAAA");
         }
+        this.colorSchemeCustom = colorScheme;
     }
 
     /**
@@ -137,9 +141,15 @@ public class CardCell extends ListCell<Card> {
             }
 
             paneLabel.setText(card.getName());
-
+            setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);
+            cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
+            paneLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
+            String lighter = mainCtrl.colorToHex(Color
+                    .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
+            mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
+            mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
         }
     }
 
@@ -153,14 +163,21 @@ public class CardCell extends ListCell<Card> {
         if (tags.size() <= 5) {
             for(int x = 0; x < tags.size(); x++) {
                 labels.get(tags.size() - x - 1).setText(tags.get(x).getName());
+                labels.get(tags.size() - x - 1)
+                        .setStyle("-fx-text-fill: "+tags.get(x).getColor()+";"
+                        +"-fx-border-color: "+tags.get(x).getColor()+";");
             }
             for(int x = tags.size(); x < 5; x++) {
                 labels.get(x).setText(null);
             }
         } else {
             tagLabel1.setText("+" + (tags.size() - 4) + " more");
+            tagLabel1.setStyle("-fx-text-fill: "+"white"+"; "
+                    +"-fx-border-color: "+"white"+";");
             for(int x = 0; x < 4; x++) {
                 labels.get(4 - x).setText(tags.get(x).getName());
+                labels.get(4 - x).setStyle("-fx-text-fill: "+tags.get(x).getColor()+"; "
+                        +"-fx-border-color: "+tags.get(x).getColor()+";");
             }
         }
     }
@@ -244,4 +261,5 @@ public class CardCell extends ListCell<Card> {
 
         dragCardToIdentical(ids);
     }
+
 }

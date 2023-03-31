@@ -22,14 +22,14 @@
                 <Font size="36.0" />
             </font>
         </Label>
-      <Button fx:id="deleteButton" layoutX="424.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteBoard" text="Delete Board" />
-      <Button fx:id="adminButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#checkAdmin" text="Admin Login" />
+        <Button fx:id="joinBoard" layoutX="334.0" layoutY="147.0" mnemonicParsing="false" onAction="#joinBoard" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join board" />
+        <Label fx:id="serverLabel" layoutX="423.0" layoutY="61.0" prefHeight="26.0" prefWidth="147.0" textFill="WHITE" />
+        <Label layoutX="455.0" layoutY="36.0" text="Current Server:" textFill="WHITE" />
+        <Button fx:id="myBoardsButton" layoutX="334.0" layoutY="213.0" mnemonicParsing="false" onAction="#userBoards" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="My Boards" />
+      <Button layoutX="334.0" layoutY="246.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="View Board" />
+        <Button fx:id="joinByCode" layoutX="334.0" layoutY="180.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join by Code" textAlignment="CENTER" AnchorPane.topAnchor="180.0" />
+      <Button fx:id="deleteButton" layoutX="335.0" layoutY="342.0" mnemonicParsing="false" onAction="#deleteBoard" style="-fx-background-color: #e33057;" text="Delete Board" />
+      <Button fx:id="adminButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#checkAdmin" style="-fx-background-color: #3498DB;" text="Admin Login" />
 
-        <Button fx:id="joinBoard" layoutX="334.0" layoutY="262.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join board" AnchorPane.topAnchor="262.0" />
-        <Label fx:id="serverLabel" layoutX="439.0" layoutY="31.0" prefHeight="26.0" prefWidth="147.0" textFill="WHITE" />
-        <Label layoutX="472.0" layoutY="14.0" text="Current Server:" textFill="WHITE" />
-        <Button fx:id="myBoardsButton" layoutX="334.0" layoutY="156.0" mnemonicParsing="false" onAction="#userBoards" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="My Boards" AnchorPane.topAnchor="162.0" />
-      <Button layoutX="334.0" layoutY="226.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #3498DB;" text="View Board" AnchorPane.topAnchor="212.0" />
-      <Button fx:id="joinByCode" layoutX="436.0" layoutY="262.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join by Code" textAlignment="CENTER" AnchorPane.topAnchor="262.0" />
     </children>
 </AnchorPane>

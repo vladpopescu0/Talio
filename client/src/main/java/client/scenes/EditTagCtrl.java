@@ -78,7 +78,7 @@ public class EditTagCtrl {
      * @return the string as a parametrized object
      */
     private Tag generateTag() {
-        return new Tag(title.getText());
+        return new Tag(title.getText(),tag.getColor());
     }
 
     /**

@@ -18,7 +18,9 @@ package client.scenes;
 import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.DataFormat;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -59,6 +61,9 @@ public class MainCtrl {
     private EditBoardNameViewCtrl editBoardNameViewCtrl;
     private Scene cardDetails;
     private CardDetailsViewCtr cardDetailsViewCtr;
+    private CustomizationPageCtrl customizationPageCtrl;
+
+    private Scene customizationPage;
     private Scene viewTags;
     private ViewTagsCtrl viewTagsCtrl;
     private Scene createTag;
@@ -69,11 +74,11 @@ public class MainCtrl {
     private ViewAddTagsCtrl viewAddTagsCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
     private User currentUser;
+    private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
+    private Scene joinBoardByLink;
     private boolean isAdmin = false;
 
     private String adminPass = "";
-    private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
-    private Scene joinBoardByLink;
 
     /**
      * Initializes the application
@@ -90,28 +95,31 @@ public class MainCtrl {
      * @param changeServer the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
-     * @param adminCheck the adminCheck scene
      * @param createTag the createTag scene
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
      * @param viewAddTag the viewAddTag scene
      * @param details the cardDetails scene
+     * @param customizationPage the CustomizationPage scene
+     * @param adminCheck the adminCheck scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
+                           Pair<AddCardCtrl,Parent> addCard,
+                           Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
                            Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
-                           Pair<AdminCheckCtrl, Parent> adminCheck,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
                            Pair<CardDetailsViewCtr, Parent> details,
+                           Pair<CustomizationPageCtrl, Parent> customizationPage,
+                           Pair<AdminCheckCtrl, Parent> adminCheck,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
@@ -124,7 +132,6 @@ public class MainCtrl {
 
         this.boardViewCtrl = boardView.getKey();
         this.boardView = new Scene(boardView.getValue());
-
 
         this.createListCtrl = createList.getKey();
         this.createList = new Scene(createList.getValue());
@@ -155,6 +162,10 @@ public class MainCtrl {
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
+
+        this.customizationPageCtrl = customizationPage.getKey();
+        this.customizationPage = new Scene(customizationPage.getValue());
+
         this.viewTagsCtrl = viewTags.getKey();
         this.viewTags = new Scene(viewTags.getValue());
 
@@ -216,6 +227,7 @@ public class MainCtrl {
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
+
     }
 
     /**
@@ -336,6 +348,17 @@ public class MainCtrl {
     }
 
     /**
+     * Shows the customization page
+     * @param board the board to be customized
+     */
+    public void showCustomizationPage(Board board) {
+        primaryStage.setTitle("Customize Your Board");
+
+        this.customizationPageCtrl.setBoard(board);
+        this.customizationPageCtrl.refresh();
+        primaryStage.setScene(customizationPage);
+    }
+    /**
      * Shows the admin login page
      */
     public void showAdminCheck(){
@@ -347,13 +370,11 @@ public class MainCtrl {
      * @param id id of the current cardList
      */
     public void showChangeListName(Long id) {
-//        primaryStage.setTitle(list.getName());
         Board board = getBoardViewCtrl().getBoard();
         showSecondaryStage(changeListName, primaryStage.getTitle());
 
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
-//        this.boardViewCtrl.refresh();
     }
 
     /**
@@ -452,6 +473,38 @@ public class MainCtrl {
         this.cardId = cardId;
     }
 
+    /**
+     * @param color the color the needs to be transformed to hex format
+     * @return a hex format of the color
+     */
+    public String colorToHex(Color color){
+        return String.format( "#%02X%02X%02X",
+                (int)( color.getRed() * 255 ),
+                (int)( color.getGreen() * 255 ),
+                (int)( color.getBlue() * 255 ) );
+    }
+
+    /**
+     * @return the controller of the customization page
+     */
+    public CustomizationPageCtrl getCustomizationPageCtrl() {
+        return customizationPageCtrl;
+    }
+
+    /** Sets the style for a button
+     * @param button the button for which the style is set
+     * @param bgColor the bg color of the button
+     * @param fontColor the cont color of the button
+     */
+    public void setButtonStyle(Button button, String bgColor, String fontColor) {
+        String style = "-fx-background-color: " + bgColor + "; "
+                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
+                + "-fx-background-radius: 5px;" +
+                "-fx-text-fill:" + fontColor + ";"+
+                "-fx-border-color: " + fontColor+";"+
+                "-fx-border-radius: 5%;";
+        button.setStyle(style);
+    }
     public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
     public boolean isAdmin() { return this.isAdmin; }

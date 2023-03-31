@@ -16,7 +16,7 @@ No additions were mentioned.
 We asked for feedback for our final backlog.   
 **TA's Answer**: We added the descriptions for the epics, which is nice, but some of them are too short. Some of the epics are not in order, so we should change that. User stories and acceptance criteria are fine. So we only have to modify the descriptions and the ordering according to the official backlog.  
 
-We asked about the first requirement on the backlog that wasn't discussed during the user Q&A's.  
+e asked about the first requirement on the backlog that wasn't discussed during the user Q&A's.  
 **TA's Answer**: Sebastian didn't say anything about the server because nobody asked that question. Essentially he wants a client server architecture, the server should always be running and have stuff on it.   
 
 ## **Git assignment**

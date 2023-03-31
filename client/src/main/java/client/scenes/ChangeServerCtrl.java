@@ -27,12 +27,11 @@ public class ChangeServerCtrl {
 
     /**
      * Injects mainCtrl and ServerUtils to controller
-     *
      * @param mainCtrl Injected main controller
-     * @param server   Injected server utils
+     * @param server Injected server utils
      */
     @Inject
-    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
+    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server){
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -94,7 +93,6 @@ public class ChangeServerCtrl {
             mainCtrl.getCurrentUser().setBoardList(server.getBoardsByUserId(
                     mainCtrl.getCurrentUser().getId()));
         }
-
         errorLabel.setVisible(false);
         mainCtrl.closeSecondaryStage();
         mainCtrl.getOverviewCtrl().refresh();
@@ -103,7 +101,7 @@ public class ChangeServerCtrl {
     /**
      * Goes back to the board overview page
      */
-    public void cancel() {
+    public void cancel(){
         serverField.clear();
         errorLabel.setVisible(false);
         mainCtrl.closeSecondaryStage();

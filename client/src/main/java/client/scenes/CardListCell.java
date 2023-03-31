@@ -5,31 +5,38 @@ import commons.Board;
 import client.utils.ServerUtils;
 import commons.Card;
 import commons.CardList;
-import jakarta.ws.rs.BadRequestException;
+import commons.ColorScheme;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TitledPane;
+import javafx.scene.control.*;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
 import java.util.*;
 
 import static client.scenes.MainCtrl.cardDataFormat;
 
-public class CardListCell extends ListCell<CardList> {
+public class CardListCell extends ListCell<CardList>{
 
     private final MainCtrl mainCtrl;
     @FXML
     private Button editListButton;
 
     @FXML
+    private ScrollPane scrollPane;
+
+    @FXML
     private Button deleteList;
+
     @FXML
     private TitledPane titledPane;
+
+    @FXML
+    private AnchorPane anchorPane;
 
     @FXML
     private ListView<Card> cardsList;
@@ -39,6 +46,7 @@ public class CardListCell extends ListCell<CardList> {
 
     private ObservableList<Card> cardObservableList;
 
+    private ColorScheme colorScheme;
     private FXMLLoader fxmlLoader;
     private ServerUtils server;
 
@@ -55,6 +63,7 @@ public class CardListCell extends ListCell<CardList> {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.colorScheme= board.getListsColorScheme();
     }
 
     /**
@@ -81,18 +90,26 @@ public class CardListCell extends ListCell<CardList> {
             setGraphic(null);
         } else {
             if (fxmlLoader == null) {
-                fxmlLoader = new FXMLLoader(getClass().getResource("CardListView.fxml"));
+                fxmlLoader = new FXMLLoader(getClass()
+                        .getResource("CardListView.fxml"));
                 fxmlLoader.setController(this);
-
                 try {
                     fxmlLoader.load();
+                    //i want to find a better solution :((((
+                    Platform.runLater(() -> {
+                        Pane title = (Pane) titledPane.lookup(".title");
+                        if (title != null) {
+                            title.setStyle("-fx-background-color: "
+                                    +colorScheme.getColorBGlight()+";");
+                            System.out.println(title.getStyle());
+                        }
+                    });
                     editListButton.setOnAction(event -> {
                         rename(cardList.getId());
                     });
                     deleteList.setOnAction(event -> {
                         delete(cardList.getId());
                     });
-
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
@@ -101,24 +118,32 @@ public class CardListCell extends ListCell<CardList> {
                     e.printStackTrace();
                 }
             }
-
             titledPane.setText(cardList.getName());
-
-            long id = this.getItem().getId();
-
-            CardList cl = null;
-            try {
-                cl = server.getCL(id);
-            } catch (BadRequestException br) {
-                br.printStackTrace();
-            }
-
             refresh();
-            setText(null);
             setGraphic(titledPane);
+            setStyles();
         }
     }
-
+    /**
+     * sets the colors for the given list
+     */
+    public void setStyles(){
+        titledPane.setStyle(" -fx-text-fill: "
+                + colorScheme.getColorFont() + ";");
+        anchorPane.setStyle("-fx-background-color: "
+                +colorScheme.getColorBGdark()+";"
+                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
+                + "-fx-background-radius: 5px;" +
+                "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+        cardsList.setStyle("-fx-background-color: "
+                +colorScheme.getColorBGlight()+";");
+        mainCtrl.setButtonStyle(editListButton
+                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+        mainCtrl.setButtonStyle(addCardButton
+                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+        mainCtrl.setButtonStyle(deleteList
+                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+    }
     /**
      * refresh method for an individual list of cards
      * on the client
@@ -127,7 +152,8 @@ public class CardListCell extends ListCell<CardList> {
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c -> new CardCell(mainCtrl, server,this, board));
+        cardsList.setCellFactory(c
+                -> new CardCell(mainCtrl, server,this, board,board.getCardsColorScheme()));
     }
 
     /** Helper method for renaming a cardlist

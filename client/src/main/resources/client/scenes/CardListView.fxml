@@ -9,9 +9,9 @@
 
 <TitledPane fx:id="titledPane" alignment="TOP_CENTER" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="148.0" prefWidth="242.0" text="List" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <content>
-        <AnchorPane prefHeight="150.0" prefWidth="242.0">
+        <AnchorPane fx:id="anchorPane" prefHeight="150.0" prefWidth="242.0">
             <children>
-                <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
+                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="5.0">
                     <content>
                         <ListView fx:id="cardsList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
                     </content>
