@@ -111,12 +111,12 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
         call("save");
         Optional<ColorScheme> opt = find(entity.getId());
         if (opt.isEmpty()) {
-            entity.setId((long) colorSchemes.size());
+            entity.setIdOnlyTest((long) colorSchemes.size());
             colorSchemes.add(entity);
         } else {
             int ind = colorSchemes.indexOf(opt.get());
             colorSchemes.remove(opt.get());
-            entity.setId(ind);
+            entity.setIdOnlyTest(ind);
             colorSchemes.add(ind, entity);
         }
         return entity;

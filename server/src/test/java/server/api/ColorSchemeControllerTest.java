@@ -25,7 +25,7 @@ public class ColorSchemeControllerTest {
     @Test
     public void addColorSchemeTest(){
         ColorScheme c = new ColorScheme("red","green","black","yellow");
-        c.setId(5);
+        c.setIdOnlyTest(5);
         var response = controller.add(c);
         assertEquals(response.getBody(),c);
     }

@@ -112,7 +112,7 @@ public class ColorScheme{
      * setter for id, only for tests
      * @param id of the colorScheme to be set
      */
-    public void setId(long id){
+    public void setIdOnlyTest(long id){
         this.id=id;
     }
     @Override
