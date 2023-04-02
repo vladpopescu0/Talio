@@ -1,10 +1,7 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.Card;
-import commons.Tag;
-import commons.Task;
+import commons.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,6 +27,8 @@ public class CardDetailsViewCtr implements Initializable {
     private ObservableList<Task> taskObservableList;
     private ObservableList<Tag> tagObservableList;
 
+    private ObservableList<ColorScheme> colorSchemeObservableList;
+
     @FXML
     private Button cancelButton;
 
@@ -38,6 +37,9 @@ public class CardDetailsViewCtr implements Initializable {
 
     @FXML
     private ListView<Tag> tagList;
+
+    @FXML
+    private ListView<ColorScheme> colorSchemeList;
 
     @FXML
     private Button confirmButton;
@@ -95,13 +97,22 @@ public class CardDetailsViewCtr implements Initializable {
         description.setEditable(false);
         List<Task> tasks = (card == null || card.getTasks() == null ?
                 new ArrayList<>() : card.getTasks());
+
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
         taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+
         tagObservableList = FXCollections.observableList(card == null || card.getTags() == null?
                 new ArrayList<>() : card.getTags());
         tagList.setItems(tagObservableList);
         tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+        List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
+                new ArrayList<>() : board.getCardsColorSchemesList());
+        colorSchemeObservableList = FXCollections.observableList(colors);
+        colorSchemeList.setItems(colorSchemeObservableList);
+        colorSchemeList.setCellFactory(p ->
+                new PresetDetailsCtrl(mainCtrl, server, this,board,card));
+
     }
 
     /**

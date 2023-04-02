@@ -3,6 +3,7 @@ package client.scenes;
 import client.utils.ServerUtils;
 import client.utils.SocketHandler;
 import commons.*;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -14,6 +15,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.util.List;
 import java.util.Objects;
@@ -55,6 +57,8 @@ public class CardCell extends ListCell<Card> {
     private MainCtrl mainCtrl;
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
+
+    private FadeTransition fadeTransition;
 
     /**
      * useful dependencies for universal variables and server communication
@@ -160,6 +164,9 @@ public class CardCell extends ListCell<Card> {
                     this.editButton.setOnAction(event -> editCard());
                     this.deleteButton.setOnAction(event -> deleteCard());
                     this.setOnKeyPressed(this::handleShortcuts);
+                    if(!hasDefault()){
+                        this.colorSchemeCustom=this.getItem().getColors();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -167,7 +174,13 @@ public class CardCell extends ListCell<Card> {
 
             paneLabel.setText(mainCtrl.getFocusedNode().equals(this)?
                     card.getName() + " (S)" : card.getName());
-
+            setAnim();
+            if(mainCtrl.getFocusedNode().equals(this)){
+                fadeTransition.play();
+            }else{
+                fadeTransition.jumpTo(Duration.ZERO);
+                fadeTransition.stop();
+            }
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);
@@ -214,6 +227,7 @@ public class CardCell extends ListCell<Card> {
      */
     public void showDetails() {
         mainCtrl.closeSecondaryStage();
+        //otherwise the board will have empty lists
         mainCtrl.showCardDetailsView(this.getItem(), board);
     }
 
@@ -350,4 +364,30 @@ public class CardCell extends ListCell<Card> {
         dragCardToIdentical(ids);
     }
 
+    /**
+     * Method that checks whether the card has a default color scheme
+     * @return true if the card has a default color scheme, false otherwise
+     */
+    private boolean hasDefault(){
+        ColorScheme c = this.getItem().getColors();
+        if(c==null){
+            return true;
+        }
+        return Objects.equals(c.getColorFont(), "black")
+                && Objects.equals(c.getColorLighter(), "black");
+    }
+
+    /**
+     * sets a fade animation if the variable is null
+     */
+    private void setAnim(){
+        if(fadeTransition==null){
+            fadeTransition = new FadeTransition(Duration.millis(1000));
+            fadeTransition.setNode(this);
+            fadeTransition.setFromValue(1.0);
+            fadeTransition.setToValue(0.3);
+            fadeTransition.setCycleCount(200);
+            fadeTransition.setAutoReverse(true);
+        }
+    }
 }

@@ -264,6 +264,7 @@ public class MainCtrl {
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
+        this.cardDetailsViewCtr.refresh();
     }
 
     /**

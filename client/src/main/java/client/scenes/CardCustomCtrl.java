@@ -76,7 +76,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     @Override
     protected void updateItem(ColorScheme colors, boolean empty) {
         super.updateItem(colors, empty);
-//trebuie sa fac o metoda getbyid pt colorpair
         if (empty || colors == null) {
             setText(null);
             setGraphic(null);
@@ -139,9 +138,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
      */
     public void deletePreset(){
         board = server.getBoardByID(board.getId());
-
-
-
         if(board.getCardsColorScheme().equals(this.getItem())){
             ColorScheme newScheme = server.addColorScheme(new ColorScheme());
             board.setCardsColorScheme(newScheme);
