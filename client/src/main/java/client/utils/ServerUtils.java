@@ -22,6 +22,8 @@ import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
 import jakarta.ws.rs.core.Response;
@@ -258,6 +260,22 @@ public class ServerUtils {
     }
 
     /**
+     * Updates a board in the database
+     *
+     * @param board the board to be updated
+     * @return the updated board
+     */
+    public Board updateBoardAddTag(Board board) {
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/updateTagAdd/" + board.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        setCardsParent(b);
+        return b;
+    }
+
+    /**
      * Updates the details of a card
      * @param card the card to be updated
      * @return the card
@@ -268,6 +286,36 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    private static ExecutorService exec = Executors.newSingleThreadExecutor();
+
+    /**
+     * @param cons the consumer
+     */
+    public void getBoardUpdates(Consumer<Board> cons) {
+        exec.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig()) //
+                        .target(server).path("api/boards/updates") //
+                        .request(APPLICATION_JSON) //
+                        .accept(APPLICATION_JSON) //
+                        .get(Response.class);
+
+                if(res.getStatus() == 204){
+                    continue;
+                }
+                Board board = res.readEntity(Board.class);
+                cons.accept(board);
+            }
+        });
+    }
+
+    /**
+     * Stops the executors
+     */
+    public void stop(){
+        exec.shutdownNow();
     }
 
     /**
@@ -415,20 +463,20 @@ public class ServerUtils {
         // can also use switch statement
     }
 
-    /**
-     * @param list the list that is posted
-     */
-    public void addCL(CardList list) {
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/lists/add") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(list, APPLICATION_JSON));
-
-        if (res.getStatus() != 200) {
-            System.out.println("error");
-        }
-    }
+//    /**
+//     * @param list the list that is posted
+//     */
+//    public void addCL(CardList list) {
+//        Response res = ClientBuilder.newClient(new ClientConfig()) //
+//                .target(server).path("api/lists/add") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .post(Entity.entity(list, APPLICATION_JSON));
+//
+//        if (res.getStatus() != 200) {
+//            System.out.println("error");
+//        }
+//    }
 
     /**
      * Removes a cardList
@@ -527,7 +575,7 @@ public class ServerUtils {
                 .target(server).path("api/cards/addTags/" + id)
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .post(Entity.entity(tags, APPLICATION_JSON), Card.class);
+                .put(Entity.entity(tags, APPLICATION_JSON), Card.class);
     }
 
     /**
@@ -543,7 +591,6 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(tag, APPLICATION_JSON), Card.class);
     }
-
 
     /**
      * Updates the colorScheme of the board
@@ -686,4 +733,31 @@ public class ServerUtils {
             }
         });
     }
+//    /**
+//     * gets a colorScheme by id
+//     * @param id of the searched colorscheme
+//     * @return the given entity, can throw
+//     * server exception if not found
+//     */
+//    public ColorScheme getColorSchemeById(long id){
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/colors/"+id)
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .get(ColorScheme.class);
+//    }
+//
+//    /**
+//     * deletes a colorScheme by id
+//     * @param id of the colorScheme
+//     * @return the colorScheme if it was deleted,
+//     * throws an exception if not found
+//     */
+//    public ColorScheme deleteColorSchemeById(long id) {
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/colors/delete/"+id)
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .delete(ColorScheme.class);
+//    }
 }

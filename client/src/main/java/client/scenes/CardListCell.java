@@ -7,7 +7,6 @@ import commons.Card;
 import commons.CardList;
 import commons.ColorScheme;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -159,17 +158,23 @@ public class CardListCell extends ListCell<CardList>{
                     "\n-fx-border-color: " +
                     board.getCardsColorScheme().getColorBGlight() + ";");
             card.setOnMouseClicked(event -> Platform.runLater(() ->{
-                card.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
-                        "-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
+                card.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";" +
+                        "-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";");
             }));
             card.hoverProperty().addListener(
                     (observable, oldValue, newValue) -> {
                         if (newValue) {
-                            card.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
-                                    "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
+                            card.setStyle("-fx-background-color:"
+                                    +board.getCardsColorScheme().getColorBGdark()+";" +
+                                    "\n-fx-border-color:"
+                                    +board.getCardsColorScheme().getColorBGdark()+";");
                         } else {
-                            card.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGlight()+";" +
-                                    "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGlight()+";");
+                            card.setStyle("-fx-background-color:"
+                                    +board.getCardsColorScheme().getColorBGlight()+";" +
+                                    "\n-fx-border-color:"
+                                    +board.getCardsColorScheme().getColorBGlight()+";");
                         }
                     });
 

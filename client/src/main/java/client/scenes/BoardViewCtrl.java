@@ -21,7 +21,6 @@ import java.awt.datatransfer.StringSelection;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -119,7 +118,7 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
         titledPane.setText(board.getName());
-        server.registerForUpdates("/topic/lists",
+        server.registerForUpdates("/topic/updateList",
                 CardList.class, q -> Platform.runLater(() -> {
                     cardListObservableList.add(q);
                     refresh();
@@ -180,28 +179,15 @@ public class BoardViewCtrl implements Initializable {
      * refreshes the boardView page
      */
     public void refresh() {
-        this.board = server.getBoardByID(board.getId());
-        cardListObservableList = FXCollections.observableList(board.getList());
-        cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl ->
-                new CardListCell(mainCtrl, server, board)
-        );
-//        mainCtrl.getCustomizationPageCtrl().getPres1BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
-//        mainCtrl.getCustomizationPageCtrl().getPres1Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(0)));
-//        mainCtrl.getCustomizationPageCtrl().getPres2BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(1)));
-//        mainCtrl.getCustomizationPageCtrl().getPres2Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(1)));
-//        mainCtrl.getCustomizationPageCtrl().getPres3BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
-//        mainCtrl.getCustomizationPageCtrl().getPres3Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
-//        cardListView.setCellFactory(cl ->
-//                new CardListCell(mainCtrl, server, board)
-//        );
-        customizeBoard(board);
+        if(board != null && board.getId() != null) {
+            this.board = server.getBoardByID(board.getId());
+            cardListObservableList = FXCollections.observableList(board.getList());
+            cardListView.setItems(cardListObservableList);
+            cardListView.setCellFactory(cl ->
+                    new CardListCell(mainCtrl, server, board)
+            );
+            customizeBoard(board);
+        }
     }
 
     /**

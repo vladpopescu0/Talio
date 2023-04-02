@@ -62,7 +62,7 @@
       <Button layoutX="521.0" layoutY="280.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #00C9A7;" text="Add Task" />
       <ScrollPane hbarPolicy="NEVER" layoutX="26.0" layoutY="310.0" prefHeight="220.0" prefWidth="560.0" vbarPolicy="NEVER">
          <content>
-            <ListView fx:id="taskList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="220.0" prefWidth="558.0" style="-fx-background-color: #24919c;" />
+            <ListView fx:id="taskList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="220.0" prefWidth="558.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css"/>
          </content>
       </ScrollPane>
       <Label layoutX="26.0" layoutY="545.0" style="-fx-font-weight: bold;" text="Tags" textFill="#e7e6e6">

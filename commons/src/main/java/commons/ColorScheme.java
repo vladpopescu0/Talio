@@ -108,6 +108,13 @@ public class ColorScheme{
     public Long getId(){
         return id;
     }
+    /**
+     * setter for id, only for tests
+     * @param id of the colorScheme to be set
+     */
+    public void setIdOnlyTest(long id){
+        this.id=id;
+    }
     @Override
     public boolean equals(Object obj) { return EqualsBuilder.reflectionEquals(this, obj); }
 

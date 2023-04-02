@@ -61,10 +61,9 @@ public class TaskCell extends ListCell<Task> {
                 confirmButton.setVisible(false);
                 statusBox.setSelected(this.getItem().getStatus());
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e){
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -79,7 +78,6 @@ public class TaskCell extends ListCell<Task> {
         super.updateItem(task, empty);
 
         if (empty || task == null) {
-            System.out.println("plpl");
             setText(null);
             setGraphic(null);
         } else {
@@ -92,9 +90,11 @@ public class TaskCell extends ListCell<Task> {
                         server.deleteTaskFromCard(parentController.getCard().getId(),
                                 this.getItem().getId());
                         server.deleteTask(this.getItem().getId());
+                        mainCtrl.getCardDetailsViewCtr().refresh();
                         mainCtrl.showCardDetailsView(server.getCardById(parentController
                                         .getCard().getId()),
                                 parentController.getBoard());
+                        mainCtrl.getCardDetailsViewCtr().refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();

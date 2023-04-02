@@ -166,6 +166,7 @@ public class CardController {
             return ResponseEntity.badRequest().build();
         }
         Card c = repo.findById(id).get();
+        msgs.convertAndSend("/topic/deleteCard", c);
         repo.deleteById(id);
         return ResponseEntity.ok(c);
     }
@@ -183,6 +184,7 @@ public class CardController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(card);
     }
 
@@ -225,7 +227,7 @@ public class CardController {
         Card card = repo.getById(id);
         card.addTask(task);
         repo.save(card);
-        msgs.convertAndSend("/topic/tasks", task);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(task);
     }
 
@@ -235,7 +237,7 @@ public class CardController {
      * @param tags list of Tags to be added to the Card
      * @return updated Card
      */
-    @PostMapping("addTags/{id}")
+    @PutMapping("addTags/{id}")
     public ResponseEntity<Card> addTags(@PathVariable("id") long id,
                                         @RequestBody List<Tag> tags) {
         if (!repo.existsById(id)) {
@@ -252,10 +254,10 @@ public class CardController {
         }
 
         Card card = repo.getById(id);
-        for(Tag t: tags) {
-            card.addTag(t);
-        }
+        tags.forEach(card::addTag);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
+        msgs.convertAndSend("/topic/tags", id);
         return ResponseEntity.ok(card);
     }
 
@@ -275,6 +277,8 @@ public class CardController {
         Card card = repo.getById(id);
         card.removeTag(tag);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
+        msgs.convertAndSend("/topic/tags", id);
         return ResponseEntity.ok(card);
     }
 

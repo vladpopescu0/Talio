@@ -18,7 +18,6 @@ package client.scenes;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import client.utils.SocketHandler;
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
@@ -73,12 +72,13 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-        server.registerForUpdates("/topic/boards",
-                Board.class, q -> Platform.runLater(() -> {
-                    data.add(q);
-                    refresh();
-                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
-                }));
+        //long polling
+        server.getBoardUpdates(q -> {
+            data.add(q);
+            refresh();
+            mainCtrl.getUserBoardsOverviewCtrl().refresh();
+        });
+        //websockets
         server.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
@@ -89,10 +89,10 @@ public class BoardsOverviewCtrl implements Initializable {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-//        server.registerForUpdates("/topic/boardsAdd",
-//                Long.class, q -> Platform.runLater(() -> {
-//                    refresh();
-//                }));
+        server.registerForUpdates("/topic/refreshUsers",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                }));
     }
 
     /**
@@ -201,5 +201,12 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void toJoinByLink() {
         mainCtrl.showJoinBoardByLink();
+    }
+
+    /**
+     * Stops the executors
+     */
+    public void stop(){
+        server.stop();
     }
 }

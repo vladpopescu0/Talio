@@ -2,7 +2,6 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -14,7 +13,6 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -86,8 +84,10 @@ public class CardCell extends ListCell<Card> {
         hasDesc.setVisible(this.getItem() != null && this.getItem().hasDescription());
         statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
-            cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
-                    "-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
+            cardPane.setStyle("-fx-background-color:"
+                    +board.getCardsColorScheme().getColorBGdark()+";" +
+                    "-fx-border-color:"+
+                    board.getCardsColorScheme().getColorBGdark()+";");
             if (event.getClickCount() == 2) {
                 mainCtrl.closeSecondaryStage();
                 mainCtrl.showCardDetailsView(this.getItem(), board);
@@ -122,6 +122,7 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.showEditCard();
                     });
                     this.deleteButton.setOnAction(event ->{
+
                         var c = server.deleteCardfromList
                                 (this.getItem().getParentCardList().getId(),this.getItem().getId());
                         if (this.getItem().getTasks() != null) {
@@ -130,6 +131,7 @@ public class CardCell extends ListCell<Card> {
                                 server.deleteTask(t.getId());
                             }
                         }
+
                         server.deleteCard(this.getItem().getId());
 
                         if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
@@ -137,15 +139,21 @@ public class CardCell extends ListCell<Card> {
                         }
 
                         mainCtrl.getBoardViewCtrl().refresh();
+//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
                     });
+
                     cardPane.hoverProperty().addListener(
                             (observable, oldValue, newValue) -> {
                                 if (newValue) {
-                                    cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
-                                            "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
+                                    cardPane.setStyle("-fx-background-color:"
+                                            +board.getCardsColorScheme().getColorBGdark()+";" +
+                                            "\n-fx-border-color:"
+                                            +board.getCardsColorScheme().getColorBGdark()+";");
                                 } else {
-                                    cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGlight()+";" +
-                                            "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGlight()+";");
+                                    cardPane.setStyle("-fx-background-color:"
+                                            +board.getCardsColorScheme().getColorBGlight()+";" +
+                                            "\n-fx-border-color:"
+                                            +board.getCardsColorScheme().getColorBGlight()+";");
                                 }
                             });
                 } catch (Exception e) {
