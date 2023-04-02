@@ -63,6 +63,14 @@ public class MainCtrl {
     private CardDetailsViewCtr cardDetailsViewCtr;
     private CustomizationPageCtrl customizationPageCtrl;
 
+    private Scene changeBoardPass;
+
+    private EditBoardPasswordViewCtrl changeBoardPassCtrl;
+
+    private Scene checkBoardPass;
+
+    private CheckBoardPasswordViewCtrl checkBoardPassCtrl;
+
     private Scene customizationPage;
     private Scene viewTags;
     private ViewTagsCtrl viewTagsCtrl;
@@ -103,6 +111,8 @@ public class MainCtrl {
      * @param details the cardDetails scene
      * @param customizationPage the CustomizationPage scene
      * @param adminCheck the adminCheck scene
+     * @param editBoardPass the editBoardPassword scene
+     * @param checkBoardPass the checkBoardPassword scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -123,7 +133,9 @@ public class MainCtrl {
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
-                           Pair<ViewAddTagsCtrl, Parent> viewAddTag) {
+                           Pair<ViewAddTagsCtrl, Parent> viewAddTag,
+                           Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
+                           Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass){
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -183,6 +195,12 @@ public class MainCtrl {
 
         this.viewAddTagsCtrl = viewAddTag.getKey();
         this.viewAddTag = new Scene(viewAddTag.getValue());
+
+        this.changeBoardPassCtrl = editBoardPass.getKey();
+        this.changeBoardPass = new Scene(editBoardPass.getValue());
+
+        this.checkBoardPassCtrl = checkBoardPass.getKey();
+        this.checkBoardPass = new Scene(checkBoardPass.getValue());
 
         showUserView();
         primaryStage.show();
@@ -250,6 +268,26 @@ public class MainCtrl {
         showSecondaryStage(editBoardName, "Edit board name: " + board.getName());
 
         this.editBoardNameViewCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the change Password scene for the given board
+     * @param board the board to change
+     */
+    public void showChangeBoardPasswordView(Board board) {
+        showSecondaryStage(changeBoardPass, "Edit board password");
+
+        this.changeBoardPassCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the Check password scene for the given board
+     * @param board The board to check
+     */
+    public void showCheckBoardPasswordView(Board board) {
+        showSecondaryStage(checkBoardPass, "Check board password");
+
+        this.checkBoardPassCtrl.setBoard(board);
     }
 
     /**

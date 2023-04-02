@@ -95,12 +95,19 @@ public class Main extends Application {
         var viewAddTag = FXML.load(ViewAddTagsCtrl.class,
                 "client", "scenes", "ViewAddTags.fxml");
 
+        var viewChangeBoardPass = FXML.load(EditBoardPasswordViewCtrl.class,
+                "client", "scenes", "EditBoardPasswordView.fxml");
+
+        var viewCheckBoardPass = FXML.load(CheckBoardPasswordViewCtrl.class,
+                "client", "scenes", "CheckBoardPasswordView.fxml");
+
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         Stage secondaryStage = new Stage();
         secondaryStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag);
+                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag,
+                viewChangeBoardPass, viewCheckBoardPass);
     }
 }
