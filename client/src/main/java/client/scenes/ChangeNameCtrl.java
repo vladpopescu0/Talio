@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 public class ChangeNameCtrl {
@@ -27,7 +28,7 @@ public class ChangeNameCtrl {
     @FXML
     private Button change;
 
-    /** Constructor foor ChangeNameCtrl
+    /** Constructor for ChangeNameCtrl
      * @param mainCtrl main controller of the program
      * @param server utility service for server communication
      */
@@ -35,6 +36,19 @@ public class ChangeNameCtrl {
     public ChangeNameCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: changeName();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**

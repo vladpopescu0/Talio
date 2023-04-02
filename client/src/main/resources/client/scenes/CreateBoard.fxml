@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" text="Create New Board" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardViewCtrl">
+<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleShortcuts" prefHeight="200.0" prefWidth="300.0" text="Create New Board" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardViewCtrl">
   <content>
     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
          <children>
@@ -15,6 +15,7 @@
             <Button fx:id="createBoardButton" layoutX="170.0" layoutY="87.0" mnemonicParsing="false" onAction="#createNewBoard" text="Create Board" />
             <Label fx:id="errorLabel" layoutX="64.0" layoutY="115.0" text="Please enter a valid board name" visible="false" />
             <Button layoutX="106.0" layoutY="87.0" mnemonicParsing="false" onAction="#toBoardsOverview" text="Back" />
-         </children></AnchorPane>
+         </children>
+    </AnchorPane>
   </content>
 </TitledPane>

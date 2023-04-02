@@ -8,6 +8,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 public class CreateTagCtrl {
@@ -32,6 +33,19 @@ public class CreateTagCtrl {
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.server = server;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: createTag();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**

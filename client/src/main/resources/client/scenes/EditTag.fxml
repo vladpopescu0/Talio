@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="225.0" prefWidth="292.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
+<AnchorPane prefHeight="225.0" prefWidth="292.0" onKeyPressed="#handleShortcuts" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
     <children>
         <TextField fx:id="title" layoutX="83.0" layoutY="95.0" />
         <Text layoutX="31.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit a tag">

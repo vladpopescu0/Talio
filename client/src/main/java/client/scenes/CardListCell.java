@@ -11,7 +11,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -153,7 +155,7 @@ public class CardListCell extends ListCell<CardList>{
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
         cardsList.setCellFactory(c
-                -> new CardCell(mainCtrl, server,this, board,board.getCardsColorScheme()));
+                -> new CardCell(mainCtrl, server,this, board, board.getCardsColorScheme(), this));
     }
 
     /** Helper method for renaming a cardlist
@@ -183,6 +185,63 @@ public class CardListCell extends ListCell<CardList>{
         }
 
         mainCtrl.showBoardView(b);
+    }
+
+    /**
+     * Changes the focus to an adjacent Card above or below
+     * @param card currently selected Card
+     * @param up whether the change should be made upwards
+     */
+    public void changeCardFocus(Card card, boolean up) {
+        int index = cardsList.getItems().indexOf(card);
+        Node oldFocus = mainCtrl.getFocusedNode();
+        VirtualFlow virtualFlow = (VirtualFlow) cardsList.lookup(".virtual-flow");
+        if (up && index > 0) {
+            virtualFlow.getCell(index - 1).requestFocus();
+
+            if (mainCtrl.getFocusedNode() instanceof CardCell) {
+                CardCell newFocusCell = (CardCell) mainCtrl.getFocusedNode();
+                newFocusCell.updateItem(newFocusCell.getItem(), false);
+            }
+            if (oldFocus instanceof CardCell) {
+                CardCell oldFocusCell = (CardCell) oldFocus;
+                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            }
+        } else if (!up && index + 1 < cardsList.getItems().size()) {
+            virtualFlow.getCell(index + 1).requestFocus();
+
+            if (mainCtrl.getFocusedNode() instanceof CardCell) {
+                CardCell newFocusCell = (CardCell) mainCtrl.getFocusedNode();
+                newFocusCell.updateItem(newFocusCell.getItem(), false);
+            }
+            if (oldFocus instanceof CardCell) {
+                CardCell oldFocusCell = (CardCell) oldFocus;
+                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            }
+        }
+    }
+
+    /**
+     * Swaps the currently selected Card with an adjacent Card above or below
+     * @param card currently selected Card
+     * @param up whether the swap should be made upwards
+     */
+    public void swapCards(Card card, boolean up) {
+        int index = cardsList.getItems().indexOf(card);
+        VirtualFlow virtualFlow = (VirtualFlow) cardsList.lookup(".virtual-flow");
+        if (up && index > 0) {
+            server.moveCard(this.getItem().getId(),
+                    List.of(card, cardsList.getItems().get(index - 1)));
+
+            mainCtrl.getBoardViewCtrl().refresh();
+            virtualFlow.getCell(index - 1).requestFocus();
+        } else if (!up && index + 1 < cardsList.getItems().size()) {
+            server.moveCard(this.getItem().getId(),
+                    List.of(card, cardsList.getItems().get(index + 1)));
+
+            mainCtrl.getBoardViewCtrl().refresh();
+            virtualFlow.getCell(index + 1).requestFocus();
+        }
     }
 
     /**

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
@@ -34,6 +35,19 @@ public class ChangeServerCtrl {
     public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server){
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: changeServer();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**

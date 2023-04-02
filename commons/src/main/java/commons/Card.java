@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,7 +171,7 @@ public class Card {
      * @return (completed/total tasks done)
      */
     public String tasksLabel() {
-        if (this  == null || tasks == null || tasks.isEmpty()) {
+        if (tasks == null || tasks.isEmpty()) {
             return "";
         } else {
             int done = 0;
