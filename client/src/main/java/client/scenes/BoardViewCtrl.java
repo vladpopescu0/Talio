@@ -48,8 +48,6 @@ public class BoardViewCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
-
     private Board board;
     private boolean isAnimationPlayed = false;
 
@@ -121,6 +119,17 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
         titledPane.setText(board.getName());
+        server.registerForUpdates("/topic/lists",
+                CardList.class, q -> Platform.runLater(() -> {
+                    cardListObservableList.add(q);
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
+        server.registerForUpdates("/topic/updateParent",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
@@ -141,17 +150,6 @@ public class BoardViewCtrl implements Initializable {
             cardListView.setDisable(false);
             viewTags.setDisable(false);
         }
-        socketHandler.registerForUpdates("/topic/lists",
-                CardList.class, q -> Platform.runLater(() -> {
-                    cardListObservableList.add(q);
-                    refresh();
-                    mainCtrl.getOverviewCtrl().refresh();
-                }));
-        socketHandler.registerForUpdates("/topic/updateParent",
-                Long.class, q -> Platform.runLater(() -> {
-                    refresh();
-                    mainCtrl.getOverviewCtrl().refresh();
-                }));
     }
 
     /**
@@ -317,13 +315,22 @@ public class BoardViewCtrl implements Initializable {
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
-        System.out.println(board.getColorScheme().getColorLighter()+"first");
+//        System.out.println(board.getColorScheme().getColorLighter()+"first");
 //        setScrollBarStyle(scrollbar,board.getColorLighter());
-        content.setVisible(false);
+//        content.setVisible(false);
+        this.content = (Region) titledPane.lookup(".title");
+
+        content.setOpacity(0);
+        titledPane.setStyle(darkerStyle);
         border.setStyle(darkerStyle);
         cardListView.setStyle(style);
         scrollPane.setStyle(style);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server,board));
+        cardListView.setCellFactory(cc -> {
+            CardListCell c = new CardListCell(mainCtrl, server, board);
+            c.setStyle("-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
+                    "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";");
+            return c;
+        });
     }
 
 //    public void setScrollBarStyle(Region scrollbar, String bgColor) {

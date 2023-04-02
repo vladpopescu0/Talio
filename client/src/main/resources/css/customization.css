@@ -1,0 +1,42 @@
+.list-view *.scroll-bar:vertical .increment-button ,
+.list-view *.scroll-bar:vertical .decrement-button {
+    -fx-background-color :#dbdbdc;;
+    -fx-background-radius : 0.0em;
+    -fx-padding: 3px;
+    -fx-opacity: 0;
+}
+
+.list-view *.scroll-bar:vertical .thumb{
+    -fx-background-color : #cecaca;
+    -fx-opacity: 50%;
+    -fx-background-radius : 4px;
+    -fx-padding: 3px;
+}
+
+.list-view *.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color : #cecaca;
+    -fx-opacity: 70%;
+}
+
+
+.list-view .scroll-bar:vertical .track{
+    -fx-background-color : transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 4px;
+    -fx-padding: 3px;
+}
+.list-view .scroll-bar:vertical,
+.list .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+
+.list-cell {
+    /*-fx-cell-hover-color: #0093ff;*/
+    -fx-background-color: #24919c;
+}
+
+.list-cell:filled:hover {
+    -fx-text-fill: #24919c;
+}
+
+.list-view{ -fx-background-insets: 0; -fx-padding: 0; }

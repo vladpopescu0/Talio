@@ -1,8 +1,8 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import client.utils.SocketHandler;
 import commons.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -14,6 +14,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 import java.util.List;
@@ -53,7 +54,6 @@ public class CardCell extends ListCell<Card> {
     private FXMLLoader fxmlLoader;
     private Board board;
     private MainCtrl mainCtrl;
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
 
     /**
@@ -71,8 +71,8 @@ public class CardCell extends ListCell<Card> {
         this.board = board;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
-            //statusLabel.setText(this.getItem().tasksLabel());
-            statusLabel.setText("AAAA");
+//            //statusLabel.setText(this.getItem().tasksLabel());
+//            statusLabel.setText("AAAA");
         }
         this.colorSchemeCustom = colorScheme;
     }
@@ -86,6 +86,8 @@ public class CardCell extends ListCell<Card> {
         hasDesc.setVisible(this.getItem() != null && this.getItem().hasDescription());
         statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
+            cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
+                    "-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
             if (event.getClickCount() == 2) {
                 mainCtrl.closeSecondaryStage();
                 mainCtrl.showCardDetailsView(this.getItem(), board);
@@ -111,6 +113,7 @@ public class CardCell extends ListCell<Card> {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
+                setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGlight() + ";");
                 try {
                     fxmlLoader.load();
                     displayTags();
@@ -135,16 +138,26 @@ public class CardCell extends ListCell<Card> {
 
                         mainCtrl.getBoardViewCtrl().refresh();
                     });
+                    cardPane.hoverProperty().addListener(
+                            (observable, oldValue, newValue) -> {
+                                if (newValue) {
+                                    cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGdark()+";" +
+                                            "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGdark()+";");
+                                } else {
+                                    cardPane.setStyle("-fx-background-color:"+board.getCardsColorScheme().getColorBGlight()+";" +
+                                            "\n-fx-border-color:"+board.getCardsColorScheme().getColorBGlight()+";");
+                                }
+                            });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
             paneLabel.setText(card.getName());
-            setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
+            setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGlight() + ";");
             setText(null);
             setGraphic(cardPane);
-            cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
+            cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGlight() + ";");
             paneLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
             String lighter = mainCtrl.colorToHex(Color
                     .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
@@ -164,20 +177,17 @@ public class CardCell extends ListCell<Card> {
             for(int x = 0; x < tags.size(); x++) {
                 labels.get(tags.size() - x - 1).setText(tags.get(x).getName());
                 labels.get(tags.size() - x - 1)
-                        .setStyle("-fx-text-fill: "+tags.get(x).getColor()+";"
-                        +"-fx-border-color: "+tags.get(x).getColor()+";");
+                        .setStyle("-fx-text-fill: "+tags.get(x).getColor()+";");
             }
             for(int x = tags.size(); x < 5; x++) {
                 labels.get(x).setText(null);
             }
         } else {
             tagLabel1.setText("+" + (tags.size() - 4) + " more");
-            tagLabel1.setStyle("-fx-text-fill: "+"white"+"; "
-                    +"-fx-border-color: "+"white"+";");
+            tagLabel1.setStyle("-fx-text-fill: "+"white"+";");
             for(int x = 0; x < 4; x++) {
                 labels.get(4 - x).setText(tags.get(x).getName());
-                labels.get(4 - x).setStyle("-fx-text-fill: "+tags.get(x).getColor()+"; "
-                        +"-fx-border-color: "+tags.get(x).getColor()+";");
+                labels.get(4 - x).setStyle("-fx-text-fill: "+tags.get(x).getColor()+";");
             }
         }
     }

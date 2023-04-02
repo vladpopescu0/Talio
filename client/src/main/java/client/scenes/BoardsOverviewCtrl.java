@@ -36,7 +36,6 @@ public class BoardsOverviewCtrl implements Initializable {
 
     private final ServerUtils server;
     private final MainCtrl mainCtrl;//must change mainCtrl
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private ObservableList<Board> data;
     @FXML
@@ -74,23 +73,26 @@ public class BoardsOverviewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-        socketHandler.registerForUpdates("/topic/boards",
+        server.registerForUpdates("/topic/boards",
                 Board.class, q -> Platform.runLater(() -> {
                     data.add(q);
                     refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
                 }));
-        socketHandler.registerForUpdates("/topic/boardsUpdate",
+        server.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
                 }));
-        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd",
+        server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-
+//        server.registerForUpdates("/topic/boardsAdd",
+//                Long.class, q -> Platform.runLater(() -> {
+//                    refresh();
+//                }));
     }
 
     /**
@@ -117,7 +119,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             if (table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -141,7 +143,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void showBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             if (table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -159,9 +161,9 @@ public class BoardsOverviewCtrl implements Initializable {
     /**
      * Deletes the selected board, given the user has admin privileges
      */
-    public void deleteBoard(){
+    public void deleteBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("You need to select a board!");
@@ -197,7 +199,7 @@ public class BoardsOverviewCtrl implements Initializable {
     /**
      * Redirects the user to the join board by code scene
      */
-    public void toJoinByLink(){
+    public void toJoinByLink() {
         mainCtrl.showJoinBoardByLink();
     }
 }

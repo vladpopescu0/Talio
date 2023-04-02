@@ -79,6 +79,7 @@ public class TaskCell extends ListCell<Task> {
         super.updateItem(task, empty);
 
         if (empty || task == null) {
+            System.out.println("plpl");
             setText(null);
             setGraphic(null);
         } else {

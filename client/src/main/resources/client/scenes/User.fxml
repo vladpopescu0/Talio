@@ -7,23 +7,48 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" text="Talio: Get it done with ease - your to-do app for peace" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #2C3E50;">
-         <children>
-            <Label layoutX="19.0" layoutY="45.0" prefHeight="37.0" prefWidth="280.0" text="Please enter your username to log in, or create an account if you do not have one" textAlignment="CENTER" textFill="WHITE" wrapText="true" />
-            <TextField fx:id="username" layoutX="79.0" layoutY="109.0" promptText="Username" style="-fx-background-color: white;" />
-            <Button layoutX="54.0" layoutY="161.0" mnemonicParsing="false" onAction="#logUserIn" style="-fx-background-color: #27AE60;" text="Log in" textFill="WHITE" />
-            <Button layoutX="186.0" layoutY="161.0" mnemonicParsing="false" onAction="#createUser" style="-fx-background-color: #27AE60;" text="Create new user" textFill="WHITE" />
-            <Label fx:id="notFoundWarning" layoutX="98.0" layoutY="258.0" text="It seems like there is no user with this username. Please create a new user" visible="false" />
-            <Label fx:id="alreadyUsedWarning" layoutX="102.0" layoutY="291.0" text="It seems like your username is already used. Please enter a different one" visible="false" />
-            <Label fx:id="emptyUsernameWarning" layoutX="79.0" layoutY="222.0" text="Please enter a valid username" textFill="WHITE" />
-            <ImageView fitHeight="382.0" fitWidth="390.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" >
-               <image>
-                  <Image url="@../../images/log-in-image.png" />
-               </image>
-            </ImageView>
-         </children></AnchorPane>
-  </content>
+<TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="775.0" text="Talio: Get it done with ease" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserCtrl">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="385.0" prefWidth="774.0" style="-fx-background-color: #027883;">
+            <children>
+                <Label layoutX="12.0" layoutY="55.0" prefHeight="102.0" prefWidth="354.0" text="Please enter your username to log in, or create an account if you do not have one" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                    <font>
+                        <Font size="16.0" />
+                    </font></Label>
+                <TextField fx:id="username" layoutX="50.0" layoutY="171.0" prefHeight="30.0" prefWidth="268.0" promptText="Username" style="-fx-background-color: white;">
+                    <font>
+                        <Font size="14.0" />
+                    </font></TextField>
+                <Button layoutX="50.0" layoutY="224.0" mnemonicParsing="false" onAction="#logUserIn" prefHeight="31.0" prefWidth="59.0" style="-fx-background-color: #00C9A7;" text="Log in" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+                <Button layoutX="190.0" layoutY="224.0" mnemonicParsing="false" onAction="#createUser" prefHeight="32.0" prefWidth="127.0" style="-fx-background-color: #00C9A7;" text="Create new user" textFill="WHITE">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+                <Label fx:id="notFoundWarning" layoutX="26.0" layoutY="262.0" prefHeight="94.0" prefWidth="316.0" text="It seems like there is no user with this username. Please create a new user" textAlignment="CENTER" textFill="#ea4343" visible="false" wrapText="true">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Label>
+                <Label fx:id="alreadyUsedWarning" layoutX="41.0" layoutY="262.0" prefHeight="96.0" prefWidth="285.0" text="It seems like your username is already used. Please enter a different one" textAlignment="CENTER" textFill="#ea4343" wrapText="true">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Label>
+                <Label fx:id="emptyUsernameWarning" layoutX="92.0" layoutY="290.0" text="Please enter a valid username" textFill="#ea4343">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Label>
+                <ImageView fitHeight="401.0" fitWidth="392.0" layoutX="388.0" layoutY="-2.0" pickOnBounds="true" preserveRatio="true" style="-fx-background-color: #027883;">
+                    <image>
+                        <Image url="@/images/log-in-image.png" />
+                    </image>
+                </ImageView>
+            </children></AnchorPane>
+    </content>
+    <font>
+        <Font size="14.0" />
+    </font>
 </TitledPane>

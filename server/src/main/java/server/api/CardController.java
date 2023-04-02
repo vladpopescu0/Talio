@@ -225,6 +225,7 @@ public class CardController {
         Card card = repo.getById(id);
         card.addTask(task);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", task);
         return ResponseEntity.ok(task);
     }
 

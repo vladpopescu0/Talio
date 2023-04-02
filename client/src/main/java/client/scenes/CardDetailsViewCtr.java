@@ -5,6 +5,7 @@ import commons.Board;
 import commons.Card;
 import commons.Tag;
 import commons.Task;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -90,6 +91,16 @@ public class CardDetailsViewCtr implements Initializable {
                 new ArrayList<>() : card.getTags());
         tagList.setItems(tagObservableList);
         tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+        server.registerForUpdates("/topic/tasks",
+                Task.class, q -> Platform.runLater(() -> {
+                    taskObservableList.add(q);
+                    refresh();
+                }));
+//        server.registerForUpdates("/topic/tasks",
+//                Long.class, q -> Platform.runLater(() -> {
+//                    refresh();
+//                    mainCtrl.getBoardViewCtrl().refresh();
+//                }));
     }
 
     /**

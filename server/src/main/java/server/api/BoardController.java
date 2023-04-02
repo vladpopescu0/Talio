@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Board;
+import commons.CardList;
 import commons.ColorScheme;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -177,5 +178,27 @@ public class BoardController {
         colorSchemeRepository.save(colorScheme);
 //      msgs.convertAndSend("/topic/boardsUpdate", board);
         return ResponseEntity.ok(colorScheme);
+    }
+
+    @PostMapping("/addList/{id}")
+    public ResponseEntity<CardList> addListToBoard(@PathVariable("id") long id, @RequestBody CardList cardList){
+        //if(card==null){
+        //    return ResponseEntity.badRequest().build();
+        //}
+        //cLService.addCard(id,card);
+        //return ResponseEntity.ok(card);
+        if (cardList == null || cardList.getName() == null
+                || cardList.getName().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Board board = getById(id).getBody();
+        board.addList(cardList);
+        repo.save(board);
+//        listeners.forEach((k,l) -> l.accept(cardList));
+        msgs.convertAndSend("/topic/updateList", cardList);
+        return ResponseEntity.ok(cardList);
     }
 }
