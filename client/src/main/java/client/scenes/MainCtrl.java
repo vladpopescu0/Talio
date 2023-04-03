@@ -24,6 +24,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,6 +88,8 @@ public class MainCtrl {
     private boolean isAdmin = false;
 
     private String adminPass = "";
+
+    private HashMap<Long, String> savedPasswords = new HashMap<>();
 
     /**
      * Initializes the application
@@ -617,5 +620,35 @@ public class MainCtrl {
         return secondaryStage.isShowing()
                 && secondaryStage.getScene().equals(editTag)
                 && tag.getId() == editTagCtrl.getTag().getId();
+    }
+
+    /**
+     * Gets the map of saved passwords
+     * @return Map of board ID to saved password
+     */
+    public HashMap<Long, String> getSavedPasswords() {
+        return savedPasswords;
+    }
+
+    /**
+     * Sets the map of saved passwords
+     * @param savedPasswords Map of Board ID to Password (String)
+     */
+    public void setSavedPasswords(HashMap<Long, String> savedPasswords) {
+        this.savedPasswords = savedPasswords;
+    }
+
+    /**
+     * Updates the map of saved passwords by replacing a password if one exists,
+     * otherwise adding it
+     * @param id Board ID
+     * @param pass Password
+     */
+    public void updatePassword(long id, String pass) {
+        if (this.savedPasswords.containsKey(id)) {
+            this.savedPasswords.replace(id, pass);
+        } else {
+            this.savedPasswords.put(id, pass);
+        }
     }
 }

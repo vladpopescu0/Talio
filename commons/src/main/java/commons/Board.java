@@ -381,8 +381,6 @@ public class Board {
      */
     public void setPasswordHash(String pass){
         setHasPassword(true);
-        System.out.println("pass: " + pass);
-        System.out.println("hash: " + pass.hashCode());
         this.password = String.valueOf(pass.hashCode());
     }
 

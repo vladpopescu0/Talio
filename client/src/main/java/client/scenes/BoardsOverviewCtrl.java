@@ -129,6 +129,19 @@ public class BoardsOverviewCtrl implements Initializable {
             }
         }
         if (b.isHasPassword() && !mainCtrl.isAdmin()) {
+            if (mainCtrl.getSavedPasswords().containsKey(b.getId())){
+                if (server.checkBoardPassword(
+                        mainCtrl.getSavedPasswords().get(b.getId()), b.getId()
+                )) {
+                    b.addUser(mainCtrl.getCurrentUser());
+                    b = server.updateBoard(b);
+                    mainCtrl.getCurrentUser().setBoardList(server.
+                            getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+                    mainCtrl.showBoardView(b);
+                    mainCtrl.closeSecondaryStage();
+                    return;
+                }
+            }
             mainCtrl.showCheckBoardPasswordView(b);
         } else {
             b.addUser(mainCtrl.getCurrentUser());
