@@ -135,6 +135,7 @@ public class MainCtrl {
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
                            Pair<HelpCtrl, Parent> helpPage) {
+
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
         this.helpStage = helpStage;
@@ -377,11 +378,11 @@ public class MainCtrl {
      * @param board the board to be customized
      */
     public void showCustomizationPage(Board board) {
-        primaryStage.setTitle("Customize Your Board");
-
+        //primaryStage.setTitle("Customize Your Board");
+        showSecondaryStage(customizationPage,"Customize Your Board");
         this.customizationPageCtrl.setBoard(board);
         this.customizationPageCtrl.refresh();
-        primaryStage.setScene(customizationPage);
+        //primaryStage.setScene(customizationPage);
     }
     /**
      * Shows the admin login page
@@ -545,6 +546,9 @@ public class MainCtrl {
         if (secondaryStage.isShowing()) {
             secondaryStage.close();
         }
+    }
+    public Stage getSecondaryStage(){
+        return secondaryStage;
     }
 
     /**

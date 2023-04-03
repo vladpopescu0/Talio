@@ -107,6 +107,7 @@ public class CustomizationPageCtrl implements Initializable {
                 .setColorFont(mainCtrl.colorToHex(listFont.getValue()));
         this.board = server.addBoard(board);
         mainCtrl.showBoardView(board);
+        mainCtrl.closeSecondaryStage();
     }
 
     /**

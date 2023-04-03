@@ -79,7 +79,8 @@ public class BoardController {
      */
     @PutMapping(path ="/modify")
     public ResponseEntity<Board> putBoard(@RequestBody Board board) {
-        if (board == null || board.getName() == null|| board.getName().isEmpty()) {
+        if (board == null || board.getName() == null
+                || board.getName().isEmpty() || repo.existsById(board.getId())) {
             return ResponseEntity.badRequest().build();
         }
 //        listeners.forEach((k,l) -> l.accept(board));
@@ -163,10 +164,10 @@ public class BoardController {
     }
 
     /**
-     * Updates a board
-     * @param id the id of the board to be updated
-     * @param colorScheme the new version of the board
-     * @return a response entity containing the updated board, if the update is possible
+     * Updates a Color Scheme
+     * @param id the id of the color Scheme to be updated
+     * @param colorScheme the new version of the Color Scheme
+     * @return a response entity containing the updated color scheme, if the update is possible
      */
     @PutMapping("/updateColorScheme/{id}")
     public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
