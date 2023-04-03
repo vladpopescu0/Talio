@@ -1,7 +1,7 @@
 # Agenda - Week 8  
 **Location:** Drebbelweg-PC Hall 1  
 **Date:** 4th of April, 2023  
-**Time:** 16:45-17:10  
+**Time:** 15:15-15:40  
 **Attendees:** Georgios Kontos, Ioan Leolea, Jakub Matyja, Vlad Popescu, Shashwat Sahay  
 
 ## Roles
