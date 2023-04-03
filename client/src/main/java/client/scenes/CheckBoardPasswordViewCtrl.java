@@ -25,7 +25,7 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
      * Constructor for the EditBoardNameCtrl class
      * @param server the server to be used
      * @param mainCtrl the main controller of the application
-     * @param board the board whose name will be changed
+     * @param board the board whose password will be checked
      */
     @Inject
     public CheckBoardPasswordViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
@@ -47,14 +47,14 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
 
     /**
      * Setter for the board
-     * @param board the board whose name is to be changed
+     * @param board the board whose password is to be checked
      */
     public void setBoard(Board board) {
         this.board = board;
     }
 
     /**
-     * Edits the name of the board to that entered by the User
+     * Checks the password of the board against the input password
      */
     public void checkPass() {
         if (pass.getText().isEmpty() || pass.getText() == null) {

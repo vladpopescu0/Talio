@@ -25,7 +25,7 @@ public class EditBoardPasswordViewCtrl implements Initializable {
      * Constructor for the EditBoardNameCtrl class
      * @param server the server to be used
      * @param mainCtrl the main controller of the application
-     * @param board the board whose name will be changed
+     * @param board the board whose password will be changed
      */
     @Inject
     public EditBoardPasswordViewCtrl(ServerUtils server, MainCtrl mainCtrl, Board board) {
@@ -47,14 +47,14 @@ public class EditBoardPasswordViewCtrl implements Initializable {
 
     /**
      * Setter for the board
-     * @param board the board whose name is to be changed
+     * @param board the board whose password is to be changed
      */
     public void setBoard(Board board) {
         this.board = board;
     }
 
     /**
-     * Edits the name of the board to that entered by the User
+     * Edits the password of the board to that entered by the User
      */
     public void editPass() {
         if (newPass.getText().isEmpty() || newPass.getText() == null) {
