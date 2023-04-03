@@ -5,6 +5,7 @@ import commons.Board;
 import commons.Card;
 import commons.Tag;
 import commons.Task;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,7 +25,7 @@ public class CardDetailsViewCtr implements Initializable {
     private final MainCtrl mainCtrl;
     private Card card;
 
-    private  Board board;
+    private Board board;
     private ObservableList<Task> taskObservableList;
     private ObservableList<Tag> tagObservableList;
 
@@ -47,10 +48,11 @@ public class CardDetailsViewCtr implements Initializable {
 
     /**
      * Constructor for the detailed card view
-     * @param server the server used
+     *
+     * @param server   the server used
      * @param mainCtrl the mainCtrl used
-     * @param card the current card
-     * @param board the board to which the card belongs
+     * @param card     the current card
+     * @param board    the board to which the card belongs
      */
     @Inject
     public CardDetailsViewCtr(ServerUtils server, MainCtrl mainCtrl, Card card, Board board) {
@@ -69,13 +71,6 @@ public class CardDetailsViewCtr implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //cancelButton.setDisable(true);
-        refresh();
-    }
-
-    /**
-     * Updates the tasks, description and tags
-     */
-    public void refresh() {
         editButton.setVisible(true);
         cancelButton.setVisible(false);
         confirmButton.setVisible(true);
@@ -86,22 +81,60 @@ public class CardDetailsViewCtr implements Initializable {
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
         taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
-        tagObservableList = FXCollections.observableList(card == null || card.getTags() == null?
+        tagObservableList = FXCollections.observableList(card == null || card.getTags() == null ?
                 new ArrayList<>() : card.getTags());
         tagList.setItems(tagObservableList);
         tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+        description.setText(card.getDescription());
+        server.registerForUpdates("/topic/tasks",
+                Long.class, q -> Platform.runLater(() -> {
+                    System.out.println("id " + q);
+                    refreshTagChange();
+                    description.setText(card.getDescription());
+                    mainCtrl.getBoardViewCtrl().refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
+        server.registerForUpdates("/topic/deleteCard",
+                Card.class, q -> Platform.runLater(() -> {
+                    if (card.equals(q)) {
+                        mainCtrl.showBoardView(server.getBoardByID(board.getId()));
+                        mainCtrl.getBoardViewCtrl().refresh();
+                        mainCtrl.getOverviewCtrl().refresh();
+                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+                    }
+                }));
+    }
+
+    /**
+     * Updates the tasks, description and tags
+     */
+    public void refresh() {
+        if (card != null && card.getId() > 0) {
+            this.card = server.getCardById(card.getId());
+            List<Task> tasks = (card == null || card.getTasks() == null ?
+                    new ArrayList<>() : card.getTasks());
+            taskObservableList = FXCollections.observableList(tasks);
+            taskList.setItems(taskObservableList);
+            taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+            tagObservableList =
+                    FXCollections.observableList(card == null || card.getTags() == null ?
+                            new ArrayList<>() : card.getTags());
+            tagList.setItems(tagObservableList);
+            tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+            description.setText(card.getDescription());
+        }
     }
 
     /**
      * Updates the Tags when changes were made to them
      */
     public void refreshTagChange() {
-        card = server.getCardById(card.getId());
         refresh();
     }
 
     /**
      * Setter for the board
+     *
      * @param board the board to which the card belongs
      */
     public void setBoard(Board board) {
@@ -110,6 +143,7 @@ public class CardDetailsViewCtr implements Initializable {
 
     /**
      * Setter for the card
+     *
      * @param card the current card
      */
     public void setCard(Card card) {
@@ -118,19 +152,23 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
-     *Getter for the card field, used when editing task order,
-     *so that the task cell is dependent on this class
-     *@return the card from this controller
+     * Getter for the card field, used when editing task order,
+     * so that the task cell is dependent on this class
+     *
+     * @return the card from this controller
      */
-    public Card getCard(){
+    public Card getCard() {
         return card;
     }
 
     /**
      * Getter for the board to which the card belongs
+     *
      * @return the board to which this card belongs
      */
-    public Board getBoard() {return board; }
+    public Board getBoard() {
+        return board;
+    }
 
     /**
      * Allows to edit the description

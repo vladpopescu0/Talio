@@ -19,7 +19,12 @@ import commons.*;
 
 import static jakarta.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
@@ -27,10 +32,18 @@ import org.glassfish.jersey.client.ClientConfig;
 import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
+import org.springframework.messaging.converter.MappingJackson2MessageConverter;
+import org.springframework.messaging.simp.stomp.StompFrameHandler;
+import org.springframework.messaging.simp.stomp.StompHeaders;
+import org.springframework.messaging.simp.stomp.StompSession;
+import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
+import org.springframework.web.socket.client.standard.StandardWebSocketClient;
+import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
     private static String server = "http://localhost:8080/";
+    private String url = server.replace("http", "ws") + "websocket";
 
     /**
      * Sets static server variable
@@ -247,6 +260,22 @@ public class ServerUtils {
     }
 
     /**
+     * Updates a board in the database
+     *
+     * @param board the board to be updated
+     * @return the updated board
+     */
+    public Board updateBoardAddTag(Board board) {
+        Board b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/updateTagAdd/" + board.getId()) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
+        setCardsParent(b);
+        return b;
+    }
+
+    /**
      * Updates the details of a card
      * @param card the card to be updated
      * @return the card
@@ -257,6 +286,36 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)//
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(card, APPLICATION_JSON), Card.class);
+    }
+
+    private static ExecutorService exec = Executors.newSingleThreadExecutor();
+
+    /**
+     * @param cons the consumer
+     */
+    public void getBoardUpdates(Consumer<Board> cons) {
+        exec.submit(() -> {
+            while (!Thread.interrupted()) {
+                var res = ClientBuilder.newClient(new ClientConfig()) //
+                        .target(server).path("api/boards/updates") //
+                        .request(APPLICATION_JSON) //
+                        .accept(APPLICATION_JSON) //
+                        .get(Response.class);
+
+                if(res.getStatus() == 204){
+                    continue;
+                }
+                Board board = res.readEntity(Board.class);
+                cons.accept(board);
+            }
+        });
+    }
+
+    /**
+     * Stops the executors
+     */
+    public void stop(){
+        exec.shutdownNow();
     }
 
     /**
@@ -404,20 +463,20 @@ public class ServerUtils {
         // can also use switch statement
     }
 
-    /**
-     * @param list the list that is posted
-     */
-    public void addCL(CardList list) {
-        Response res = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/lists/add") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(list, APPLICATION_JSON));
-
-        if (res.getStatus() != 200) {
-            System.out.println("error");
-        }
-    }
+//    /**
+//     * @param list the list that is posted
+//     */
+//    public void addCL(CardList list) {
+//        Response res = ClientBuilder.newClient(new ClientConfig()) //
+//                .target(server).path("api/lists/add") //
+//                .request(APPLICATION_JSON) //
+//                .accept(APPLICATION_JSON) //
+//                .post(Entity.entity(list, APPLICATION_JSON));
+//
+//        if (res.getStatus() != 200) {
+//            System.out.println("error");
+//        }
+//    }
 
     /**
      * Removes a cardList
@@ -586,6 +645,93 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(colorScheme,APPLICATION_JSON), ColorScheme.class);
+    }
+    /**
+     * gets a colorScheme by id
+     * @param id of the searched colorscheme
+     * @return the given entity, can throw
+     * server exception if not found
+     */
+    public ColorScheme getColorSchemeById(long id){
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .get(ColorScheme.class);
+    }
+
+    /**
+     * deletes a colorScheme by id
+     * @param id of the colorScheme
+     * @return the colorScheme if it was deleted,
+     * throws an exception if not found
+     */
+    public ColorScheme deleteColorSchemeById(long id) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/colors/delete/"+id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .delete(ColorScheme.class);
+    }
+
+    /**
+     * Get a list of cards by having a list id, solving the recursion problem
+     *
+     * @param id   the id of the card list
+     * @param cardList the cardlist that needs to be added
+     * @return the cards that are connected to that card list
+     */
+    public CardList addListToBoard(CardList cardList, Long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/addList/" + id)//
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
+    }
+
+    private StompSession session = connect(url);
+
+    /**
+     * Connects the handler to a URL
+     *
+     * @param URL the URL to be used
+     * @return the session
+     */
+    private StompSession connect(String URL) {
+        var client = new StandardWebSocketClient();
+        var stomp = new WebSocketStompClient(client);
+        stomp.setMessageConverter(new MappingJackson2MessageConverter());
+        try {
+            return stomp.connect(URL, new StompSessionHandlerAdapter() {
+            }).get();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+        throw new IllegalStateException();
+    }
+
+    /**
+     * Looks for updates
+     *
+     * @param destination the target of the updates
+     * @param type        the entity type to look for updates
+     * @param consumer    the consumer
+     * @param <T>         generics
+     */
+    public <T> void registerForUpdates(String destination, Class<T> type, Consumer<T> consumer) {
+        session.subscribe(destination, new StompFrameHandler() {
+            @Override
+            public Type getPayloadType(StompHeaders headers) {
+                return type;
+            }
+
+            @Override
+            public void handleFrame(StompHeaders headers, Object payload) {
+                consumer.accept((T) payload);
+            }
+        });
     }
 //    /**
 //     * gets a colorScheme by id

@@ -580,4 +580,11 @@ public class MainCtrl {
                 && secondaryStage.getScene().equals(editTag)
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
+
+    /**
+     * @return the primary stage
+     */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
 }

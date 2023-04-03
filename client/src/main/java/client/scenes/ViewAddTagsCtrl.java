@@ -25,6 +25,7 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -80,23 +81,32 @@ public class ViewAddTagsCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         tagsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tagsView.setPlaceholder(new Label("There are currently no tags available to be added"));
+        server.registerForUpdates("/topic/tags",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getCardDetailsViewCtr().refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
-        this.card = server.getCardById(card.getId());
-        this.board = server.getBoardByID(board.getId());
-        List<Tag> observableTags = board.getTags();
-        for(Tag t: card.getTags()) {
-            observableTags.remove(t);
+        if(card != null && board != null && card.getId() > 0 && board.getId() != null) {
+            this.card = server.getCardById(card.getId());
+            this.board = server.getBoardByID(board.getId());
+            List<Tag> observableTags = board.getTags();
+            for (Tag t : card.getTags()) {
+                observableTags.remove(t);
+            }
+            tagObservableList = FXCollections.observableList(observableTags);
+            tagsView.setItems(tagObservableList);
+            tagsView.setCellFactory(tc ->
+                    new TagAddCell(mainCtrl, server, false)
+            );
         }
-        tagObservableList = FXCollections.observableList(observableTags);
-        tagsView.setItems(tagObservableList);
-        tagsView.setCellFactory(tc ->
-                new TagAddCell(mainCtrl, server, false)
-        );
     }
 
     /**

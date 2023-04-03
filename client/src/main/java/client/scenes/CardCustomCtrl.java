@@ -19,7 +19,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private Board board;
 
     @FXML
-    private Button delete;
+    private Button removeButton;
 
     @FXML
     private Text label;
@@ -66,7 +66,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                 presBG.setValue(Color.valueOf(this.getItem().getColorBGlight()));
                 presFont.setValue(Color.valueOf(this.getItem().getColorFont()));
                 set.setVisible(true);
-                delete.setVisible(true);
+                removeButton.setVisible(true);
             }
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -76,7 +76,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     @Override
     protected void updateItem(ColorScheme colors, boolean empty) {
         super.updateItem(colors, empty);
-//trebuie sa fac o metoda getbyid pt colorpair
         if (empty || colors == null) {
             setText(null);
             setGraphic(null);
@@ -92,6 +91,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                     this.presBG.setOnAction(event -> saveBG());
                     this.set.setOnAction(
                             event -> selectPreset());
+                    this.removeButton.setOnAction(event -> deletePreset());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -5,16 +5,25 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" text="Create New Card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddCardCtrl">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
-         <children>
-            <TextField fx:id="title" layoutX="105.0" layoutY="40.0" promptText="Card" />
-            <Label layoutX="43.0" layoutY="44.0" text="Name:" />
-            <Button fx:id="add" layoutX="176.0" layoutY="87.0" mnemonicParsing="false" onAction="#ok" text="Create Card" />
-            <Label fx:id="errorLabel" layoutX="64.0" layoutY="115.0" text="Please enter a valid board name" visible="false" />
-            <Button fx:id="cancel" layoutX="105.0" layoutY="87.0" mnemonicParsing="false" onAction="#cancel" text="Back" />
-         </children></AnchorPane>
-  </content>
+<TitledPane animated="false" collapsible="false" text="Create a new card" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AddCardCtrl">
+    <content>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="459.0" style="-fx-background-color: #027883;">
+            <children>
+                <TextField fx:id="title" layoutX="84.0" layoutY="86.0" prefHeight="30.0" prefWidth="295.0" promptText="Card name">
+                    <font>
+                        <Font size="14.0" />
+                    </font></TextField>
+                <Button fx:id="add" layoutX="287.0" layoutY="150.0" mnemonicParsing="false" onAction="#ok" style="-fx-background-color: #00C9A7;" text="Create Card">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+                <Label fx:id="errorLabel" layoutX="64.0" layoutY="115.0" text="Please enter a valid board name" visible="false" />
+                <Button fx:id="cancel" layoutX="79.0" layoutY="150.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #00C9A7;" text="Back">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button>
+            </children></AnchorPane>
+    </content>
 </TitledPane>

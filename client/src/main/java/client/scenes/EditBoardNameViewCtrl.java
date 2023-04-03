@@ -43,7 +43,6 @@ public class EditBoardNameViewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         newName.setText(board.getName());
-        errorLabel.setVisible(false);
     }
 
     /**

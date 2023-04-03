@@ -5,16 +5,28 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane animated="false" collapsible="false" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" text="Create New Board" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardViewCtrl">
-  <content>
-    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="300.0" prefWidth="300.0">
-         <children>
-            <TextField fx:id="boardName" layoutX="105.0" layoutY="40.0" promptText="Board" />
-            <Label layoutX="43.0" layoutY="44.0" text="Name:" />
-            <Button fx:id="createBoardButton" layoutX="170.0" layoutY="87.0" mnemonicParsing="false" onAction="#createNewBoard" text="Create Board" />
-            <Label fx:id="errorLabel" layoutX="64.0" layoutY="115.0" text="Please enter a valid board name" visible="false" />
-            <Button layoutX="106.0" layoutY="87.0" mnemonicParsing="false" onAction="#toBoardsOverview" text="Back" />
-         </children></AnchorPane>
-  </content>
+<TitledPane animated="false" collapsible="false" minWidth="-Infinity" prefHeight="265.0" prefWidth="459.0" text="Create a new board" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateBoardViewCtrl">
+    <content>
+        <AnchorPane prefHeight="240.0" prefWidth="415.0" style="-fx-background-color: #027883;">
+            <children>
+                <TextField fx:id="boardName" layoutX="63.0" layoutY="82.0" prefHeight="33.0" prefWidth="328.0" promptText="Board name">
+                    <font>
+                        <Font size="14.0" />
+                    </font></TextField>
+                <Button fx:id="submitButton" layoutX="260.0" layoutY="153.0" mnemonicParsing="false" onAction="#createNewBoard" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #00C9A7;" text="Create Board">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Label fx:id="errorLabel" layoutX="107.0" layoutY="36.0" style="-fx-text-fill: EA4343; -fx-font-weight: bold;" text="Please enter a valid board name" visible="false">
+                    <font>
+                        <Font size="16.0" />
+                    </font></Label>
+                <Button fx:id="backButton" layoutX="63.0" layoutY="153.0" mnemonicParsing="false" onAction="#toBoardsOverview" prefHeight="23.0" prefWidth="50.0" style="-fx-background-color: #00C9A7;" text="Back">
+                    <font>
+                        <Font size="14.0" />
+                    </font></Button></children></AnchorPane>
+    </content>
 </TitledPane>

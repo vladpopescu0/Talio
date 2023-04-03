@@ -23,6 +23,7 @@ import com.google.inject.Inject;
 import client.utils.ServerUtils;
 import commons.Board;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -77,18 +78,26 @@ public class ViewTagsCtrl implements Initializable {
         tagsView.setCellFactory(tc ->
                 new TagCell(mainCtrl, server,this)
         );
+        server.registerForUpdates("/topic/tags2",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
-        this.board = server.getBoardByID(board.getId());
-        tagObservableList = FXCollections.observableList(board.getTags());
-        tagsView.setItems(tagObservableList);
-        tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server,this)
-        );
+        if(board != null && board.getId() != null) {
+            this.board = server.getBoardByID(board.getId());
+            tagObservableList = FXCollections.observableList(board.getTags());
+            tagsView.setItems(tagObservableList);
+            tagsView.setCellFactory(tc ->
+                    new TagCell(mainCtrl, server, this)
+            );
+        }
     }
 
     /**
@@ -127,6 +136,6 @@ public class ViewTagsCtrl implements Initializable {
      */
     public void back() {
         mainCtrl.closeSecondaryStage();
-        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
+        mainCtrl.showBoardView(server.getBoardByID(board.getId()));
     }
 }

@@ -9,56 +9,56 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="640.0" prefWidth="601.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CustomizationPageCtrl">
+<AnchorPane prefHeight="584.0" prefWidth="601.0" style="-fx-background-color: #027883;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CustomizationPageCtrl">
    <children>
-      <Text layoutX="178.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold; -fx-font-family: Montserrat;" text="Customization">
+      <Text fill="#ecebeb" layoutX="178.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold; -fx-font-family: Montserrat;" text="Customization">
          <font>
             <Font size="36.0" />
          </font>
       </Text>
-      <Text layoutX="68.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Board colors">
+      <Text fill="#ecebeb" layoutX="75.0" layoutY="136.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat; -fx-font-weight: bold;" text="Board colors">
          <font>
             <Font size="30.0" />
          </font>
       </Text>
-      <Text layoutX="339.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="List colors">
+      <Text fill="#ecebeb" layoutX="390.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat; -fx-font-weight: bold;" text="List colors">
          <font>
             <Font size="30.0" />
          </font>
       </Text>
-      <Text layoutX="159.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
+      <Text fill="#ecebeb" layoutX="129.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="68.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="BG">
+      <Text fill="#ecebeb" layoutX="48.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="BG">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <ColorPicker fx:id="boardBG" editable="true" layoutX="95.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="boardFont" editable="true" layoutX="198.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <Button fx:id="boardReset" layoutX="240.0" layoutY="117.0" mnemonicParsing="false" onAction="#reset" text="RESET" />
-      <Button fx:id="listReset" layoutX="477.0" layoutY="116.0" mnemonicParsing="false" text="RESET" onAction="#resetLists"/>
-      <Text layoutX="430.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
+      <ColorPicker fx:id="boardBG" editable="true" layoutX="75.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="boardFont" editable="true" layoutX="168.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <Button fx:id="boardReset" layoutX="222.0" layoutY="156.0" mnemonicParsing="false" onAction="#reset" style="-fx-background-color: #00C9A7;" text="RESET" />
+      <Button fx:id="listReset" layoutX="514.0" layoutY="156.0" mnemonicParsing="false" style="-fx-background-color: #00C9A7;" text="RESET" />
+      <Text fill="#ecebeb" layoutX="420.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
-      <Text layoutX="339.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="BG">
+      <Text fill="#ecebeb" layoutX="339.0" layoutY="175.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="BG">
          <font>
             <Font size="18.0" />
          </font>
       </Text>
       <ColorPicker fx:id="listBG" editable="true" layoutX="366.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="listFont" editable="true" layoutX="469.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="listFont" editable="true" layoutX="459.0" layoutY="157.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <Line endX="469.0" layoutX="131.0" layoutY="217.0" startX="-130.99998474121094" stroke="#dcd4d4" />
-      <Button fx:id="listReset1" layoutX="563.0" layoutY="12.0" mnemonicParsing="false" onAction="#customizeBoard" text="X" />
-      <ScrollPane layoutX="59.0" layoutY="288.0" prefHeight="243.0" prefWidth="494.0">
+      <Button fx:id="listReset1" layoutX="14.0" layoutY="545.0" mnemonicParsing="false" onAction="#customizeBoard" style="-fx-background-color: #00C9A7;" text="Back" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="59.0" layoutY="288.0" prefHeight="243.0" prefWidth="494.0" vbarPolicy="NEVER">
          <content>
-            <ListView fx:id="colorPairList" prefHeight="238.0" prefWidth="489.0" />
+            <ListView fx:id="colorPairList" prefHeight="247.0" prefWidth="496.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css" />
          </content>
       </ScrollPane>
-      <Button fx:id="addPreset" layoutX="477.0" layoutY="245.0" mnemonicParsing="false" onAction="#addPreset" text="Add Preset" />
+      <Button fx:id="addPreset" layoutX="477.0" layoutY="245.0" mnemonicParsing="false" onAction="#addPreset" style="-fx-background-color: #00C9A7;" text="Add Preset" />
    </children>
 </AnchorPane>
