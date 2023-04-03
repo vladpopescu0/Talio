@@ -62,6 +62,7 @@ public class EditBoardPasswordViewCtrl implements Initializable {
         } else {
             //board.setPassword(newPass.getText());
             server.setBoardPassword(newPass.getText(), board.getId());
+            mainCtrl.updatePassword(board.getId(), newPass.getText());
             mainCtrl.closeSecondaryStage();
 
             BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();

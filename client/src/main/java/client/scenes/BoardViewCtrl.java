@@ -130,7 +130,10 @@ public class BoardViewCtrl implements Initializable {
      * edit it
      */
     public void checkUser() {
-        if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
+        if (!board.getUsers().contains(mainCtrl.getCurrentUser()) ||
+                (board.isHasPassword() && (!mainCtrl.getSavedPasswords().containsKey(board.getId())
+                || !server.checkBoardPassword(mainCtrl.getSavedPasswords().get(
+                        board.getId()), board.getId())))) {
             removeButton.setDisable(true);
             editTitle.setDisable(true);
             addList.setDisable(true);
