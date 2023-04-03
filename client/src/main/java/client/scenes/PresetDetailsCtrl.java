@@ -88,6 +88,9 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                     this.set.setOnAction(event -> setColorScheme());
                     colorBG.setStyle("-fx-fill: "+this.getItem().getColorBGlight()+";");
                     colorFont.setStyle("-fx-fill: "+this.getItem().getColorFont()+";");
+                    if(card.getColors().equals(this.getItem())){
+                        setStyle("-fx-border-color: red;");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -104,7 +107,7 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
         card = server.getCardById(card.getId());
         card.setColors(this.getItem());
         server.updateCardDetails(card);
-        //server.updateBoard(board);
+        parent.getCard().setColors(this.getItem());
         parent.refresh();
     }
 }

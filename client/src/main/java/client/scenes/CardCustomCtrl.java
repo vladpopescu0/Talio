@@ -87,6 +87,9 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                     fxmlLoader.load();
 //                    int i = board.getColors().indexOf(this.getItem());
                     label.setText("Preset");
+                    if(board.getCardsColorScheme().equals(this.getItem())){
+                        setStyle("-fx-border-color: red;");
+                    }
                     this.presFont.setOnAction(event -> saveFont());
                     this.presBG.setOnAction(event -> saveBG());
                     this.set.setOnAction(
