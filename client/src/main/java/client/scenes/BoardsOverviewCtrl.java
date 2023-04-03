@@ -70,29 +70,31 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
+        colBoardName.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getName()));
         //long polling
         server.getBoardUpdates(q -> {
             data.add(q);
             refresh();
-            mainCtrl.getUserBoardsOverviewCtrl().refresh();
         });
         //websockets
         server.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
                     refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                    mainCtrl.getPrimaryStage()
+                            .setTitle(mainCtrl.getBoardViewCtrl().getBoard().getName());
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-        server.registerForUpdates("/topic/refreshUsers",
-                Long.class, q -> Platform.runLater(() -> {
-                    refresh();
-                }));
+//        server.registerForUpdates("/topic/refreshUsers",
+//                Long.class, q -> Platform.runLater(() -> {
+//                    refresh();
+//                }));
     }
 
     /**

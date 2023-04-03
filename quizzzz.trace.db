@@ -2914,3 +2914,9 @@ alter table card_tags add constraint FK3d8m6ot8d661jw391k45btejs foreign key (ca
 2023-04-02 16:03:59 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL TABLES[*]"; expected "OBJECTS"; SQL statement:
 drop all tables [42001-200]
+2023-04-02 23:55:50 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL TABLES[*]"; expected "OBJECTS"; SQL statement:
+drop all tables [42001-200]
+2023-04-03 14:07:59 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL TABLES[*]"; expected "OBJECTS"; SQL statement:
+drop all tables [42001-200]
