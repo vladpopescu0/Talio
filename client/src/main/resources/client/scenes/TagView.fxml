@@ -2,13 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ColorPicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="178.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="621.0" text="Tag" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="20.0" text="Tag" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="163.0" AnchorPane.topAnchor="0.0">
             <font>
                 <Font size="15.0" />
             </font>
@@ -16,7 +17,7 @@
                 <Insets left="10.0" />
             </padding>
         </Label>
-        <Button fx:id="editButton" layoutX="638.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" text="Edit" AnchorPane.rightAnchor="62.0">
+        <Button fx:id="editButton" layoutX="98.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" text="Edit" AnchorPane.rightAnchor="55.16796875">
             <font>
                 <Font size="10.0" />
             </font></Button>
@@ -25,5 +26,6 @@
                 <Font size="10.0" />
             </font>
         </Button>
+        <ColorPicker fx:id="tagColor" editable="true" layoutX="55.0" layoutY="12.0" prefHeight="25.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" AnchorPane.rightAnchor="91.66796875" />
     </children>
 </AnchorPane>

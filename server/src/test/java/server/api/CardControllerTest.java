@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Card;
+import commons.Tag;
 import commons.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +19,9 @@ public class CardControllerTest {
     private TestCardRepository repo;
     private TestCardListRepository cardListRepository;
     private TestTaskRepository taskRepository;
+    private TestTagRepository tagRepository;
     private CardController sut;
+    private TagController tagSut;
     private SimpMessagingTemplate msg;
     private MessageChannel channel;
     private TaskController tSut;
@@ -33,8 +36,10 @@ public class CardControllerTest {
         repo = new TestCardRepository();
         taskRepository = new TestTaskRepository();
         cardListRepository = new TestCardListRepository();
-        sut = new CardController(repo, cardListRepository,msg, taskRepository);
+        tagRepository = new TestTagRepository();
+        sut = new CardController(repo, cardListRepository,msg, taskRepository, tagRepository);
         tSut = new TaskController(taskRepository);
+        tagSut = new TagController(tagRepository, repo);
     }
 
     /**
@@ -345,5 +350,95 @@ public class CardControllerTest {
         sut.addTaskToCard(2, t);
         Card c5 = sut.getById(2).getBody();
         assertEquals(c5.getTasks(), tasks);
+    }
+
+    /**
+     * Test for addTags with wrong arguments
+     */
+    @Test
+    public void testAddTagsNonExisting() {
+        Tag tag1 = new Tag("tag 1");
+        Tag tag2 = new Tag("tag 2");
+        Tag tag3 = new Tag("tag 3");
+        tag1.setId(1);
+        tag2.setId(2);
+        tag3.setId(3);
+        var actual = sut.addTags(22, List.of(tag1, tag2, tag3));
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        actual = sut.addTags(c.getId(), new ArrayList<>());
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+        actual = sut.addTags(c.getId(), List.of(tag1, tag2, tag3));
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+    }
+
+    /**
+     * Test for addTags with correct arguments
+     */
+    @Test
+    public void testAddTags() {
+        Tag tag1 = new Tag("tag 1");
+        Tag tag2 = new Tag("tag 2");
+        Tag tag3 = new Tag("tag 3");
+        tag1.setId(1);
+        tag2.setId(2);
+        tag3.setId(3);
+        tagSut.add(tag1);
+        tagSut.add(tag2);
+        tagSut.add(tag3);
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        var actual = sut.addTags(c.getId(), List.of(tag1, tag2, tag3));
+        assertEquals(actual.getBody(), repo.getById(c.getId()));
+    }
+
+    /**
+     * Test for removeTag with wrong arguments
+     */
+    @Test
+    public void testRemoveTagNonExisting() {
+        Tag tag1 = new Tag("tag 1");
+        Tag tag2 = new Tag("tag 2");
+        Tag tag3 = new Tag("tag 3");
+        tag1.setId(1);
+        tag2.setId(2);
+        tag3.setId(3);
+        var actual = sut.removeTag(22, tag1);
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        actual = sut.removeTag(c.getId(), null);
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+        actual = sut.removeTag(c.getId(), tag1);
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+    }
+
+    /**
+     * Test for removeTag with correct arguments
+     */
+    @Test
+    public void testRemoveTag() {
+        Tag tag1 = new Tag("tag 1");
+        Tag tag2 = new Tag("tag 2");
+        Tag tag3 = new Tag("tag 3");
+        tag1.setId(1);
+        tag2.setId(2);
+        tag3.setId(3);
+        tagSut.add(tag1);
+        tagSut.add(tag2);
+        tagSut.add(tag3);
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        var actual = sut.removeTag(c.getId(), tag2);
+        assertEquals(actual.getBody(), repo.getById(c.getId()));
     }
 }

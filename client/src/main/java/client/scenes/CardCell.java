@@ -2,11 +2,7 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import client.utils.SocketHandler;
-import commons.Board;
-import commons.Card;
-import commons.CardList;
-import commons.ColorScheme;
-import commons.Task;
+import commons.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.SnapshotParameters;
@@ -38,6 +34,17 @@ public class CardCell extends ListCell<Card> {
     private Button deleteButton;
     @FXML
     private Label statusLabel;
+
+    @FXML
+    private Label tagLabel1;
+    @FXML
+    private Label tagLabel2;
+    @FXML
+    private Label tagLabel3;
+    @FXML
+    private Label tagLabel4;
+    @FXML
+    private Label tagLabel5;
 
     @FXML
     private Label hasDesc;
@@ -76,14 +83,11 @@ public class CardCell extends ListCell<Card> {
      */
     public void initialize() {
         handleDraggable();
-        if (this.getItem()!=null && this.getItem().hasDescription()) {
-            hasDesc.setVisible(true);
-        } else {
-            hasDesc.setVisible(false);
-        }
+        hasDesc.setVisible(this.getItem() != null && this.getItem().hasDescription());
         statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
+                mainCtrl.closeSecondaryStage();
                 mainCtrl.showCardDetailsView(this.getItem(), board);
             }
         });
@@ -109,6 +113,7 @@ public class CardCell extends ListCell<Card> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    displayTags();
                     this.editButton.setOnAction(event -> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
@@ -123,6 +128,11 @@ public class CardCell extends ListCell<Card> {
                             }
                         }
                         server.deleteCard(this.getItem().getId());
+
+                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
+                            mainCtrl.closeSecondaryStage();
+                        }
+
                         mainCtrl.getBoardViewCtrl().refresh();
                     });
                 } catch (Exception e) {
@@ -140,6 +150,35 @@ public class CardCell extends ListCell<Card> {
                     .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
             mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
             mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
+        }
+    }
+
+    /**
+     * Displays Tags attached to the Card
+     */
+    public void displayTags() {
+        List<Tag> tags = this.getItem().getTags();
+        List<Label> labels = List.of(tagLabel1, tagLabel2, tagLabel3, tagLabel4, tagLabel5);
+
+        if (tags.size() <= 5) {
+            for(int x = 0; x < tags.size(); x++) {
+                labels.get(tags.size() - x - 1).setText(tags.get(x).getName());
+                labels.get(tags.size() - x - 1)
+                        .setStyle("-fx-text-fill: "+tags.get(x).getColor()+";"
+                        +"-fx-border-color: "+tags.get(x).getColor()+";");
+            }
+            for(int x = tags.size(); x < 5; x++) {
+                labels.get(x).setText(null);
+            }
+        } else {
+            tagLabel1.setText("+" + (tags.size() - 4) + " more");
+            tagLabel1.setStyle("-fx-text-fill: "+"white"+"; "
+                    +"-fx-border-color: "+"white"+";");
+            for(int x = 0; x < 4; x++) {
+                labels.get(4 - x).setText(tags.get(x).getName());
+                labels.get(4 - x).setStyle("-fx-text-fill: "+tags.get(x).getColor()+"; "
+                        +"-fx-border-color: "+tags.get(x).getColor()+";");
+            }
         }
     }
 

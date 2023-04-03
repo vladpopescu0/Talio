@@ -16,12 +16,14 @@
 package client.scenes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,8 +32,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 
-public class ViewTagsCtrl implements Initializable {
+public class ViewAddTagsCtrl implements Initializable {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -39,9 +42,11 @@ public class ViewTagsCtrl implements Initializable {
     private ListView<Tag> tagsView;
 
     @FXML
-    private Button createTag;
+    private Button addTag;
 
     private Board board;
+    private Card card;
+    private boolean shortcut;
 
     private ObservableList<Tag> tagObservableList;
 
@@ -49,14 +54,16 @@ public class ViewTagsCtrl implements Initializable {
      * Constructor for the ViewTagsCtrl
      * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param board the Board of which Tags are displayed
+     * @param board the Board to which the Card belongs
+     * @param card the Card to which a Tag will be added
      */
     @Inject
-    public ViewTagsCtrl(ServerUtils server, MainCtrl mainCtrl,
-                        Board board) {
+    public ViewAddTagsCtrl(ServerUtils server, MainCtrl mainCtrl,
+                           Board board, Card card) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.card = card;
     }
 
     /**
@@ -71,40 +78,40 @@ public class ViewTagsCtrl implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        tagsView.setPlaceholder(new Label("There are currently no tags available"));
-        tagObservableList = FXCollections.observableList(board.getTags());
-        tagsView.setItems(tagObservableList);
-        tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server,this)
-        );
+        tagsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        tagsView.setPlaceholder(new Label("There are currently no tags available to be added"));
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
+        this.card = server.getCardById(card.getId());
         this.board = server.getBoardByID(board.getId());
-        tagObservableList = FXCollections.observableList(board.getTags());
+        List<Tag> observableTags = board.getTags();
+        for(Tag t: card.getTags()) {
+            observableTags.remove(t);
+        }
+        tagObservableList = FXCollections.observableList(observableTags);
         tagsView.setItems(tagObservableList);
         tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server,this)
+                new TagAddCell(mainCtrl, server, false)
         );
     }
 
     /**
      * Redirects the user to a page with tag creation
      */
-    public void createTag() {
-        mainCtrl.showAddTag(board);
-        refresh();
-    }
-
-    /**
-     * Refreshes page when a Tag is edited
-     */
-    public void refreshEdit() {
-        tagsView.setItems(FXCollections.observableList(board.getTags()));
-        refresh();
+    public void addTags() {
+        if (tagsView.getSelectionModel().getSelectedItems().size() > 0) {
+            server.addTagsToCard(card.getId(), tagsView.getSelectionModel().getSelectedItems());
+            if (shortcut) {
+                mainCtrl.getBoardViewCtrl().refresh();
+            } else {
+                mainCtrl.getCardDetailsViewCtr().refreshTagChange();
+            }
+            refresh();
+        }
     }
 
     /**
@@ -123,10 +130,41 @@ public class ViewTagsCtrl implements Initializable {
     }
 
     /**
-     * Returns back to the Board view
+     * Setter for the Card
+     * @param card the Card to which a Tag can be added
+     */
+    public void setCard(Card card) {
+        this.card = card;
+    }
+
+    /**
+     * Getter for the Card
+     * @return the Card to which a Tag can be added
+     */
+    public Card getCard() {
+        return card;
+    }
+
+    /**
+     * Getter for the shortcut boolean
+     * @return whether the page was opened using a keyboard shortcut
+     */
+    public boolean getShortcut() {
+        return shortcut;
+    }
+
+    /**
+     * Setter for the shortcut boolean
+     * @param shortcut whether the page was opened using a keyboard shortcut
+     */
+    public void setShortcut(boolean shortcut) {
+        this.shortcut = shortcut;
+    }
+
+    /**
+     * Closes the pop up page
      */
     public void back() {
         mainCtrl.closeSecondaryStage();
-        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
     }
 }

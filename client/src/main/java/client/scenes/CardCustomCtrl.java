@@ -128,10 +128,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
      */
     public void selectPreset() {
         board = server.getBoardByID(board.getId());
-        board.getCardsColorScheme().setColorFont(this.getItem().getColorFont());
-        board.getCardsColorScheme().setColorLighter(this.getItem().getColorLighter());
-        board.getCardsColorScheme().setColorBGdark(this.getItem().getColorBGdark());
-        board.getCardsColorScheme().setColorBGlight(this.getItem().getColorBGlight());
+        board.setCardsColorScheme(this.getItem());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }
@@ -142,7 +139,15 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
      */
     public void deletePreset(){
         board = server.getBoardByID(board.getId());
+
+
+
+        if(board.getCardsColorScheme().equals(this.getItem())){
+            ColorScheme newScheme = server.addColorScheme(new ColorScheme());
+            board.setCardsColorScheme(newScheme);
+        }
         board.getCardsColorSchemesList().remove(this.getItem());
+        board.setCardsColorScheme(new ColorScheme());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }

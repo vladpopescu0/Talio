@@ -505,6 +505,33 @@ public class ServerUtils {
                 .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
     }
 
+    /**
+     * Adds the Tags from the list to the specified Card
+     * @param id ID of the Card
+     * @param tags list of Tags to be added to the Card
+     * @return updated Card
+     */
+    public Card addTagsToCard(long id, List<Tag> tags) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/addTags/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tags, APPLICATION_JSON), Card.class);
+    }
+
+    /**
+     * Removes the Tag from the list of the specified Card
+     * @param id ID of the Card
+     * @param tag Tag to be removed from the Card
+     * @return updated Card
+     */
+    public Card removeTagFromCard(long id, Tag tag) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/cards/removeTag/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(tag, APPLICATION_JSON), Card.class);
+    }
 
     /**
      * Updates the colorScheme of the board
@@ -560,31 +587,31 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(colorScheme,APPLICATION_JSON), ColorScheme.class);
     }
-    /**
-     * gets a colorScheme by id
-     * @param id of the searched colorscheme
-     * @return the given entity, can throw
-     * server exception if not found
-     */
-    public ColorScheme getColorSchemeById(long id){
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/colors/"+id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ColorScheme.class);
-    }
-
-    /**
-     * deletes a colorScheme by id
-     * @param id of the colorScheme
-     * @return the colorScheme if it was deleted,
-     * throws an exception if not found
-     */
-    public ColorScheme deleteColorSchemeById(long id) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/colors/delete/"+id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete(ColorScheme.class);
-    }
+//    /**
+//     * gets a colorScheme by id
+//     * @param id of the searched colorscheme
+//     * @return the given entity, can throw
+//     * server exception if not found
+//     */
+//    public ColorScheme getColorSchemeById(long id){
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/colors/"+id)
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .get(ColorScheme.class);
+//    }
+//
+//    /**
+//     * deletes a colorScheme by id
+//     * @param id of the colorScheme
+//     * @return the colorScheme if it was deleted,
+//     * throws an exception if not found
+//     */
+//    public ColorScheme deleteColorSchemeById(long id) {
+//        return ClientBuilder.newClient(new ClientConfig())
+//                .target(server).path("api/colors/delete/"+id)
+//                .request(APPLICATION_JSON)
+//                .accept(APPLICATION_JSON)
+//                .delete(ColorScheme.class);
+//    }
 }

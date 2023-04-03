@@ -4,8 +4,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+
+import java.util.List;
 
 import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
@@ -16,6 +20,12 @@ public class Tag {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
+
+    private String color;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tags")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Card> cards;
 
     /**
      * Empty constructor
@@ -30,6 +40,16 @@ public class Tag {
      */
     public Tag(String name) {
         this.name = name;
+        this.color = "#FF0000";
+    }
+    /**
+     * Constructor for the Tag class
+     * @param name name of the Tag
+     * @param color the new color of the Tag
+     */
+    public Tag(String name,String color) {
+        this.name = name;
+        this.color = color;
     }
 
     /**
@@ -63,6 +83,22 @@ public class Tag {
      */
     public void setId(long id) {
         this.id = id;
+    }
+
+    /**
+     * Getter for the color field
+     * @return the color of the tag, red by default
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Setter for the color field
+     * @param color string to be added
+     */
+    public void setColor(String color) {
+        this.color = color;
     }
 
     /**

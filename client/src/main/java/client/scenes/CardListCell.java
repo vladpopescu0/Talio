@@ -169,6 +169,19 @@ public class CardListCell extends ListCell<CardList>{
     public void delete(Long id) {
         Board b = mainCtrl.getBoardViewCtrl().getBoard();
         server.removeCL(id);
+
+        if (mainCtrl.isSecondaryFromCardListCell(this.getItem())) {
+            mainCtrl.closeSecondaryStage();
+        } else {
+            if (this.getItem().getCards().stream()
+                    .anyMatch(c -> c.getId() == mainCtrl.getCardId())) {
+                if (mainCtrl.isSecondaryFromCardCell(this.getItem().getCards().stream()
+                        .filter(c -> c.getId() == mainCtrl.getCardId()).findFirst().get())) {
+                    mainCtrl.closeSecondaryStage();
+                }
+            }
+        }
+
         mainCtrl.showBoardView(b);
     }
 

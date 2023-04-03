@@ -15,10 +15,7 @@
  */
 package client.scenes;
 
-import commons.Board;
-import commons.Card;
-import commons.Tag;
-import commons.User;
+import commons.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Objects;
 
 public class MainCtrl {
     private Board board;
@@ -72,6 +70,8 @@ public class MainCtrl {
     private CreateTagCtrl createTagCtrl;
     private Scene editTag;
     private EditTagCtrl editTagCtrl;
+    private Scene viewAddTag;
+    private ViewAddTagsCtrl viewAddTagsCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
     private User currentUser;
     private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
@@ -99,6 +99,7 @@ public class MainCtrl {
      * @param viewTags the viewTags scene
      * @param editTag the editTag scene
      * @param joinBoardByLink the JoinBoardByLink scene
+     * @param viewAddTag the viewAddTag scene
      * @param details the cardDetails scene
      * @param customizationPage the CustomizationPage scene
      * @param adminCheck the adminCheck scene
@@ -108,7 +109,8 @@ public class MainCtrl {
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard, Pair<UserCtrl, Parent> userPage,
+                           Pair<AddCardCtrl,Parent> addCard,
+                           Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
@@ -120,8 +122,8 @@ public class MainCtrl {
                            Pair<AdminCheckCtrl, Parent> adminCheck,
                            Pair<ViewTagsCtrl, Parent> viewTags,
                            Pair<CreateTagCtrl, Parent> createTag,
-                           Pair<EditTagCtrl, Parent> editTag) {
-
+                           Pair<EditTagCtrl, Parent> editTag,
+                           Pair<ViewAddTagsCtrl, Parent> viewAddTag) {
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
 
@@ -179,6 +181,9 @@ public class MainCtrl {
         this.cardDetailsViewCtr = details.getKey();
         this.cardDetails = new Scene(details.getValue());
 
+        this.viewAddTagsCtrl = viewAddTag.getKey();
+        this.viewAddTag = new Scene(viewAddTag.getValue());
+
         showUserView();
         primaryStage.show();
 
@@ -207,8 +212,7 @@ public class MainCtrl {
      * Shows an overview of all boards
      */
     public void showOverview() {
-        primaryStage.setTitle("Main Page");
-        primaryStage.setScene(overview);
+        changePrimaryStage(overview, "Main Page");
         this.overviewCtrl.refresh();
     }
 
@@ -218,8 +222,7 @@ public class MainCtrl {
      * @param board the board to be shown
      */
     public void showBoardView(Board board) {
-        primaryStage.setTitle(board.getName());
-        primaryStage.setScene(boardView);
+        changePrimaryStage(boardView, board.getName());
 
         this.boardViewCtrl.setBoard(board);
         this.boardViewCtrl.refresh();
@@ -233,8 +236,7 @@ public class MainCtrl {
      * @param board the board to which the card belongs
      */
     public void showCardDetailsView(Card card, Board board) {
-        primaryStage.setTitle(card.getName());
-        primaryStage.setScene(cardDetails);
+        changePrimaryStage(cardDetails, card.getName());
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
@@ -245,8 +247,7 @@ public class MainCtrl {
      * @param board the board whose name is to be changed
      */
     public void showEditBoardNameView(Board board) {
-        primaryStage.setTitle("Edit board name: " + board.getName());
-        primaryStage.setScene(editBoardName);
+        showSecondaryStage(editBoardName, "Edit board name: " + board.getName());
 
         this.editBoardNameViewCtrl.setBoard(board);
     }
@@ -255,16 +256,15 @@ public class MainCtrl {
      * Shows the add card page
      */
     public void showAddCard() {
-        primaryStage.setTitle("Add Card");
-        primaryStage.setScene(addCard);
+        showSecondaryStage(addCard, "Add Card");
     }
 
     /**
      * Shows the edit card page
      */
     public void showEditCard() {
-        primaryStage.setTitle("Edit Card");
-        primaryStage.setScene(editCard);
+        showSecondaryStage(editCard, "Edit Card");
+
         editCardCtrl.updateFields(getCardId());
         //must change later for safety measures
 
@@ -277,21 +277,9 @@ public class MainCtrl {
      * @param board the board to which the list is to be added
      */
     public void showCreateList(Board board) {
-        primaryStage.setTitle("Main Page");
-        primaryStage.setScene(createList);
+        showSecondaryStage(createList, "Create List");
+
         this.createListCtrl.setBoard(board);
-//        FXMLLoader loader = new FXMLLoader();
-//        loader.setLocation(Main.class.getResource("ClientView.fxml"));
-//        mainLayout = loader.load();
-//
-//        ClientViewController cvc = loader.getController();
-//        cvc.setClient(client); // Passing the client-object to the ClientViewController
-//        this.createListCtrl.setBoard(board);
-//
-//        Scene scene = new Scene(mainLayout, 900, 600);
-//        primaryStage.setScene(scene);
-//        primaryStage.setResizable(true);
-//        primaryStage.show();
     }
 
     /**
@@ -338,19 +326,25 @@ public class MainCtrl {
     }
 
     /**
+     * Getter for viewAddTagsCtrl
+     * @return the viewAddTagsCtrl
+     */
+    public ViewAddTagsCtrl getViewAddTagsCtrl() {
+        return viewAddTagsCtrl;
+    }
+
+    /**
      * Shows the createBoard scene
      */
     public void createBoardView() {
-        primaryStage.setTitle("New Board");
-        primaryStage.setScene(createBoard);
+        showSecondaryStage(createBoard, "New Board");
     }
 
     /**
      * Shows the sign-in page
      */
     public void showUserView() {
-        primaryStage.setTitle("Sign in");
-        primaryStage.setScene(user);
+        changePrimaryStage(user, "Sign in");
     }
 
     /**
@@ -377,7 +371,8 @@ public class MainCtrl {
      */
     public void showChangeListName(Long id) {
         Board board = getBoardViewCtrl().getBoard();
-        primaryStage.setScene(changeListName);
+        showSecondaryStage(changeListName, primaryStage.getTitle());
+
         this.changeListNameCtrl.setId(id);
         this.changeListNameCtrl.setBoard(board);
     }
@@ -387,15 +382,15 @@ public class MainCtrl {
      */
     public void showChangeServer() {
         this.changeServerCtrl.initialize();
-        primaryStage.setScene(changeServer);
+        showSecondaryStage(changeServer, "Change Server");
     }
 
     /**
      * Shows an overview of all boards for a logged-in user
      */
     public void showUserBoardOverview() {
-        primaryStage.setTitle("Your boards");
-        primaryStage.setScene(userBoardOverview);
+        changePrimaryStage(userBoardOverview, "Your boards");
+
         this.userBoardsOverviewCtrl.refresh();
     }
 
@@ -404,8 +399,7 @@ public class MainCtrl {
      * @param board the Board of which Tag overview is to be shown
      */
     public void showViewTags(Board board) {
-        primaryStage.setTitle("Tags Overview");
-        primaryStage.setScene(viewTags);
+        changePrimaryStage(viewTags, "Tags Overview");
 
         viewTagsCtrl.setBoard(board);
         viewTagsCtrl.refresh();
@@ -416,9 +410,7 @@ public class MainCtrl {
      * @param board the Board to add a Tag to
      */
     public void showAddTag(Board board) {
-        secondaryStage.setTitle("Add Tag");
-        secondaryStage.setScene(createTag);
-        showSecondaryStage();
+        showSecondaryStage(createTag, "Add Tag");
         createTagCtrl.setBoard(board);
     }
 
@@ -427,19 +419,30 @@ public class MainCtrl {
      * @param tag Tag to be edited
      */
     public void showEditTag(Tag tag) {
-        secondaryStage.setTitle("Edit Tag");
-        secondaryStage.setScene(editTag);
-        showSecondaryStage();
+        showSecondaryStage(editTag, "Edit Tag");
         editTagCtrl.setTag(tag);
         editTagCtrl.updateFields();
+    }
+
+    /**
+     * Shows the Add Tag to Card page
+     * @param board the board to which the Card belongs
+     * @param card the Card to which a Tag might be added
+     * @param shortcut whether the page was opened using a keyboard shortcut
+     */
+    public void showViewAddTag(Board board, Card card, boolean shortcut) {
+        showSecondaryStage(viewAddTag, "Add Tag to " + card.getName());
+        viewAddTagsCtrl.setBoard(board);
+        viewAddTagsCtrl.setCard(card);
+        viewAddTagsCtrl.setShortcut(shortcut);
+        viewAddTagsCtrl.refresh();
     }
 
     /**
      * Sets the current screen to the "JoinBoardByLink scene from resources"
      */
     public void showJoinBoardByLink(){
-        primaryStage.setTitle("Join A Board By Code");
-        primaryStage.setScene(joinBoardByLink);
+        showSecondaryStage(joinBoardByLink, "Join A Board By Code");
     }
 
     /**
@@ -509,7 +512,6 @@ public class MainCtrl {
     public String getAdminPass() { return adminPass; }
 
     public void setAdminPass(String pass) { this.adminPass = pass; }
-
     /**
      * Closes the secondary stage if it's visible
      */
@@ -520,11 +522,62 @@ public class MainCtrl {
     }
 
     /**
-     * Shows the secondary stage if it's not visible
+     * Sets up the primary stage for change
+     * @param scene scene to be shown on the page
+     * @param title title of the page
      */
-    private void showSecondaryStage() {
+    private void changePrimaryStage(Scene scene, String title) {
+        primaryStage.setTitle(title);
+        primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
+        primaryStage.toFront();
+    }
+
+    /**
+     * Shows the secondary stage if it's not visible
+     * @param scene scene to be shown on the pop up page
+     * @param title title of the pop up page
+     */
+    private void showSecondaryStage(Scene scene, String title) {
+        secondaryStage.setTitle(title);
+        secondaryStage.setScene(scene);
+        secondaryStage.centerOnScreen();
+        secondaryStage.toFront();
         if (!secondaryStage.isShowing()) {
             secondaryStage.show();
         }
+    }
+
+    /**
+     * Checks whether the pop up page was invoked from the CardListCell entity
+     * @param cardList CardList corresponding to the CardListCell
+     * @return whether the pop up page was invoked from the CardListCell entity
+     */
+    public boolean isSecondaryFromCardListCell(CardList cardList) {
+        return secondaryStage.isShowing()
+                && ((secondaryStage.getScene().equals(addCard) && cardList.getId() == this.getId())
+                || (secondaryStage.getScene().equals(changeListName)
+                && Objects.equals(cardList.getId(), changeListNameCtrl.getId())));
+    }
+
+    /**
+     * Checks whether the pop up page was invoked from the CardCell entity
+     * @param card Card corresponding to the CardCell
+     * @return whether the pop up page was invoked from the CardCell entity
+     */
+    public boolean isSecondaryFromCardCell(Card card) {
+        return secondaryStage.isShowing()
+                && secondaryStage.getScene().equals(editCard) && card.getId() == cardId;
+    }
+
+    /**
+     * Checks whether the pop up page was invoked from the TagCell entity
+     * @param tag Tag corresponding to the TagCell
+     * @return whether the pop up page was invoked from the TagCell entity
+     */
+    public boolean isSecondaryFromTagCell(Tag tag) {
+        return secondaryStage.isShowing()
+                && secondaryStage.getScene().equals(editTag)
+                && tag.getId() == editTagCtrl.getTag().getId();
     }
 }

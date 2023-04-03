@@ -30,5 +30,6 @@
         <Button fx:id="joinByCode" layoutX="334.0" layoutY="180.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="20.0" prefWidth="90.0" style="-fx-background-color: #27AE60;" text="Join by Code" textAlignment="CENTER" AnchorPane.topAnchor="180.0" />
       <Button fx:id="deleteButton" layoutX="335.0" layoutY="342.0" mnemonicParsing="false" onAction="#deleteBoard" style="-fx-background-color: #e33057;" text="Delete Board" />
       <Button fx:id="adminButton" layoutX="14.0" layoutY="384.0" mnemonicParsing="false" onAction="#checkAdmin" style="-fx-background-color: #3498DB;" text="Admin Login" />
+
     </children>
 </AnchorPane>
