@@ -2920,3 +2920,6 @@ drop all tables [42001-200]
 2023-04-03 14:07:59 jdbc[13]: exception
 org.h2.jdbc.JdbcSQLSyntaxErrorException: Syntax error in SQL statement "DROP ALL TABLES[*]"; expected "OBJECTS"; SQL statement:
 drop all tables [42001-200]
+2023-04-04 00:47:28 jdbc[14]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "TASKCARD_LIST" not found; SQL statement:
+SELECT * FROM  TaskCARD_LIST [42102-200]

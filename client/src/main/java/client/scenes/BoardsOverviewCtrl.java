@@ -15,11 +15,7 @@
  */
 package client.scenes;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.application.Platform;
@@ -27,14 +23,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 
-public class BoardsOverviewCtrl implements Initializable {
+/*Not imlementing initializable is required because otherwise, the ctrl tries to look for
+the current server when the app starts, which is impossible, since it has not been
+selected yet by the user*/
+public class BoardsOverviewCtrl {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;//must change mainCtrl
+    private final MainCtrl mainCtrl;
 
     private ObservableList<Board> data;
     @FXML
@@ -44,9 +42,9 @@ public class BoardsOverviewCtrl implements Initializable {
     @FXML
     private TableColumn<Board, String> colBoardName;
     @FXML
-    private TableColumn<Board, String> colCreator;
-    @FXML
     private Button deleteButton;
+    @FXML
+    private Label userLabel;
 
     /**
      * Constructor for the BoardsOverviewCtrl
@@ -62,14 +60,9 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Initializer for the BoardsOverview scene
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initializ() {
+        server.setSession(server.getUrl());
         colBoardName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getName()));
         //long polling
@@ -112,6 +105,7 @@ public class BoardsOverviewCtrl implements Initializable {
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
+        this.userLabel.setText(mainCtrl.getCurrentUser().getUsername());
         deleteButton.setVisible(mainCtrl.isAdmin());
     }
 
@@ -210,5 +204,12 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void stop(){
         server.stop();
+    }
+
+    /**
+     * Redirects to the log in page
+     */
+    public void changeUser() {
+        mainCtrl.showUserView();
     }
 }

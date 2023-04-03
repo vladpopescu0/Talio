@@ -184,7 +184,7 @@ public class MainCtrl {
         this.viewAddTagsCtrl = viewAddTag.getKey();
         this.viewAddTag = new Scene(viewAddTag.getValue());
 
-        showUserView();
+        showSelectServer();
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(event -> {
@@ -383,6 +383,17 @@ public class MainCtrl {
     public void showChangeServer() {
         this.changeServerCtrl.initialize();
         showSecondaryStage(changeServer, "Change Server");
+        this.changeServerCtrl.showAsPopUp();
+    }
+
+    /**
+     * Shows the selectServer scene
+     */
+    public void showSelectServer() {
+        this.changeServerCtrl.initialize();
+        primaryStage.setTitle("Select a server");
+        this.primaryStage.setScene(changeServer);
+        this.changeServerCtrl.startScene();
     }
 
     /**
@@ -586,5 +597,13 @@ public class MainCtrl {
      */
     public Stage getPrimaryStage() {
         return primaryStage;
+    }
+
+    /**
+     * Getter for the boardOverviewCtrl
+     * @return the boardOverviewCtrl
+     */
+    public BoardsOverviewCtrl getBoardsOverviewCtrl() {
+        return this.overviewCtrl;
     }
 }
