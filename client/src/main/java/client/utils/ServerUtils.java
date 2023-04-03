@@ -247,6 +247,52 @@ public class ServerUtils {
     }
 
     /**
+     * Sets the board's password in the database
+     * @param pass The password to set to
+     * @param boardId The ID of the board to edit
+     * @return True if successful, else Bad Request
+     */
+    public boolean setBoardPassword(String pass, long boardId) {
+        boolean b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/" + boardId + "/pass") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(pass, APPLICATION_JSON), Boolean.class);
+        return b;
+    }
+
+    /**
+     * Checks given password against board in the database
+     * @param pass Password to check against
+     * @param boardId The ID of the board to check
+     * @return True if they match, False if they don't, Bad Request if board couldn't be found
+     */
+    public boolean checkBoardPassword(String pass, long boardId) {
+        boolean b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/" + boardId + "/pass/check") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .put(Entity.entity(pass, APPLICATION_JSON), Boolean.class);
+        return b;
+    }
+
+    /**
+     * Remove password from given board
+     * @param boardId The ID of the board to remove from
+     * @return True if successful, otherwise Bad Request
+     */
+    public boolean deleteBoardPassword(long boardId) {
+        boolean b = ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/" + boardId + "/pass/check") //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .get(Boolean.class);
+        return b;
+    }
+
+
+
+    /**
      * Updates the details of a card
      * @param card the card to be updated
      * @return the card

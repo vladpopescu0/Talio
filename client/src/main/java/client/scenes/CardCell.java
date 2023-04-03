@@ -167,6 +167,8 @@ public class CardCell extends ListCell<Card> {
                     if(!hasDefault()){
                         this.colorSchemeCustom=this.getItem().getColors();
                     }
+                    hasDesc.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
+                    statusLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
