@@ -4,6 +4,7 @@ import client.utils.ServerUtils;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 
 import javax.inject.Inject;
@@ -29,6 +30,19 @@ public class AdminCheckCtrl {
     public AdminCheckCtrl(MainCtrl mainCtrl, ServerUtils server){
         this.mainCtrl = mainCtrl;
         this.server = server;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: checkAdmin();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**

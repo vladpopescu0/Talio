@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import java.net.URL;
@@ -51,6 +52,19 @@ public class CreateBoardViewCtrl implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         boardName.setText("Board");
         errorLabel.setVisible(false);
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: createNewBoard();
+                break;
+            case ESCAPE: toBoardsOverview();
+                break;
+        }
     }
 
     /**

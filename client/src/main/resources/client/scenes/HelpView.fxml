@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="674.0" text="Help Page" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HelpCtrl">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+         <children>
+            <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="39.6" layoutY="39.6" prefHeight="209.0" prefWidth="418.0" text="Global shortcuts:&#10;? - Access the Help Page with shortcuts and information about a specific page&#10;&#10;Board Overview specific shortcuts:&#10;C - Change the colour of the selected Card&#10;T - Add Tasks to the selected Card&#10;E - Change the title of the selected Card&#10;Enter - Open details of the selected Card&#10;Delete / Backspace - Delete the selected Card&#10;Escape - Exit Card details&#10;Up / Down - Select Card above / below the selected one&#10;Shift + Up / Down - Swap the selected Card with the one above / below" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
+            <Label fx:id="pageInfo" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="49.6" layoutY="49.6" prefHeight="209.0" prefWidth="418.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="230.0" />
+         </children>
+        </AnchorPane>
+    </content>
+</TitledPane>

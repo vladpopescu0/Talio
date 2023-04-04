@@ -79,12 +79,10 @@ public class BoardsOverviewCtrl implements Initializable {
         });
         //websockets
         server.registerForUpdates("/topic/boardsUpdate",
-                Board.class, q -> Platform.runLater(() -> {
+                Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
-                    mainCtrl.getPrimaryStage()
-                            .setTitle(mainCtrl.getBoardViewCtrl().getBoard().getName());
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {

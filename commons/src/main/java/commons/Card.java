@@ -29,7 +29,7 @@ public class Card {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Tag> tags;
 
     /**
@@ -170,7 +170,7 @@ public class Card {
      * @return (completed/total tasks done)
      */
     public String tasksLabel() {
-        if (this  == null || tasks == null || tasks.isEmpty()) {
+        if (tasks == null || tasks.isEmpty()) {
             return "";
         } else {
             int done = 0;

@@ -202,6 +202,11 @@ public class BoardViewCtrl implements Initializable {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
+        prepareCustomizationPage();
+        mainCtrl.showCustomizationPage(this.board);
+    }
+
+    public void prepareCustomizationPage(){
         if (board.getColorScheme().getColorLighter() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {
@@ -226,7 +231,6 @@ public class BoardViewCtrl implements Initializable {
             mainCtrl.getCustomizationPageCtrl().getListFont()
                     .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
         }
-        mainCtrl.showCustomizationPage(this.board);
     }
 
     /**

@@ -34,6 +34,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.input.KeyEvent;
 
 public class ViewAddTagsCtrl implements Initializable {
     private final ServerUtils server;
@@ -53,10 +54,11 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Constructor for the ViewTagsCtrl
-     * @param server the server to be used
+     *
+     * @param server   the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param board the Board to which the Card belongs
-     * @param card the Card to which a Tag will be added
+     * @param board    the Board to which the Card belongs
+     * @param card     the Card to which a Tag will be added
      */
     @Inject
     public ViewAddTagsCtrl(ServerUtils server, MainCtrl mainCtrl,
@@ -68,14 +70,27 @@ public class ViewAddTagsCtrl implements Initializable {
     }
 
     /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch (event.getCode()) {
+            case ENTER:
+                addTags();
+                break;
+            case ESCAPE:
+                back();
+                break;
+        }
+    }
+
+    /**
      * Initializer for the ViewTags scene
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
      *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
+     * @param location  The location used to resolve relative paths for the root object, or
+     *                  {@code null} if the location is not known.
+     * @param resources The resources used to localize the root object, or {@code null} if
+     *                  the root object was not localized.
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -88,13 +103,16 @@ public class ViewAddTagsCtrl implements Initializable {
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getOverviewCtrl().refresh();
                 }));
+        server.registerForUpdates("/topic/deleteTaskTag", Long.class, q -> {
+            this.card = null;
+        });
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
-        if(card != null && board != null && card.getId() > 0 && board.getId() != null) {
+        if (server.getCardById(card.getId()) != null) {
             this.card = server.getCardById(card.getId());
             this.board = server.getBoardByID(board.getId());
             List<Tag> observableTags = board.getTags();
@@ -126,6 +144,7 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Setter for the board
+     *
      * @param board the Board of which Tags are displayed
      */
     public void setBoard(Board board) {
@@ -141,6 +160,7 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Setter for the Card
+     *
      * @param card the Card to which a Tag can be added
      */
     public void setCard(Card card) {
@@ -149,6 +169,7 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Getter for the Card
+     *
      * @return the Card to which a Tag can be added
      */
     public Card getCard() {
@@ -157,6 +178,7 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Getter for the shortcut boolean
+     *
      * @return whether the page was opened using a keyboard shortcut
      */
     public boolean getShortcut() {
@@ -165,6 +187,7 @@ public class ViewAddTagsCtrl implements Initializable {
 
     /**
      * Setter for the shortcut boolean
+     *
      * @param shortcut whether the page was opened using a keyboard shortcut
      */
     public void setShortcut(boolean shortcut) {

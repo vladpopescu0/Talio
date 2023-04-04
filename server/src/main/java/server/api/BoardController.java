@@ -182,7 +182,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(board);
-        msgs.convertAndSend("/topic/boardsUpdate", board);
+        msgs.convertAndSend("/topic/boardsUpdate", id);
         msgs.convertAndSend("/topic/tags2",id);
         msgs.convertAndSend("/topic/tags",id);
         return ResponseEntity.ok(board);
@@ -219,7 +219,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         colorSchemeRepository.save(colorScheme);
-//      msgs.convertAndSend("/topic/boardsUpdate", board);
+        msgs.convertAndSend("/topic/boardsUpdate", id);
         return ResponseEntity.ok(colorScheme);
     }
 
