@@ -21,7 +21,7 @@
             <Label fx:id="emptyUsernameWarning" layoutX="79.0" layoutY="222.0" text="Please enter a valid username" textFill="WHITE" />
             <ImageView fitHeight="382.0" fitWidth="390.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true" preserveRatio="true" >
                <image>
-                  <Image url="@../../images/log-in-image.png" />
+                  <Image url="@/images/log-in-image.png" />
                </image>
             </ImageView>
          </children></AnchorPane>

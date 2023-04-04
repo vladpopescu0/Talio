@@ -21,7 +21,7 @@ public class Tag {
 
     private String color;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY, mappedBy = "tags")
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "tags")
     private List<Card> cards;
 
     /**

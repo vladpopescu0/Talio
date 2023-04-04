@@ -104,9 +104,6 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
-            case A:
-                System.out.println(mainCtrl.getFocusedNode());
-                break;
             case C:
                 mainCtrl.getBoardViewCtrl().toCustomizationPage();
                 break;
@@ -180,6 +177,19 @@ public class CardCell extends ListCell<Card> {
             }else{
                 fadeTransition.jumpTo(Duration.ZERO);
                 fadeTransition.stop();
+            }
+
+            if (mainCtrl.getFocusedNode() instanceof CardCell) {
+                CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
+                if (cardCell.getItem() != null &&
+                        this.getItem().getId() == cardCell.getItem().getId()) {
+                    paneLabel.setText(card.getName() + " (S)");
+                    this.requestFocus();
+                } else {
+                    paneLabel.setText(card.getName());
+                }
+            } else {
+                paneLabel.setText(card.getName());
             }
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
@@ -269,8 +279,7 @@ public class CardCell extends ListCell<Card> {
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            content.put(cardDataFormat, List.of(this.getItem().getId(),
-                    this.getItem().getParentCardList().getId()));
+            content.put(cardDataFormat, this.getItem().getId());
             db.setContent(content);
             WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
             db.setDragView(snapshot);
@@ -286,17 +295,9 @@ public class CardCell extends ListCell<Card> {
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                //We can opt for passing just a Card ID and retrieve
-                // both the Card and CardList later
-                @SuppressWarnings("unchecked")
-                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
-
-                if (ids.get(0) != this.getItem().getId()) {
-                    if (Objects.equals(ids.get(1), this.getItem().getParentCardList().getId())) {
-                        dragCardToIdentical(ids);
-                    } else {
-                        dragCardToDifferent(ids);
-                    }
+                long id = (long) event.getDragboard().getContent(cardDataFormat);
+                if (id != this.getItem().getId()) {
+                    dragCard(id);
                 }
             }
 
@@ -333,35 +334,11 @@ public class CardCell extends ListCell<Card> {
 
     /**
      * Handles drag-and-drop gesture between Cards of the same CardList
-     * @param ids the Card that the gesture origins from
+     * @param id the ID of the Card that the gesture origins from
      */
-    private void dragCardToIdentical(List<Long> ids) {
-        long parentId = this.getItem().getParentCardList().getId();
-        server.moveCard(parentId,
-                List.of(server.getCardById(ids.get(0)), this.getItem()));
+    private void dragCard(long id) {
+        server.moveCard(List.of(id, this.getItem().getId()));
         mainCtrl.getBoardViewCtrl().refresh();
-    }
-
-    /**
-     * Handles drag-and-drop gesture between Cards of different CardLists
-     * This method may be improved at a later point
-     * @param ids the Card that the gesture origins from
-     */
-    private void dragCardToDifferent(List<Long> ids) {
-        Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(server.getCL(
-                ids.get(1)));
-        int newParentIndex = board.getList().indexOf(server.getCL(
-                this.getItem().getParentCardList().getId()));
-        CardList oldParent = server.getCL(ids.get(1));
-        CardList newParent = this.getItem().getParentCardList();
-        server.updateParent(ids.get(0), List.of(oldParent, newParent));
-        CardList newCardList = server.getCL(newParent.getId());
-        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
-        board.getList().set(newParentIndex, newCardList);
-        this.getItem().setParentCardList(newCardList);
-
-        dragCardToIdentical(ids);
     }
 
     /**

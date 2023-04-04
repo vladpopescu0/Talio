@@ -26,6 +26,7 @@ import com.google.inject.Inject;
 
 import client.utils.ServerUtils;
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
@@ -33,14 +34,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.util.Duration;
 import javafx.scene.paint.Color;
+import java.util.List;
 
 public class BoardViewCtrl implements Initializable {
 
@@ -146,13 +150,12 @@ public class BoardViewCtrl implements Initializable {
             cardListView.setDisable(false);
             viewTags.setDisable(false);
         }
-        socketHandler.registerForUpdates("/topic/lists",
-                CardList.class, q -> Platform.runLater(() -> {
-                    cardListObservableList.add(q);
+        socketHandler.registerForUpdates("/topic/moveCard",
+                List.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getOverviewCtrl().refresh();
                 }));
-        socketHandler.registerForUpdates("/topic/updateParent",
+        socketHandler.registerForUpdates("/topic/moveToCardList",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getOverviewCtrl().refresh();
@@ -187,13 +190,39 @@ public class BoardViewCtrl implements Initializable {
      * refreshes the boardView page
      */
     public void refresh() {
+        Node focusedNode = mainCtrl.getFocusedNode();
+        long focusedId = -1;
+        if (focusedNode instanceof CardCell) {
+            focusedId = ((CardCell) focusedNode).getItem().getId();
+        }
+
         this.board = server.getBoardByID(board.getId());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl ->
-                new CardListCell(mainCtrl, server, board)
-        );
         customizeBoard(board);
+
+        if (focusedId >= 0) {
+            for (int x = 0; x < cardListObservableList.size(); x++) {
+                List<Card> cardList = cardListObservableList.get(x).getCards();
+                for (int y = 0; y < cardList.size(); y++) {
+                    if (cardList.get(y).getId() == focusedId) {
+                        VirtualFlow virtualFlowCL = (VirtualFlow) cardListView
+                                .lookup(".virtual-flow");
+                        VirtualFlow virtualFlowC = (VirtualFlow) virtualFlowCL.getCell(x)
+                                .lookup(".virtual-flow");
+                        Node newFocus = virtualFlowC.getCell(y);
+                        if (newFocus instanceof CardCell) {
+                            newFocus.requestFocus();
+                            CardCell cc = (CardCell) newFocus;
+                            if (cc.getItem() != null) {
+                                cc.updateItem(cc.getItem(), false);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -316,7 +345,6 @@ public class BoardViewCtrl implements Initializable {
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
-        System.out.println(board.getColorScheme().getColorLighter()+"first");
 //        setScrollBarStyle(scrollbar,board.getColorLighter());
         content.setVisible(false);
         border.setStyle(darkerStyle);

@@ -538,17 +538,30 @@ public class ServerUtils {
     }
 
     /**
-     * Moves the second given Card in front of the first given Card in CardList of provided ID
-     * @param id ID of the CardList to be updated
-     * @param cards two Cards to be moved
-     * @return modified CardList
+     * Moves a Card with the second given ID in front of a Card with the first given ID
+     * @param ids IDs of the Cards to be moved from and moved to
+     * @return whether the operation was successful
      */
-    public CardList moveCard(long id, List<Card> cards) {
+    public boolean moveCard(List<Long> ids) {
         return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/lists/moveCard/" + id)
+                .target(server).path("api/lists/moveCard")
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
-                .put(Entity.entity(cards, APPLICATION_JSON), CardList.class);
+                .put(Entity.entity(ids, APPLICATION_JSON), Boolean.class);
+    }
+
+    /**
+     * Moves a Card with the given ID to the end of a CardList with the given ID
+     * @param id ID of the CardList
+     * @param cardId ID of the Card
+     * @return whether the operation was successful
+     */
+    public boolean moveCardToCardList(long id, long cardId) {
+        return ClientBuilder.newClient(new ClientConfig())
+                .target(server).path("api/lists/moveToCardList/" + id)
+                .request(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+                .put(Entity.entity(cardId, APPLICATION_JSON), Boolean.class);
     }
 
     /**

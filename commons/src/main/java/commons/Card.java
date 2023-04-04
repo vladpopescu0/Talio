@@ -30,7 +30,8 @@ public class Card {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
+        CascadeType.REFRESH},fetch = FetchType.LAZY)
     private List<Tag> tags;
 
     @OneToOne(cascade = CascadeType.ALL)
