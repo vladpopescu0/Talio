@@ -76,12 +76,6 @@ public class UserBoardsOverviewCtrl implements Initializable {
         table.setPlaceholder(new Label("You haven't joined any board"));
     }
 
-    /**
-     * Redirects to the createBoard scene
-     */
-    public void createBoard() {
-        mainCtrl.createBoardView(); //to be added with addBoard Scene
-    }
 
     /**
      * refreshes the page, looking for updates

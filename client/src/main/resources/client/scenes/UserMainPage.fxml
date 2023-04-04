@@ -9,10 +9,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="461.0" prefWidth="687.0" style="-fx-background-color: #027883;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.UserBoardsOverviewCtrl">
     <children>
-        <Button fx:id="addBoard" layoutX="533.0" layoutY="174.0" mnemonicParsing="false" onAction="#createBoard" prefHeight="38.0" prefWidth="120.0" style="-fx-background-color: #00C9A7;" text="Add Board" AnchorPane.rightAnchor="34.0">
-            <font>
-                <Font size="14.0" />
-            </font></Button>
         <TableView fx:id="table" layoutX="14.0" layoutY="83.0" prefHeight="354.0" prefWidth="495.0" style="-fx-background-color: #24919c; -fx-font-size: 14;" stylesheets="@/css/myboards.css">
             <columns>
                 <TableColumn fx:id="colBoardName" editable="false" prefWidth="246.4000062942505" style="-fx-font-size: 14; -fx-color: #1b7580; -fx-text-fill: #e7e6e6;" text="Board Name" />
