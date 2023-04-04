@@ -3,20 +3,28 @@ package server.api;
 import commons.ColorScheme;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 public class ColorSchemeControllerTest {
     TestColorSchemeRepository repo;
     ColorSchemeController controller;
+    private MessageChannel channel;
+
+    SimpMessagingTemplate msg;
 
     /**
      * Sets up the testing environment
      */
     @BeforeEach
     public void setup() {
+        channel = (message, timeout) -> true;
+        msg = new SimpMessagingTemplate(channel);
         repo = new TestColorSchemeRepository();
-        controller = new ColorSchemeController(repo,null);
+        controller = new ColorSchemeController(repo,msg);
     }
 
     /**

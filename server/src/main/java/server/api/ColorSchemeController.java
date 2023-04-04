@@ -15,6 +15,7 @@ public class ColorSchemeController {
     /**
      * constructor for controller
      * @param repo the used repository
+     * @param msg the messaging template
      */
     public ColorSchemeController(ColorSchemeRepository repo,SimpMessagingTemplate msg){
         this.repo = repo;
