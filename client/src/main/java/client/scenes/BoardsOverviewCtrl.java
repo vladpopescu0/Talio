@@ -140,7 +140,9 @@ public class BoardsOverviewCtrl {
                     return;
                 }
             }
+            mainCtrl.showBoardView(b);
             mainCtrl.showCheckBoardPasswordView(b);
+
         } else {
             b.addUser(mainCtrl.getCurrentUser());
             b = server.updateBoard(b);

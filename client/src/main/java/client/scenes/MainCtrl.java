@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainCtrl {
-    private Board board;
+
     private Stage primaryStage;
     private Stage secondaryStage;
     private BoardsOverviewCtrl overviewCtrl;
@@ -674,5 +674,9 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+    }
+
+    public void forgetPasswords() {
+        savedPasswords = new HashMap<>();
     }
 }
