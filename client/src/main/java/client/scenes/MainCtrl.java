@@ -676,6 +676,9 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * When the user changes, all saved passwords should be forgotten
+     */
     public void forgetPasswords() {
         savedPasswords = new HashMap<>();
     }
