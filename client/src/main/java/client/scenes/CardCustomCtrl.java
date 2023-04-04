@@ -22,7 +22,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private Board board;
 
     @FXML
-    private Button delete;
+    private Button removeButton;
 
     @FXML
     private Text label;
@@ -70,7 +70,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                 presBG.setVisible(true);
                 presFont.setVisible(true);
                 set.setVisible(true);
-                delete.setVisible(true);
+                removeButton.setVisible(true);
             }
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -108,6 +108,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                     this.presBG.setOnAction(event -> saveBG());
                     this.set.setOnAction(
                             event -> selectPreset());
+                    this.removeButton.setOnAction(event -> deletePreset());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

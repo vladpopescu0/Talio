@@ -38,8 +38,8 @@ public class CardControllerTest {
         cardListRepository = new TestCardListRepository();
         tagRepository = new TestTagRepository();
         sut = new CardController(repo, cardListRepository,msg, taskRepository, tagRepository);
-        tSut = new TaskController(taskRepository);
-        tagSut = new TagController(tagRepository, repo);
+        tSut = new TaskController(taskRepository,null);
+        tagSut = new TagController(tagRepository, repo,null);
     }
 
     /**

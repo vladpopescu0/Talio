@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import server.database.CardRepository;
@@ -15,14 +16,18 @@ public class TagController {
     private final TagRepository repo;
     private final CardRepository cardRepo;
 
+    private final SimpMessagingTemplate msgs;
+
     /**
      * Constructor for the TagController
      * @param repo the repository that is used
      * @param cardRepo Card Repository
+     * @param msgs messaging template
      */
-    public TagController(TagRepository repo, CardRepository cardRepo){
+    public TagController(TagRepository repo, CardRepository cardRepo, SimpMessagingTemplate msgs){
         this.repo = repo;
         this.cardRepo = cardRepo;
+        this.msgs = msgs;
     }
 
 
@@ -81,6 +86,7 @@ public class TagController {
             cardRepo.save(c);
         });
         repo.deleteById(id);
+        msgs.convertAndSend("/topic/tags2", id);
         return ResponseEntity.ok(tag);
     }
 
@@ -100,6 +106,7 @@ public class TagController {
         newTag.setName(tag.getName());
         newTag.setColor(tag.getColor());
         repo.save(newTag);
+        msgs.convertAndSend("/topic/tags2", id);
         return ResponseEntity.ok(newTag);
     }
 }

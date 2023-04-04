@@ -8,15 +8,19 @@
 
 <TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="479.0" text="View Tags" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ViewTagsCtrl">
     <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #027883;">
             <children>
                 <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="346.0" prefWidth="335.0">
                     <content>
-                        <ListView fx:id="tagsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="734.0" />
+                        <ListView stylesheets="@/css/customization.css" fx:id="tagsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="734.0" style="-fx-background-color: #24919c;" />
                     </content>
                 </ScrollPane>
-                <Button fx:id="createTag" layoutX="378.0" layoutY="170.0" mnemonicParsing="false" onAction="#createTag" text="Create Tag" />
-                <Button layoutX="370.0" layoutY="206.0" mnemonicParsing="false" onAction="#back" text="Back to Board" />
+                <Button fx:id="createTag" layoutX="378.0" layoutY="170.0" mnemonicParsing="false" onAction="#createTag" style="-fx-background-color: #00C9A7;" text="Create Tag" />
+                <Button layoutX="370.0" layoutY="206.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #00C9A7;" text="Back to Board" />
+                <!--=======-->
+                <!--                <Button fx:id="createTag" layoutX="378.0" layoutY="170.0" mnemonicParsing="false" onAction="#createTag" text="Create Tag" />-->
+                <!--                <Button layoutX="370.0" layoutY="206.0" mnemonicParsing="false" onAction="#back" text="Back to Board" />-->
+                <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
             </children>
         </AnchorPane>
     </content>

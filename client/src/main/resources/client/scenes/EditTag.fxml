@@ -2,25 +2,30 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="225.0" prefWidth="292.0" onKeyPressed="#handleShortcuts" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
-    <children>
-        <TextField fx:id="title" layoutX="83.0" layoutY="95.0" />
-        <Text layoutX="31.0" layoutY="73.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Edit a tag">
-            <font>
-                <Font size="48.0" />
-            </font>
-        </Text>
-        <Text layoutX="31.0" layoutY="115.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Title">
-            <font>
-                <Font size="18.0" />
-            </font>
-        </Text>
-        <Button fx:id="save" layoutX="215.0" layoutY="164.0" mnemonicParsing="false" text="Save" onAction="#ok"/>
-        <Button fx:id="cancel" layoutX="146.0" layoutY="165.0" mnemonicParsing="false" text="Cancel" onAction="#cancel"/>
-    </children>
-</AnchorPane>
+<TitledPane animated="false" collapsible="false" text="Edit the tag" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
+    <content>
+        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="459.0" style="-fx-background-color: #027883;">
+            <children>
+                <TextField fx:id="title" layoutX="80.0" layoutY="102.0" prefHeight="30.0" prefWidth="300.0" promptText="New name of the tag">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </TextField>
+                <Button fx:id="save" layoutX="300.0" layoutY="165.0" mnemonicParsing="false" onAction="#ok" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Save">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+                <Button fx:id="cancel" layoutX="80.0" layoutY="165.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Cancel">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+    </content>
+</TitledPane>

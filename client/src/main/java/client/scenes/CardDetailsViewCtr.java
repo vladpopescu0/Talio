@@ -2,10 +2,14 @@ package client.scenes;
 
 import client.utils.ServerUtils;
 import commons.*;
+import commons.Board;
+import commons.Card;
+import commons.Tag;
+import commons.Task;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -13,17 +17,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class CardDetailsViewCtr implements Initializable {
+public class CardDetailsViewCtr {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Card card;
 
-    private  Board board;
+    private Board board;
     private ObservableList<Task> taskObservableList;
     private ObservableList<Tag> tagObservableList;
 
@@ -51,10 +53,11 @@ public class CardDetailsViewCtr implements Initializable {
 
     /**
      * Constructor for the detailed card view
-     * @param server the server used
+     *
+     * @param server   the server used
      * @param mainCtrl the mainCtrl used
-     * @param card the current card
-     * @param board the board to which the card belongs
+     * @param card     the current card
+     * @param board    the board to which the card belongs
      */
     @Inject
     public CardDetailsViewCtr(ServerUtils server, MainCtrl mainCtrl, Card card, Board board) {
@@ -75,24 +78,14 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Initialized the card Details view
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initializ() {
         //cancelButton.setDisable(true);
-        refresh();
-    }
-
-    /**
-     * Updates the tasks, description and tags
-     */
-    public void refresh() {
+        server.setSession(server.getUrl());
         editButton.setVisible(true);
         cancelButton.setVisible(false);
-        confirmButton.setVisible(true);
+        confirmButton.setVisible(false);
         description.setText(card.getDescription());
         description.setEditable(false);
         List<Task> tasks = (card == null || card.getTasks() == null ?
@@ -101,8 +94,7 @@ public class CardDetailsViewCtr implements Initializable {
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
         taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
-
-        tagObservableList = FXCollections.observableList(card == null || card.getTags() == null?
+        tagObservableList = FXCollections.observableList(card == null || card.getTags() == null ?
                 new ArrayList<>() : card.getTags());
         tagList.setItems(tagObservableList);
         tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
@@ -112,19 +104,62 @@ public class CardDetailsViewCtr implements Initializable {
         colorSchemeList.setItems(colorSchemeObservableList);
         colorSchemeList.setCellFactory(p ->
                 new PresetDetailsCtrl(mainCtrl, server, this,board,card));
+        description.setText(card.getDescription());
+        server.registerForUpdates("/topic/tasks",
+                Long.class, q -> Platform.runLater(() -> {
+                    System.out.println("id " + q);
+                    refreshTagChange();
+                    description.setText(card.getDescription());
+                    mainCtrl.getBoardViewCtrl().refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
+        server.registerForUpdates("/topic/deleteCard",
+                Card.class, q -> Platform.runLater(() -> {
+                    if (card.equals(q)) {
+                        mainCtrl.showBoardView(server.getBoardByID(board.getId()));
+                        mainCtrl.getBoardViewCtrl().refresh();
+                        mainCtrl.getOverviewCtrl().refresh();
+                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+                    }
+                }));
+    }
 
+    /**
+     * Updates the tasks, description and tags
+     */
+    public void refresh() {
+        if (card != null && card.getId() > 0) {
+            this.card = server.getCardById(card.getId());
+            List<Task> tasks = (card == null || card.getTasks() == null ?
+                    new ArrayList<>() : card.getTasks());
+            taskObservableList = FXCollections.observableList(tasks);
+            taskList.setItems(taskObservableList);
+            taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+            tagObservableList =
+                    FXCollections.observableList(card == null || card.getTags() == null ?
+                            new ArrayList<>() : card.getTags());
+            tagList.setItems(tagObservableList);
+            tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+            List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
+                    new ArrayList<>() : board.getCardsColorSchemesList());
+            colorSchemeObservableList = FXCollections.observableList(colors);
+            colorSchemeList.setItems(colorSchemeObservableList);
+            colorSchemeList.setCellFactory(p ->
+                    new PresetDetailsCtrl(mainCtrl, server, this,board,card));
+            description.setText(card.getDescription());
+        }
     }
 
     /**
      * Updates the Tags when changes were made to them
      */
     public void refreshTagChange() {
-        card = server.getCardById(card.getId());
         refresh();
     }
 
     /**
      * Setter for the board
+     *
      * @param board the board to which the card belongs
      */
     public void setBoard(Board board) {
@@ -133,6 +168,7 @@ public class CardDetailsViewCtr implements Initializable {
 
     /**
      * Setter for the card
+     *
      * @param card the current card
      */
     public void setCard(Card card) {
@@ -141,19 +177,23 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
-     *Getter for the card field, used when editing task order,
-     *so that the task cell is dependent on this class
-     *@return the card from this controller
+     * Getter for the card field, used when editing task order,
+     * so that the task cell is dependent on this class
+     *
+     * @return the card from this controller
      */
-    public Card getCard(){
+    public Card getCard() {
         return card;
     }
 
     /**
      * Getter for the board to which the card belongs
+     *
      * @return the board to which this card belongs
      */
-    public Board getBoard() {return board; }
+    public Board getBoard() {
+        return board;
+    }
 
     /**
      * Allows to edit the description
@@ -201,7 +241,7 @@ public class CardDetailsViewCtr implements Initializable {
     /**
      * Pops up a secondary page on which tag to be added can be selected
      */
-    public void addTags() {
+    public void addTag() {
         mainCtrl.showViewAddTag(board, card, false);
     }
 

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainCtrl {
-    private Board board;
+
     private Stage primaryStage;
     private Stage secondaryStage;
     private Stage helpStage;
@@ -219,10 +219,11 @@ public class MainCtrl {
 
         this.checkBoardPassCtrl = checkBoardPass.getKey();
         this.checkBoardPass = new Scene(checkBoardPass.getValue());
-
-        showUserView();
         primaryStage.show();
+
         helpStage.setScene(this.helpPage);
+
+        showSelectServer();
 
         primaryStage.setOnCloseRequest(event -> {
             closeSecondaryStage();
@@ -449,6 +450,17 @@ public class MainCtrl {
     public void showChangeServer() {
         this.changeServerCtrl.initialize();
         showSecondaryStage(changeServer, "Change Server");
+        this.changeServerCtrl.showAsPopUp();
+    }
+
+    /**
+     * Shows the selectServer scene
+     */
+    public void showSelectServer() {
+        this.changeServerCtrl.initialize();
+        primaryStage.setTitle("Select a server");
+        this.primaryStage.setScene(changeServer);
+        this.changeServerCtrl.startScene();
     }
 
     /**
@@ -679,11 +691,26 @@ public class MainCtrl {
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
 
+
     /**
-     * Event listener for shortcuts
-     * @param event the key event
-     * @param primary whether the key listener concerns primary stage
+     * @return the primary stage
      */
+    public Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
+    /**
+     * Getter for the boardOverviewCtrl
+     * @return the boardOverviewCtrl
+     */
+    public BoardsOverviewCtrl getBoardsOverviewCtrl() {
+        return this.overviewCtrl;
+    }
+        /**
+         * Event listener for shortcuts
+         * @param event the key event
+         * @param primary whether the key listener concerns primary stage
+         */
     private void keyEventListener(KeyEvent event, boolean primary) {
         Node focused = primary? primaryStage.getScene().getFocusOwner()
                 : secondaryStage.getScene().getFocusOwner();
@@ -694,10 +721,10 @@ public class MainCtrl {
         }
     }
 
-    /**
-     * Returns the currently focused node
-     * @return the currently focused node in the primary stage
-     */
+        /**
+         * Returns the currently focused node
+         * @return the currently focused node in the primary stage
+         */
     public Node getFocusedNode() {
         return primaryStage.getScene().getFocusOwner();
     }
@@ -729,5 +756,12 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+    }
+
+    /**
+     * When the user changes, all saved passwords should be forgotten
+     */
+    public void forgetPasswords() {
+        savedPasswords = new HashMap<>();
     }
 }
