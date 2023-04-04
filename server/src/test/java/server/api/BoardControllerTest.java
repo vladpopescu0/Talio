@@ -1,7 +1,6 @@
 package server.api;
 
 import commons.Board;
-import commons.ColorScheme;
 import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +29,7 @@ public class BoardControllerTest {
         channel = (message, timeout) -> true;
         msg = new SimpMessagingTemplate(channel);
         repo = new TestBoardRepository();
-        sut = new BoardController(repo, msg,null);
+        sut = new BoardController(repo, msg);
     }
 
     /**
@@ -256,6 +255,9 @@ public class BoardControllerTest {
         assertTrue(repo.calledMethods.contains("findByUsers_Id"));
     }
 
+    /**
+     * put board test
+     */
     @Test
     public void putBoardTest(){
         SOME_USER.setId(1);
@@ -267,6 +269,10 @@ public class BoardControllerTest {
         var actual = sut.putBoard(b2);
         assertEquals(actual.getBody(),b2);
     }
+
+    /**
+     * put board no name test
+     */
     @Test
     public void putBoardNoNameTest(){
         SOME_USER.setId(1);

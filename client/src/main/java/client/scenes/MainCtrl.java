@@ -587,6 +587,11 @@ public class MainCtrl {
             secondaryStage.close();
         }
     }
+
+    /**
+     * returns the Secondary Stage
+     * @return the secondary stage
+     */
     public Stage getSecondaryStage(){
         return secondaryStage;
     }
