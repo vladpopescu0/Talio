@@ -406,12 +406,18 @@ public class ServerUtils {
      * @return the searched card
      */
     public Card getCardById(long id) {
-        return ClientBuilder.newClient(new ClientConfig()) //
+        Response res = ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/"+id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
-                .get(Card.class);
+                .get();
         //Get parent
+        if (res.getStatus() != 200) {
+            return null;
+        }
+
+        Card c = res.readEntity(Card.class);
+        return c;
     }
 
     /**

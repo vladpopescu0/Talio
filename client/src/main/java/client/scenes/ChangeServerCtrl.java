@@ -120,11 +120,8 @@ public class ChangeServerCtrl {
             mainCtrl.getBoardViewCtrl().initializ();
             mainCtrl.getViewTagsCtrl().initializ();
             mainCtrl.getViewAddTagsCtrl().initializ();
+            mainCtrl.getCardDetailsViewCtr().initializ();
             errorLabel.setVisible(false);
-            mainCtrl.getBoardsOverviewCtrl().initializ();
-            mainCtrl.getBoardViewCtrl().initializ();
-            mainCtrl.getViewTagsCtrl().initializ();
-            mainCtrl.getViewAddTagsCtrl().initializ();
             mainCtrl.showUserView();
         } else {
             errorLabel.setVisible(true);

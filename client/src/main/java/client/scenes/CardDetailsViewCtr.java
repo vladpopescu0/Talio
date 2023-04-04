@@ -64,6 +64,7 @@ public class CardDetailsViewCtr {
      */
     public void initializ() {
         //cancelButton.setDisable(true);
+        server.setSession(server.getUrl());
         editButton.setVisible(true);
         cancelButton.setVisible(false);
         confirmButton.setVisible(false);
