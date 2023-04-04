@@ -6,8 +6,9 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1202.0" stylesheets="@/css/lists.css" text="Board View" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardViewCtrl">
+<TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="1202.0" stylesheets="@/css/lists.css" text="Board View" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardViewCtrl">
 
 
 
@@ -15,21 +16,21 @@
     <content>
         <AnchorPane fx:id="border" minHeight="0.0" minWidth="0.0" prefHeight="506.0" prefWidth="713.0">
             <children>
-                <Button fx:id="addList" layoutX="1085.0" layoutY="232.0" mnemonicParsing="false" onAction="#addCardList" prefHeight="27.0" prefWidth="109" text="+ Add List" />
-                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="656.0" prefWidth="1066.0">
+                <Button fx:id="addList" layoutX="1085.0" layoutY="360.0" mnemonicParsing="false" onAction="#addCardList" prefHeight="27.0" prefWidth="109" text="+ Add List" />
+                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="60.0" prefHeight="656.0" prefWidth="1066.0">
                     <content>
                         <ListView fx:id="cardListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="HORIZONTAL" prefHeight="694.0" prefWidth="1066.0" />
                     </content>
                 </ScrollPane>
-                <Button fx:id="allBoardsButton" layoutX="1085.0" layoutY="124.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="109.0" text="To all Boards" />
-                <Button fx:id="viewTags" layoutX="1085.0" layoutY="304.0" mnemonicParsing="false" onAction="#viewTags" prefHeight="27.0" prefWidth="109" text="View Tags" />
-                <Button fx:id="leaveButton" layoutX="1085.0" layoutY="16.0" mnemonicParsing="false" onAction="#removeUser" prefHeight="27.0" prefWidth="109" text="Leave Board" />
-                <Button fx:id="myBoardsButton" layoutX="1085.0" layoutY="88.0" mnemonicParsing="false" onAction="#toUserOverview" prefHeight="27.0" prefWidth="109.0" text="To my Boards" />
-                <Button fx:id="customizeButton" layoutX="1085.0" layoutY="196.0" mnemonicParsing="false" onAction="#toCustomizationPage" prefHeight="27.0" prefWidth="109" text="Customize" />
-                <Button fx:id="editTitle" layoutX="1085.0" layoutY="268.0" mnemonicParsing="false" onAction="#editTitle" prefHeight="27.0" prefWidth="109" text="Edit title" />
-                <Button fx:id="copyInviteButton" layoutX="1085.0" layoutY="160.0" mnemonicParsing="false" onAction="#copyLink" prefHeight="27.0" prefWidth="109.0" text="Copy Invite Code" />
+                <Button fx:id="allBoardsButton" layoutX="1085.0" layoutY="210.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="109.0" text="To all Boards" />
+                <Button fx:id="viewTags" layoutX="1085.0" layoutY="460.0" mnemonicParsing="false" onAction="#viewTags" prefHeight="27.0" prefWidth="109" text="View Tags" />
+                <Button fx:id="leaveButton" layoutX="1085.0" layoutY="60.0" mnemonicParsing="false" onAction="#removeUser" prefHeight="27.0" prefWidth="109" text="Leave Board" />
+                <Button fx:id="myBoardsButton" layoutX="1086.0" layoutY="160.0" mnemonicParsing="false" onAction="#toUserOverview" prefHeight="27.0" prefWidth="109.0" text="To my Boards" />
+                <Button fx:id="customizeButton" layoutX="1085.0" layoutY="310.0" mnemonicParsing="false" onAction="#toCustomizationPage" prefHeight="27.0" prefWidth="109" text="Customize" />
+                <Button fx:id="editTitle" layoutX="1085.0" layoutY="410.0" mnemonicParsing="false" onAction="#editTitle" prefHeight="27.0" prefWidth="109" text="Edit title" />
+                <Button fx:id="copyInviteButton" layoutX="1085.0" layoutY="260.0" mnemonicParsing="false" onAction="#copyLink" prefHeight="27.0" prefWidth="109.0" text="Copy Invite Code" />
                 <Label fx:id="copyLabel" alignment="CENTER" layoutX="1083.0" layoutY="359.0" prefHeight="79.0" prefWidth="115.0" style="-fx-background-color: white; -fx-background-radius: 10;" textAlignment="CENTER" textFill="#47c93b" visible="false" wrapText="true" />
-            <Button fx:id="deleteButton" layoutX="1085.0" layoutY="52.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="27.0" prefWidth="109" text="Delete Board" />
+            <Button fx:id="deleteButton" layoutX="1085.0" layoutY="110.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="27.0" prefWidth="109" text="Delete Board" />
                 <!--=======-->
                 <!--            <Button fx:id="allBoardsButton" layoutX="204.0" layoutY="466.0" mnemonicParsing="false" onAction="#cancel" text="To all Boards" />-->
                 <!--            <Button fx:id="removeButton" layoutX="14.0" layoutY="466.0" mnemonicParsing="false" onAction="#removeUser" text="Leave Board" />-->
@@ -43,7 +44,12 @@
                 <!--                    </font>-->
                 <!--                </Label>-->
                 <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
-            <Button fx:id="boardPass" layoutX="1085.0" layoutY="340.0" mnemonicParsing="false" onAction="#editPassword" prefHeight="27.0" prefWidth="109.0" text="Password" />
+            <Button fx:id="boardPass" layoutX="1085.0" layoutY="510.0" mnemonicParsing="false" onAction="#editPassword" prefHeight="27.0" prefWidth="109.0" text="Password" />
+            <Label fx:id="boardTitle" alignment="CENTER" layoutX="66.0" layoutY="8.0" prefHeight="60.0" prefWidth="400.0" style="-fx-font-weight: bold;" text="Name" textAlignment="CENTER">
+               <font>
+                  <Font size="36.0" />
+               </font>
+            </Label>
 
             </children>
         </AnchorPane>

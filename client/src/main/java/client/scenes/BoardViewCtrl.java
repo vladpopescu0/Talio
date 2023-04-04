@@ -85,6 +85,8 @@ public class BoardViewCtrl {
     private Button boardPass;
     @FXML
     private Label copyLabel;
+    @FXML
+    private Label boardTitle;
 
     /**
      * Constructor of the Controller for BoardView
@@ -190,6 +192,7 @@ public class BoardViewCtrl {
                     new CardListCell(mainCtrl, server, board)
             );
             customizeBoard(board);
+            boardTitle.setText(board.getName());
         }
     }
 

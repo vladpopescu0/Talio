@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <TitledPane animated="false" collapsible="false" text="Edit the tag" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.EditTagCtrl">
     <content>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="459.0" style="-fx-background-color: #027883;">
@@ -16,12 +15,12 @@
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <Button fx:id="save" layoutX="332.0" layoutY="165.0" mnemonicParsing="false" onAction="#ok" style="-fx-background-color: #00C9A7;" text="Save">
+                <Button fx:id="save" layoutX="300.0" layoutY="165.0" mnemonicParsing="false" onAction="#ok" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Save">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="cancel" layoutX="80.0" layoutY="165.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #00C9A7;" text="Cancel">
+                <Button fx:id="cancel" layoutX="80.0" layoutY="165.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Cancel">
                     <font>
                         <Font size="14.0" />
                     </font>

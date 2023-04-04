@@ -71,8 +71,6 @@ public class UserBoardsOverviewCtrl implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue()
-                .listUsernames()));
         table.setPlaceholder(new Label("You haven't joined any board"));
     }
 

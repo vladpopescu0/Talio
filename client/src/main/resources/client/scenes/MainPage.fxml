@@ -19,7 +19,7 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <TableView fx:id="table" layoutX="86.0" layoutY="100.0" prefHeight="370.0" prefWidth="332.0" style="-fx-font-size: 12; -fx-background-color: #24919c; -fx-alignment: CENTER;" stylesheets="@/css/overview.css">
+        <TableView fx:id="table" layoutX="86.0" layoutY="92.0" prefHeight="370.0" prefWidth="332.0" style="-fx-font-size: 12; -fx-background-color: #24919c; -fx-alignment: CENTER;" stylesheets="@/css/overview.css">
             <columns>
                 <TableColumn fx:id="colBoardName" editable="false" prefWidth="165.59997844696045" sortable="false" style="-fx-font-size: 20; -fx-color: #1b7580; -fx-text-fill: #e7e6e6; -fx-alignment: CENTER;" text=" Board Name" />
             </columns>
@@ -27,12 +27,12 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
-        <Label fx:id="pageTitle" layoutX="206.0" layoutY="39.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="pageTitle" layoutX="196.0" layoutY="14.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font size="36.0" />
             </font>
         </Label>
-        <Button fx:id="joinBoard" layoutX="449.0" layoutY="385.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join board" />
+        <Button fx:id="joinBoard" layoutX="449.0" layoutY="335.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join board" />
         <Label fx:id="serverLabel" alignment="CENTER" layoutX="453.0" layoutY="56.0" prefHeight="26.0" prefWidth="146.0" text="Whatever" textFill="WHITE">
             <font>
                 <Font size="14.0" />
@@ -48,14 +48,9 @@
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button layoutX="449.0" layoutY="285.0" mnemonicParsing="false" onAction="#showBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="View Board">
-            <font>
-                <Font size="13.0" />
-            </font>
-        </Button>
-        <Button fx:id="joinByCode" layoutX="449.0" layoutY="435.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join by Code" textAlignment="CENTER" />
+        <Button fx:id="joinByCode" layoutX="449.0" layoutY="385.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join by Code" textAlignment="CENTER" />
         <Button fx:id="deleteButton" layoutX="449.0" layoutY="135.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #e33057;" text="Delete Board" />
-        <Button fx:id="adminButton" layoutX="449.0" layoutY="335.0" mnemonicParsing="false" onAction="#checkAdmin" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Admin Login" />
+        <Button fx:id="adminButton" layoutX="449.0" layoutY="285.0" mnemonicParsing="false" onAction="#checkAdmin" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Admin Login" />
       <Label layoutX="634.0" layoutY="19.0" text="Current User:" textFill="WHITE">
          <font>
             <Font size="14.0" />

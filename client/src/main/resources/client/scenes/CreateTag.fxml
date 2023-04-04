@@ -6,7 +6,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <TitledPane collapsible="false" text="Create a new tag" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CreateTagCtrl">
     <content>
         <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="283.0" prefWidth="541.0" style="-fx-background-color: #027883;">
@@ -16,12 +15,12 @@
                         <Font size="14.0" />
                     </font>
                 </TextField>
-                <Button fx:id="create" layoutX="365.0" layoutY="187.0" mnemonicParsing="false" onAction="#createTag" prefHeight="27.0" prefWidth="70.0" style="-fx-background-color: #00C9A7;" text="Create">
+                <Button fx:id="create" layoutX="356.0" layoutY="170.0" mnemonicParsing="false" onAction="#createTag" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Save">
                     <font>
                         <Font size="14.0" />
                     </font>
                 </Button>
-                <Button fx:id="cancel" layoutX="106.0" layoutY="187.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="70.0" style="-fx-background-color: #00C9A7;" text="Cancel">
+                <Button fx:id="cancel" layoutX="106.0" layoutY="170.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Cancel">
                     <font>
                         <Font size="14.0" />
                     </font>

@@ -24,15 +24,15 @@
          <font>
             <Font size="14.0" />
          </font></TextArea>
-      <Button fx:id="editButton" layoutX="474.0" layoutY="140.0" mnemonicParsing="false" onAction="#edit" prefHeight="27.0" prefWidth="45.0" style="-fx-background-color: #00C9A7;" text="Edit">
+      <Button fx:id="editButton" layoutX="473.0" layoutY="137.0" mnemonicParsing="false" onAction="#edit" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #00C9A7;" text="Edit">
          <font>
             <Font size="13.0" />
          </font></Button>
-      <Button fx:id="cancelButton" layoutX="523.0" layoutY="140.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="61.0" style="-fx-background-color: #00C9A7;" text="Cancel" visible="false">
+      <Button fx:id="cancelButton" layoutX="473.0" layoutY="179.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="61.0" style="-fx-background-color: #00C9A7;" text="Cancel" visible="false">
          <font>
             <Font size="13.0" />
          </font></Button>
-      <Button fx:id="confirmButton" layoutX="473.0" layoutY="182.0" mnemonicParsing="false" onAction="#confirm" prefHeight="30.0" prefWidth="111.0" style="-fx-background-color: #00C9A7;" text="Confirm Changes" visible="false" wrapText="true" />
+      <Button fx:id="confirmButton" layoutX="541.0" layoutY="179.0" mnemonicParsing="false" onAction="#confirm" prefHeight="30.0" prefWidth="61.0" style="-fx-background-color: #00C9A7;" text="Save" visible="false" wrapText="true" />
       <Button layoutX="536.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #00C9A7;" text="Back">
          <font>
             <Font size="13.0" />
