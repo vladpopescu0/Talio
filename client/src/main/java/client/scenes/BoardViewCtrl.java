@@ -140,6 +140,7 @@ public class BoardViewCtrl {
             viewTags.setDisable(true);
             customizeButton.setDisable(true);
             copyInviteButton.setDisable(true);
+            boardPass.setDisable(true);
         } else {
             leaveButton.setDisable(false);
             deleteButton.setDisable(false);
@@ -149,6 +150,7 @@ public class BoardViewCtrl {
             viewTags.setDisable(false);
             customizeButton.setDisable(false);
             copyInviteButton.setDisable(false);
+            boardPass.setDisable(false);
         }
     }
 
