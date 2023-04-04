@@ -16,7 +16,7 @@ public class ColorSchemeControllerTest {
     @BeforeEach
     public void setup() {
         repo = new TestColorSchemeRepository();
-        controller = new ColorSchemeController(repo);
+        controller = new ColorSchemeController(repo,null);
     }
 
     /**

@@ -1,8 +1,10 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketHandler;
 import commons.Board;
 import commons.ColorScheme;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -15,6 +17,7 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private final CustomizationPageCtrl parent;
     private ServerUtils server;
     private MainCtrl mainCtrl;
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private Board board;
 
@@ -61,10 +64,11 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
             if (this.getItem() != null) {
                 this.board = server.getBoardByID(parent.getBoard().getId());
 //                int i = board.getColors().indexOf(this.getItem());
+                if(board.getCardsColorScheme().equals(this.getItem())){
+                    setStyle("-fx-border-color: red;");
+                }
                 presBG.setVisible(true);
                 presFont.setVisible(true);
-                presBG.setValue(Color.valueOf(this.getItem().getColorBGlight()));
-                presFont.setValue(Color.valueOf(this.getItem().getColorFont()));
                 set.setVisible(true);
                 delete.setVisible(true);
             }
@@ -85,11 +89,21 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
-//                    int i = board.getColors().indexOf(this.getItem());
-                    label.setText("Preset");
+                    presBG.setValue(Color.valueOf(this.getItem().getColorBGlight()));
+                    presFont.setValue(Color.valueOf(this.getItem().getColorFont()));
                     if(board.getCardsColorScheme().equals(this.getItem())){
                         setStyle("-fx-border-color: red;");
                     }
+                    socketHandler.registerForUpdates("/topic/colorsUpdate",
+                            ColorScheme.class, q -> Platform.runLater(() -> {
+                                mainCtrl.getCustomizationPageCtrl().refresh();
+                            }));
+                    socketHandler.registerForUpdates("/topic/boardsUpdate",
+                            Board.class, q -> Platform.runLater(() -> {
+                                mainCtrl.getCustomizationPageCtrl().refresh();
+                            }));
+//                    int i = board.getColors().indexOf(this.getItem());
+                    label.setText("Preset");
                     this.presFont.setOnAction(event -> saveFont());
                     this.presBG.setOnAction(event -> saveBG());
                     this.set.setOnAction(

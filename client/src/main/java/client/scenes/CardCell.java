@@ -167,15 +167,13 @@ public class CardCell extends ListCell<Card> {
                     if(!hasDefault()){
                         this.colorSchemeCustom=this.getItem().getColors();
                     }
+                    paneLabel.setText(this.getItem().getName());
                     hasDesc.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
                     statusLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
-            paneLabel.setText(mainCtrl.getFocusedNode().equals(this)?
-                    card.getName() + " (S)" : card.getName());
             setAnim();
             if(mainCtrl.getFocusedNode().equals(this)){
                 fadeTransition.play();
@@ -387,7 +385,7 @@ public class CardCell extends ListCell<Card> {
             fadeTransition = new FadeTransition(Duration.millis(1000));
             fadeTransition.setNode(this);
             fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.3);
+            fadeTransition.setToValue(0.7);
             fadeTransition.setCycleCount(200);
             fadeTransition.setAutoReverse(true);
         }

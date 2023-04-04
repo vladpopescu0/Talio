@@ -193,21 +193,6 @@ public class BoardViewCtrl implements Initializable {
         cardListView.setCellFactory(cl ->
                 new CardListCell(mainCtrl, server, board)
         );
-//        mainCtrl.getCustomizationPageCtrl().getPres1BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(0)));
-//        mainCtrl.getCustomizationPageCtrl().getPres1Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(0)));
-//        mainCtrl.getCustomizationPageCtrl().getPres2BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(1)));
-//        mainCtrl.getCustomizationPageCtrl().getPres2Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(1)));
-//        mainCtrl.getCustomizationPageCtrl().getPres3BG()
-//                .setValue(Color.valueOf(board.getPresetsBGColor().get(2)));
-//        mainCtrl.getCustomizationPageCtrl().getPres3Font()
-//                .setValue(Color.valueOf(board.getPresetsFontColor().get(2)));
-//        cardListView.setCellFactory(cl ->
-//                new CardListCell(mainCtrl, server, board)
-//        );
         customizeBoard(board);
     }
 

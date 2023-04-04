@@ -2,6 +2,7 @@ package server.api;
 
 import commons.ColorScheme;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.ColorSchemeRepository;
 
@@ -9,13 +10,15 @@ import server.database.ColorSchemeRepository;
 @RequestMapping("api/colors")
 public class ColorSchemeController {
     private final ColorSchemeRepository repo;
+    private SimpMessagingTemplate msg;
 
     /**
      * constructor for controller
      * @param repo the used repository
      */
-    public ColorSchemeController(ColorSchemeRepository repo){
+    public ColorSchemeController(ColorSchemeRepository repo,SimpMessagingTemplate msg){
         this.repo = repo;
+        this.msg = msg;
     }
 
 //    /**
@@ -41,6 +44,7 @@ public class ColorSchemeController {
             return ResponseEntity.badRequest().build();
         }
         ColorScheme saved = repo.save(colorScheme);
+        msg.convertAndSend("/topic/colors", colorScheme);
         return ResponseEntity.ok(saved);
     }
     /**
@@ -56,6 +60,7 @@ public class ColorSchemeController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(colorScheme);
+        msg.convertAndSend("/topic/colorsUpdate",colorScheme);
         return ResponseEntity.ok(colorScheme);
     }
 }
