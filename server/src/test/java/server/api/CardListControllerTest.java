@@ -294,13 +294,9 @@ public class CardListControllerTest {
         List<Card> broken2 = new ArrayList<>();
         broken2.add(card4);
         broken2.add(card2);
-        var actual1 = sut.moveCard(1, null);
-        var actual2 = sut.moveCard(-1, list);
-        var actual3 = sut.moveCard(1, broken1);
-        var actual4 = sut.moveCard(1, broken2);
+        var actual1 = sut.moveCard(List.of((long) -1, (long) 1));
+        var actual3 = sut.moveCard(List.of((long) 1, (long) 1));
         assertEquals(BAD_REQUEST, actual1.getStatusCode());
-        assertEquals(BAD_REQUEST, actual2.getStatusCode());
         assertEquals(BAD_REQUEST, actual3.getStatusCode());
-        assertEquals(BAD_REQUEST, actual4.getStatusCode());
     }
 }

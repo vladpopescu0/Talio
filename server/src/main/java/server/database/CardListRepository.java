@@ -19,5 +19,17 @@ import commons.CardList;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CardListRepository extends JpaRepository<CardList, Long> {
-    //CardList findByCards_Id(long id);
+    /**
+     * Returns the CardList by its child Card's ID
+     * @param id ID of the child Card
+     * @return CardList containing Card of given ID
+     */
+    CardList findByCards_Id(long id);
+
+    /**
+     * Checks whether there exists a parent CardList for Card of given ID
+     * @param id ID of the Card
+     * @return whether there exists a parent CardList for Card of given ID
+     */
+    boolean existsByCards_Id(long id);
 }

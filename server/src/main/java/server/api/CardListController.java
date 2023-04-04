@@ -10,7 +10,10 @@ import server.database.CardListRepository;
 import server.database.CardRepository;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.OptionalInt;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @RestController
 @RequestMapping(path = "api/lists")
@@ -165,43 +168,6 @@ public class CardListController {
     }
 
     /**
-     * Moves the second given Card in front of the first given Card in CardList of provided ID
-     * @param id ID of the CardList to be updated
-     * @param cards two Cards to be moved
-     * @return the new cardList
-     */
-    @PutMapping("/moveCard/{id}")
-    public ResponseEntity<CardList> moveCard(@PathVariable("id") long id,
-                                             @RequestBody List<Card> cards) {
-        if (cards == null || !repo.existsById(id) || cards.size() < 2
-                || !cardRepository.existsById(cards.get(0).getId())
-                || !cardRepository.existsById(cards.get(1).getId())) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        CardList cl = repo.getById(id);
-        Card origin = cards.get(0);
-        Card destination = cards.get(1);
-        int originIndex = 0;
-        for(int x = 0; x < cl.getCards().size(); x++) {
-            if (cl.getCards().get(x).getId() == origin.getId()) {
-                originIndex = x;
-                break;
-            }
-        }
-        for(int x = 0; x < cl.getCards().size(); x++) {
-            if (cl.getCards().get(x).getId() == destination.getId()) {
-                Card replaced = cl.getCards().remove(originIndex);
-                cl.getCards().add(x, replaced);
-                break;
-            }
-        }
-        repo.save(cl);
-        msgs.convertAndSend("/topic/updateParent", id);
-        return ResponseEntity.ok(cl);
-    }
-
-    /**
      * The mapping of the delete card from list
      * @param id of the list from which to delete the card
      * @param cardId the id of the card that should be deleted
@@ -224,6 +190,89 @@ public class CardListController {
             return ResponseEntity.ok(repo.getById(id));
         }
         return ResponseEntity.notFound().build();
+    }
+
+    /**
+     * Moves a Card with the second given ID in front of a Card with the first given ID
+     * @param ids IDs of the Cards to be moved from and moved to
+     * @return Response entity stating whether the operation was successful
+     */
+    @PutMapping(path = "/moveCard")
+    public ResponseEntity<Boolean> moveCard(@RequestBody List<Long> ids) {
+        if (ids == null || ids.size() != 2 || !cardRepository.existsById(ids.get(0))
+                || !cardRepository.existsById(ids.get(0)) || !repo.existsByCards_Id(ids.get(0))
+                || !repo.existsByCards_Id(ids.get(1))) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        CardList originCardList = repo.findByCards_Id(ids.get(0));
+        CardList destinationCardList = repo.findByCards_Id(ids.get(1));
+        Card origin = cardRepository.getById(ids.get(0));
+        Card destination = cardRepository.getById(ids.get(1));
+        OptionalInt index = IntStream.range(0, originCardList.getCards().size())
+                .filter(x -> origin.getId() == originCardList.getCards().get(x).getId())
+                .findFirst();
+
+        if (index.isPresent()) {
+            int originIndex = index.getAsInt();
+            if (Objects.equals(originCardList.getId(), destinationCardList.getId())) {
+                index = IntStream.range(0, originCardList.getCards().size())
+                        .filter(x -> destination.getId()
+                                == originCardList.getCards().get(x).getId())
+                        .findFirst();
+                if (index.isPresent()) {
+                    Card replaced = originCardList.getCards().remove(originIndex);
+                    originCardList.getCards().add(index.getAsInt(), replaced);
+                    repo.save(originCardList);
+                }
+            } else {
+                index = IntStream.range(0, destinationCardList.getCards().size())
+                        .filter(x -> destination.getId()
+                                == destinationCardList.getCards().get(x).getId())
+                        .findFirst();
+                if (index.isPresent()) {
+                    Card replaced = originCardList.getCards().remove(originIndex);
+                    destinationCardList.getCards().add(index.getAsInt(), replaced);
+                    repo.save(originCardList);
+                    repo.save(destinationCardList);
+                }
+            }
+        }
+        msgs.convertAndSend("/topic/moveCard", ids);
+        return ResponseEntity.ok(true);
+    }
+
+    /**
+     * Moves a Card with the given ID to the end of a CardList with the given ID
+     * @param id ID of the CardList
+     * @param cardId ID of the Card
+     * @return Response entity stating whether the operation was successful
+     */
+    @PutMapping(path = "/moveToCardList/{id}")
+    public ResponseEntity<Boolean> moveCardToCardList(@PathVariable("id") long id,
+                                                      @RequestBody long cardId) {
+        if (!repo.existsById(id) || !cardRepository.existsById(cardId) ||
+                !repo.existsByCards_Id(cardId)) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        CardList originCardList = repo.findByCards_Id(cardId);
+        CardList destinationCardList = repo.getById(id);
+
+        OptionalInt index = IntStream.range(0, originCardList.getCards().size())
+                .filter(x -> cardId == originCardList.getCards().get(x).getId())
+                .findFirst();
+        if (index.isPresent()) {
+            Card replaced = originCardList.getCards().remove(index.getAsInt());
+            destinationCardList.getCards().add(replaced);
+            repo.save(originCardList);
+            repo.save(destinationCardList);
+        }
+
+        repo.save(originCardList);
+        repo.save(destinationCardList);
+        msgs.convertAndSend("/topic/moveToCardList", cardId);
+        return ResponseEntity.ok(true);
     }
 }
 

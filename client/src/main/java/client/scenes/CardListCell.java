@@ -103,7 +103,6 @@ public class CardListCell extends ListCell<CardList>{
                         if (title != null) {
                             title.setStyle("-fx-background-color: "
                                     +colorScheme.getColorBGlight()+";");
-                            System.out.println(title.getStyle());
                         }
                     });
                     editListButton.setOnAction(event -> {
@@ -189,6 +188,7 @@ public class CardListCell extends ListCell<CardList>{
 
     /**
      * Changes the focus to an adjacent Card above or below
+     * This method represents navigation between the Cards using the keyboard
      * @param card currently selected Card
      * @param up whether the change should be made upwards
      */
@@ -223,24 +223,18 @@ public class CardListCell extends ListCell<CardList>{
 
     /**
      * Swaps the currently selected Card with an adjacent Card above or below
+     * This method represents swapping Cards using the keyboard
      * @param card currently selected Card
      * @param up whether the swap should be made upwards
      */
     public void swapCards(Card card, boolean up) {
         int index = cardsList.getItems().indexOf(card);
-        VirtualFlow virtualFlow = (VirtualFlow) cardsList.lookup(".virtual-flow");
         if (up && index > 0) {
-            server.moveCard(this.getItem().getId(),
-                    List.of(card, cardsList.getItems().get(index - 1)));
-
+            server.moveCard(List.of(card.getId(), cardsList.getItems().get(index - 1).getId()));
             mainCtrl.getBoardViewCtrl().refresh();
-            virtualFlow.getCell(index - 1).requestFocus();
         } else if (!up && index + 1 < cardsList.getItems().size()) {
-            server.moveCard(this.getItem().getId(),
-                    List.of(card, cardsList.getItems().get(index + 1)));
-
+            server.moveCard(List.of(card.getId(), cardsList.getItems().get(index + 1).getId()));
             mainCtrl.getBoardViewCtrl().refresh();
-            virtualFlow.getCell(index + 1).requestFocus();
         }
     }
 
@@ -258,14 +252,8 @@ public class CardListCell extends ListCell<CardList>{
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                //We can opt for passing just a Card ID and retrieve
-                // both the Card and CardList later
-                @SuppressWarnings("unchecked")
-                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
-
-                if (!Objects.equals(ids.get(1), this.getItem().getId())) {
-                    dragCardToCardList(ids);
-                }
+                long id = (long) event.getDragboard().getContent(cardDataFormat);
+                dragCardToCardList(id);
             }
 
             event.setDropCompleted(true);
@@ -276,11 +264,10 @@ public class CardListCell extends ListCell<CardList>{
 
     /**
      * Handles drag-and-drop gesture from Card to CardList
-     * @param ids the Card that the gesture origins from
+     * @param id the ID of the Card that the gesture origins from
      */
-    public void dragCardToCardList(List<Long> ids) {
-        CardList oldParent = server.getCL(ids.get(1));
-        server.updateParent(ids.get(0), List.of(oldParent, this.getItem()));
+    public void dragCardToCardList(long id) {
+        server.moveCardToCardList(this.getItem().getId(), id);
         mainCtrl.getBoardViewCtrl().refresh();
     }
 }
