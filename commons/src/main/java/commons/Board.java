@@ -53,6 +53,12 @@ public class Board {
     @OneToMany(cascade = CascadeType.ALL,targetEntity = ColorScheme.class,orphanRemoval = true)
     private List<ColorScheme> cardsColorSchemesList;
 
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "hasPassword")
+    private boolean hasPassword;
+
     /**
      * getter for the lists color scheme
      * @return the listsColorScheme
@@ -89,6 +95,8 @@ public class Board {
         this.listsColorScheme = new ColorScheme();
         this.cardsColorScheme = new ColorScheme();
         this.cardsColorSchemesList = new ArrayList<>();
+        this.password = "";
+        this.hasPassword = false;
     }
 
     /**
@@ -117,6 +125,8 @@ public class Board {
         this.listsColorScheme = new ColorScheme();
         this.cardsColorScheme = new ColorScheme();
         this.cardsColorSchemesList = new ArrayList<>();
+        this.password = "";
+        this.hasPassword = false;
     }
 
     /**
@@ -332,4 +342,63 @@ public class Board {
         this.cardsColorScheme = cardsColorScheme;
     }
 
+    /**
+     * Returns whether board has a password or not
+     * @return true if the board has a password, false otherwise
+     */
+    public boolean isHasPassword() {
+        return hasPassword;
+    }
+
+    /**
+     * Sets whether the board has a password or not
+     * @param hasPassword Whether the board has a password or not
+     */
+    public void setHasPassword(boolean hasPassword) {
+        this.hasPassword = hasPassword;
+    }
+
+    /**
+     * Returns the board's password's hash
+     * @return hash of password
+     */
+    public String getPassword(){
+        return password;
+    }
+
+    /**
+     * Sets the board's password
+     * SHOULD NOT BE USED, this is here for Spring, use setPasswordHash instead
+     * @param pass
+     */
+    public void setPassword(String pass) {
+        this.password = pass;
+    }
+
+    /**
+     * Sets the password of the board to the given password
+     * @param pass New password as a String
+     */
+    public void setPasswordHash(String pass){
+        setHasPassword(true);
+        this.password = String.valueOf(pass.hashCode());
+    }
+
+    /**
+     * Checks if the given password is equal to the board's password
+     * @param pass Password to check
+     * @return True if passwords match, false otherwise
+     */
+    public boolean comparePass(String pass){
+        if (!isHasPassword()) return true;
+        return Integer.parseInt(this.password) == pass.hashCode();
+    }
+
+    /**
+     * Removes the board's password
+     */
+    public void removePass(){
+        this.password = "";
+        this.hasPassword = false;
+    }
 }

@@ -8,8 +8,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="710.0" prefWidth="1202.0" stylesheets="@/css/lists.css" text="Board View" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardViewCtrl">
+
+
+
+
     <content>
-        <AnchorPane fx:id="border" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane fx:id="border" minHeight="0.0" minWidth="0.0" prefHeight="506.0" prefWidth="713.0">
             <children>
                 <Button fx:id="addList" layoutX="1085.0" layoutY="232.0" mnemonicParsing="false" onAction="#addCardList" prefHeight="27.0" prefWidth="109" text="+ Add List" />
                 <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="656.0" prefWidth="1066.0">
@@ -39,6 +43,8 @@
                 <!--                    </font>-->
                 <!--                </Label>-->
                 <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
+            <Button fx:id="boardPass" layoutX="1085.0" layoutY="340.0" mnemonicParsing="false" onAction="#editPassword" prefHeight="27.0" prefWidth="109.0" text="Password" />
+
             </children>
         </AnchorPane>
     </content>

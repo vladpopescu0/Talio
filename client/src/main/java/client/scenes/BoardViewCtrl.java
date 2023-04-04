@@ -80,6 +80,9 @@ public class BoardViewCtrl {
     private Button copyInviteButton;
     @FXML
     private Button viewTags;
+
+    @FXML
+    private Button boardPass;
     @FXML
     private Label copyLabel;
 
@@ -125,7 +128,10 @@ public class BoardViewCtrl {
      * edit it
      */
     public void checkUser() {
-        if (!board.getUsers().contains(mainCtrl.getCurrentUser())) {
+        if (!board.getUsers().contains(mainCtrl.getCurrentUser()) ||
+                (board.isHasPassword() && (!mainCtrl.getSavedPasswords().containsKey(board.getId())
+                || !server.checkBoardPassword(mainCtrl.getSavedPasswords().get(
+                        board.getId()), board.getId())))) {
             leaveButton.setDisable(true);
             deleteButton.setDisable(true);
             editTitle.setDisable(true);
@@ -253,6 +259,13 @@ public class BoardViewCtrl {
     }
 
     /**
+     * Redirects to edit Password scene, where the user can change the password of the board
+     */
+    public void editPassword() {
+        mainCtrl.showChangeBoardPasswordView(board);
+    }
+
+    /**
      * Customizes the board, list and cards
      *
      * @param board the board to be customized
@@ -295,6 +308,8 @@ public class BoardViewCtrl {
         mainCtrl.setButtonStyle(customizeButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(copyInviteButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(boardPass, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());

@@ -11,6 +11,7 @@ import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
 import server.database.ColorSchemeRepository;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -175,6 +176,7 @@ public class BoardController {
      * @param board the new version of the board
      * @return a response entity containing the updated board, if the update is possible
      */
+    @Transactional
     @PutMapping("/update/{id}")
     public ResponseEntity<Board> updateBoard(@PathVariable("id") long id,
                                              @RequestBody Board board) {
@@ -205,6 +207,56 @@ public class BoardController {
 //        msgs.convertAndSend("/topic/tags",id);
 //        return ResponseEntity.ok(board);
 //    }
+
+    /**
+     * Sets the password of the given board
+     * @param id Board ID
+     * @param pass Password to set to
+     * @return True if successful, else bad request
+     */
+    @PutMapping("/{id}/pass")
+    public ResponseEntity<Boolean> setBoardPassword(@PathVariable("id") long id,
+                                                      @RequestBody String pass){
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Board b = repo.getById(id);
+        b.setPasswordHash(pass);
+        repo.save(b);
+        return ResponseEntity.ok(true);
+    }
+
+    /**
+     * Removes the password from given board
+     * @param id Board ID
+     * @return True if successful, else bad request
+     */
+    @GetMapping("/{id}/pass/remove")
+    public ResponseEntity<Boolean> removeBoardPassword(@PathVariable("id") long id){
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Board b = repo.getById(id);
+        b.removePass();
+        repo.save(b);
+        return  ResponseEntity.ok(true);
+    }
+
+    /**
+     * Checks if the given password is the same as the board's password
+     * @param id Board ID
+     * @param pass Password to check against
+     * @return True if passwords match, false if they don't, bad request if board could not be found
+     */
+    @PutMapping("/{id}/pass/check")
+    public ResponseEntity<Boolean> checkBoardPassword(@PathVariable("id") long id,
+                                                    @RequestBody String pass){
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Board b = repo.getById(id);
+        return ResponseEntity.ok(b.comparePass(pass));
+    }
 
     /**
      * Updates a board
