@@ -19,6 +19,7 @@ import client.utils.ServerUtils;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -376,9 +377,21 @@ public class BoardViewCtrl {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        for (CardList cl : board.getList()) {
-            server.removeCL(cl.getId());
+        if (board.getList() != null) {
+            for (CardList cl : board.getList()) {
+                server.removeCL(cl.getId());
+            }
         }
+        if (board.getTags() != null) {
+            for (Tag t : board.getTags()) {
+                server.removeTag(t.getId());
+            }
+        }
+        //if (board.getCardsColorSchemesList() != null) {
+        //    for (ColorScheme c : board.getCardsColorSchemesList()) {
+        //        server.deleteColorSchemeById(c.getId());
+        //    }
+        //}
         server.deleteBoard(board.getId());
         mainCtrl.showUserBoardOverview();
     }
