@@ -5,19 +5,17 @@ import client.utils.SocketHandler;
 import commons.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.TransferMode;
+import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.util.List;
-import java.util.Objects;
 
 import static client.scenes.MainCtrl.cardDataFormat;
 
@@ -52,6 +50,7 @@ public class CardCell extends ListCell<Card> {
     private ColorScheme colorSchemeCustom;
     private FXMLLoader fxmlLoader;
     private Board board;
+    private CardListCell parent;
     private MainCtrl mainCtrl;
     private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
     private ServerUtils server;
@@ -63,12 +62,14 @@ public class CardCell extends ListCell<Card> {
      * @param cardList the cardListCell in which this card is
      * @param board the board the card belongs to
      * @param colorScheme the colorscheme of this card
+     * @param parent the parent CardListCell of this CardCell
      */
-    public CardCell(MainCtrl mainCtrl, ServerUtils server
-            , CardListCell cardList, Board board,ColorScheme colorScheme) {
+    public CardCell(MainCtrl mainCtrl, ServerUtils server, CardListCell cardList,
+                    Board board, ColorScheme colorScheme, CardListCell parent) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.parent = parent;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
             //statusLabel.setText(this.getItem().tasksLabel());
@@ -83,14 +84,52 @@ public class CardCell extends ListCell<Card> {
      */
     public void initialize() {
         handleDraggable();
+        handleHover();
         hasDesc.setVisible(this.getItem() != null && this.getItem().hasDescription());
         statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                mainCtrl.closeSecondaryStage();
-                mainCtrl.showCardDetailsView(this.getItem(), board);
+                showDetails();
             }
         });
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case C:
+                mainCtrl.getBoardViewCtrl().toCustomizationPage();
+                break;
+            case T:
+                mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
+                break;
+            case E:
+                editCard();
+                break;
+            case ENTER:
+                showDetails();
+                break;
+            case DELETE:
+            case BACK_SPACE:
+                deleteCard();
+                break;
+            case UP:
+                if (event.isShiftDown()) {
+                    parent.swapCards(this.getItem(), true);
+                } else {
+                    parent.changeCardFocus(this.getItem(), true);
+                }
+                break;
+            case DOWN:
+                if (event.isShiftDown()) {
+                    parent.swapCards(this.getItem(), false);
+                } else {
+                    parent.changeCardFocus(this.getItem(), false);
+                }
+                break;
+        }
     }
 
     /**
@@ -114,33 +153,27 @@ public class CardCell extends ListCell<Card> {
                 try {
                     fxmlLoader.load();
                     displayTags();
-                    this.editButton.setOnAction(event -> {
-                        mainCtrl.setCardId(this.getItem().getId());
-                        mainCtrl.showEditCard();
-                    });
-                    this.deleteButton.setOnAction(event ->{
-                        var c = server.deleteCardfromList
-                                (this.getItem().getParentCardList().getId(),this.getItem().getId());
-                        if (this.getItem().getTasks() != null) {
-                            for (Task t : this.getItem().getTasks()) {
-                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
-                                server.deleteTask(t.getId());
-                            }
-                        }
-                        server.deleteCard(this.getItem().getId());
-
-                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
-                            mainCtrl.closeSecondaryStage();
-                        }
-
-                        mainCtrl.getBoardViewCtrl().refresh();
-                    });
+                    this.editButton.setOnAction(event -> editCard());
+                    this.deleteButton.setOnAction(event -> deleteCard());
+                    this.setOnKeyPressed(this::handleShortcuts);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
 
-            paneLabel.setText(card.getName());
+            if (mainCtrl.getFocusedNode() instanceof CardCell) {
+                CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
+                if (cardCell.getItem() != null &&
+                        this.getItem().getId() == cardCell.getItem().getId()) {
+                    paneLabel.setText(card.getName() + " (S)");
+                    this.requestFocus();
+                } else {
+                    paneLabel.setText(card.getName());
+                }
+            } else {
+                paneLabel.setText(card.getName());
+            }
+
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);
@@ -154,9 +187,46 @@ public class CardCell extends ListCell<Card> {
     }
 
     /**
+     * Opens the edit Card panel
+     */
+    public void editCard() {
+        mainCtrl.setCardId(this.getItem().getId());
+        mainCtrl.showEditCard();
+    }
+
+    /**
+     * Deletes the Card
+     */
+    public void deleteCard() {
+        var c = server.deleteCardfromList
+                (this.getItem().getParentCardList().getId(),this.getItem().getId());
+        if (this.getItem().getTasks() != null) {
+            for (Task t : this.getItem().getTasks()) {
+                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+                server.deleteTask(t.getId());
+            }
+        }
+        server.deleteCard(this.getItem().getId());
+
+        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
+            mainCtrl.closeSecondaryStage();
+        }
+
+        mainCtrl.getBoardViewCtrl().refresh();
+    }
+
+    /**
+     * Shows the Card details panel
+     */
+    public void showDetails() {
+        mainCtrl.closeSecondaryStage();
+        mainCtrl.showCardDetailsView(this.getItem(), board);
+    }
+
+    /**
      * Displays Tags attached to the Card
      */
-    public void displayTags() {
+    private void displayTags() {
         List<Tag> tags = this.getItem().getTags();
         List<Label> labels = List.of(tagLabel1, tagLabel2, tagLabel3, tagLabel4, tagLabel5);
 
@@ -187,12 +257,11 @@ public class CardCell extends ListCell<Card> {
      * Object equality is handled by ID equality as Serialized Objects may differ
      * and yield false for equals method
      */
-    public void handleDraggable() {
+    private void handleDraggable() {
         this.setOnDragDetected(event -> {
             Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
             ClipboardContent content = new ClipboardContent();
-            content.put(cardDataFormat, List.of(this.getItem().getId(),
-                    this.getItem().getParentCardList().getId()));
+            content.put(cardDataFormat, this.getItem().getId());
             db.setContent(content);
             WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
             db.setDragView(snapshot);
@@ -208,17 +277,9 @@ public class CardCell extends ListCell<Card> {
 
         this.setOnDragDropped(event -> {
             if (event.getDragboard().hasContent(cardDataFormat)) {
-                //We can opt for passing just a Card ID and retrieve
-                // both the Card and CardList later
-                @SuppressWarnings("unchecked")
-                List<Long> ids = (List<Long>) event.getDragboard().getContent(cardDataFormat);
-
-                if (ids.get(0) != this.getItem().getId()) {
-                    if (Objects.equals(ids.get(1), this.getItem().getParentCardList().getId())) {
-                        dragCardToIdentical(ids);
-                    } else {
-                        dragCardToDifferent(ids);
-                    }
+                long id = (long) event.getDragboard().getContent(cardDataFormat);
+                if (id != this.getItem().getId()) {
+                    dragCard(id);
                 }
             }
 
@@ -229,37 +290,36 @@ public class CardCell extends ListCell<Card> {
     }
 
     /**
-     * Handles drag-and-drop gesture between Cards of the same CardList
-     * @param ids the Card that the gesture origins from
+     * Handles hovering gesture for mouse
      */
-    public void dragCardToIdentical(List<Long> ids) {
-        Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        long parentId = this.getItem().getParentCardList().getId();
-        server.moveCard(parentId,
-                List.of(server.getCardById(ids.get(0)), this.getItem()));
-        mainCtrl.getBoardViewCtrl().refresh();
+    private void handleHover() {
+        this.setOnMouseEntered(event -> {
+            Node oldFocus = mainCtrl.getFocusedNode();
+            this.requestFocus();
+            updateItem(this.getItem(), false);
+            if (oldFocus instanceof CardCell) {
+                CardCell oldFocusCell = (CardCell) oldFocus;
+                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            }
+        });
+
+        this.setOnMouseClicked(event -> {
+            Node oldFocus = mainCtrl.getFocusedNode();
+            this.requestFocus();
+            updateItem(this.getItem(), false);
+            if (oldFocus instanceof CardCell) {
+                CardCell oldFocusCell = (CardCell) oldFocus;
+                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            }
+        });
     }
 
     /**
-     * Handles drag-and-drop gesture between Cards of different CardLists
-     * This method may be improved at a later point
-     * @param ids the Card that the gesture origins from
+     * Handles drag-and-drop gesture between Cards of the same CardList
+     * @param id the ID of the Card that the gesture origins from
      */
-    public void dragCardToDifferent(List<Long> ids) {
-        Board board = mainCtrl.getBoardViewCtrl().getBoard();
-        int oldParentIndex = board.getList().indexOf(server.getCL(
-                ids.get(1)));
-        int newParentIndex = board.getList().indexOf(server.getCL(
-                this.getItem().getParentCardList().getId()));
-        CardList oldParent = server.getCL(ids.get(1));
-        CardList newParent = this.getItem().getParentCardList();
-        server.updateParent(ids.get(0), List.of(oldParent, newParent));
-        CardList newCardList = server.getCL(newParent.getId());
-        board.getList().set(oldParentIndex, server.getCL(oldParent.getId()));
-        board.getList().set(newParentIndex, newCardList);
-        this.getItem().setParentCardList(newCardList);
-
-        dragCardToIdentical(ids);
+    private void dragCard(long id) {
+        server.moveCard(List.of(id, this.getItem().getId()));
+        mainCtrl.getBoardViewCtrl().refresh();
     }
-
 }

@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import java.util.List;
@@ -37,6 +38,19 @@ public class JoinBoardByLinkCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
 
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: ok();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**

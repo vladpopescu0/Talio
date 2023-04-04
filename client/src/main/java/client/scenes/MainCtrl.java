@@ -16,10 +16,15 @@
 package client.scenes;
 
 import commons.*;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -32,6 +37,7 @@ public class MainCtrl {
     private Board board;
     private Stage primaryStage;
     private Stage secondaryStage;
+    private Stage helpStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
     private UserBoardsOverviewCtrl userBoardsOverviewCtrl;
@@ -81,6 +87,8 @@ public class MainCtrl {
     private EditTagCtrl editTagCtrl;
     private Scene viewAddTag;
     private ViewAddTagsCtrl viewAddTagsCtrl;
+    private Scene helpPage;
+    private HelpCtrl helpPageCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
     private User currentUser;
     private JoinBoardByLinkCtrl joinBoardByLinkCtrl;
@@ -95,6 +103,7 @@ public class MainCtrl {
      * Initializes the application
      * @param primaryStage the primary stage used
      * @param secondaryStage the secondary stage used
+     * @param helpStage the stage for help information used
      * @param overview the boardOverview scene
      * @param boardView the boardView scene
      * @param createList the createList scene
@@ -113,11 +122,12 @@ public class MainCtrl {
      * @param viewAddTag the viewAddTag scene
      * @param details the cardDetails scene
      * @param customizationPage the CustomizationPage scene
+     * @param helpPage the HelpPage scene
      * @param adminCheck the adminCheck scene
      * @param editBoardPass the editBoardPassword scene
      * @param checkBoardPass the checkBoardPassword scene
      */
-    public void initialize(Stage primaryStage, Stage secondaryStage,
+    public void initialize(Stage primaryStage, Stage secondaryStage, Stage helpStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
@@ -137,10 +147,13 @@ public class MainCtrl {
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
+                           Pair<HelpCtrl, Parent> helpPage,
                            Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
                            Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass){
+
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
+        this.helpStage = helpStage;
 
         this.overviewCtrl = overview.getKey();
         this.overview = new Scene(overview.getValue());
@@ -199,6 +212,9 @@ public class MainCtrl {
         this.viewAddTagsCtrl = viewAddTag.getKey();
         this.viewAddTag = new Scene(viewAddTag.getValue());
 
+        this.helpPageCtrl = helpPage.getKey();
+        this.helpPage = new Scene(helpPage.getValue());
+
         this.changeBoardPassCtrl = editBoardPass.getKey();
         this.changeBoardPass = new Scene(editBoardPass.getValue());
 
@@ -207,9 +223,18 @@ public class MainCtrl {
 
         showUserView();
         primaryStage.show();
+        helpStage.setScene(this.helpPage);
 
         primaryStage.setOnCloseRequest(event -> {
             closeSecondaryStage();
+            closeHelpStage();
+        });
+
+        primaryStage.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+            keyEventListener(event, true);
+        });
+        secondaryStage.addEventFilter(KeyEvent.KEY_PRESSED, (KeyEvent event) -> {
+            keyEventListener(event, false);
         });
     }
 
@@ -553,12 +578,22 @@ public class MainCtrl {
     public String getAdminPass() { return adminPass; }
 
     public void setAdminPass(String pass) { this.adminPass = pass; }
+
     /**
      * Closes the secondary stage if it's visible
      */
     public void closeSecondaryStage() {
         if (secondaryStage.isShowing()) {
             secondaryStage.close();
+        }
+    }
+
+    /**
+     * Closes the help stage if it's visible
+     */
+    public void closeHelpStage() {
+        if (helpStage.isShowing()) {
+            helpStage.close();
         }
     }
 
@@ -580,12 +615,26 @@ public class MainCtrl {
      * @param title title of the pop up page
      */
     private void showSecondaryStage(Scene scene, String title) {
+        Scene oldScene = secondaryStage.getScene();
         secondaryStage.setTitle(title);
         secondaryStage.setScene(scene);
-        secondaryStage.centerOnScreen();
         secondaryStage.toFront();
         if (!secondaryStage.isShowing()) {
+            secondaryStage.centerOnScreen();
             secondaryStage.show();
+        } else if (!oldScene.equals(scene)) {
+            secondaryStage.centerOnScreen();
+        }
+    }
+
+    /**
+     * Shows the help stage if it's not visible
+     */
+    private void showHelpStage() {
+        helpStage.toFront();
+        if (!helpStage.isShowing()) {
+            helpStage.centerOnScreen();
+            helpStage.show();
         }
     }
 
@@ -620,6 +669,29 @@ public class MainCtrl {
         return secondaryStage.isShowing()
                 && secondaryStage.getScene().equals(editTag)
                 && tag.getId() == editTagCtrl.getTag().getId();
+    }
+
+    /**
+     * Event listener for shortcuts
+     * @param event the key event
+     * @param primary whether the key listener concerns primary stage
+     */
+    private void keyEventListener(KeyEvent event, boolean primary) {
+        Node focused = primary? primaryStage.getScene().getFocusOwner()
+                : secondaryStage.getScene().getFocusOwner();
+        if (!(focused instanceof TextField || focused instanceof TextArea)) {
+            if (event.getCode() == KeyCode.SLASH) {
+                showHelpStage();
+            }
+        }
+    }
+
+    /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
+    public Node getFocusedNode() {
+        return primaryStage.getScene().getFocusOwner();
     }
 
     /**

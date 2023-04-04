@@ -12,6 +12,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -58,6 +60,16 @@ public class CardDetailsViewCtr implements Initializable {
         this.mainCtrl = mainCtrl;
         this.card = card;
         this.board = board;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        if (event.getCode() == KeyCode.ESCAPE) {
+            back();
+        }
     }
 
     /**
@@ -178,8 +190,18 @@ public class CardDetailsViewCtr implements Initializable {
     /**
      * Pops up a secondary page on which tag to be added can be selected
      */
-    public void addTag() {
+    public void addTags() {
         mainCtrl.showViewAddTag(board, card, false);
+    }
+
+    /**
+     * Pops up a secondary page on which tag to be added can be selected
+     * and informs the page that it's popped from a shortcut
+     * @param board Board to which the Card belongs
+     * @param card Card to which Tags may be added
+     */
+    public void addTagsShortcut(Board board, Card card) {
+        mainCtrl.showViewAddTag(board, card, true);
     }
 
     /**

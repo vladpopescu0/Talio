@@ -8,6 +8,7 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 
@@ -34,6 +35,19 @@ public class EditTagCtrl {
         this.server = server;
         this.board = board;
         this.tag = tag;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: ok();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**
