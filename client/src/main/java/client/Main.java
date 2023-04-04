@@ -98,14 +98,21 @@ public class Main extends Application {
         var helpPage = FXML.load(HelpCtrl.class,
                 "client", "scenes", "HelpView.fxml");
 
+        var viewChangeBoardPass = FXML.load(EditBoardPasswordViewCtrl.class,
+                "client", "scenes", "EditBoardPasswordView.fxml");
+
+        var viewCheckBoardPass = FXML.load(CheckBoardPasswordViewCtrl.class,
+                "client", "scenes", "CheckBoardPasswordView.fxml");
+
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         Stage secondaryStage = new Stage();
         secondaryStage.setResizable(false);
         Stage helpStage = new Stage();
         helpStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, helpStage, overview, boardView,
-                createList, createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName,joinBoardByLink, details,
-                customizationPage, adminCheck, viewTags, createTag, editTag, viewAddTag, helpPage);
+                createList, createBoardCtrl, add, userCtrl, editCard, changeListNameCtrl,
+                changeServer, userBoardOverview, editBoardName,joinBoardByLink,
+                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag,
+                helpPage, viewChangeBoardPass, viewCheckBoardPass);
     }
 }

@@ -286,4 +286,43 @@ public class BoardTest {
         b.addTag(t3);
         assertTrue(b.getTags().contains(t3));
     }
+
+    /**
+     * Test for default password
+     */
+    @Test
+    public void defaultPasswordTest(){
+        Board b = new Board(SOME_USER, "a");
+        assertEquals(b.getPassword(), "");
+    }
+
+    /**
+     * Test for default hasPassword
+     */
+    @Test
+    public void defaultHasPassword(){
+        Board b = new Board(SOME_USER, "a");
+        assertFalse(b.isHasPassword());
+    }
+
+    /**
+     * Test for password comparison
+     */
+    @Test
+    public void hasPasswordTest(){
+        Board b = new Board(SOME_USER, "a");
+        b.setPasswordHash("Somepass");
+        assertTrue(b.isHasPassword());
+        assertTrue(b.comparePass("Somepass"));
+    }
+
+    /**
+     * Test for setPassword and getPassword
+     */
+    @Test
+    public void setPasswordTest(){
+        Board b = new Board(SOME_USER, "a");
+        b.setPasswordHash("pass123");
+        assertEquals(b.getPassword(), String.valueOf("pass123".hashCode()));
+    }
 }
