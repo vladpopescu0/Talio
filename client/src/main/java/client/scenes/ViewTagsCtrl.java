@@ -127,6 +127,8 @@ public class ViewTagsCtrl implements Initializable {
      */
     public void back() {
         mainCtrl.closeSecondaryStage();
-        mainCtrl.showBoardView(mainCtrl.getBoardViewCtrl().getBoard());
+        BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
+        mainCtrl.showBoardView(ctrl.getBoard());
+        ctrl.refocusFromBackup();
     }
 }

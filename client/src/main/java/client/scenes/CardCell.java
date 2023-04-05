@@ -100,7 +100,7 @@ public class CardCell extends ListCell<Card> {
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
             case C:
-                mainCtrl.getBoardViewCtrl().toCustomizationPage();
+                //mainCtrl.getBoardViewCtrl().toCustomizationPage();
                 break;
             case T:
                 mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
@@ -165,8 +165,8 @@ public class CardCell extends ListCell<Card> {
                 CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
                 if (cardCell.getItem() != null &&
                         this.getItem().getId() == cardCell.getItem().getId()) {
-                    paneLabel.setText(card.getName() + " (S)");
                     this.requestFocus();
+                    paneLabel.setText(card.getName() + " (S)");
                 } else {
                     paneLabel.setText(card.getName());
                 }
@@ -192,6 +192,7 @@ public class CardCell extends ListCell<Card> {
     public void editCard() {
         mainCtrl.setCardId(this.getItem().getId());
         mainCtrl.showEditCard();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -213,6 +214,7 @@ public class CardCell extends ListCell<Card> {
         }
 
         mainCtrl.getBoardViewCtrl().refresh();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -294,18 +296,22 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleHover() {
         this.setOnMouseEntered(event -> {
-            Node oldFocus = mainCtrl.getFocusedNode();
-            this.requestFocus();
-            updateItem(this.getItem(), false);
-            if (oldFocus instanceof CardCell) {
-                CardCell oldFocusCell = (CardCell) oldFocus;
-                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            if (mainCtrl.isPrimaryStageFocused()) {
+                Node oldFocus = mainCtrl.getFocusedNode();
+                this.requestFocus();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
+                updateItem(this.getItem(), false);
+                if (oldFocus instanceof CardCell) {
+                    CardCell oldFocusCell = (CardCell) oldFocus;
+                    oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+                }
             }
         });
 
         this.setOnMouseClicked(event -> {
             Node oldFocus = mainCtrl.getFocusedNode();
             this.requestFocus();
+            mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
             updateItem(this.getItem(), false);
             if (oldFocus instanceof CardCell) {
                 CardCell oldFocusCell = (CardCell) oldFocus;
@@ -315,7 +321,7 @@ public class CardCell extends ListCell<Card> {
     }
 
     /**
-     * Handles drag-and-drop gesture between Cards of the same CardList
+     * Handles drag-and-drop gesture between two Cards
      * @param id the ID of the Card that the gesture origins from
      */
     private void dragCard(long id) {

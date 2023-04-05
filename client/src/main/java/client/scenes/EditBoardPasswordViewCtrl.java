@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
 import java.net.URL;
@@ -32,6 +33,23 @@ public class EditBoardPasswordViewCtrl implements Initializable {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
+    }
+
+    /**
+     * Adds support for keyboard shortcuts
+     */
+    @FXML
+    private void handleShortcuts(KeyEvent event) {
+        switch(event.getCode()) {
+            case ENTER: editPass();
+                break;
+            case DELETE:
+            case BACK_SPACE:
+                removePass();
+                break;
+            case ESCAPE: cancel();
+                break;
+        }
     }
 
     /**
@@ -90,5 +108,16 @@ public class EditBoardPasswordViewCtrl implements Initializable {
      */
     public void cancel() {
         mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Edit Board Password specific shortcuts:\n"
+                + "Enter - Set the password\n"
+                + "Delete / Backspace - Remove the password\n"
+                + "Escape - Close the page";
     }
 }

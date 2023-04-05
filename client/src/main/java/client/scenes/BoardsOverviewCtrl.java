@@ -90,7 +90,6 @@ public class BoardsOverviewCtrl implements Initializable {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-
     }
 
     /**

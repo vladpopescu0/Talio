@@ -68,19 +68,6 @@ public class ViewAddTagsCtrl implements Initializable {
     }
 
     /**
-     * Adds support for keyboard shortcuts
-     */
-    @FXML
-    private void handleShortcuts(KeyEvent event) {
-        switch(event.getCode()) {
-            case ENTER: addTags();
-                break;
-            case ESCAPE: back();
-                break;
-        }
-    }
-
-    /**
      * Initializer for the ViewTags scene
      * @param location
      * The location used to resolve relative paths for the root object, or
