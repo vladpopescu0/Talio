@@ -97,7 +97,6 @@ public class CardListCell extends ListCell<CardList>{
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
-                    //i want to find a better solution :((((
                     Platform.runLater(() -> {
                         Pane title = (Pane) titledPane.lookup(".title");
                         if (title != null) {
@@ -137,7 +136,7 @@ public class CardListCell extends ListCell<CardList>{
                 + "-fx-background-radius: 5px;" +
                 "-fx-text-fill:" + colorScheme.getColorFont() + ";");
         cardsList.setStyle("-fx-background-color: "
-                +colorScheme.getColorBGlight()+";");
+                +board.getCardsColorScheme().getColorBGlight()+";");
         mainCtrl.setButtonStyle(editListButton
                 ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
         mainCtrl.setButtonStyle(addCardButton
@@ -153,8 +152,35 @@ public class CardListCell extends ListCell<CardList>{
         List<Card> cards = (this.getItem() == null ? new ArrayList<>() : this.getItem().getCards());
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
-        cardsList.setCellFactory(c
-                -> new CardCell(mainCtrl, server,this, board, board.getCardsColorScheme(), this));
+        cardsList.setCellFactory(c -> {
+            CardCell card = new CardCell(mainCtrl, server,this,board,board.getCardsColorScheme());
+            card.setStyle("-fx-background-color: " +
+                    board.getCardsColorScheme().getColorBGlight() + ";" +
+                    "\n-fx-border-color: " +
+                    board.getCardsColorScheme().getColorBGlight() + ";");
+            card.setOnMouseClicked(event -> Platform.runLater(() ->{
+                card.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";" +
+                        "-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";");
+            }));
+            card.hoverProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        if (newValue) {
+                            card.setStyle("-fx-background-color:"
+                                    +board.getCardsColorScheme().getColorBGdark()+";" +
+                                    "\n-fx-border-color:"
+                                    +board.getCardsColorScheme().getColorBGdark()+";");
+                        } else {
+                            card.setStyle("-fx-background-color:"
+                                    +board.getCardsColorScheme().getColorBGlight()+";" +
+                                    "\n-fx-border-color:"
+                                    +board.getCardsColorScheme().getColorBGlight()+";");
+                        }
+                    });
+
+            return card ;
+        });
     }
 
     /** Helper method for renaming a cardlist

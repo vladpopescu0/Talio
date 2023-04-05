@@ -7,9 +7,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="178.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="64.0" prefWidth="173.0" style="-fx-background-color: #24919c;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="20.0" text="Tag" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="163.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="20.0" text="Tag" textAlignment="CENTER" textFill="#ececec" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="83.0" AnchorPane.topAnchor="0.0">
+            <!--=======-->
+            <!--<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="178.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">-->
+            <!--    <children>-->
+            <!--        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="20.0" text="Tag" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="163.0" AnchorPane.topAnchor="0.0">-->
+            <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
             <font>
                 <Font size="15.0" />
             </font>
@@ -17,15 +22,19 @@
                 <Insets left="10.0" />
             </padding>
         </Label>
-        <Button fx:id="editButton" layoutX="98.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" text="Edit" AnchorPane.rightAnchor="55.16796875">
+        <!--<<<<<<< HEAD-->
+        <!--        <Button fx:id="editButton" layoutX="50.0" layoutY="19.0" mnemonicParsing="false" prefHeight="25.0" style="-fx-background-color: #59bfc7;" text="Edit" AnchorPane.rightAnchor="65.2" />-->
+        <!--        <Button fx:id="deleteButton" layoutX="84.0" layoutY="19.0" mnemonicParsing="false" prefHeight="25.0" style="-fx-background-color: #59bfc7;" text="Delete" AnchorPane.rightAnchor="7.400000000000006" />-->
+        <!--=======-->
+        <Button fx:id="editButton" layoutX="88.23203125" layoutY="19.0" mnemonicParsing="false" prefHeight="25.0" style="-fx-background-color: #59bfc7;" text="Edit" AnchorPane.rightAnchor="55.16796875">
             <font>
                 <Font size="10.0" />
             </font></Button>
-        <Button fx:id="deleteButton" layoutX="678.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" text="Delete" AnchorPane.rightAnchor="10.0">
+        <Button fx:id="deleteButton" layoutX="121.4" layoutY="19.0" mnemonicParsing="false" prefHeight="25.0" style="-fx-background-color: #59bfc7;" text="Delete" AnchorPane.rightAnchor="10.0">
             <font>
                 <Font size="10.0" />
             </font>
         </Button>
-        <ColorPicker fx:id="tagColor" editable="true" layoutX="55.0" layoutY="12.0" prefHeight="25.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" AnchorPane.rightAnchor="91.66796875" />
+        <ColorPicker fx:id="tagColor" editable="true" layoutX="45.33203125" layoutY="19.0" prefHeight="25.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" AnchorPane.rightAnchor="91.66796875" />
     </children>
 </AnchorPane>

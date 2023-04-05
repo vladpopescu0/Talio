@@ -2,6 +2,7 @@ package server.api;
 
 import commons.Task;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.TaskRepository;
 
@@ -11,13 +12,16 @@ import java.util.List;
 @RequestMapping("api/tasks")
 public class TaskController {
     private final TaskRepository repo;
+    private final SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the task controller
      * @param repo the task repository used
+     * @param msgs messaging template
      */
-    public TaskController(TaskRepository repo) {
+    public TaskController(TaskRepository repo,SimpMessagingTemplate msgs) {
         this.repo = repo;
+        this.msgs = msgs;
     }
 
     /**
@@ -68,6 +72,7 @@ public class TaskController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(task);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(task);
     }
 
@@ -83,6 +88,7 @@ public class TaskController {
         }
         Task t = repo.findById(id).get();
         repo.deleteById(id);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(t);
     }
 }

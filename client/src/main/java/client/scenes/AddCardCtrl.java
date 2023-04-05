@@ -35,7 +35,6 @@ public class AddCardCtrl {
     public AddCardCtrl(ServerUtils server, MainCtrl mainCtrl) {
         this.mainCtrl = mainCtrl;
         this.server = server;
-
     }
 
     /**

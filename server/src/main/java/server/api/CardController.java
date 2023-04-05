@@ -166,6 +166,7 @@ public class CardController {
             return ResponseEntity.badRequest().build();
         }
         Card c = repo.findById(id).get();
+        msgs.convertAndSend("/topic/deleteCard", c);
         repo.deleteById(id);
         return ResponseEntity.ok(c);
     }
@@ -183,6 +184,7 @@ public class CardController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(card);
     }
 
@@ -225,6 +227,7 @@ public class CardController {
         Card card = repo.getById(id);
         card.addTask(task);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
         return ResponseEntity.ok(task);
     }
 
@@ -253,6 +256,8 @@ public class CardController {
         Card card = repo.getById(id);
         tags.forEach(card::addTag);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
+        msgs.convertAndSend("/topic/tags", id);
         return ResponseEntity.ok(card);
     }
 
@@ -272,6 +277,8 @@ public class CardController {
         Card card = repo.getById(id);
         card.removeTag(tag);
         repo.save(card);
+        msgs.convertAndSend("/topic/tasks", id);
+        msgs.convertAndSend("/topic/tags", id);
         return ResponseEntity.ok(card);
     }
 

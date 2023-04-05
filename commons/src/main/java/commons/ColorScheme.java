@@ -39,10 +39,10 @@ public class ColorScheme{
      * Setter with zero params, sets the colors to some default values
      */
     public ColorScheme(){
-        this.colorBGlight = "#000000"; //black
-        this.colorBGdark = "#000000"; //black
-        this.colorLighter = "#121212"; // grey
-        this.colorFont = "#FFFFFF"; //white
+        this.colorBGlight = "#24919c";
+        this.colorBGdark = "#027883";
+        this.colorLighter = "#59bfc7";
+        this.colorFont = "#FFFFFF";
     }
 
     /**
