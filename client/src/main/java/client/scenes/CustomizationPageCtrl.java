@@ -5,7 +5,6 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.ColorScheme;
 import jakarta.ws.rs.WebApplicationException;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -78,6 +77,9 @@ public class CustomizationPageCtrl implements Initializable {
                 Long.class, q ->  changeColors());
     }
 
+    /**
+     * Changes the colors of the colorpickers
+     */
     public void changeColors(){
         if (board.getColorScheme().getColorLighter() == null) {
             this.getBoardBG().setValue(Color.BLACK);

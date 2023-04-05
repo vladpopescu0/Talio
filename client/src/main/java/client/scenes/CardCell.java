@@ -170,7 +170,8 @@ public class CardCell extends ListCell<Card> {
 //                    this.deleteButton.setOnAction(event ->{
 //
 //                        var c = server.deleteCardfromList
-//                                (this.getItem().getParentCardList().getId(),this.getItem().getId());
+//                                (this.getItem().getParentCardList()
+//                                .getId(),this.getItem().getId());
 //                        if (this.getItem().getTasks() != null) {
 //                            for (Task t : this.getItem().getTasks()) {
 //                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());

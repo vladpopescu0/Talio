@@ -122,21 +122,21 @@ public class CardDetailsViewCtr implements Initializable {
      * Updates the tasks, description and tags
      */
     public void refresh() {
-            if (server.getCardById(card.getId()) != null) {
-                this.card = server.getCardById(card.getId());
-                List<Task> tasks = (card == null || card.getTasks() == null ?
-                        new ArrayList<>() : card.getTasks());
-                taskObservableList = FXCollections.observableList(tasks);
-                taskList.setItems(taskObservableList);
-                taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
-                tagObservableList =
-                        FXCollections.observableList(card == null || card.getTags() == null ?
-                                new ArrayList<>() : card.getTags());
-                tagList.setItems(tagObservableList);
-                tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
-                description.setText(card.getDescription());
-            }
+        if (server.getCardById(card.getId()) != null) {
+            this.card = server.getCardById(card.getId());
+            List<Task> tasks = (card == null || card.getTasks() == null ?
+                    new ArrayList<>() : card.getTasks());
+            taskObservableList = FXCollections.observableList(tasks);
+            taskList.setItems(taskObservableList);
+            taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+            tagObservableList =
+                    FXCollections.observableList(card == null || card.getTags() == null ?
+                            new ArrayList<>() : card.getTags());
+            tagList.setItems(tagObservableList);
+            tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+            description.setText(card.getDescription());
         }
+    }
 
     /**
      * Updates the Tags when changes were made to them
@@ -236,8 +236,9 @@ public class CardDetailsViewCtr implements Initializable {
     /**
      * Pops up a secondary page on which tag to be added can be selected
      * and informs the page that it's popped from a shortcut
+     *
      * @param board Board to which the Card belongs
-     * @param card Card to which Tags may be added
+     * @param card  Card to which Tags may be added
      */
     public void addTagsShortcut(Board board, Card card) {
         mainCtrl.showViewAddTag(board, card, true);

@@ -29,6 +29,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -69,6 +70,14 @@ public class MainCtrl {
     private CardDetailsViewCtr cardDetailsViewCtr;
     private CustomizationPageCtrl customizationPageCtrl;
 
+    private Scene changeBoardPass;
+
+    private EditBoardPasswordViewCtrl changeBoardPassCtrl;
+
+    private Scene checkBoardPass;
+
+    private CheckBoardPasswordViewCtrl checkBoardPassCtrl;
+
     private Scene customizationPage;
     private Scene viewTags;
     private ViewTagsCtrl viewTagsCtrl;
@@ -88,6 +97,8 @@ public class MainCtrl {
 
     private String adminPass = "";
 
+    private HashMap<Long, String> savedPasswords = new HashMap<>();
+
     /**
      * Initializes the application
      *
@@ -104,16 +115,18 @@ public class MainCtrl {
      * @param changeListName     the changeListName scene
      * @param changeServer       the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
-     * @param editBoardName      the editBoardName scene
-     * @param createTag          the createTag scene
-     * @param viewTags           the viewTags scene
-     * @param editTag            the editTag scene
-     * @param joinBoardByLink    the JoinBoardByLink scene
-     * @param viewAddTag         the viewAddTag scene
-     * @param details            the cardDetails scene
-     * @param customizationPage  the CustomizationPage scene
-     * @param helpPage           the HelpPage scene
-     * @param adminCheck         the adminCheck scene
+     * @param editBoardName the editBoardName scene
+     * @param createTag the createTag scene
+     * @param viewTags the viewTags scene
+     * @param editTag the editTag scene
+     * @param joinBoardByLink the JoinBoardByLink scene
+     * @param viewAddTag the viewAddTag scene
+     * @param details the cardDetails scene
+     * @param customizationPage the CustomizationPage scene
+     * @param adminCheck the adminCheck scene
+     * @param editBoardPass the editBoardPassword scene
+     * @param helpPage the HelpPage scene
+     * @param checkBoardPass the checkBoardPassword scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage, Stage helpStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -135,8 +148,12 @@ public class MainCtrl {
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
+                            Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
+                           Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass,
                            Pair<HelpCtrl, Parent> helpPage) {
+
         this.primaryStage = primaryStage;
+
         this.secondaryStage = secondaryStage;
         this.helpStage = helpStage;
 
@@ -199,6 +216,11 @@ public class MainCtrl {
 
         this.helpPageCtrl = helpPage.getKey();
         this.helpPage = new Scene(helpPage.getValue());
+        this.changeBoardPassCtrl = editBoardPass.getKey();
+        this.changeBoardPass = new Scene(editBoardPass.getValue());
+
+        this.checkBoardPassCtrl = checkBoardPass.getKey();
+        this.checkBoardPass = new Scene(checkBoardPass.getValue());
 
         showUserView();
         primaryStage.show();
@@ -279,6 +301,26 @@ public class MainCtrl {
         showSecondaryStage(editBoardName, "Edit board name: " + board.getName());
 
         this.editBoardNameViewCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the change Password scene for the given board
+     * @param board the board to change
+     */
+    public void showChangeBoardPasswordView(Board board) {
+        showSecondaryStage(changeBoardPass, "Edit board password");
+
+        this.changeBoardPassCtrl.setBoard(board);
+    }
+
+    /**
+     * Shows the Check password scene for the given board
+     * @param board The board to check
+     */
+    public void showCheckBoardPasswordView(Board board) {
+        showSecondaryStage(checkBoardPass, "Check board password");
+
+        this.checkBoardPassCtrl.setBoard(board);
     }
 
     /**
@@ -551,18 +593,30 @@ public class MainCtrl {
         button.setStyle(style);
     }
 
+    /**
+     * @param isAdmin boolean if user is admin
+     */
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
 
+    /**
+     * @return boolean if user is admin
+     */
     public boolean isAdmin() {
         return this.isAdmin;
     }
 
+    /**
+     * @return the admin password
+     */
     public String getAdminPass() {
         return adminPass;
     }
 
+    /**
+     * @param pass the admin password
+     */
     public void setAdminPass(String pass) {
         this.adminPass = pass;
     }
@@ -665,6 +719,7 @@ public class MainCtrl {
     }
 
     /**
+<<<<<<< HEAD
      * @return the primary stage
      */
     public Stage getPrimaryStage() {
@@ -694,5 +749,34 @@ public class MainCtrl {
      */
     public Node getFocusedNode() {
         return primaryStage.getScene().getFocusOwner();
+    }
+    /**
+     * Gets the map of saved passwords
+     * @return Map of board ID to saved password
+     */
+    public HashMap<Long, String> getSavedPasswords() {
+        return savedPasswords;
+    }
+
+    /**
+     * Sets the map of saved passwords
+     * @param savedPasswords Map of Board ID to Password (String)
+     */
+    public void setSavedPasswords(HashMap<Long, String> savedPasswords) {
+        this.savedPasswords = savedPasswords;
+    }
+
+    /**
+     * Updates the map of saved passwords by replacing a password if one exists,
+     * otherwise adding it
+     * @param id Board ID
+     * @param pass Password
+     */
+    public void updatePassword(long id, String pass) {
+        if (this.savedPasswords.containsKey(id)) {
+            this.savedPasswords.replace(id, pass);
+        } else {
+            this.savedPasswords.put(id, pass);
+        }
     }
 }
