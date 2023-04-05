@@ -33,7 +33,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.input.KeyEvent;
 
 public class ViewAddTagsCtrl implements Initializable {
     private final ServerUtils server;

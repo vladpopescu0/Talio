@@ -14,12 +14,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.skin.VirtualFlow;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-import java.awt.event.FocusEvent;
 import java.util.*;
 
 import static client.scenes.MainCtrl.cardDataFormat;
