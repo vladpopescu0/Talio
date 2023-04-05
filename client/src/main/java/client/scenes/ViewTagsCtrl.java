@@ -15,24 +15,19 @@
  */
 package client.scenes;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-public class ViewTagsCtrl implements Initializable {
+public class ViewTagsCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -62,16 +57,9 @@ public class ViewTagsCtrl implements Initializable {
 
     /**
      * Initializer for the ViewTags scene
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         tagsView.setPlaceholder(new Label("There are currently no tags available"));
         tagObservableList = FXCollections.observableList(board.getTags());
         tagsView.setItems(tagObservableList);

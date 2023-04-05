@@ -9,7 +9,6 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -17,12 +16,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import javax.inject.Inject;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class CardDetailsViewCtr implements Initializable {
+public class CardDetailsViewCtr {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
     private Card card;
@@ -75,17 +72,14 @@ public class CardDetailsViewCtr implements Initializable {
     }
 
     /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Initialized the card Details view
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void init() {
         //cancelButton.setDisable(true);
+        server.setSession(ServerUtils.getUrl());
         editButton.setVisible(true);
         cancelButton.setVisible(false);
-        confirmButton.setVisible(true);
+        confirmButton.setVisible(false);
         description.setText(card.getDescription());
         description.setEditable(false);
         List<Task> tasks = (card == null || card.getTasks() == null ?

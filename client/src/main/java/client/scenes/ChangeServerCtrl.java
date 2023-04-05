@@ -1,18 +1,15 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.User;
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 public class ChangeServerCtrl {
 
@@ -25,14 +22,24 @@ public class ChangeServerCtrl {
     @FXML
     private Label errorLabel;
 
+    @FXML
+    private Button changeButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button selectServer;
+
 
     /**
      * Injects mainCtrl and ServerUtils to controller
+     *
      * @param mainCtrl Injected main controller
-     * @param server Injected server utils
+     * @param server   Injected server utils
      */
     @Inject
-    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server){
+    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -42,10 +49,12 @@ public class ChangeServerCtrl {
      */
     @FXML
     private void handleShortcuts(KeyEvent event) {
-        switch(event.getCode()) {
-            case ENTER: changeServer();
+        switch (event.getCode()) {
+            case ENTER:
+                changeServer();
                 break;
-            case ESCAPE: cancel();
+            case ESCAPE:
+                cancel();
                 break;
         }
     }
@@ -54,9 +63,10 @@ public class ChangeServerCtrl {
      * Initializes the scene with the current server in the server field,
      * as well as setting the error message to be invisible
      */
-    public void initialize(){
+    public void initialize() {
         serverField.setText(ServerUtils.getServer());
         errorLabel.setVisible(false);
+        selectServer.setVisible(false);
     }
 
     /**
@@ -66,48 +76,7 @@ public class ChangeServerCtrl {
      * address
      */
     public void changeServer() {
-        String newServer = serverField.getText();
-        String oldServer = ServerUtils.getServer();
-        ServerUtils.setServer(newServer);
-        String currUsername = mainCtrl.getCurrentUser().getUsername();
-        boolean notfound;
-        try {
-            notfound = server.getUserByUsername(currUsername).isEmpty();
-        } catch (ProcessingException e) {
-            ServerUtils.setServer(oldServer);
-            errorLabel.setVisible(true);
-            return;
-        }
-
-        if (newServer == null || newServer.isEmpty()) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("You need to input a server!");
-            alert.showAndWait();
-            return;
-        }
-
-        ServerUtils.setServer(newServer);
-
-        if (notfound) {
-            User newUser = new User(currUsername);
-            try {
-                server.addUser(newUser);
-            } catch (WebApplicationException e) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-                return;
-            }
-            mainCtrl.setCurrentUser(server.getUserByUsername(currUsername).get(0));
-            mainCtrl.getCurrentUser().setBoardList(new ArrayList<>());
-        } else {
-            mainCtrl.setCurrentUser(server.getUserByUsername(currUsername).get(0));
-            mainCtrl.getCurrentUser().setBoardList(server.getBoardsByUserId(
-                    mainCtrl.getCurrentUser().getId()));
-        }
-        errorLabel.setVisible(false);
+        decideServer();
         mainCtrl.closeSecondaryStage();
         mainCtrl.getOverviewCtrl().refresh();
     }
@@ -115,9 +84,82 @@ public class ChangeServerCtrl {
     /**
      * Goes back to the board overview page
      */
-    public void cancel(){
+    public void cancel() {
         serverField.clear();
         errorLabel.setVisible(false);
         mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Shows the scene as the first scene shown in the app
+     */
+    public void startScene() {
+        backButton.setVisible(false);
+        changeButton.setVisible(false);
+        selectServer.setVisible(true);
+    }
+
+    /**
+     * Shows the scene as a pop up to change server
+     */
+    public void showAsPopUp() {
+        backButton.setVisible(true);
+        changeButton.setVisible(true);
+        selectServer.setVisible(false);
+    }
+
+    /**
+     * Sets a server when the button is pressed
+     */
+    public void setServer() {
+        decideServer();
+        mainCtrl.getBoardsOverviewCtrl().init();
+    }
+
+    /**
+     * Decides if the server can be reached, and connects to it if so
+     */
+    public void decideServer() {
+        String newServer = serverField.getText();
+        ServerUtils.setServer(newServer);
+        if (newServer == null || newServer.isEmpty()) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to input a server!");
+            alert.showAndWait();
+            return;
+        }
+        ServerUtils.setServer(newServer);
+        ServerUtils.setUrlFromServer(newServer);
+        try {
+            server.setSession(ServerUtils.getUrl());
+        } catch (Exception e) {
+            errorLabel.setVisible(true);
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.
+                    setContentText("The server you entered does not exist " +
+                            "or the format is incorrect!");
+            alert.showAndWait();
+            return;
+        }
+
+        if (server.getSession() != null) {
+            errorLabel.setVisible(false);
+            mainCtrl.getBoardsOverviewCtrl().init();
+            mainCtrl.getBoardViewCtrl().init();
+            mainCtrl.getViewTagsCtrl().init();
+            mainCtrl.getViewAddTagsCtrl().init();
+            mainCtrl.getCardDetailsViewCtr().init();
+            mainCtrl.getCustomizationPageCtrl().init();
+            errorLabel.setVisible(false);
+            mainCtrl.showUserView();
+        } else {
+            errorLabel.setVisible(true);
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("There was a problem when trying to connect to the server!");
+            alert.showAndWait();
+        }
     }
 }

@@ -15,33 +15,30 @@
  */
 package client.scenes;
 
-import java.awt.*;
-import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.CardList;
+import commons.Tag;
 import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.util.Duration;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
-public class BoardViewCtrl implements Initializable {
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+
+public class BoardViewCtrl {
 
     @SuppressWarnings("unused")
     private final ServerUtils server;
@@ -64,16 +61,14 @@ public class BoardViewCtrl implements Initializable {
     private ListView<CardList> cardListView;
 
     @FXML
-    private Button removeButton;
-
+    private Button leaveButton;
+    @FXML
+    private Button deleteButton;
     private ObservableList<CardList> cardListObservableList;
-
     @FXML
     private Button editTitle;
-
     @FXML
     private Button addList;
-
     @FXML
     private Button customizeButton;
 
@@ -85,11 +80,13 @@ public class BoardViewCtrl implements Initializable {
     private Button copyInviteButton;
     @FXML
     private Button viewTags;
-    @FXML
-    private Button boardPass;
 
     @FXML
+    private Button boardPass;
+    @FXML
     private Label copyLabel;
+    @FXML
+    private Label boardTitle;
 
     /**
      * Constructor of the Controller for BoardView
@@ -108,14 +105,9 @@ public class BoardViewCtrl implements Initializable {
 
     /**
      * Runs upon initialization of the controller
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
@@ -142,17 +134,25 @@ public class BoardViewCtrl implements Initializable {
                 (board.isHasPassword() && (!mainCtrl.getSavedPasswords().containsKey(board.getId())
                 || !server.checkBoardPassword(mainCtrl.getSavedPasswords().get(
                         board.getId()), board.getId())))) {
-            removeButton.setDisable(true);
+            leaveButton.setDisable(true);
+            deleteButton.setDisable(true);
             editTitle.setDisable(true);
             addList.setDisable(true);
             cardListView.setDisable(true);
             viewTags.setDisable(true);
+            customizeButton.setDisable(true);
+            copyInviteButton.setDisable(true);
+            boardPass.setDisable(true);
         } else {
-            removeButton.setDisable(false);
+            leaveButton.setDisable(false);
+            deleteButton.setDisable(false);
             editTitle.setDisable(false);
             addList.setDisable(false);
             cardListView.setDisable(false);
             viewTags.setDisable(false);
+            customizeButton.setDisable(false);
+            copyInviteButton.setDisable(false);
+            boardPass.setDisable(false);
         }
     }
 
@@ -192,6 +192,7 @@ public class BoardViewCtrl implements Initializable {
                     new CardListCell(mainCtrl, server, board)
             );
             customizeBoard(board);
+            boardTitle.setText(board.getName());
         }
     }
 
@@ -257,7 +258,7 @@ public class BoardViewCtrl implements Initializable {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.closeSecondaryStage();
+        //mainCtrl.closeSecondaryStage();
         mainCtrl.showUserBoardOverview();
     }
 
@@ -306,13 +307,15 @@ public class BoardViewCtrl implements Initializable {
 
         mainCtrl.setButtonStyle(editTitle, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(removeButton, board.getColorScheme().getColorLighter()
+        mainCtrl.setButtonStyle(leaveButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(addList, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(allBoardsButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(myBoardsButton, board.getColorScheme().getColorLighter()
+                , board.getColorScheme().getColorFont());
+        mainCtrl.setButtonStyle(deleteButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
         mainCtrl.setButtonStyle(customizeButton, board.getColorScheme().getColorLighter()
                 , board.getColorScheme().getColorFont());
@@ -391,5 +394,32 @@ public class BoardViewCtrl implements Initializable {
         StringSelection stringSelection = new StringSelection(inviteCode);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+    }
+
+    /**
+     * Deletes a board and all lists of it from the database
+     */
+    public void deleteBoard() {
+        board.removeUser(mainCtrl.getCurrentUser());
+        server.updateBoard(board);
+        mainCtrl.getCurrentUser().setBoardList(server.
+                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+        if (board.getList() != null) {
+            for (CardList cl : board.getList()) {
+                server.removeCL(cl.getId());
+            }
+        }
+        if (board.getTags() != null) {
+            for (Tag t : board.getTags()) {
+                server.removeTag(t.getId());
+            }
+        }
+        //if (board.getCardsColorSchemesList() != null) {
+        //    for (ColorScheme c : board.getCardsColorSchemesList()) {
+        //        server.deleteColorSchemeById(c.getId());
+        //    }
+        //}
+        server.deleteBoard(board.getId());
+        mainCtrl.showUserBoardOverview();
     }
 }

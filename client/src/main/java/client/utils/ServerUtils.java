@@ -42,8 +42,40 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-    private static String server = "http://localhost:8080/";
-    private String url = server.replace("http", "ws") + "websocket";
+    private static String server;
+    private static String url;
+    private StompSession session;
+
+    /** Sets the url for the websockets
+     * @param server the server
+     */
+    public static void setUrlFromServer(String server){
+        ServerUtils.url = server.replace("http","ws") + "websocket";
+    }
+
+    /**
+     * Getter for the url
+     * @return the url
+     */
+    public static String getUrl() {
+        return ServerUtils.url;
+    }
+
+    /**
+     * Setter for the session
+     * @param url the url to connect to
+     */
+    public void setSession(String url) {
+        this.session = connect(url);
+    }
+
+    /**
+     * Getter for the session
+     * @return the session
+     */
+    public StompSession getSession() {
+        return this.session;
+    }
 
     /**
      * Sets static server variable
@@ -387,14 +419,13 @@ public class ServerUtils {
                 .accept(APPLICATION_JSON) //
                 .get();
 
-        if(res.getStatus() != 200){
+        //Get parent
+        if (res.getStatus() != 200) {
             return null;
         }
 
         Card c = res.readEntity(Card.class);
         return c;
-
-        //Get parent
     }
 
     /**
@@ -497,6 +528,19 @@ public class ServerUtils {
     public Response deleteCard(long id) {
         return ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/cards/delete/" + id) //
+                .request(APPLICATION_JSON) //
+                .accept(APPLICATION_JSON) //
+                .delete();
+    }
+
+    /**
+     * Deletes a board from the database
+     * @param id the id of the board
+     * @return a response indicating the board is deleted
+     */
+    public Response deleteBoard(long id) {
+        return ClientBuilder.newClient(new ClientConfig()) //
+                .target(server).path("api/boards/delete/" + id) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .delete();
@@ -743,15 +787,13 @@ public class ServerUtils {
                 .post(Entity.entity(cardList, APPLICATION_JSON), CardList.class);
     }
 
-    private StompSession session = connect(url);
-
     /**
      * Connects the handler to a URL
      *
      * @param URL the URL to be used
      * @return the session
      */
-    private StompSession connect(String URL) {
+    public StompSession connect(String URL) {
         var client = new StandardWebSocketClient();
         var stomp = new WebSocketStompClient(client);
         stomp.setMessageConverter(new MappingJackson2MessageConverter());
@@ -761,7 +803,7 @@ public class ServerUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException();
         }
         throw new IllegalStateException();
     }
@@ -775,6 +817,9 @@ public class ServerUtils {
      * @param <T>         generics
      */
     public <T> void registerForUpdates(String destination, Class<T> type, Consumer<T> consumer) {
+        if(session == null){
+            return;
+        }
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {

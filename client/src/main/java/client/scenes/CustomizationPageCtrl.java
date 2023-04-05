@@ -8,18 +8,15 @@ import jakarta.ws.rs.WebApplicationException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class CustomizationPageCtrl implements Initializable {
+public class CustomizationPageCtrl {
 
     private final MainCtrl mainCtrl;
 
@@ -61,13 +58,9 @@ public class CustomizationPageCtrl implements Initializable {
     }
 
     /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Initializer for Customization Page
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void init() {
         List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
                 new ArrayList<>() : board.getCardsColorSchemesList());
         colorPairObservableList = FXCollections.observableList(colors);

@@ -28,7 +28,7 @@
          </font>
       </Button>
       <Button fx:id="cancelButton" layoutX="321.0" layoutY="16.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #59bfc7;" text="Cancel" />
-      <Button fx:id="confirmButton" layoutX="380.0" layoutY="16.0" mnemonicParsing="false" onAction="#confirm" style="-fx-background-color: #59bfc7;" text="Confirm" />
+      <Button fx:id="confirmButton" layoutX="380.0" layoutY="16.0" mnemonicParsing="false" onAction="#confirm" prefHeight="25.0" prefWidth="51.0" style="-fx-background-color: #59bfc7;" text="Save" />
       <ImageView fitHeight="19.0" fitWidth="19.0" layoutX="37.0" layoutY="18.0" onMouseClicked="#moveUp" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/ArrowUp.png" />

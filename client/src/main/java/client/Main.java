@@ -120,6 +120,5 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(e -> {
             overview.getKey().stop();
         });
-
     }
 }

@@ -15,12 +15,12 @@
                   <Font size="14.0" />
                </font>
             </TextField>
-            <Button layoutX="332.0" layoutY="165.0" mnemonicParsing="false" onAction="#editName" style="-fx-background-color: #00C9A7;" text="Save" textFill="#efeeee">
+            <Button layoutX="300.0" layoutY="165.0" mnemonicParsing="false" onAction="#editName" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Save" textFill="#efeeee">
                <font>
                   <Font size="14.0" />
                </font>
             </Button>
-            <Button fx:id="cancel" layoutX="80.0" layoutY="165.0" mnemonicParsing="false" onAction="#cancel" style="-fx-background-color: #00C9A7;" text="Cancel" textFill="#efeeee">
+            <Button fx:id="cancel" layoutX="80.0" layoutY="165.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Cancel" textFill="#efeeee">
                <font>
                   <Font size="14.0" />
                </font>

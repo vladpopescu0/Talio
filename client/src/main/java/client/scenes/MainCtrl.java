@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MainCtrl {
-    private Board board;
+
     private Stage primaryStage;
     private Stage secondaryStage;
     private Stage helpStage;
@@ -216,16 +216,17 @@ public class MainCtrl {
 
         this.helpPageCtrl = helpPage.getKey();
         this.helpPage = new Scene(helpPage.getValue());
+
         this.changeBoardPassCtrl = editBoardPass.getKey();
         this.changeBoardPass = new Scene(editBoardPass.getValue());
 
         this.checkBoardPassCtrl = checkBoardPass.getKey();
         this.checkBoardPass = new Scene(checkBoardPass.getValue());
-
-        showUserView();
         primaryStage.show();
+
         helpStage.setScene(this.helpPage);
 
+        showSelectServer();
         primaryStage.setOnCloseRequest(event -> {
             closeSecondaryStage();
             closeHelpStage();
@@ -464,6 +465,17 @@ public class MainCtrl {
     public void showChangeServer() {
         this.changeServerCtrl.initialize();
         showSecondaryStage(changeServer, "Change Server");
+        this.changeServerCtrl.showAsPopUp();
+    }
+
+    /**
+     * Shows the selectServer scene
+     */
+    public void showSelectServer() {
+        this.changeServerCtrl.initialize();
+        primaryStage.setTitle("Select a server");
+        this.primaryStage.setScene(changeServer);
+        this.changeServerCtrl.startScene();
     }
 
     /**
@@ -719,7 +731,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * @return the primary stage
      */
     public Stage getPrimaryStage() {
@@ -750,6 +761,14 @@ public class MainCtrl {
     public Node getFocusedNode() {
         return primaryStage.getScene().getFocusOwner();
     }
+
+    /**
+     * Getter for the boardOverviewCtrl
+     * @return the boardOverviewCtrl
+     */
+    public BoardsOverviewCtrl getBoardsOverviewCtrl() {
+        return this.overviewCtrl;
+    }
     /**
      * Gets the map of saved passwords
      * @return Map of board ID to saved password
@@ -778,5 +797,12 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+    }
+
+    /**
+     * When the user changes, all saved passwords should be forgotten
+     */
+    public void forgetPasswords() {
+        savedPasswords = new HashMap<>();
     }
 }

@@ -15,7 +15,7 @@
                     <font>
                         <Font size="14.0" />
                     </font></TextField>
-                <Button fx:id="submitButton" layoutX="260.0" layoutY="153.0" mnemonicParsing="false" onAction="#createNewBoard" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #00C9A7;" text="Create Board">
+                <Button fx:id="submitButton" layoutX="311.0" layoutY="153.0" mnemonicParsing="false" onAction="#createNewBoard" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Save">
                     <font>
                         <Font size="14.0" />
                     </font>
@@ -24,7 +24,7 @@
                     <font>
                         <Font size="16.0" />
                     </font></Label>
-                <Button fx:id="backButton" layoutX="63.0" layoutY="153.0" mnemonicParsing="false" onAction="#toBoardsOverview" prefHeight="23.0" prefWidth="50.0" style="-fx-background-color: #00C9A7;" text="Back">
+                <Button fx:id="backButton" layoutX="63.0" layoutY="153.0" mnemonicParsing="false" onAction="#toBoardsOverview" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #00C9A7;" text="Cancel">
                     <font>
                         <Font size="14.0" />
                     </font></Button></children></AnchorPane>
