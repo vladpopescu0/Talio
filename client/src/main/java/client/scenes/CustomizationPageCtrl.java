@@ -1,10 +1,12 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
+import client.utils.SocketHandler;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.ColorScheme;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -24,6 +26,8 @@ public class CustomizationPageCtrl implements Initializable {
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
+
+    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
 
     private Board board;
 
@@ -73,6 +77,12 @@ public class CustomizationPageCtrl implements Initializable {
         colorPairObservableList = FXCollections.observableList(colors);
         colorPairList.setItems(colorPairObservableList);
         colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+        socketHandler.registerForUpdates("/topic/colors",
+                ColorScheme.class, q -> Platform.runLater(() -> {
+                    colorPairObservableList.add(q);
+                    refresh();
+                }));
+
     }
 
     /** Sets the board to be customized
@@ -107,6 +117,7 @@ public class CustomizationPageCtrl implements Initializable {
                 .setColorFont(mainCtrl.colorToHex(listFont.getValue()));
         this.board = server.addBoard(board);
         mainCtrl.showBoardView(board);
+        mainCtrl.closeSecondaryStage();
     }
 
     /**
@@ -126,6 +137,10 @@ public class CustomizationPageCtrl implements Initializable {
     * Updates the tasks and description
      */
     public void refresh() {
+        if(board==null){
+            return;
+        }
+        board = server.getBoardByID(board.getId());
         List<ColorScheme> colorsCards = (board == null || board.getCardsColorSchemesList() == null ?
                 new ArrayList<>() : board.getCardsColorSchemesList());
         colorPairObservableList = FXCollections.observableList(colorsCards);
@@ -185,8 +200,8 @@ public class CustomizationPageCtrl implements Initializable {
         ColorScheme newDefaultColorScheme = server.addColorScheme(new ColorScheme());
         board.getCardsColorSchemesList().add(newDefaultColorScheme);
         server.updateBoard(board);
-        refresh();
-        this.mainCtrl.showCustomizationPage(board);
+        //refresh();
+        //this.mainCtrl.showCustomizationPage(board);
     }
 
     /**

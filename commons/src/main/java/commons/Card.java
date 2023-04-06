@@ -31,9 +31,11 @@ public class Card {
     private List<Task> tasks;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH, CascadeType.REMOVE},fetch = FetchType.LAZY)
+        CascadeType.REFRESH},fetch = FetchType.LAZY)
     private List<Tag> tags;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private ColorScheme colors;
     /**
      * Empty constructor
      */
@@ -59,6 +61,7 @@ public class Card {
         parentCardList = cardList;
         tasks = new ArrayList<>();
         tags = new ArrayList<>();
+        colors = new ColorScheme("black","black","black","black");
     }
 
     /**
@@ -68,14 +71,16 @@ public class Card {
      * @param tasks the tasks making up the card
      * @param tags the Tags attached to the Card
      * @param description the description of the card
+     * @param colors the custom Colorscheme of the card
      */
     public Card(String name, CardList cardList, List<Task> tasks,
-                List<Tag> tags, String description) {
+                List<Tag> tags, String description, ColorScheme colors) {
         this.name = name;
         this.tasks = tasks;
         parentCardList = cardList;
         this.tags = tags;
         this.description = description;
+        this.colors = colors;
     }
 
     /**
@@ -222,6 +227,22 @@ public class Card {
      */
     public void removeTag(Tag tag) {
         tags = tags.stream().filter(t -> t.getId() != tag.getId()).collect(Collectors.toList());
+    }
+
+    /**
+     * Setter for the colors field
+     * @param colors the new colorScheme
+     */
+    public void setColors(ColorScheme colors){
+        this.colors = colors;
+    }
+
+    /**
+     * getter for the colors field
+     * @return the color scheme of the card
+     */
+    public ColorScheme getColors(){
+        return colors;
     }
 
     /**

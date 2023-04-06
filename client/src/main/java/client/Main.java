@@ -97,7 +97,6 @@ public class Main extends Application {
 
         var helpPage = FXML.load(HelpCtrl.class,
                 "client", "scenes", "HelpView.fxml");
-
         var viewChangeBoardPass = FXML.load(EditBoardPasswordViewCtrl.class,
                 "client", "scenes", "EditBoardPasswordView.fxml");
 
@@ -109,10 +108,13 @@ public class Main extends Application {
         secondaryStage.setResizable(false);
         Stage helpStage = new Stage();
         helpStage.setResizable(false);
-        mainCtrl.initialize(primaryStage, secondaryStage, helpStage, overview, boardView,
-                createList, createBoardCtrl, add, userCtrl, editCard, changeListNameCtrl,
+        mainCtrl.initialize(primaryStage, secondaryStage, helpStage,overview, boardView, createList,
+                createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag,
-                helpPage, viewChangeBoardPass, viewCheckBoardPass);
+                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag
+                ,helpPage, viewChangeBoardPass, viewCheckBoardPass);
+        primaryStage.setOnCloseRequest(e -> {
+            overview.getKey().stop();
+        });
     }
 }

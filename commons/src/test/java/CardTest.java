@@ -1,7 +1,4 @@
-import commons.Card;
-import commons.CardList;
-import commons.Tag;
-import commons.Task;
+import commons.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -46,7 +43,7 @@ public class CardTest {
     @Test
     public void getDescriptionTest() {
         Card c = new Card("Card", new CardList(),
-                new ArrayList<>(), new ArrayList<>(), "aa");
+                new ArrayList<>(), new ArrayList<>(), "aa",new ColorScheme());
         assertEquals(c.getDescription(), "aa");
     }
 
@@ -56,7 +53,7 @@ public class CardTest {
     @Test
     public void setDescriptionTest() {
         Card c = new Card("Card", new CardList(),
-                new ArrayList<>(), new ArrayList<>(), "desc");
+                new ArrayList<>(), new ArrayList<>(), "desc",new ColorScheme());
         assertEquals(c.getDescription(), "desc");
     }
 
@@ -66,10 +63,10 @@ public class CardTest {
     @Test
     public void hasDescriptionTest() {
         Card c = new Card("Card", new CardList(),
-                new ArrayList<>(), new ArrayList<>(), "desc");
+                new ArrayList<>(), new ArrayList<>(), "desc",new ColorScheme());
         assertTrue(c.hasDescription());
         Card c1 = new Card("Card", new CardList(), new ArrayList<>(),
-                new ArrayList<>(), "");
+                new ArrayList<>(), "",new ColorScheme());
         assertFalse(c1.hasDescription());
         c1.setDescription(null);
         assertFalse(c1.hasDescription());
@@ -94,7 +91,7 @@ public class CardTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
-        Card c = new Card("a", new CardList(), list, tagList, "a");
+        Card c = new Card("a", new CardList(), list, tagList, "a",new ColorScheme());
         assertEquals(list, c.getTasks());
     }
 
@@ -117,7 +114,7 @@ public class CardTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
-        Card c = new Card("a", new CardList(), list, tagList, "a");
+        Card c = new Card("a", new CardList(), list, tagList, "a",new ColorScheme());
         Task t4 = new Task("4");
         c.addTask(t4);
         List<Task> newList = new ArrayList<>();
@@ -148,7 +145,7 @@ public class CardTest {
         tagList.add(tag2);
         tagList.add(tag3);
         Card c = new Card("a", new CardList(),
-                new ArrayList<>(), tagList, "a");
+                new ArrayList<>(), tagList, "a",new ColorScheme());
         c.setTasks(list);
         assertEquals(c.getTasks(), list);
     }
@@ -173,7 +170,7 @@ public class CardTest {
         tagList.add(tag2);
         tagList.add(tag3);
         Card c = new Card("c", new CardList(),
-                new ArrayList<>(), tagList, "desc");
+                new ArrayList<>(), tagList, "desc",new ColorScheme());
         assertEquals("", c.tasksLabel());
         c.setTasks(list);
         assertEquals(c.tasksLabel(), "(0/3 done)");
@@ -202,7 +199,7 @@ public class CardTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
-        Card c = new Card("a", new CardList(), list, tagList, "a");
+        Card c = new Card("a", new CardList(), list, tagList, "a",new ColorScheme());
         assertEquals(tagList, c.getTags());
     }
 
@@ -226,7 +223,7 @@ public class CardTest {
         tagList.add(tag2);
         tagList.add(tag3);
         Card c = new Card("a", new CardList(),
-                list, new ArrayList<>(), "a");
+                list, new ArrayList<>(), "a",new ColorScheme());
         c.setTags(tagList);
         assertEquals(c.getTags(), tagList);
     }
@@ -250,7 +247,7 @@ public class CardTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
-        Card c = new Card("a", new CardList(), list, tagList, "a");
+        Card c = new Card("a", new CardList(), list, tagList, "a",new ColorScheme());
         Tag tag4 = new Tag("tag4");
         c.addTag(tag4);
         List<Tag> newList = new ArrayList<>();
@@ -283,7 +280,7 @@ public class CardTest {
         tagList.add(tag1);
         tagList.add(tag2);
         tagList.add(tag3);
-        Card c = new Card("a", new CardList(), list, tagList, "a");
+        Card c = new Card("a", new CardList(), list, tagList, "a",new ColorScheme());
         c.removeTag(tag2);
         List<Tag> newList = new ArrayList<>();
         newList.add(tag1);

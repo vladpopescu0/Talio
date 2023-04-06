@@ -15,12 +15,7 @@
  */
 package client.scenes;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import client.utils.SocketHandler;
 import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
 import commons.Board;
 import javafx.application.Platform;
@@ -28,15 +23,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 
-public class BoardsOverviewCtrl implements Initializable {
+/*Not imlementing initializable is required because otherwise, the ctrl tries to look for
+the current server when the app starts, which is impossible, since it has not been
+selected yet by the user*/
+public class BoardsOverviewCtrl {
 
     private final ServerUtils server;
-    private final MainCtrl mainCtrl;//must change mainCtrl
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
+    private final MainCtrl mainCtrl;
 
     private ObservableList<Board> data;
     @FXML
@@ -46,9 +42,9 @@ public class BoardsOverviewCtrl implements Initializable {
     @FXML
     private TableColumn<Board, String> colBoardName;
     @FXML
-    private TableColumn<Board, String> colCreator;
-    @FXML
     private Button deleteButton;
+    @FXML
+    private Label userLabel;
 
     /**
      * Constructor for the BoardsOverviewCtrl
@@ -64,33 +60,34 @@ public class BoardsOverviewCtrl implements Initializable {
 
     /**
      * Initializer for the BoardsOverview scene
-     *
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
-        colCreator.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().listUsernames()));
-        socketHandler.registerForUpdates("/topic/boards",
+    public void initializ() {
+        server.setSession(server.getUrl());
+        colBoardName.setCellValueFactory(q ->
+                new SimpleStringProperty(q.getValue().getName()));
+        //long polling
+        server.getBoardUpdates(q -> {
+            data.add(q);
+            refresh();
+        });
+        //websockets
+        server.registerForUpdates("/topic/boardsUpdate",
                 Board.class, q -> Platform.runLater(() -> {
-                    data.add(q);
                     refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
+                    mainCtrl.getPrimaryStage()
+                            .setTitle(mainCtrl.getBoardViewCtrl().getBoard().getName());
                 }));
-        socketHandler.registerForUpdates("/topic/boardsUpdate",
-                Board.class, q -> Platform.runLater(() -> {
-                    refresh();
-                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
-                }));
-        socketHandler.registerForUpdates("/topic/boardsRenameDeleteAdd",
+        server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-
+//        server.registerForUpdates("/topic/refreshUsers",
+//                Long.class, q -> Platform.runLater(() -> {
+//                    refresh();
+//                }));
     }
 
     /**
@@ -108,6 +105,7 @@ public class BoardsOverviewCtrl implements Initializable {
         data = FXCollections.observableList(boards);
         table.setItems(data);
         this.serverLabel.setText(ServerUtils.getServer());
+        this.userLabel.setText(mainCtrl.getCurrentUser().getUsername());
         deleteButton.setVisible(mainCtrl.isAdmin());
     }
 
@@ -117,7 +115,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void joinBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             if (table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -142,7 +140,9 @@ public class BoardsOverviewCtrl implements Initializable {
                     return;
                 }
             }
+            mainCtrl.showBoardView(b);
             mainCtrl.showCheckBoardPasswordView(b);
+
         } else {
             b.addUser(mainCtrl.getCurrentUser());
             b = server.updateBoard(b);
@@ -158,7 +158,7 @@ public class BoardsOverviewCtrl implements Initializable {
      */
     public void showBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             if (table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
@@ -176,9 +176,9 @@ public class BoardsOverviewCtrl implements Initializable {
     /**
      * Deletes the selected board, given the user has admin privileges
      */
-    public void deleteBoard(){
+    public void deleteBoard() {
         Board b = table.getSelectionModel().getSelectedItem();
-        if(b == null){
+        if (b == null) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText("You need to select a board!");
@@ -214,7 +214,21 @@ public class BoardsOverviewCtrl implements Initializable {
     /**
      * Redirects the user to the join board by code scene
      */
-    public void toJoinByLink(){
+    public void toJoinByLink() {
         mainCtrl.showJoinBoardByLink();
+    }
+
+    /**
+     * Stops the executors
+     */
+    public void stop(){
+        server.stop();
+    }
+
+    /**
+     * Redirects to the log in page
+     */
+    public void changeUser() {
+        mainCtrl.showUserView();
     }
 }

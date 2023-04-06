@@ -14,13 +14,23 @@
  * limitations under the License.
  */
 package client.scenes;
-
+import client.utils.ServerUtils;
+import commons.User;
+import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 
-public class MainCtrlTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class MainCtrlTest extends MainCtrl{
 
     private MainCtrl sut;
+    private MockStage primaryStageMock;
+    private MockStage secondaryStageMock;
+    private MockStage helpStageMock;
+
+    private AddCardCtrlTest addCardCtrlTest;
 
     /**
      * sets up the mainCtrl for the application
@@ -28,13 +38,99 @@ public class MainCtrlTest {
     @BeforeEach
     public void setup() {
         sut = new MainCtrl();
+        primaryStageMock = new MockStage();
+        secondaryStageMock = new MockStage();
+        helpStageMock = new MockStage();
+        addCardCtrlTest = new AddCardCtrlTest(new ServerUtils(),this);
     }
 
     /**
-
+     * test for the color to hex
+     */
     @Test
-    public void writeSomeTests() {
-        // TODO create replacement objects and write some tests
-        // sut.initialize(null, null, null);
-    }*/
+    public void colorToHexTest(){
+        String testColor = sut.colorToHex(new Color(1,0,1,1));
+        assertEquals(testColor,"#FF00FF");
+    }
+
+    /**
+     * double test for id setter and getter
+     */
+    @Test
+    public void idSetterAndGetterTest(){
+        sut.setId(34);
+        assertEquals(sut.getId(),34);
+    }
+
+    /**
+     * double test for the card id setter and getter
+     */
+    @Test
+    public void cardIdSetterAndGetterTest(){
+        sut.setCardId(34);
+        assertEquals(sut.getCardId(),34);
+    }
+
+    /**
+     * set admin and is admin test
+     */
+    @Test
+    public void setAdminIsAdminTest(){
+        sut.setAdmin(false);
+        assertFalse(sut.isAdmin());
+    }
+
+    /**
+     * admin password test
+     */
+    @Test
+    public void adminPassTest(){
+        String pass = "cabdpRmPiEjh";
+        sut.setAdminPass(pass);
+        assertEquals(sut.getAdminPass(),pass);
+    }
+
+    /**
+     * setter and getter current user test
+     */
+    @Test
+    public void setAndGetCurrentUserTest(){
+        User u = new User("name");
+        sut.setCurrentUser(u);
+        assertEquals(new User("name"),sut.getCurrentUser());
+    }
+
+    /**
+     * close secondary stage override mock
+     */
+    @Override
+    public void closeSecondaryStage(){
+        secondaryStageMock=null;
+    }
+
+    /**
+     * close help stage mock
+     */
+    @Override
+    public void closeHelpStage(){
+        helpStageMock=null;
+    }
+
+    /**
+     * get focused node mock
+     * @return the mocked focused node
+     */
+    @Override
+    public Node getFocusedNode(){
+        return primaryStageMock.getFocusedNode();
+    }
+
+    /**
+     * show add card mock override
+     */
+    @Override
+    public void showAddCard(){
+        secondaryStageMock.setScene(new SceneMock("addCard"));
+        secondaryStageMock.setTitle("Add Card");
+    }
 }
