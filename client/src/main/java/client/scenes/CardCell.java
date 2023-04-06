@@ -106,7 +106,7 @@ public class CardCell extends ListCell<Card> {
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
             case C:
-
+                mainCtrl.showCardPresetShortcut(this.getItem());
                 break;
             case T:
                 mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
