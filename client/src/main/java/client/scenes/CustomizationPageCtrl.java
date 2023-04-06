@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import commons.Board;
 import commons.ColorScheme;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,6 +68,12 @@ public class CustomizationPageCtrl {
         colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
         server.registerForUpdates("/topic/boardsUpdate",
                 Long.class, q ->  changeColors());
+        server.setSession(ServerUtils.getUrl());
+        server.registerForUpdates("/topic/colors",
+                ColorScheme.class, q -> Platform.runLater(() -> {
+                    colorPairObservableList.add(q);
+                    refresh();
+                }));
     }
 
     /**

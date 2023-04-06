@@ -107,5 +107,15 @@ public class CreateBoardViewCtrl implements Initializable {
         resetField();
         mainCtrl.closeSecondaryStage();
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Add Board specific shortcuts:\n"
+                + "Enter - Create a board\n"
+                + "Escape - Close the page";
+    }
 }
 

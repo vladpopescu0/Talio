@@ -81,6 +81,7 @@ public class ViewAddTagsCtrl {
     }
 
     /**
+>>>>>>> 6bf4fe812fbb5f5ad8704cb72d26d0ec29c38de6
      * Initializer for the ViewTags scene
      */
     public void init() {

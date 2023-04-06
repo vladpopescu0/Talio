@@ -102,6 +102,8 @@ public class Main extends Application {
 
         var viewCheckBoardPass = FXML.load(CheckBoardPasswordViewCtrl.class,
                 "client", "scenes", "CheckBoardPasswordView.fxml");
+        var cardPresetPage = FXML.load(CardPresetCtrl.class,
+                "client", "scenes", "CardPresetView.fxml");
 
         primaryStage.setResizable(false); //Force non-resizable view in order to unify UI design
         Stage secondaryStage = new Stage();
@@ -115,7 +117,7 @@ public class Main extends Application {
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink, details,
                 customizationPage, adminCheck,
                 viewTags, createTag, editTag,
-                viewAddTag, viewChangeBoardPass, viewCheckBoardPass, helpPage);
+                viewAddTag, viewChangeBoardPass, viewCheckBoardPass, helpPage, cardPresetPage);
         primaryStage.setOnCloseRequest(e -> {
             overview.getKey().stop();
         });

@@ -74,6 +74,7 @@ public class CardCell extends ListCell<Card> {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.parent = cardList;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
 //            //statusLabel.setText(this.getItem().tasksLabel());
@@ -109,7 +110,7 @@ public class CardCell extends ListCell<Card> {
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
             case C:
-                mainCtrl.getBoardViewCtrl().toCustomizationPage();
+                mainCtrl.showCardPresetShortcut(this.getItem());
                 break;
             case T:
                 mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
@@ -163,34 +164,52 @@ public class CardCell extends ListCell<Card> {
                 try {
                     fxmlLoader.load();
                     displayTags();
-                    this.editButton.setOnAction(event -> editCard());
-                    this.deleteButton.setOnAction(event -> deleteCard());
                     this.setOnKeyPressed(this::handleShortcuts);
-//                    this.editButton.setOnAction(event -> {
-//                        mainCtrl.setCardId(this.getItem().getId());
-//                        mainCtrl.showEditCard();
-//                    });
-//                    this.deleteButton.setOnAction(event ->{
-//
-//                        var c = server.deleteCardfromList
-//                                (this.getItem().getParentCardList()
-//                                .getId(),this.getItem().getId());
-//                        if (this.getItem().getTasks() != null) {
-//                            for (Task t : this.getItem().getTasks()) {
-//                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
-//                                server.deleteTask(t.getId());
-//                            }
-//                        }
-//
-//                        server.deleteCard(this.getItem().getId());
-//
-//                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
-//                            mainCtrl.closeSecondaryStage();
-//                        }
-//
-//                        mainCtrl.getBoardViewCtrl().refresh();
-////                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-//                    });
+                    if(!hasDefault()){
+                        this.colorSchemeCustom=this.getItem().getColors();
+                    }
+                    paneLabel.setText(this.getItem().getName());
+                    hasDesc.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
+                    statusLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
+
+                    this.editButton.setOnAction(event -> {
+                        mainCtrl.setCardId(this.getItem().getId());
+                        mainCtrl.showEditCard();
+                    });
+                    this.deleteButton.setOnAction(event ->{
+                        deleteCard();
+//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+                    });
+//=======
+//                    this.editButton.setOnAction(event -> editCard());
+//                    this.deleteButton.setOnAction(event -> deleteCard());
+//                    this.setOnKeyPressed(this::handleShortcuts);
+////                    this.editButton.setOnAction(event -> {
+////                        mainCtrl.setCardId(this.getItem().getId());
+////                        mainCtrl.showEditCard();
+////                    });
+////                    this.deleteButton.setOnAction(event ->{
+////
+////                        var c = server.deleteCardfromList
+////                                (this.getItem().getParentCardList()
+////                                .getId(),this.getItem().getId());
+////                        if (this.getItem().getTasks() != null) {
+////                            for (Task t : this.getItem().getTasks()) {
+////                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+////                                server.deleteTask(t.getId());
+////                            }
+////                        }
+////
+////                        server.deleteCard(this.getItem().getId());
+////
+////                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
+////                            mainCtrl.closeSecondaryStage();
+////                        }
+////
+////                        mainCtrl.getBoardViewCtrl().refresh();
+//////                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+////                    });
+//>>>>>>> c6fd328439b80fd6171e36ba5516efcbab6a9d87
 
                     cardPane.hoverProperty().addListener(
                             (observable, oldValue, newValue) -> {
@@ -238,17 +257,20 @@ public class CardCell extends ListCell<Card> {
     }
 
     private void focusChange(Card card) {
+        setAnim();
         if (mainCtrl.getFocusedNode() instanceof CardCell) {
             CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
             if (cardCell.getItem() != null &&
                     this.getItem().getId() == cardCell.getItem().getId()) {
-                paneLabel.setText(card.getName() + " (S)");
+                fadeTransition.play();
                 this.requestFocus();
             } else {
-                paneLabel.setText(card.getName());
+                fadeTransition.jumpTo(Duration.ZERO);
+                fadeTransition.stop();
             }
         } else {
-            paneLabel.setText(card.getName());
+            fadeTransition.jumpTo(Duration.ZERO);
+            fadeTransition.stop();
         }
     }
 
@@ -258,6 +280,7 @@ public class CardCell extends ListCell<Card> {
     public void editCard() {
         mainCtrl.setCardId(this.getItem().getId());
         mainCtrl.showEditCard();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -279,6 +302,7 @@ public class CardCell extends ListCell<Card> {
         }
 
         mainCtrl.getBoardViewCtrl().refresh();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -358,18 +382,22 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleHover() {
         this.setOnMouseEntered(event -> {
-            Node oldFocus = mainCtrl.getFocusedNode();
-            this.requestFocus();
-            updateItem(this.getItem(), false);
-            if (oldFocus instanceof CardCell) {
-                CardCell oldFocusCell = (CardCell) oldFocus;
-                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            if (mainCtrl.isPrimaryStageFocused()) {
+                Node oldFocus = mainCtrl.getFocusedNode();
+                this.requestFocus();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
+                updateItem(this.getItem(), false);
+                if (oldFocus instanceof CardCell) {
+                    CardCell oldFocusCell = (CardCell) oldFocus;
+                    oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+                }
             }
         });
 
         this.setOnMouseClicked(event -> {
             Node oldFocus = mainCtrl.getFocusedNode();
             this.requestFocus();
+            mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
             updateItem(this.getItem(), false);
             if (oldFocus instanceof CardCell) {
                 CardCell oldFocusCell = (CardCell) oldFocus;
@@ -379,7 +407,7 @@ public class CardCell extends ListCell<Card> {
     }
 
     /**
-     * Handles drag-and-drop gesture between Cards of the same CardList
+     * Handles drag-and-drop gesture between two Cards
      * @param id the ID of the Card that the gesture origins from
      */
     private void dragCard(long id) {
@@ -408,7 +436,7 @@ public class CardCell extends ListCell<Card> {
             fadeTransition = new FadeTransition(Duration.millis(1000));
             fadeTransition.setNode(this);
             fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.7);
+            fadeTransition.setToValue(0.5);
             fadeTransition.setCycleCount(200);
             fadeTransition.setAutoReverse(true);
         }

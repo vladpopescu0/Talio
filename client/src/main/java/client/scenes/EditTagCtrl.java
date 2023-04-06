@@ -130,4 +130,14 @@ public class EditTagCtrl {
     public Tag getTag() {
         return tag;
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Edit Tag specific shortcuts:\n"
+                + "Enter - Submit a name change\n"
+                + "Escape - Close the page";
+    }
 }
