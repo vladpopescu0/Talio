@@ -229,13 +229,6 @@ public class CardCell extends ListCell<Card> {
                     e.printStackTrace();
                 }
             }
-            setAnim();
-            if(mainCtrl.getFocusedNode().equals(this)){
-                fadeTransition.play();
-            }else{
-                fadeTransition.jumpTo(Duration.ZERO);
-                fadeTransition.stop();
-            }
             focusChange(card);
             paneLabel.setText(mainCtrl.getFocusedNode().equals(this)?
                     card.getName() + " (S)" : card.getName());
