@@ -150,7 +150,8 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
      */
     @Override
     public boolean existsById(Long aLong) {
-        return false;
+        call("existsById");
+        return find(aLong).isPresent();
     }
 
     /**
@@ -226,6 +227,11 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
      */
     @Override
     public ColorScheme getById(Long aLong) {
+        for(ColorScheme c : colorSchemes){
+            if(c.getId()==(long)aLong){
+                return c;
+            }
+        }
         return null;
     }
 
@@ -320,7 +326,7 @@ public class TestColorSchemeRepository implements ColorSchemeRepository {
      * @return an optional object on whether it was found
      * or not
      */
-    private Optional<ColorScheme> find(Long id) {
+    public Optional<ColorScheme> find(Long id) {
         return colorSchemes.stream()
                 .filter(c -> Objects.equals(c.getId(), id)).findFirst();
     }

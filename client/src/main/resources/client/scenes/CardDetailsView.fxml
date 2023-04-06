@@ -8,38 +8,77 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="644.0" onKeyPressed="#handleShortcuts" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardDetailsViewCtr">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="761.0" prefWidth="612.0" style="-fx-background-color: #027883;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardDetailsViewCtr">
    <children>
-      <Label layoutX="26.0" layoutY="13.0" prefHeight="23.0" prefWidth="170.0" text="Description">
+      <Label layoutX="26.0" layoutY="37.0" prefHeight="35.0" prefWidth="137.0" style="-fx-font-weight: bold;" text="Description" textFill="#e7e6e6">
+         <!--=======-->
+         <!--<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="713.0" prefWidth="644.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.CardDetailsViewCtr">-->
+         <!--   <children>-->
+         <!--      <Label layoutX="26.0" layoutY="13.0" prefHeight="23.0" prefWidth="170.0" text="Description">-->
+         <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <TextArea fx:id="description" layoutX="26.0" layoutY="60.0" prefHeight="113.0" prefWidth="591.0" />
-      <Button fx:id="editButton" layoutX="186.0" layoutY="18.0" mnemonicParsing="false" onAction="#edit" text="Edit" />
-      <Button fx:id="cancelButton" layoutX="429.0" layoutY="18.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <Button fx:id="confirmButton" layoutX="509.0" layoutY="18.0" mnemonicParsing="false" onAction="#confirm" text="Confirm Changes" />
-      <Button layoutX="14.0" layoutY="676.0" mnemonicParsing="false" onAction="#back" text="Back" />
-      <Label layoutX="26.0" layoutY="184.0" text="Tasks">
+      <TextArea fx:id="description" layoutX="26.0" layoutY="73.0" prefHeight="183.0" prefWidth="331.0">
+         <font>
+            <Font size="14.0" />
+         </font></TextArea>
+      <Button fx:id="editButton" layoutX="144.0" layoutY="40.0" mnemonicParsing="false" onAction="#edit" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #00C9A7;" text="Edit">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
+      <Button fx:id="cancelButton" layoutX="286.0" layoutY="47.0" mnemonicParsing="false" onAction="#cancel" prefHeight="14.0" prefWidth="60.0" style="-fx-background-color: #00C9A7;" text="Cancel" visible="false">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
+      <Button fx:id="confirmButton" layoutX="356.0" layoutY="39.0" mnemonicParsing="false" onAction="#confirm" prefHeight="35.0" prefWidth="60.0" style="-fx-background-color: #00C9A7;" text="Save" visible="false" wrapText="true" />
+      <Button layoutX="536.0" layoutY="14.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #00C9A7;" text="Back">
+         <font>
+            <Font size="13.0" />
+         </font></Button>
+      <Label layoutX="26.0" layoutY="277.0" style="-fx-font-weight: bold;" text="Tasks" textFill="#e7e6e6">
+         <!--=======-->
+         <!--      <TextArea fx:id="description" layoutX="26.0" layoutY="60.0" prefHeight="113.0" prefWidth="591.0" />-->
+         <!--      <Button fx:id="editButton" layoutX="186.0" layoutY="18.0" mnemonicParsing="false" onAction="#edit" text="Edit" />-->
+         <!--      <Button fx:id="cancelButton" layoutX="429.0" layoutY="18.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />-->
+         <!--      <Button fx:id="confirmButton" layoutX="509.0" layoutY="18.0" mnemonicParsing="false" onAction="#confirm" text="Confirm Changes" />-->
+         <!--      <Button layoutX="14.0" layoutY="676.0" mnemonicParsing="false" onAction="#back" text="Back" />-->
+         <!--      <Label layoutX="26.0" layoutY="184.0" text="Tasks">-->
+         <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="552.0" layoutY="188.0" mnemonicParsing="false" onAction="#addTask" text="Add Task" />
-      <ScrollPane layoutX="26.0" layoutY="228.0" prefHeight="220.0" prefWidth="591.0">
+      <!--<<<<<<< HEAD-->
+      <!--      <Button layoutX="548.0" layoutY="531.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #00C9A7;" text="Add Task">-->
+      <!--         <font>-->
+      <!--            <Font size="13.0" />-->
+      <!--         </font></Button>-->
+      <!--      <ScrollPane hbarPolicy="NEVER" layoutX="26.0" layoutY="312.0" prefHeight="210.0" prefWidth="591.0" vbarPolicy="NEVER">-->
+      <!--         <content>-->
+      <!--            <ListView fx:id="taskList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="212.0" prefWidth="589.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css" />-->
+      <!--=======-->
+      <Button layoutX="521.0" layoutY="280.0" mnemonicParsing="false" onAction="#addTask" style="-fx-background-color: #00C9A7;" text="Add Task" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="26.0" layoutY="310.0" prefHeight="220.0" prefWidth="560.0" vbarPolicy="NEVER">
          <content>
-            <ListView fx:id="taskList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="576.0" />
+            <ListView fx:id="taskList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="220.0" prefWidth="558.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css" />
          </content>
       </ScrollPane>
-      <Label layoutX="26.0" layoutY="458.0" text="Tags">
+      <Label layoutX="26.0" layoutY="545.0" style="-fx-font-weight: bold;" text="Tags" textFill="#e7e6e6">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <Button layoutX="556.0" layoutY="462.0" mnemonicParsing="false" onAction="#addTags" text="Add Tag" />
-      <ScrollPane layoutX="26.0" layoutY="502.0" prefHeight="162.0" prefWidth="591.0">
+      <Button layoutX="526.0" layoutY="550.0" mnemonicParsing="false" onAction="#addTag" style="-fx-background-color: #00C9A7;" text="Add Tag" />
+      <ScrollPane hbarPolicy="NEVER" layoutX="26.0" layoutY="580.0" prefHeight="162.0" prefWidth="560.0" vbarPolicy="NEVER">
          <content>
-            <ListView fx:id="tagList" maxWidth="1.7976931348623157E308" prefWidth="576.0" />
+            <ListView fx:id="tagList" maxWidth="1.7976931348623157E308" prefHeight="166.0" prefWidth="559.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css" />
+         </content>
+      </ScrollPane>
+      <ScrollPane hbarPolicy="NEVER" layoutX="386.0" layoutY="72.0" prefHeight="183.0" prefWidth="198.0" vbarPolicy="NEVER">
+         <content>
+            <ListView fx:id="colorSchemeList" maxWidth="1.7976931348623157E308" prefHeight="183.0" prefWidth="198.0" style="-fx-background-color: #24919c;" stylesheets="@/css/customization.css" />
          </content>
       </ScrollPane>
    </children>

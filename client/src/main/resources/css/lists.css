@@ -1,0 +1,71 @@
+.list-view *.scroll-bar:horizontal .increment-button ,
+.list-view *.scroll-bar:horizontal .decrement-button {
+    -fx-background-color :#dbdbdc;;
+    -fx-background-radius : 0.0em;
+    -fx-padding: 3px;
+    -fx-opacity: 0;
+}
+
+.list-view *.scroll-bar:horizontal .thumb{
+    -fx-background-color : #b0aeae;
+    -fx-opacity: 50%;
+    -fx-background-radius : 4px;
+    -fx-padding: 3px;
+}
+
+.list-view *.scroll-bar:horizontal .thumb:hover {
+    -fx-background-color : #b0aeae;
+    -fx-opacity: 70%;
+}
+
+
+.list-view .scroll-bar:horizontal .track{
+    -fx-background-color : transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 4px;
+    -fx-padding: 3px;
+}
+.list-view .scroll-bar:horizontal,
+.table-view .virtual-flow .scroll-bar:horizontal .track-background {
+    -fx-background-color: transparent;
+}
+.list-view{ -fx-background-insets: 0; -fx-padding: 0; }
+
+.list-view *.scroll-bar:vertical .increment-button ,
+.list-view *.scroll-bar:vertical .decrement-button {
+    -fx-background-radius : 0.0em;
+    -fx-padding: 1px;
+    -fx-opacity: 0;
+}
+
+.list-view *.scroll-bar:vertical .thumb{
+    -fx-background-color : #b0aeae;
+    -fx-opacity: 50%;
+    -fx-background-radius : 4px;
+    -fx-padding: 1px;
+}
+
+.list-view *.scroll-bar:vertical .thumb:hover {
+    -fx-background-color : #b0aeae;
+    -fx-opacity: 70%;
+}
+
+
+.list-view .scroll-bar:vertical .track{
+    -fx-background-color : transparent;
+    -fx-border-color :transparent;
+    -fx-background-radius : 4px;
+    -fx-padding: 1px;
+}
+.list-view .scroll-bar:vertical,
+.table-view .virtual-flow .scroll-bar:vertical .track-background {
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell:selected:filled{
+    -fx-view-order: -1;
+    -fx-effect: dropshadow(gaussian, #333334, 12, 0.05, 0.0, 2);
+}
+
+
+

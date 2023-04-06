@@ -8,19 +8,19 @@
 
 <!--Pane prefHeight="55.0" prefWidth="578.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.TaskCell" -->
 
-<Pane fx:id="presetsPane" prefHeight="45.0" prefWidth="430.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="presetsPane" prefHeight="45.0" prefWidth="430.0" style="-fx-background-color: #24919c;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="delete" layoutX="392.0" layoutY="11.0" mnemonicParsing="false" text="X" textFill="#fc0505" onAction="#deletePreset">
+      <Button fx:id="removeButton" layoutX="392.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: #59bfc7;" text="X" textFill="#fc0505">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <ColorPicker fx:id="presBG" editable="true" layoutX="132.0" layoutY="12.0" onAction="#saveBG" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <ColorPicker fx:id="presFont" editable="true" layoutX="194.0" layoutY="13.0" onAction="#saveFont" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
-      <Button fx:id="set" layoutX="290.0" layoutY="11.0" mnemonicParsing="false" onAction="#selectPreset" text="Set as default" />
-      <Text fx:id="label" layoutX="14.0" layoutY="32.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Preset 1">
+      <ColorPicker fx:id="presBG" editable="true" layoutX="132.0" layoutY="12.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <ColorPicker fx:id="presFont" editable="true" layoutX="194.0" layoutY="13.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
+      <Button fx:id="set" layoutX="290.0" layoutY="11.0" mnemonicParsing="false" style="-fx-background-color: #59bfc7;" text="Set as default" />
+      <Text fx:id="label" fill="WHITE" layoutX="21.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-weight: bold;" text="Preset">
          <font>
-            <Font size="24.0" />
+            <Font size="18.0" />
          </font>
       </Text>
    </children>

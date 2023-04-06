@@ -2,6 +2,7 @@ package server.api;
 
 import commons.ColorScheme;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import server.database.ColorSchemeRepository;
 
@@ -9,13 +10,16 @@ import server.database.ColorSchemeRepository;
 @RequestMapping("api/colors")
 public class ColorSchemeController {
     private final ColorSchemeRepository repo;
+    private SimpMessagingTemplate msg;
 
     /**
      * constructor for controller
      * @param repo the used repository
+     * @param msg the messaging template
      */
-    public ColorSchemeController(ColorSchemeRepository repo){
+    public ColorSchemeController(ColorSchemeRepository repo,SimpMessagingTemplate msg){
         this.repo = repo;
+        this.msg = msg;
     }
 
 //    /**
@@ -41,20 +45,23 @@ public class ColorSchemeController {
             return ResponseEntity.badRequest().build();
         }
         ColorScheme saved = repo.save(colorScheme);
+        msg.convertAndSend("/topic/colors", colorScheme);
         return ResponseEntity.ok(saved);
     }
-//    /**
-//     * Deletes a colorScheme if possible
-//     * @param id the id of the colorScheme
-//     * @return ok if the colorScheme is deleted, a bad request if the colorScheme is not found
-//     */
-//    @DeleteMapping("/delete/{id}")
-//    public ResponseEntity<ColorScheme> deleteColorSchemeById(@PathVariable("id") long id) {
-//        if (!repo.existsById(id)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        ColorScheme deleted = repo.getById(id);
-//        repo.deleteById(id);
-//        return ResponseEntity.ok(deleted);
-//    }
+    /**
+     * Updates a Color Scheme
+     * @param id the id of the color Scheme to be updated
+     * @param colorScheme the new version of the Color Scheme
+     * @return a response entity containing the updated color scheme, if the update is possible
+     */
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
+                                                         @RequestBody ColorScheme colorScheme) {
+        if (!repo.existsById(id) || colorScheme==null) {
+            return ResponseEntity.badRequest().build();
+        }
+        repo.save(colorScheme);
+        msg.convertAndSend("/topic/colorsUpdate",colorScheme);
+        return ResponseEntity.ok(colorScheme);
+    }
 }

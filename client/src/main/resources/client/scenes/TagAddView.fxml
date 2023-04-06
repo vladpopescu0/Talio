@@ -7,9 +7,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="tagPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #24919c;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="621.0" text="Tag" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="paneLabel" contentDisplay="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" prefWidth="621.0" text="Tag" textAlignment="CENTER" textFill="#ececec" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="0.0">
             <font>
                 <Font size="15.0" />
             </font>
@@ -17,11 +17,11 @@
                 <Insets left="10.0" />
             </padding>
         </Label>
-        <Button fx:id="removeButton" layoutX="678.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" text="Remove" AnchorPane.rightAnchor="10.0">
+        <Button fx:id="removeButton" layoutX="678.0" layoutY="12.0" mnemonicParsing="false" prefHeight="25.0" style="-fx-background-color: #59bfc7;" text="Remove" AnchorPane.rightAnchor="10.0">
             <font>
                 <Font size="10.0" />
             </font>
         </Button>
-      <Circle fx:id="colorCircle" fill="RED" layoutX="44.0" layoutY="24.5" radius="12.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: transparent;" AnchorPane.rightAnchor="63.16796875" />
+        <Circle fx:id="colorCircle" fill="RED" layoutX="44.0" layoutY="24.5" radius="12.5" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: transparent;" AnchorPane.rightAnchor="63.16796875" />
     </children>
 </AnchorPane>

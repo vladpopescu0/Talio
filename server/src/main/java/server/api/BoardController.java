@@ -1,16 +1,20 @@
 package server.api;
 
 import commons.Board;
-import commons.ColorScheme;
+import commons.CardList;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
-import server.database.ColorSchemeRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("api/boards")
@@ -18,20 +22,16 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
-    private final ColorSchemeRepository colorSchemeRepository;
     private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      * @param msgs the messages template
-     * @param colorSchemeRepository the colorScheme repository
      */
-    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs,
-                           ColorSchemeRepository colorSchemeRepository) {
+    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
         this.repo = repo;
         this.msgs = msgs;
-        this.colorSchemeRepository = colorSchemeRepository;
     }
 
     /**
@@ -59,6 +59,25 @@ public class BoardController {
         return ResponseEntity.ok(repo.findById(id).get());
     }
 
+    private static Map<Object, Consumer<Board>> listeners = new HashMap<>();
+
+    /**
+     * @return deferred result of board
+     */
+    @GetMapping(path = {"/updates"})
+    public DeferredResult<ResponseEntity<Board>> getBoardUpdates(){
+        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        var res = new DeferredResult<ResponseEntity<Board>>(5000L,noContent);
+
+        var key = new Object();
+        listeners.put(key,q ->
+                res.setResult(ResponseEntity.ok(q))
+        );
+        res.onCompletion(() -> listeners.remove(key));
+
+        return res;
+    }
+
     /**
      * Adds a new board
      * @param board the board to add
@@ -69,7 +88,7 @@ public class BoardController {
         if (board == null || board.getName() == null|| board.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        msgs.convertAndSend("/topic/boards", board);
+        listeners.forEach((k,l) -> l.accept(board));
         Board saved = repo.save(board);
         return ResponseEntity.ok(saved);
     }
@@ -80,10 +99,10 @@ public class BoardController {
      */
     @PutMapping(path ="/modify")
     public ResponseEntity<Board> putBoard(@RequestBody Board board) {
-        if (board == null || board.getName() == null|| board.getName().isEmpty()) {
+        if (board == null || board.getName() == null
+                || board.getName().isEmpty() || repo.existsById(board.getId())) {
             return ResponseEntity.badRequest().build();
         }
-//        listeners.forEach((k,l) -> l.accept(board));
         Board saved = repo.save(board);
         return ResponseEntity.ok(saved);
 
@@ -142,7 +161,7 @@ public class BoardController {
         if (id < 0 || !repo.existsByUsers_Id(id)) {
             return ResponseEntity.ok(new ArrayList<>());
         }
-        msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
+        msgs.convertAndSend("/topic/refreshUsers", id);
         return ResponseEntity.ok(repo.findByUsers_Id(id));
     }
 
@@ -161,8 +180,28 @@ public class BoardController {
         }
         repo.save(board);
         msgs.convertAndSend("/topic/boardsUpdate", board);
+        msgs.convertAndSend("/topic/tags2",id);
+        msgs.convertAndSend("/topic/tags",id);
         return ResponseEntity.ok(board);
     }
+
+//    /**
+//     * Updates a board
+//     * @param id the id of the board to be updated
+//     * @param board the new version of the board
+//     * @return a response entity containing the updated board, if the update is possible
+//     */
+//    @PutMapping("/updateTagAdd/{id}")
+//    public ResponseEntity<Board> updateTagAdd(@PathVariable("id") long id,
+//                                             @RequestBody Board board) {
+//        if (!repo.existsById(id)) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        repo.save(board);
+//        msgs.convertAndSend("/topic/tags2",id);
+//        msgs.convertAndSend("/topic/tags",id);
+//        return ResponseEntity.ok(board);
+//    }
 
     /**
      * Sets the password of the given board
@@ -215,19 +254,24 @@ public class BoardController {
     }
 
     /**
-     * Updates a board
-     * @param id the id of the board to be updated
-     * @param colorScheme the new version of the board
-     * @return a response entity containing the updated board, if the update is possible
+     * @param id id of the board
+     * @param cardList the cardlist
+     * @return a responseentity of the cardlist
      */
-    @PutMapping("/updateColorScheme/{id}")
-    public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
-                                                       @RequestBody ColorScheme colorScheme) {
-        if (!colorSchemeRepository.existsById(id)) {
+    @PostMapping("/addList/{id}")
+    public ResponseEntity<CardList> addListToBoard
+    (@PathVariable("id") long id, @RequestBody CardList cardList){
+        if (cardList == null || cardList.getName() == null
+                || cardList.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        colorSchemeRepository.save(colorScheme);
-//      msgs.convertAndSend("/topic/boardsUpdate", board);
-        return ResponseEntity.ok(colorScheme);
+        if (!repo.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        Board board = getById(id).getBody();
+        board.addList(cardList);
+        repo.save(board);
+        msgs.convertAndSend("/topic/updateList", cardList);
+        return ResponseEntity.ok(cardList);
     }
 }
