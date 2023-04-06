@@ -34,11 +34,12 @@ public class ChangeServerCtrl {
 
     /**
      * Injects mainCtrl and ServerUtils to controller
+     *
      * @param mainCtrl Injected main controller
-     * @param server Injected server utils
+     * @param server   Injected server utils
      */
     @Inject
-    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server){
+    public ChangeServerCtrl(MainCtrl mainCtrl, ServerUtils server) {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
@@ -48,10 +49,12 @@ public class ChangeServerCtrl {
      */
     @FXML
     private void handleShortcuts(KeyEvent event) {
-        switch(event.getCode()) {
-            case ENTER: changeServer();
+        switch (event.getCode()) {
+            case ENTER:
+                changeServer();
                 break;
-            case ESCAPE: cancel();
+            case ESCAPE:
+                cancel();
                 break;
         }
     }
@@ -60,7 +63,7 @@ public class ChangeServerCtrl {
      * Initializes the scene with the current server in the server field,
      * as well as setting the error message to be invisible
      */
-    public void initialize(){
+    public void initialize() {
         serverField.setText(ServerUtils.getServer());
         errorLabel.setVisible(false);
         selectServer.setVisible(false);
@@ -81,7 +84,7 @@ public class ChangeServerCtrl {
     /**
      * Goes back to the board overview page
      */
-    public void cancel(){
+    public void cancel() {
         serverField.clear();
         errorLabel.setVisible(false);
         mainCtrl.closeSecondaryStage();
@@ -110,7 +113,7 @@ public class ChangeServerCtrl {
      */
     public void setServer() {
         decideServer();
-        mainCtrl.getBoardsOverviewCtrl().initializ();
+//        mainCtrl.getBoardsOverviewCtrl().init();
     }
 
     /**
@@ -127,18 +130,36 @@ public class ChangeServerCtrl {
             return;
         }
         ServerUtils.setServer(newServer);
-        server.setSession(server.getUrl());
+        ServerUtils.setUrlFromServer(newServer);
+        try {
+            server.setSession(ServerUtils.getUrl());
+        } catch (Exception e) {
+            errorLabel.setVisible(true);
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.
+                    setContentText("The server you entered does not exist " +
+                            "or the format is incorrect!");
+            alert.showAndWait();
+            return;
+        }
+
         if (server.getSession() != null) {
             errorLabel.setVisible(false);
-            mainCtrl.getBoardsOverviewCtrl().initializ();
-            mainCtrl.getBoardViewCtrl().initializ();
-            mainCtrl.getViewTagsCtrl().initializ();
-            mainCtrl.getViewAddTagsCtrl().initializ();
-            mainCtrl.getCardDetailsViewCtr().initializ();
+            mainCtrl.getBoardsOverviewCtrl().init();
+            mainCtrl.getBoardViewCtrl().init();
+            mainCtrl.getViewTagsCtrl().init();
+            mainCtrl.getViewAddTagsCtrl().init();
+            mainCtrl.getCardDetailsViewCtr().init();
+            mainCtrl.getCustomizationPageCtrl().init();
             errorLabel.setVisible(false);
             mainCtrl.showUserView();
         } else {
             errorLabel.setVisible(true);
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("There was a problem when trying to connect to the server!");
+            alert.showAndWait();
         }
     }
 }

@@ -167,6 +167,7 @@ public class CardController {
         }
         Card c = repo.findById(id).get();
         msgs.convertAndSend("/topic/deleteCard", c);
+        msgs.convertAndSend("/topic/deleteTaskTag", id);
         repo.deleteById(id);
         return ResponseEntity.ok(c);
     }
