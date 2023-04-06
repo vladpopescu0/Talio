@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import client.utils.SocketHandler;
 import com.google.inject.Inject;
 import commons.Board;
 import commons.ColorScheme;
@@ -10,25 +9,19 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ListView;
 import javafx.scene.paint.Color;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
-public class CustomizationPageCtrl implements Initializable {
+public class CustomizationPageCtrl {
 
     private final MainCtrl mainCtrl;
 
     private final ServerUtils server;
-
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
-
     private Board board;
 
     @FXML
@@ -65,24 +58,45 @@ public class CustomizationPageCtrl implements Initializable {
     }
 
     /**
-     * @param location  The location used to resolve relative paths for the root object, or
-     *                  {@code null} if the location is not known.
-     * @param resources The resources used to localize the root object, or {@code null} if
-     *                  the root object was not localized.
+     * Initializer for Customization Page
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
-                new ArrayList<>() : board.getCardsColorSchemesList());
-        colorPairObservableList = FXCollections.observableList(colors);
-        colorPairList.setItems(colorPairObservableList);
-        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
-        socketHandler.registerForUpdates("/topic/colors",
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
+        server.registerForUpdates("/topic/colors",
                 ColorScheme.class, q -> Platform.runLater(() -> {
                     colorPairObservableList.add(q);
                     refresh();
                 }));
+    }
 
+    /**
+     * Changes the colors of the colorpickers
+     */
+    public void changeColors(){
+        if (board.getColorScheme().getColorLighter() == null) {
+            this.getBoardBG().setValue(Color.BLACK);
+        } else {
+            this.getBoardBG()
+                    .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
+        }
+        if (board.getColorScheme().getColorFont() == null) {
+            this.getBoardBG().setValue(Color.WHITE);
+        } else {
+            this.getBoardFont()
+                    .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
+        }
+        if (board.getListsColorScheme().getColorBGlight() == null) {
+            this.getBoardBG().setValue(Color.BLACK);
+        } else {
+            this.getListBG()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
+        }
+        if (board.getListsColorScheme().getColorFont() == null) {
+            this.getListFont().setValue(Color.WHITE);
+        } else {
+            this.getListFont()
+                    .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
+        }
     }
 
     /** Sets the board to be customized
@@ -115,7 +129,8 @@ public class CustomizationPageCtrl implements Initializable {
                 .setColorBGdark(mainCtrl.colorToHex(listBG.getValue().darker()));
         this.board.getListsColorScheme()
                 .setColorFont(mainCtrl.colorToHex(listFont.getValue()));
-        this.board = server.addBoard(board);
+
+        this.board = server.updateBoard(board);
         mainCtrl.showBoardView(board);
         mainCtrl.closeSecondaryStage();
     }
@@ -160,6 +175,7 @@ public class CustomizationPageCtrl implements Initializable {
                 .setColorBGlight(mainCtrl.colorToHex(Color.BLACK));
         board.getColorScheme()
                 .setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+        server.updateBoard(board);
         boardFont.setValue(Color.WHITE);
         boardBG.setValue(Color.BLACK);
     }
@@ -175,6 +191,7 @@ public class CustomizationPageCtrl implements Initializable {
                 .setColorBGlight(mainCtrl.colorToHex(Color.BLACK));
         board.getListsColorScheme()
                 .setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+        server.updateBoard(board);
         listFont.setValue(Color.WHITE);
         listBG.setValue(Color.BLACK);
     }

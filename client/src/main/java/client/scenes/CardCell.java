@@ -176,6 +176,36 @@ public class CardCell extends ListCell<Card> {
                         deleteCard();
 //                        mainCtrl.getCardDetailsViewCtr().setCard(null);
                     });
+//=======
+//                    this.editButton.setOnAction(event -> editCard());
+//                    this.deleteButton.setOnAction(event -> deleteCard());
+//                    this.setOnKeyPressed(this::handleShortcuts);
+////                    this.editButton.setOnAction(event -> {
+////                        mainCtrl.setCardId(this.getItem().getId());
+////                        mainCtrl.showEditCard();
+////                    });
+////                    this.deleteButton.setOnAction(event ->{
+////
+////                        var c = server.deleteCardfromList
+////                                (this.getItem().getParentCardList()
+////                                .getId(),this.getItem().getId());
+////                        if (this.getItem().getTasks() != null) {
+////                            for (Task t : this.getItem().getTasks()) {
+////                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+////                                server.deleteTask(t.getId());
+////                            }
+////                        }
+////
+////                        server.deleteCard(this.getItem().getId());
+////
+////                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
+////                            mainCtrl.closeSecondaryStage();
+////                        }
+////
+////                        mainCtrl.getBoardViewCtrl().refresh();
+//////                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+////                    });
+//>>>>>>> c6fd328439b80fd6171e36ba5516efcbab6a9d87
 
                     cardPane.hoverProperty().addListener(
                             (observable, oldValue, newValue) -> {

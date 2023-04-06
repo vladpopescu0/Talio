@@ -154,7 +154,8 @@ public class CardListCell extends ListCell<CardList>{
         cardObservableList = FXCollections.observableList(cards);
         cardsList.setItems(cardObservableList);
         cardsList.setCellFactory(c -> {
-            CardCell card = new CardCell(mainCtrl, server,this,board,board.getCardsColorScheme());
+            CardCell card = new CardCell(mainCtrl, server,
+                    this,board,board.getCardsColorScheme());
             card.setStyle("-fx-background-color: " +
                     board.getCardsColorScheme().getColorBGlight() + ";" +
                     "\n-fx-border-color: " +

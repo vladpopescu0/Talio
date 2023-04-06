@@ -113,8 +113,8 @@ public class Main extends Application {
         mainCtrl.initialize(primaryStage, secondaryStage, helpStage,overview, boardView, createList,
                 createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
-                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag
-                ,helpPage, viewChangeBoardPass, viewCheckBoardPass, cardPresetPage);
+                details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag,
+                helpPage, viewChangeBoardPass, viewCheckBoardPass, cardPresetPage);
 
         primaryStage.setOnCloseRequest(e -> {
             overview.getKey().stop();

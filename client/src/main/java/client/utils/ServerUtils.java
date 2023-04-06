@@ -26,10 +26,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
+import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.core.Response;
 import org.glassfish.jersey.client.ClientConfig;
 
-import jakarta.ws.rs.client.ClientBuilder;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.core.GenericType;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
@@ -42,16 +42,23 @@ import org.springframework.web.socket.messaging.WebSocketStompClient;
 
 public class ServerUtils {
 
-    private static String server = "http://localhost:8080/";
-    private String url = server.replace("http", "ws") + "websocket";
+    private static String server;
+    private static String url;
     private StompSession session;
+
+    /** Sets the url for the websockets
+     * @param server the server
+     */
+    public static void setUrlFromServer(String server){
+        ServerUtils.url = server.replace("http","ws") + "websocket";
+    }
 
     /**
      * Getter for the url
      * @return the url
      */
-    public String getUrl() {
-        return url;
+    public static String getUrl() {
+        return ServerUtils.url;
     }
 
     /**
@@ -411,6 +418,7 @@ public class ServerUtils {
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get();
+
         //Get parent
         if (res.getStatus() != 200) {
             return null;
@@ -808,8 +816,7 @@ public class ServerUtils {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
-            //throw new RuntimeException(e);
-            return null;
+            throw new IllegalStateException();
         }
         throw new IllegalStateException();
     }
@@ -823,6 +830,9 @@ public class ServerUtils {
      * @param <T>         generics
      */
     public <T> void registerForUpdates(String destination, Class<T> type, Consumer<T> consumer) {
+        if(session == null){
+            return;
+        }
         session.subscribe(destination, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {

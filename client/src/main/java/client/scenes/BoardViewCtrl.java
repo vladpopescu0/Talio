@@ -119,8 +119,8 @@ public class BoardViewCtrl {
     /**
      * Runs upon initialization of the controller
      */
-    public void initializ() {
-        server.setSession(server.getUrl());
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
@@ -269,6 +269,14 @@ public class BoardViewCtrl {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
+        prepareCustomizationPage();
+        mainCtrl.showCustomizationPage(this.board);
+    }
+
+    /**
+     * Sets the existing colors in the customization page
+     */
+    public void prepareCustomizationPage(){
         if (board.getColorScheme().getColorLighter() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {

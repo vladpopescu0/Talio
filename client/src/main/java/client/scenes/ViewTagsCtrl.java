@@ -58,8 +58,8 @@ public class ViewTagsCtrl {
     /**
      * Initializer for the ViewTags scene
      */
-    public void initializ() {
-        server.setSession(server.getUrl());
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         tagsView.setPlaceholder(new Label("There are currently no tags available"));
         tagObservableList = FXCollections.observableList(board.getTags());
         tagsView.setItems(tagObservableList);
