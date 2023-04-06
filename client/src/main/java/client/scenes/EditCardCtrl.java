@@ -108,4 +108,13 @@ public class EditCardCtrl {
         title.clear();
     }
 
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Edit Card specific shortcuts:\n"
+                + "Enter - Submit the name change\n"
+                + "Escape - Close the page";
+    }
 }

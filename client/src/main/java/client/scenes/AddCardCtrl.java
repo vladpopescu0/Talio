@@ -113,4 +113,14 @@ public class AddCardCtrl {
     private void clearFields() {
         title.clear();
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Add Card specific shortcuts:\n"
+                + "Enter - Create a card\n"
+                + "Escape - Close the page";
+    }
 }

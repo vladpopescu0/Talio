@@ -115,6 +115,7 @@ public class Main extends Application {
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink,
                 details,customizationPage,adminCheck, viewTags, createTag, editTag, viewAddTag
                 ,helpPage, viewChangeBoardPass, viewCheckBoardPass, cardPresetPage);
+
         primaryStage.setOnCloseRequest(e -> {
             overview.getKey().stop();
         });

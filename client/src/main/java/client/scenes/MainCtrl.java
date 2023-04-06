@@ -226,7 +226,6 @@ public class MainCtrl {
 
         this.cardPresetCtrl = cardPreset.getKey();
         this.cardPreset = new Scene(cardPreset.getValue());
-
         primaryStage.show();
 
         helpStage.setScene(this.helpPage);
@@ -437,8 +436,7 @@ public class MainCtrl {
      * Shows the admin login page
      */
     public void showAdminCheck(){
-        primaryStage.setTitle("Admin Password");
-        primaryStage.setScene(adminCheck);
+        showSecondaryStage(adminCheck, "Admin Password");
     }
 
     /** Shows the ChangeListName scene
@@ -670,6 +668,7 @@ public class MainCtrl {
      * Shows the help stage if it's not visible
      */
     private void showHelpStage() {
+        helpPageCtrl.setAdditionalHelp(getAdditionalHelp());
         helpStage.toFront();
         if (!helpStage.isShowing()) {
             helpStage.centerOnScreen();
@@ -710,7 +709,6 @@ public class MainCtrl {
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
 
-
     /**
      * @return the primary stage
      */
@@ -725,6 +723,7 @@ public class MainCtrl {
     public BoardsOverviewCtrl getBoardsOverviewCtrl() {
         return this.overviewCtrl;
     }
+
         /**
          * Event listener for shortcuts
          * @param event the key event
@@ -775,6 +774,54 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+    }
+
+    /**
+     * Returns a String describing currently shown page-specific shortcuts
+     * @return String description of currently shown page-specific shortcuts
+     */
+    private String getAdditionalHelp() {
+        if (secondaryStage.isShowing()) {
+            List<Scene> scenes = List.of(createBoard, joinBoardByLink, adminCheck, changeServer,
+                    addCard, changeListName, changeBoardPass, createList, createTag, editTag,
+                    editCard, editBoardName);
+            switch(scenes.indexOf(secondaryStage.getScene())) {
+                case 0:
+                    return createBoardViewCtrl.additionalHelp();
+                case 1:
+                    return joinBoardByLinkCtrl.additionalHelp();
+                case 2:
+                    return adminCheckCtrl.additionalHelp();
+                case 3:
+                    return changeServerCtrl.additionalHelp();
+                case 4:
+                    return addCardCtrl.additionalHelp();
+                case 5:
+                    return changeListNameCtrl.additionalHelp();
+                case 6:
+                    return changeBoardPassCtrl.additionalHelp();
+                case 7:
+                    return createListCtrl.additionalHelp();
+                case 8:
+                    return createTagCtrl.additionalHelp();
+                case 9:
+                    return editTagCtrl.additionalHelp();
+                case 10:
+                    return editCardCtrl.additionalHelp();
+                case 11:
+                    return editBoardNameViewCtrl.additionalHelp();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns whether the primary stage is focused
+     * @return whether the primary stage is focused
+     */
+    public boolean isPrimaryStageFocused() {
+        return primaryStage.isFocused();
     }
 
     /**
