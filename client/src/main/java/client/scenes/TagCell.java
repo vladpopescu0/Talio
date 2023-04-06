@@ -80,6 +80,7 @@ public class TagCell extends ListCell<Tag> {
 
                         mainCtrl.getViewTagsCtrl().refreshEdit();
                     });
+
                     this.tagColor.setOnAction(event->{
                         String newColor = mainCtrl.colorToHex(this.tagColor.getValue());
                         this.getItem().setColor(newColor);
@@ -87,6 +88,7 @@ public class TagCell extends ListCell<Tag> {
                         this.tagColor.setValue(Color.valueOf(this.getItem().getColor()));
                         tagCtrl.refresh();
                     });
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

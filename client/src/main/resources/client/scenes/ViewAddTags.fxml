@@ -8,15 +8,15 @@
 
 <TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="479.0" text="Add Tag" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ViewAddTagsCtrl">
     <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #027883;">
             <children>
                 <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="14.0" layoutY="14.0" prefHeight="346.0" prefWidth="335.0">
                     <content>
-                        <ListView fx:id="tagsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="734.0" />
+                        <ListView stylesheets="@/css/customization.css" fx:id="tagsView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="462.0" prefWidth="734.0" style="-fx-background-color: #24919c;" />
                     </content>
                 </ScrollPane>
-            <Button fx:id="addTag" layoutX="385.0" layoutY="170.0" mnemonicParsing="false" onAction="#addTags" text="Add Tag" />
-            <Button layoutX="395.0" layoutY="206.0" mnemonicParsing="false" onAction="#back" text="Back" />
+                <Button fx:id="addTag" layoutX="385.0" layoutY="170.0" mnemonicParsing="false" onAction="#addTags" style="-fx-background-color: #59bfc7;" text="Add Tag" />
+                <Button layoutX="395.0" layoutY="206.0" mnemonicParsing="false" onAction="#back" style="-fx-background-color: #59bfc7;" text="Back" />
             </children>
         </AnchorPane>
     </content>

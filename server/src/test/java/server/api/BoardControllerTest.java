@@ -29,7 +29,7 @@ public class BoardControllerTest {
         channel = (message, timeout) -> true;
         msg = new SimpMessagingTemplate(channel);
         repo = new TestBoardRepository();
-        sut = new BoardController(repo, msg,null);
+        sut = new BoardController(repo, msg);
     }
 
     /**
@@ -253,5 +253,35 @@ public class BoardControllerTest {
         assertTrue(actual1.getBody().contains(b3));
         assertTrue(actual2.getBody().contains(b2));
         assertTrue(repo.calledMethods.contains("findByUsers_Id"));
+    }
+
+    /**
+     * put board test
+     */
+    @Test
+    public void putBoardTest(){
+        SOME_USER.setId(1);
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "newBoard");
+        b1.setId(8L);
+        b2.setId(8L);
+        sut.add(b1);
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getBody(),b2);
+    }
+
+    /**
+     * put board no name test
+     */
+    @Test
+    public void putBoardNoNameTest(){
+        SOME_USER.setId(1);
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, null);
+        b1.setId(99L);
+        b2.setId(99L);
+        sut.add(b1);
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getStatusCodeValue(),400);
     }
 }

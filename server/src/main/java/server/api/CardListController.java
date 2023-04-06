@@ -92,34 +92,13 @@ public class CardListController {
      */
     @PostMapping(path = "/add")
     public ResponseEntity<CardList> add(@RequestBody CardList list) {
-        //CardList addedList = cLService.add(list);
-        //if(addedList == null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok(addedList);
         if (list == null || list.getName() == null
                 || list.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
         CardList saved = repo.save(list);
-        msgs.convertAndSend("/topic/lists", list);
         return ResponseEntity.ok(saved);
     }
-
-//    private static Map<Object, Consumer<CardList>> listeners = new HashMap<>();
-//    @GetMapping(path = {"/updates"})
-//    public DeferredResult<ResponseEntity<CardList>> getCLUpdates(){
-//        var noContent = ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//        var res = new DeferredResult<ResponseEntity<CardList>>(5000L,noContent);
-//
-//        var key = new Object();
-//        listeners.put(key,q ->
-//            res.setResult(ResponseEntity.ok(q))
-//        );
-//        res.onCompletion(() -> listeners.remove(key));
-//
-//        return res;
-//    }
 
 
     /**
@@ -129,10 +108,6 @@ public class CardListController {
      */
     @DeleteMapping(path = "/delete/{id}")
     public ResponseEntity<CardList> removeList(@PathVariable("id") long id){
-        //if(!cLService.delete(id)){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok().build();
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -151,12 +126,6 @@ public class CardListController {
     @PutMapping(path = "/{id}")
     public ResponseEntity<CardList> modifyName(@PathVariable("id") long id,
                                                @RequestBody String name){
-        //CardList cl = cLService.changeName(cLService.getById(id),name);
-        //if(cl == null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-
-        //return ResponseEntity.ok(cl);
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }

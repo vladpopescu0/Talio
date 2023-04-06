@@ -47,7 +47,7 @@ public class Board {
     private ColorScheme colorScheme;
     @OneToOne(cascade = CascadeType.ALL)
     private ColorScheme listsColorScheme;
-    @OneToOne(cascade = {CascadeType.ALL})
+    @OneToOne(cascade = CascadeType.ALL)
     private ColorScheme cardsColorScheme;
 
     @OneToMany(cascade = CascadeType.ALL,targetEntity = ColorScheme.class,orphanRemoval = true)

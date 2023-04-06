@@ -1,18 +1,15 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.User;
-import jakarta.ws.rs.ProcessingException;
-import jakarta.ws.rs.WebApplicationException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
 
 public class ChangeServerCtrl {
 
@@ -24,6 +21,15 @@ public class ChangeServerCtrl {
 
     @FXML
     private Label errorLabel;
+
+    @FXML
+    private Button changeButton;
+
+    @FXML
+    private Button backButton;
+
+    @FXML
+    private Button selectServer;
 
 
     /**
@@ -57,6 +63,7 @@ public class ChangeServerCtrl {
     public void initialize(){
         serverField.setText(ServerUtils.getServer());
         errorLabel.setVisible(false);
+        selectServer.setVisible(false);
     }
 
     /**
@@ -66,48 +73,7 @@ public class ChangeServerCtrl {
      * address
      */
     public void changeServer() {
-        String newServer = serverField.getText();
-        String oldServer = ServerUtils.getServer();
-        ServerUtils.setServer(newServer);
-        String currUsername = mainCtrl.getCurrentUser().getUsername();
-        boolean notfound;
-        try {
-            notfound = server.getUserByUsername(currUsername).isEmpty();
-        } catch (ProcessingException e) {
-            ServerUtils.setServer(oldServer);
-            errorLabel.setVisible(true);
-            return;
-        }
-
-        if (newServer == null || newServer.isEmpty()) {
-            var alert = new Alert(Alert.AlertType.ERROR);
-            alert.initModality(Modality.APPLICATION_MODAL);
-            alert.setContentText("You need to input a server!");
-            alert.showAndWait();
-            return;
-        }
-
-        ServerUtils.setServer(newServer);
-
-        if (notfound) {
-            User newUser = new User(currUsername);
-            try {
-                server.addUser(newUser);
-            } catch (WebApplicationException e) {
-                var alert = new Alert(Alert.AlertType.ERROR);
-                alert.initModality(Modality.APPLICATION_MODAL);
-                alert.setContentText(e.getMessage());
-                alert.showAndWait();
-                return;
-            }
-            mainCtrl.setCurrentUser(server.getUserByUsername(currUsername).get(0));
-            mainCtrl.getCurrentUser().setBoardList(new ArrayList<>());
-        } else {
-            mainCtrl.setCurrentUser(server.getUserByUsername(currUsername).get(0));
-            mainCtrl.getCurrentUser().setBoardList(server.getBoardsByUserId(
-                    mainCtrl.getCurrentUser().getId()));
-        }
-        errorLabel.setVisible(false);
+        decideServer();
         mainCtrl.closeSecondaryStage();
         mainCtrl.getOverviewCtrl().refresh();
     }
@@ -129,5 +95,60 @@ public class ChangeServerCtrl {
         return "Change Server specific shortcuts:\n"
                 + "Enter - Submit the address\n"
                 + "Escape - Close the page";
+    }
+
+    /**
+     * Shows the scene as the first scene shown in the app
+     */
+    public void startScene() {
+        backButton.setVisible(false);
+        changeButton.setVisible(false);
+        selectServer.setVisible(true);
+    }
+
+    /**
+     * Shows the scene as a pop up to change server
+     */
+    public void showAsPopUp() {
+        backButton.setVisible(true);
+        changeButton.setVisible(true);
+        selectServer.setVisible(false);
+    }
+
+    /**
+     * Sets a server when the button is pressed
+     */
+    public void setServer() {
+        decideServer();
+        mainCtrl.getBoardsOverviewCtrl().initializ();
+    }
+
+    /**
+     * Decides if the server can be reached, and connects to it if so
+     */
+    public void decideServer() {
+        String newServer = serverField.getText();
+        ServerUtils.setServer(newServer);
+        if (newServer == null || newServer.isEmpty()) {
+            var alert = new Alert(Alert.AlertType.ERROR);
+            alert.initModality(Modality.APPLICATION_MODAL);
+            alert.setContentText("You need to input a server!");
+            alert.showAndWait();
+            return;
+        }
+        ServerUtils.setServer(newServer);
+        server.setSession(server.getUrl());
+        if (server.getSession() != null) {
+            errorLabel.setVisible(false);
+            mainCtrl.getBoardsOverviewCtrl().initializ();
+            mainCtrl.getBoardViewCtrl().initializ();
+            mainCtrl.getViewTagsCtrl().initializ();
+            mainCtrl.getViewAddTagsCtrl().initializ();
+            mainCtrl.getCardDetailsViewCtr().initializ();
+            errorLabel.setVisible(false);
+            mainCtrl.showUserView();
+        } else {
+            errorLabel.setVisible(true);
+        }
     }
 }

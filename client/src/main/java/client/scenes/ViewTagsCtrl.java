@@ -15,23 +15,19 @@
  */
 package client.scenes;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
-import com.google.inject.Inject;
-
 import client.utils.ServerUtils;
+import com.google.inject.Inject;
 import commons.Board;
 import commons.Tag;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 
-public class ViewTagsCtrl implements Initializable {
+public class ViewTagsCtrl {
     private final ServerUtils server;
     private final MainCtrl mainCtrl;
 
@@ -61,34 +57,35 @@ public class ViewTagsCtrl implements Initializable {
 
     /**
      * Initializer for the ViewTags scene
-     * @param location
-     * The location used to resolve relative paths for the root object, or
-     * {@code null} if the location is not known.
-     *
-     * @param resources
-     * The resources used to localize the root object, or {@code null} if
-     * the root object was not localized.
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initializ() {
+        server.setSession(server.getUrl());
         tagsView.setPlaceholder(new Label("There are currently no tags available"));
         tagObservableList = FXCollections.observableList(board.getTags());
         tagsView.setItems(tagObservableList);
         tagsView.setCellFactory(tc ->
                 new TagCell(mainCtrl, server,this)
         );
+        server.registerForUpdates("/topic/tags2",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
-        this.board = server.getBoardByID(board.getId());
-        tagObservableList = FXCollections.observableList(board.getTags());
-        tagsView.setItems(tagObservableList);
-        tagsView.setCellFactory(tc ->
-                new TagCell(mainCtrl, server,this)
-        );
+        if(board != null && board.getId() != null) {
+            this.board = server.getBoardByID(board.getId());
+            tagObservableList = FXCollections.observableList(board.getTags());
+            tagsView.setItems(tagObservableList);
+            tagsView.setCellFactory(tc ->
+                    new TagCell(mainCtrl, server, this)
+            );
+        }
     }
 
     /**
@@ -127,8 +124,7 @@ public class ViewTagsCtrl implements Initializable {
      */
     public void back() {
         mainCtrl.closeSecondaryStage();
-        BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
-        mainCtrl.showBoardView(ctrl.getBoard());
-        ctrl.refocusFromBackup();
+        mainCtrl.showBoardView(server.getBoardByID(board.getId()));
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 }

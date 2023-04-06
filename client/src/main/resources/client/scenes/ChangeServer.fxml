@@ -1,16 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" text="Change Server" onKeyPressed="#handleShortcuts" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ChangeServerCtrl">
+<TitledPane collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="265.0" prefWidth="459.0" onKeyPressed="#handleShortcuts" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.ChangeServerCtrl">
    <content>
-      <AnchorPane prefHeight="313.0" prefWidth="298.0">
+      <AnchorPane prefHeight="240.0" prefWidth="415.0" style="-fx-background-color: #027883;">
          <children>
-            <Button fx:id="backButton" layoutX="40.0" layoutY="96.0" mnemonicParsing="false" onAction="#cancel" text="Back" />
-            <Button fx:id="changeButton" layoutX="173.0" layoutY="96.0" mnemonicParsing="false" onAction="#changeServer" text="Change Server" />
-            <TextField fx:id="serverField" layoutX="40.0" layoutY="65.0" prefHeight="26.0" prefWidth="226.0" />
-            <Label fx:id="errorLabel" layoutX="40.0" layoutY="127.0" prefHeight="37.0" prefWidth="234.0" text="Something went wrong with changing to this server" textAlignment="CENTER" textFill="RED" visible="false" wrapText="true" />
+            <Button fx:id="backButton" layoutX="63.0" layoutY="155.0" mnemonicParsing="false" onAction="#cancel" prefHeight="30.0" prefWidth="50.0" style="-fx-background-color: #00C9A7;" text="Back">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <Button fx:id="changeButton" layoutX="264.0" layoutY="153.0" mnemonicParsing="false" onAction="#changeServer" prefHeight="29.0" prefWidth="130.0" style="-fx-background-color: #00C9A7;" text="Change Server">
+               <font>
+                  <Font size="14.0" />
+               </font></Button>
+            <TextField fx:id="serverField" layoutX="63.0" layoutY="85.0" prefHeight="34.0" prefWidth="332.0">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Label fx:id="errorLabel" layoutX="31.0" layoutY="24.0" prefHeight="46.0" prefWidth="396.0" style="-fx-font-weight: bold;" text="Something went wrong with changing to this server" textAlignment="CENTER" textFill="#ea4343" visible="false" wrapText="true">
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+            <Button fx:id="selectServer" layoutX="181.0" layoutY="151.0" mnemonicParsing="false" onAction="#setServer" prefHeight="33.0" prefWidth="95.0" style="-fx-background-color: #00C9A7;" text="Select Server" />
          </children>
       </AnchorPane>
    </content>
