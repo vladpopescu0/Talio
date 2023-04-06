@@ -29,6 +29,7 @@ public class TagAddCell extends ListCell<Tag> {
     private ServerUtils server;
 
     private boolean visibleRemove;
+    private boolean unlocked;
 
     /**
      * useful dependencies for universal variables and server communication
@@ -36,12 +37,15 @@ public class TagAddCell extends ListCell<Tag> {
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
      * @param visibleRemove whether the remove button is visible or not
+     * @param unlocked whether it is unlocked
      */
     @Inject
-    public TagAddCell(MainCtrl mainCtrl, ServerUtils serverUtils, boolean visibleRemove) {
+    public TagAddCell(MainCtrl mainCtrl, ServerUtils serverUtils, boolean visibleRemove,
+                      boolean unlocked) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
         this.visibleRemove = visibleRemove;
+        this.unlocked = unlocked;
     }
 
     /**
@@ -75,6 +79,9 @@ public class TagAddCell extends ListCell<Tag> {
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                if (!unlocked) {
+                    removeButton.setVisible(false);
                 }
             }
 

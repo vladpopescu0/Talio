@@ -295,12 +295,14 @@ public class MainCtrl {
      *
      * @param card  the card whose details are to be shown
      * @param board the board to which the card belongs
+     * @param unlocked whether it is unlocked
      */
-    public void showCardDetailsView(Card card, Board board) {
+    public void showCardDetailsView(Card card, Board board, boolean unlocked) {
         changePrimaryStage(cardDetails, card.getName());
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
+        this.cardDetailsViewCtr.setUnlocked(unlocked);
         this.cardDetailsViewCtr.refresh();
     }
 
@@ -822,7 +824,6 @@ public class MainCtrl {
             FileWriter fw = new FileWriter(passwordFile);
             fw.write(newPasswords);
             fw.close();
-            System.out.println(newPasswords);
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -54,18 +54,22 @@ public class CardListCell extends ListCell<CardList>{
 
     private Board board;
 
+    private boolean unlocked;
+
     /**
      * useful dependencies for universal variables and server communication
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
      * @param board the board to which the cardList belongs
-     */
+     * @param unlocked whether it is unlocked
+     **/
     @Inject
-    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board) {
+    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board, boolean unlocked) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.colorScheme= board.getListsColorScheme();
+        this.unlocked = unlocked;
     }
 
     /**
@@ -86,7 +90,6 @@ public class CardListCell extends ListCell<CardList>{
     @Override
     protected void updateItem(CardList cardList, boolean empty) {
         super.updateItem(cardList, empty);
-
         if (empty || cardList == null) {
             setText(null);
             setGraphic(null);
@@ -117,6 +120,11 @@ public class CardListCell extends ListCell<CardList>{
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+            if (!unlocked) {
+                editListButton.setVisible(false);
+                deleteList.setVisible(false);
+                addCardButton.setVisible(false);
             }
             titledPane.setText(cardList.getName());
             refresh();
@@ -154,7 +162,7 @@ public class CardListCell extends ListCell<CardList>{
         cardsList.setItems(cardObservableList);
         cardsList.setCellFactory(c -> {
             CardCell card = new CardCell(mainCtrl, server,
-                    this,board,board.getCardsColorScheme());
+                    this,board,board.getCardsColorScheme(), unlocked);
             card.setStyle("-fx-background-color: " +
                     board.getCardsColorScheme().getColorBGlight() + ";" +
                     "\n-fx-border-color: " +

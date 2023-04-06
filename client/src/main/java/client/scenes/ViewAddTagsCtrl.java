@@ -113,7 +113,7 @@ public class ViewAddTagsCtrl {
             tagObservableList = FXCollections.observableList(observableTags);
             tagsView.setItems(tagObservableList);
             tagsView.setCellFactory(tc ->
-                    new TagAddCell(mainCtrl, server, false)
+                    new TagAddCell(mainCtrl, server, false, true)
             );
         }
     }
