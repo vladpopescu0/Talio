@@ -437,6 +437,7 @@ public class MainCtrl {
         showSecondaryStage(customizationPage,"Customize Your Board");
         this.customizationPageCtrl.setBoard(board);
         this.customizationPageCtrl.refresh();
+        this.customizationPageCtrl.init();
         //primaryStage.setScene(customizationPage);
     }
 
