@@ -159,22 +159,34 @@ public class CardCell extends ListCell<Card> {
                 try {
                     fxmlLoader.load();
                     displayTags();
+                    this.editButton.setOnAction(event -> editCard());
+                    this.deleteButton.setOnAction(event -> deleteCard());
                     this.setOnKeyPressed(this::handleShortcuts);
-                    if(!hasDefault()){
-                        this.colorSchemeCustom=this.getItem().getColors();
-                    }
-                    paneLabel.setText(this.getItem().getName());
-                    hasDesc.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
-                    statusLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
-
-                    this.editButton.setOnAction(event -> {
-                        mainCtrl.setCardId(this.getItem().getId());
-                        mainCtrl.showEditCard();
-                    });
-                    this.deleteButton.setOnAction(event ->{
-                        deleteCard();
-//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-                    });
+//                    this.editButton.setOnAction(event -> {
+//                        mainCtrl.setCardId(this.getItem().getId());
+//                        mainCtrl.showEditCard();
+//                    });
+//                    this.deleteButton.setOnAction(event ->{
+//
+//                        var c = server.deleteCardfromList
+//                                (this.getItem().getParentCardList()
+//                                .getId(),this.getItem().getId());
+//                        if (this.getItem().getTasks() != null) {
+//                            for (Task t : this.getItem().getTasks()) {
+//                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
+//                                server.deleteTask(t.getId());
+//                            }
+//                        }
+//
+//                        server.deleteCard(this.getItem().getId());
+//
+//                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
+//                            mainCtrl.closeSecondaryStage();
+//                        }
+//
+//                        mainCtrl.getBoardViewCtrl().refresh();
+////                        mainCtrl.getCardDetailsViewCtr().setCard(null);
+//                    });
 
                     cardPane.hoverProperty().addListener(
                             (observable, oldValue, newValue) -> {
@@ -202,6 +214,9 @@ public class CardCell extends ListCell<Card> {
                 fadeTransition.stop();
             }
             focusChange(card);
+            paneLabel.setText(mainCtrl.getFocusedNode().equals(this)?
+                    card.getName() + " (S)" : card.getName());
+
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);

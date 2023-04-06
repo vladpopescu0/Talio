@@ -3,13 +3,138 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
 
-<TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="527.0" prefWidth="674.0" text="Help Page" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HelpCtrl">
+<TitledPane fx:id="titledPane" animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="658.0" prefWidth="1097.0" text="Help Page" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.HelpCtrl">
     <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="632.0" prefWidth="1114.0" style="-fx-background-color: #027883;">
          <children>
-            <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="39.6" layoutY="39.6" prefHeight="209.0" prefWidth="418.0" text="Global shortcuts:&#10;? - Access the Help Page with shortcuts and information about a specific page&#10;&#10;Board Overview specific shortcuts:&#10;C - Change the colour of the selected Card&#10;T - Add Tasks to the selected Card&#10;E - Change the title of the selected Card&#10;Enter - Open details of the selected Card&#10;Delete / Backspace - Delete the selected Card&#10;Escape - Exit Card details&#10;Up / Down - Select Card above / below the selected one&#10;Shift + Up / Down - Swap the selected Card with the one above / below" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0" />
-            <Label fx:id="pageInfo" alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="49.6" layoutY="49.6" prefHeight="209.0" prefWidth="418.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="230.0" />
+            <Label alignment="TOP_LEFT" contentDisplay="CENTER" layoutX="544.0" layoutY="156.0" prefHeight="167.0" prefWidth="521.0" text="C - Change the colour of the selected Card&#10;T - Add Tasks to the selected Card&#10;E - Change the title of the selected Card&#10;Enter - Open details of the selected Card&#10;Delete / Backspace - Delete the selected Card&#10;Escape - Exit Card details&#10;Up / Down - Select Card above / below the selected one&#10;Shift + Up / Down - Swap the selected Card with the one above / below" textFill="#beefdc">
+               <font>
+                  <Font size="15.0" />
+               </font></Label>
+            <Label layoutX="543.0" layoutY="68.0" style="-fx-font-weight: bold;" text="Global shortcuts:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="544.0" layoutY="129.0" style="-fx-font-weight: bold;" text="Board Overview specific shortcuts:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="544.0" layoutY="97.0" text="? - Access the Help Page with shortcuts and information about a specific page" textFill="#beefdc">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="66.0" layoutY="20.0" style="-fx-font-weight: bold;" text="Actions you can perform in the app" textFill="#f2f2f2">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="88.0" prefHeight="32.0" prefWidth="322.0" text="Creating boards by clicking the &quot;Add Board&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="106.0" prefHeight="32.0" prefWidth="500.0" text="Joining a board by clicking on the &quot;Join Board&quot; button while selecting the board" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="125.0" prefHeight="32.0" prefWidth="543.0" text="Joining a board via its code, by entering the board code in the dialog window" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="212.0" prefHeight="32.0" prefWidth="328.0" text="Creating a list by clicking on the &quot;Create List&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="299.0" prefHeight="32.0" prefWidth="407.0" text="Creating a card by clicking on the &quot;Add Card&quot; button in the list" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="252.0" prefHeight="32.0" prefWidth="370.0" text="Deleting a list by clicking on the &quot;Delete&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="232.0" prefHeight="32.0" prefWidth="383.0" text="Renaming a list by clicking on the &quot;Edit List&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="316.0" prefHeight="32.0" prefWidth="407.0" text="Seeing the card details by double-clicking on the card" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="338.0" prefHeight="32.0" prefWidth="407.0" text="Editing the card by clicking the &quot;Edit&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="358.0" prefHeight="32.0" prefWidth="407.0" text="Deleting the card by clicking the &quot;Delete&quot; button" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="30.0" layoutY="377.0" prefHeight="32.0" prefWidth="366.0" text="Adding, editing and deleting tasks in the card details page" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="398.0" prefHeight="32.0" prefWidth="334.0" text="Adding and removing tags in the card details page" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="468.0" prefHeight="55.0" prefWidth="457.0" text="Customizing the board, lists and cards by clicking the &quot;Customize&quot; button in the board page" textFill="#beefdc" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="142.0" prefHeight="55.0" prefWidth="457.0" text="Copying the board's code to clipboard by clicking the &quot;Copy board code&quot; button in the board page" textFill="#beefdc" wrapText="true">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="418.0" prefHeight="32.0" prefWidth="421.0" text="Drag-and-dropping cards inside lists or between two different lists" textFill="#beefdc">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="29.0" layoutY="71.0" style="-fx-font-weight: bold;" text="Boards:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="194.0" prefHeight="27.0" prefWidth="75.0" style="-fx-font-weight: bold;" text="Lists:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="283.0" prefHeight="27.0" prefWidth="91.0" style="-fx-font-weight: bold;" text="Cards:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="31.0" layoutY="452.0" prefHeight="27.0" prefWidth="91.0" style="-fx-font-weight: bold;" text="Other:" textFill="#f2f2f2">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="761.0" layoutY="20.0" style="-fx-font-weight: bold;" text="Shortcuts" textFill="#f2f2f2">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Line endX="19.20001220703125" endY="-94.59996795654297" layoutX="509.0" layoutY="74.0" startX="19.20001220703125" startY="574.2000732421875" stroke="#f2f2f2" />
          </children>
         </AnchorPane>
     </content>

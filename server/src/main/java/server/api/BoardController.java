@@ -2,12 +2,14 @@ package server.api;
 
 import commons.Board;
 import commons.CardList;
+import commons.ColorScheme;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
+import server.database.ColorSchemeRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -22,16 +24,20 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
+    private final ColorSchemeRepository colorSchemeRepository;
     private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      * @param msgs the messages template
+     * @param colorSchemeRepository the repository of ColorSchemes
      */
-    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
+    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs,
+                           ColorSchemeRepository colorSchemeRepository) {
         this.repo = repo;
         this.msgs = msgs;
+        this.colorSchemeRepository = colorSchemeRepository;
     }
 
     /**
@@ -179,7 +185,7 @@ public class BoardController {
             return ResponseEntity.badRequest().build();
         }
         repo.save(board);
-        msgs.convertAndSend("/topic/boardsUpdate", board);
+        msgs.convertAndSend("/topic/boardsUpdate", id);
         msgs.convertAndSend("/topic/tags2",id);
         msgs.convertAndSend("/topic/tags",id);
         return ResponseEntity.ok(board);
@@ -251,6 +257,23 @@ public class BoardController {
         }
         Board b = repo.getById(id);
         return ResponseEntity.ok(b.comparePass(pass));
+    }
+
+    /**
+     * Updates a board
+     * @param id the id of the board to be updated
+     * @param colorScheme the new version of the board
+     * @return a response entity containing the updated board, if the update is possible
+     */
+    @PutMapping("/updateColorScheme/{id}")
+    public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
+                                                       @RequestBody ColorScheme colorScheme) {
+        if (!colorSchemeRepository.existsById(id)) {
+            return ResponseEntity.badRequest().build();
+        }
+        colorSchemeRepository.save(colorScheme);
+        msgs.convertAndSend("/topic/boardsUpdate", id);
+        return ResponseEntity.ok(colorScheme);
     }
 
     /**

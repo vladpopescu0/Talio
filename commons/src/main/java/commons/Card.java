@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,8 +29,7 @@ public class Card {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH},fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Tag> tags;
 
     @OneToOne(cascade = CascadeType.ALL)

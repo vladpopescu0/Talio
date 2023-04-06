@@ -80,9 +80,9 @@ public class CardDetailsViewCtr {
     /**
      * Initialized the card Details view
      */
-    public void initializ() {
+    public void init() {
         //cancelButton.setDisable(true);
-        server.setSession(server.getUrl());
+        server.setSession(ServerUtils.getUrl());
         editButton.setVisible(true);
         cancelButton.setVisible(false);
         confirmButton.setVisible(false);
@@ -107,8 +107,7 @@ public class CardDetailsViewCtr {
         description.setText(card.getDescription());
         server.registerForUpdates("/topic/tasks",
                 Long.class, q -> Platform.runLater(() -> {
-                    System.out.println("id " + q);
-                    refreshTagChange();
+                    refresh();
                     description.setText(card.getDescription());
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getOverviewCtrl().refresh();
@@ -120,15 +119,17 @@ public class CardDetailsViewCtr {
                         mainCtrl.getBoardViewCtrl().refresh();
                         mainCtrl.getOverviewCtrl().refresh();
                         mainCtrl.getCardDetailsViewCtr().setCard(null);
+                        mainCtrl.getViewAddTagsCtrl().setCard(null);
                     }
                 }));
+
     }
 
     /**
      * Updates the tasks, description and tags
      */
     public void refresh() {
-        if (card != null && card.getId() > 0) {
+        if (server.getCardById(card.getId()) != null) {
             this.card = server.getCardById(card.getId());
             List<Task> tasks = (card == null || card.getTasks() == null ?
                     new ArrayList<>() : card.getTasks());
@@ -248,8 +249,9 @@ public class CardDetailsViewCtr {
     /**
      * Pops up a secondary page on which tag to be added can be selected
      * and informs the page that it's popped from a shortcut
+     *
      * @param board Board to which the Card belongs
-     * @param card Card to which Tags may be added
+     * @param card  Card to which Tags may be added
      */
     public void addTagsShortcut(Board board, Card card) {
         mainCtrl.showViewAddTag(board, card, true);
