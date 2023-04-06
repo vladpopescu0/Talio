@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,6 +31,10 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -98,6 +104,11 @@ public class MainCtrl {
     private String adminPass = "";
 
     private HashMap<Long, String> savedPasswords = new HashMap<>();
+
+    private final ObjectMapper mapper = new ObjectMapper();
+    private File passwordFile;
+    private final TypeReference<HashMap<Long, String>> typeref =
+            new TypeReference<HashMap<Long, String>>() {};
 
     /**
      * Initializes the application
@@ -247,6 +258,7 @@ public class MainCtrl {
      */
     public void setCurrentUser(User user) {
         this.currentUser = user;
+        this.passwordFile = new File("userPasswords/"+user.getUsername()+".csv");
     }
 
     /**
@@ -804,12 +816,28 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+        try {
+            String newPasswords = mapper.writeValueAsString(savedPasswords);
+            if (!passwordFile.exists()){
+                passwordFile.createNewFile();
+            }
+            FileWriter fw = new FileWriter(passwordFile);
+            fw.write(newPasswords);
+            fw.close();
+            System.out.println(newPasswords);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
-     * When the user changes, all saved passwords should be forgotten
+     * Loads passwords from current User's file
      */
-    public void forgetPasswords() {
-        savedPasswords = new HashMap<>();
+    public void loadPasswords() {
+        try {
+            this.savedPasswords = mapper.readValue(passwordFile, typeref);
+        } catch (Exception e){
+            savedPasswords = new HashMap<>();
+        }
     }
 }
