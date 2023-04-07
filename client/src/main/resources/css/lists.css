@@ -29,7 +29,11 @@
 .table-view .virtual-flow .scroll-bar:horizontal .track-background {
     -fx-background-color: transparent;
 }
-.list-view{ -fx-background-insets: 0; -fx-padding: 0; }
+.list-view{
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-width: 0;
+ }
 
 .list-view *.scroll-bar:vertical .increment-button ,
 .list-view *.scroll-bar:vertical .decrement-button {
@@ -66,6 +70,10 @@
     -fx-view-order: -1;
     -fx-effect: dropshadow(gaussian, #333334, 12, 0.05, 0.0, 2);
 }
-
-
+.button{
+    -fx-effect: dropshadow(gaussian, #333334, 12, 0.05, 0.0, 2);
+}
+.titled-pane{
+    -fx-effect: dropshadow(gaussian, #333334, 12, 0.05, 0.0, 2);
+}
 

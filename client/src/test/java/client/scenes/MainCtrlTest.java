@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 package client.scenes;
-import client.utils.ServerUtils;
 import commons.User;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -30,7 +29,6 @@ public class MainCtrlTest extends MainCtrl{
     private MockStage secondaryStageMock;
     private MockStage helpStageMock;
 
-    private AddCardCtrlTest addCardCtrlTest;
 
     /**
      * sets up the mainCtrl for the application
@@ -41,7 +39,6 @@ public class MainCtrlTest extends MainCtrl{
         primaryStageMock = new MockStage();
         secondaryStageMock = new MockStage();
         helpStageMock = new MockStage();
-        addCardCtrlTest = new AddCardCtrlTest(new ServerUtils(),this);
     }
 
     /**

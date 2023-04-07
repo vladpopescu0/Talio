@@ -13,11 +13,9 @@ import javafx.scene.control.ListCell;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.util.Duration;
 
 import java.util.List;
-import java.util.Objects;
 
 import static client.scenes.MainCtrl.cardDataFormat;
 
@@ -58,6 +56,9 @@ public class CardCell extends ListCell<Card> {
 
     private FadeTransition fadeTransition;
 
+    private boolean unlocked;
+    private int location=1;
+
     /**
      * useful dependencies for universal variables and server communication
      * @param server the utils where the connection to the apis is
@@ -65,9 +66,10 @@ public class CardCell extends ListCell<Card> {
      * @param cardList the cardListCell in which this card is
      * @param board the board the card belongs to
      * @param colorScheme the colorscheme of this card
+     * @param unlocked whether it is unlocked
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server, CardListCell cardList,
-                    Board board, ColorScheme colorScheme) {
+                    Board board, ColorScheme colorScheme, boolean unlocked) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
@@ -78,6 +80,7 @@ public class CardCell extends ListCell<Card> {
 //            statusLabel.setText("AAAA");
         }
         this.colorSchemeCustom = colorScheme;
+        this.unlocked = unlocked;
     }
 
     /**
@@ -90,10 +93,6 @@ public class CardCell extends ListCell<Card> {
         hasDesc.setVisible(this.getItem() != null && this.getItem().hasDescription());
         statusLabel.setText(this.getItem().tasksLabel());
         cardPane.setOnMouseClicked(event -> {
-            cardPane.setStyle("-fx-background-color:"
-                    +board.getCardsColorScheme().getColorBGdark()+";" +
-                    "-fx-border-color:"+
-                    board.getCardsColorScheme().getColorBGdark()+";");
             if (event.getClickCount() == 2) {
                 showDetails();
             }
@@ -152,17 +151,17 @@ public class CardCell extends ListCell<Card> {
         if (empty || card == null) {
             setText(null);
             setGraphic(null);
+            setStyle("-fx-background-color:" + "transparent" + ";");
         } else {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
-                setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGlight() + ";");
                 try {
                     fxmlLoader.load();
                     displayTags();
                     this.setOnKeyPressed(this::handleShortcuts);
                     if(!hasDefault()){
-                        this.colorSchemeCustom=this.getItem().getColors();
+                        this.colorSchemeCustom = this.getItem().getColors();
                     }
                     paneLabel.setText(this.getItem().getName());
                     hasDesc.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
@@ -177,54 +176,68 @@ public class CardCell extends ListCell<Card> {
 //                        mainCtrl.getCardDetailsViewCtr().setCard(null);
                     });
 
-                    cardPane.hoverProperty().addListener(
-                            (observable, oldValue, newValue) -> {
-                                if (newValue) {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";");
-                                } else {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";");
-                                }
-                            });
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
-            paneLabel.setText(card.getName());
+            setAnim();
             focusChange(card);
-            setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
+            paneLabel.setText(card.getName());
+
+            setStyle("-fx-background-color:" + "transparent"
+                    + "; -fx-effect: dropshadow(gaussian, #333334, 12, 0.05, 0.0, 2);");
             setText(null);
             setGraphic(cardPane);
-            cardPane.setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGlight() + ";");
+            cardPane.setStyle("-fx-background-color:"
+                    +colorSchemeCustom.getColorBGlight()+";");
             paneLabel.setStyle("-fx-text-fill:" + colorSchemeCustom.getColorFont() + ";");
-            String lighter = mainCtrl.colorToHex(Color
-                    .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
-            mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
-            mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
+
+            if (!unlocked) {
+                editButton.setVisible(false);
+                deleteButton.setVisible(false);
+            }
         }
     }
 
     private void focusChange(Card card) {
-        setAnim();
         if (mainCtrl.getFocusedNode() instanceof CardCell) {
             CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
-            if (cardCell.getItem() != null &&
+            if (cardCell!=null && this.getItem()!=null && cardCell.getItem() != null &&
                     this.getItem().getId() == cardCell.getItem().getId()) {
-                fadeTransition.play();
+                if(location==1){
+                    fadeTransition.setFromValue(1);
+                    fadeTransition.setToValue(0.65);
+                    fadeTransition.play();
+                    fadeTransition.setOnFinished(event -> {
+                        location--;
+                        //Recursively calling the method to check whether the
+                        // focus changed between animation changes
+                        //this way any animation can be applied
+                        focusChange(card);
+                    });
+                }
                 this.requestFocus();
             } else {
-                fadeTransition.jumpTo(Duration.ZERO);
-                fadeTransition.stop();
+                if(location==0){
+                    fadeTransition.setFromValue(0.65);
+                    fadeTransition.setToValue(1);
+                    fadeTransition.play();
+                    fadeTransition.setOnFinished(event -> {
+                        location++;
+                        focusChange(card);
+                    });
+                }
             }
         } else {
-            fadeTransition.jumpTo(Duration.ZERO);
-            fadeTransition.stop();
+            if(location==0){
+                fadeTransition.setFromValue(0.65);
+                fadeTransition.setToValue(1);
+                fadeTransition.play();
+                fadeTransition.setOnFinished(event -> {
+                    location++;
+                    focusChange(card);
+                });
+            }
         }
     }
 
@@ -265,7 +278,7 @@ public class CardCell extends ListCell<Card> {
     public void showDetails() {
         mainCtrl.closeSecondaryStage();
         //otherwise the board will have empty lists
-        mainCtrl.showCardDetailsView(this.getItem(), board);
+        mainCtrl.showCardDetailsView(this.getItem(), board, unlocked);
     }
 
     /**
@@ -375,11 +388,7 @@ public class CardCell extends ListCell<Card> {
      */
     private boolean hasDefault(){
         ColorScheme c = this.getItem().getColors();
-        if(c==null){
-            return true;
-        }
-        return Objects.equals(c.getColorFont(), "black")
-                && Objects.equals(c.getColorLighter(), "black");
+        return c==null || !board.getCardsColorSchemesList().contains(c);
     }
 
     /**
@@ -389,9 +398,9 @@ public class CardCell extends ListCell<Card> {
         if(fadeTransition==null){
             fadeTransition = new FadeTransition(Duration.millis(1000));
             fadeTransition.setNode(this);
-            fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.5);
-            fadeTransition.setCycleCount(200);
+            fadeTransition.setFromValue(1);
+            fadeTransition.setToValue(0.65);
+            fadeTransition.setCycleCount(1);
             fadeTransition.setAutoReverse(true);
         }
     }

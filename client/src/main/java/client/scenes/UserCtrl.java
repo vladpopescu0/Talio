@@ -78,7 +78,7 @@ public class UserCtrl implements Initializable {
             mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
             mainCtrl.getCurrentUser().setBoardList(server.
                     getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-            mainCtrl.forgetPasswords();
+            mainCtrl.loadPasswords();
             mainCtrl.showOverview();
         }
 
@@ -106,7 +106,7 @@ public class UserCtrl implements Initializable {
             }
             mainCtrl.setCurrentUser(server.getUserByUsername(getUsername()).get(0));
             mainCtrl.getCurrentUser().setBoardList(new ArrayList<>());
-            mainCtrl.forgetPasswords();
+            mainCtrl.loadPasswords();
             mainCtrl.showOverview();
         }
     }

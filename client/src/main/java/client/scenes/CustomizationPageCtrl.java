@@ -61,6 +61,13 @@ public class CustomizationPageCtrl {
      * Initializer for Customization Page
      */
     public void init() {
+        List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
+                new ArrayList<>() : board.getCardsColorSchemesList());
+        colorPairObservableList = FXCollections.observableList(colors);
+        colorPairList.setItems(colorPairObservableList);
+        colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+        server.registerForUpdates("/topic/boardsUpdate",
+                Long.class, q ->  changeColors());
         server.setSession(ServerUtils.getUrl());
         server.registerForUpdates("/topic/colors",
                 ColorScheme.class, q -> Platform.runLater(() -> {

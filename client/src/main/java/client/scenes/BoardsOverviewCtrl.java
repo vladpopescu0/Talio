@@ -135,7 +135,6 @@ public class BoardsOverviewCtrl {
                 }
             }
             mainCtrl.showBoardView(b);
-            mainCtrl.showCheckBoardPasswordView(b);
 
         } else {
             b.addUser(mainCtrl.getCurrentUser());

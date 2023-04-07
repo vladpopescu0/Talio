@@ -5,7 +5,8 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 quizzzz.trace.db
-
+userPasswords/*
+!userPasswords/.gitkeep
 **/*.mv.db
 
 **/*.swp

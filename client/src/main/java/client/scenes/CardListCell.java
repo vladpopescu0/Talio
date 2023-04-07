@@ -54,18 +54,22 @@ public class CardListCell extends ListCell<CardList>{
 
     private Board board;
 
+    private boolean unlocked;
+
     /**
      * useful dependencies for universal variables and server communication
      * @param serverUtils           the utils where the connection to the apis is
      * @param mainCtrl              the controller of the whole application
      * @param board the board to which the cardList belongs
-     */
+     * @param unlocked whether it is unlocked
+     **/
     @Inject
-    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board) {
+    public CardListCell(MainCtrl mainCtrl, ServerUtils serverUtils, Board board, boolean unlocked) {
         this.server = serverUtils;
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.colorScheme= board.getListsColorScheme();
+        this.unlocked = unlocked;
     }
 
     /**
@@ -86,10 +90,10 @@ public class CardListCell extends ListCell<CardList>{
     @Override
     protected void updateItem(CardList cardList, boolean empty) {
         super.updateItem(cardList, empty);
-
         if (empty || cardList == null) {
             setText(null);
             setGraphic(null);
+            setStyle("-fx-background-color: "+board.getColorScheme().getColorBGlight()+";");
         } else {
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass()
@@ -119,6 +123,11 @@ public class CardListCell extends ListCell<CardList>{
                     e.printStackTrace();
                 }
             }
+            if (!unlocked) {
+                editListButton.setVisible(false);
+                deleteList.setVisible(false);
+                addCardButton.setVisible(false);
+            }
             titledPane.setText(cardList.getName());
             refresh();
             setGraphic(titledPane);
@@ -130,20 +139,15 @@ public class CardListCell extends ListCell<CardList>{
      */
     public void setStyles(){
         titledPane.setStyle(" -fx-text-fill: "
-                + colorScheme.getColorFont() + ";");
+                + colorScheme.getColorFont() + ";"
+                +"-fx-border-width: 0;");
         anchorPane.setStyle("-fx-background-color: "
                 +colorScheme.getColorBGdark()+";"
-                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
-                + "-fx-background-radius: 5px;" +
-                "-fx-text-fill:" + colorScheme.getColorFont() + ";");
+                + "-fx-text-fill:" + colorScheme.getColorFont() + ";"
+                +"-fx-border-width: 0;");
         cardsList.setStyle("-fx-background-color: "
-                +board.getCardsColorScheme().getColorBGlight()+";");
-        mainCtrl.setButtonStyle(editListButton
-                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
-        mainCtrl.setButtonStyle(addCardButton
-                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
-        mainCtrl.setButtonStyle(deleteList
-                ,colorScheme.getColorBGlight(),colorScheme.getColorFont());
+                +colorScheme.getColorBGlight()+";"
+                +"-fx-border-width: 0;");
     }
     /**
      * refresh method for an individual list of cards
@@ -155,32 +159,7 @@ public class CardListCell extends ListCell<CardList>{
         cardsList.setItems(cardObservableList);
         cardsList.setCellFactory(c -> {
             CardCell card = new CardCell(mainCtrl, server,
-                    this,board,board.getCardsColorScheme());
-            card.setStyle("-fx-background-color: " +
-                    board.getCardsColorScheme().getColorBGlight() + ";" +
-                    "\n-fx-border-color: " +
-                    board.getCardsColorScheme().getColorBGlight() + ";");
-            card.setOnMouseClicked(event -> Platform.runLater(() ->{
-                card.setStyle("-fx-background-color:"
-                        +board.getCardsColorScheme().getColorBGdark()+";" +
-                        "-fx-border-color:"
-                        +board.getCardsColorScheme().getColorBGdark()+";");
-            }));
-            card.hoverProperty().addListener(
-                    (observable, oldValue, newValue) -> {
-                        if (newValue) {
-                            card.setStyle("-fx-background-color:"
-                                    +board.getCardsColorScheme().getColorBGdark()+";" +
-                                    "\n-fx-border-color:"
-                                    +board.getCardsColorScheme().getColorBGdark()+";");
-                        } else {
-                            card.setStyle("-fx-background-color:"
-                                    +board.getCardsColorScheme().getColorBGlight()+";" +
-                                    "\n-fx-border-color:"
-                                    +board.getCardsColorScheme().getColorBGlight()+";");
-                        }
-                    });
-
+                    this,board,board.getCardsColorScheme(), unlocked);
             return card ;
         });
     }

@@ -16,7 +16,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private final CustomizationPageCtrl parent;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-
     private Board board;
 
     @FXML
@@ -159,7 +158,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
             board.setCardsColorScheme(newScheme);
         }
         board.getCardsColorSchemesList().remove(this.getItem());
-        board.setCardsColorScheme(new ColorScheme());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }

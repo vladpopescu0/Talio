@@ -8,6 +8,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import server.database.BoardRepository;
+import server.database.ColorSchemeRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -22,16 +23,20 @@ public class BoardController {
 
     //private final BoardService boardService;
     private final BoardRepository repo;
+    private final ColorSchemeRepository colorSchemeRepository;
     private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for the BoardController class
      * @param repo the repository used
      * @param msgs the messages template
+     * @param colorSchemeRepository the repository of ColorSchemes
      */
-    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs) {
+    public BoardController(BoardRepository repo, SimpMessagingTemplate msgs,
+                           ColorSchemeRepository colorSchemeRepository) {
         this.repo = repo;
         this.msgs = msgs;
+        this.colorSchemeRepository = colorSchemeRepository;
     }
 
     /**

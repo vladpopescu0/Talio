@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,6 +31,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -101,6 +105,11 @@ public class MainCtrl {
 
     private HashMap<Long, String> savedPasswords = new HashMap<>();
 
+    private final ObjectMapper mapper = new ObjectMapper();
+    private File passwordFile;
+    private final TypeReference<HashMap<Long, String>> typeref =
+            new TypeReference<HashMap<Long, String>>() {};
+
     /**
      * Initializes the application
      * @param primaryStage the primary stage used
@@ -150,9 +159,9 @@ public class MainCtrl {
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
-                           Pair<HelpCtrl, Parent> helpPage,
-                           Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
+                            Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
                            Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass,
+                           Pair<HelpCtrl, Parent> helpPage,
                            Pair<CardPresetCtrl, Parent> cardPreset){
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
@@ -251,6 +260,7 @@ public class MainCtrl {
      */
     public void setCurrentUser (User user) {
         this.currentUser = user;
+        this.passwordFile = new File("userPasswords/"+user.getUsername()+".csv");
     }
 
     /**
@@ -287,12 +297,14 @@ public class MainCtrl {
      * Shows the detailed view of cards
      * @param card the card whose details are to be shown
      * @param board the board to which the card belongs
+     * @param unlocked whether it is unlocked
      */
-    public void showCardDetailsView(Card card, Board board) {
+    public void showCardDetailsView(Card card, Board board, boolean unlocked) {
         changePrimaryStage(cardDetails, card.getName());
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
+        this.cardDetailsViewCtr.setUnlocked(unlocked);
         this.cardDetailsViewCtr.refresh();
     }
 
@@ -454,7 +466,7 @@ public class MainCtrl {
      * Shows the Change Server scene
      */
     public void showChangeServer() {
-        this.changeServerCtrl.initialize();
+        this.changeServerCtrl.init();
         showSecondaryStage(changeServer, "Change Server");
         this.changeServerCtrl.showAsPopUp();
     }
@@ -463,7 +475,7 @@ public class MainCtrl {
      * Shows the selectServer scene
      */
     public void showSelectServer() {
-        this.changeServerCtrl.initialize();
+        this.changeServerCtrl.init();
         primaryStage.setTitle("Select a server");
         this.primaryStage.setScene(changeServer);
         this.changeServerCtrl.startScene();
@@ -717,6 +729,14 @@ public class MainCtrl {
     }
 
     /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
+    public Node getFocusedNode() {
+        return primaryStage.getScene().getFocusOwner();
+    }
+
+    /**
      * Getter for the boardOverviewCtrl
      * @return the boardOverviewCtrl
      */
@@ -737,14 +757,6 @@ public class MainCtrl {
                 showHelpStage();
             }
         }
-    }
-
-        /**
-         * Returns the currently focused node
-         * @return the currently focused node in the primary stage
-         */
-    public Node getFocusedNode() {
-        return primaryStage.getScene().getFocusOwner();
     }
     /**
      * Gets the map of saved passwords
@@ -774,8 +786,29 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+        try {
+            String newPasswords = mapper.writeValueAsString(savedPasswords);
+            if (!passwordFile.exists()){
+                passwordFile.createNewFile();
+            }
+            FileWriter fw = new FileWriter(passwordFile);
+            fw.write(newPasswords);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
+    /**
+     * Loads passwords from current User's file
+     */
+    public void loadPasswords() {
+        try {
+            this.savedPasswords = mapper.readValue(passwordFile, typeref);
+        } catch (Exception e){
+            savedPasswords = new HashMap<>();
+        }
+    }
     /**
      * Returns a String describing currently shown page-specific shortcuts
      * @return String description of currently shown page-specific shortcuts
@@ -824,10 +857,4 @@ public class MainCtrl {
         return primaryStage.isFocused();
     }
 
-    /**
-     * When the user changes, all saved passwords should be forgotten
-     */
-    public void forgetPasswords() {
-        savedPasswords = new HashMap<>();
-    }
 }

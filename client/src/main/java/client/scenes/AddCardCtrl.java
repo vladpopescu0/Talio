@@ -15,7 +15,7 @@ import javafx.stage.Modality;
 public class AddCardCtrl {
 
     @FXML
-    private TextField title;
+    public TextField title;
 
     @FXML
     private Button cancel;
@@ -40,6 +40,7 @@ public class AddCardCtrl {
     /**
      * Adds support for keyboard shortcuts
      */
+    //Should not be tested, yet it appears in coverage
     @FXML
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
@@ -79,7 +80,6 @@ public class AddCardCtrl {
                 ctrl.checkUser();
             }
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());

@@ -29,8 +29,8 @@ public class Card {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Task> tasks;
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST,
-        CascadeType.REFRESH},fetch = FetchType.LAZY)
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private List<Tag> tags;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -60,7 +60,7 @@ public class Card {
         parentCardList = cardList;
         tasks = new ArrayList<>();
         tags = new ArrayList<>();
-        colors = new ColorScheme("black","black","black","black");
+        colors = new ColorScheme();
     }
 
     /**
