@@ -60,6 +60,7 @@ public class AddCardCtrlTest{
     /**
      * this makes the fxml work in tests
      */
+
     @BeforeAll
     void initJfxRuntime() {
         Platform.startup(() -> {});
