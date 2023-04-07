@@ -6,7 +6,6 @@ import com.sun.javafx.application.PlatformImpl;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
