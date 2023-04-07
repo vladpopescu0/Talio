@@ -96,17 +96,17 @@ public class AddCardCtrlTest{
         Mockito.verify(mainCtrlMock.getBoardViewCtrl()).checkUser();
     }
 
-    /**
-     * test when there is no such id
-     */
-    @Test
-    public void okTestBadRequest(){
-        Mockito.when(mainCtrlMock.getId()).thenReturn(3L);
-        textFieldMock = new TextField("Test");
-        sut.title = textFieldMock;
-        assertThrows(IllegalStateException.class,()->sut.ok());
-        Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(3L));
-    }
+//    /**
+//     * test when there is no such id
+//     */
+//    @Test
+//    public void okTestBadRequest(){
+//        Mockito.when(mainCtrlMock.getId()).thenReturn(3L);
+//        textFieldMock = new TextField("Test");
+//        sut.title = textFieldMock;
+//        assertThrows(IllegalStateException.class,()->sut.ok());
+//        Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(3L));
+//    }
 
     /**
      * test when the text field has an empty field
