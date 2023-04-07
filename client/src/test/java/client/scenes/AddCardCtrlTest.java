@@ -13,12 +13,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 
+import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
-
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AddCardCtrlTest{
 
     private TextField textFieldMock;
@@ -60,7 +61,7 @@ public class AddCardCtrlTest{
      * this makes the fxml work in tests
      */
     @BeforeAll
-    static void initJfxRuntime() {
+    void initJfxRuntime() {
         Platform.startup(() -> {});
     }
 
