@@ -2,6 +2,7 @@ package client.scenes;
 
 
 import client.utils.ServerUtils;
+import com.sun.javafx.application.PlatformImpl;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
@@ -62,7 +63,7 @@ public class AddCardCtrlTest{
      */
     @BeforeAll
     void initJfxRuntime() {
-        Platform.startup(() -> {});
+        PlatformImpl.startup(() -> {});
     }
 
     /**
