@@ -2,10 +2,10 @@ package client.scenes;
 
 
 import client.utils.ServerUtils;
-import com.sun.javafx.application.PlatformImpl;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
+import javafx.application.Platform;
 import javafx.scene.control.TextField;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -62,7 +62,7 @@ public class AddCardCtrlTest{
      */
     @BeforeAll
     void initJfxRuntime() {
-        PlatformImpl.startup(() -> {});
+        Platform.startup(() -> {});
     }
 
     /**
@@ -96,17 +96,17 @@ public class AddCardCtrlTest{
         Mockito.verify(mainCtrlMock.getBoardViewCtrl()).checkUser();
     }
 
-//    /**
-//     * test when there is no such id
-//     */
-//    @Test
-//    public void okTestBadRequest(){
-//        Mockito.when(mainCtrlMock.getId()).thenReturn(3L);
-//        textFieldMock = new TextField("Test");
-//        sut.title = textFieldMock;
-//        assertThrows(IllegalStateException.class,()->sut.ok());
-//        Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(3L));
-//    }
+    /**
+     * test when there is no such id
+     */
+    @Test
+    public void okTestBadRequest(){
+        Mockito.when(mainCtrlMock.getId()).thenReturn(3L);
+        textFieldMock = new TextField("Test");
+        sut.title = textFieldMock;
+        assertThrows(IllegalStateException.class,()->sut.ok());
+        Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(3L));
+    }
 
     /**
      * test when the text field has an empty field
