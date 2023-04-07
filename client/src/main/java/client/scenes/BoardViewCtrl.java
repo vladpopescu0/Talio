@@ -50,6 +50,7 @@ public class BoardViewCtrl {
 
     private Board board;
     private boolean isAnimationPlayed = false;
+    private Node focusedNodeBackup;
 
     private Region content;
     @FXML
@@ -108,14 +109,24 @@ public class BoardViewCtrl {
     }
 
     /**
+     * Handles unwanted unfocusing from mouse clicks
+     */
+    @FXML
+    private void handleClicks() {
+        refocusFromBackup();
+    }
+
+    /**
      * Runs upon initialization of the controller
      */
-    public void init() {
-        server.setSession(ServerUtils.getUrl());
+    public void initializ() {
+        server.setSession(server.getUrl());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
         titledPane.setText(board.getName());
+        cardListView.setFocusTraversable(false);
+        cardListView.setSelectionModel(dsm);
         server.registerForUpdates("/topic/updateList",
                 CardList.class, q -> Platform.runLater(() -> {
                     cardListObservableList.add(q);
@@ -181,7 +192,7 @@ public class BoardViewCtrl {
      */
     public void addCardList() {
         mainCtrl.showCreateList(board);
-        refresh();
+        refocusFromBackup();
     }
 
     /**
@@ -206,6 +217,10 @@ public class BoardViewCtrl {
         }
     }
 
+    /**
+     * Helper method for refresh
+     * @param focusedId ID of the focused Node
+     */
     private void focusChange(long focusedId) {
         if (focusedId >= 0) {
             for (int x = 0; x < cardListObservableList.size(); x++) {
@@ -229,6 +244,17 @@ public class BoardViewCtrl {
                 }
             }
         }
+
+        quickRefresh();
+    }
+
+    /**
+     * Refreshes the boardView page without checking the data on the server
+     */
+    public void quickRefresh() {
+        cardListObservableList = FXCollections.observableList(board.getList());
+        cardListView.setItems(cardListObservableList);
+        customizeBoard(board);
     }
 
     /**
@@ -243,14 +269,6 @@ public class BoardViewCtrl {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
-        prepareCustomizationPage();
-        mainCtrl.showCustomizationPage(this.board);
-    }
-
-    /**
-     * Sets the existing colors in the customization page
-     */
-    public void prepareCustomizationPage(){
         if (board.getColorScheme().getColorLighter() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {
@@ -275,6 +293,8 @@ public class BoardViewCtrl {
             mainCtrl.getCustomizationPageCtrl().getListFont()
                     .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
         }
+        mainCtrl.showCustomizationPage(this.board);
+        refocusFromBackup();
     }
 
     /**
@@ -303,6 +323,7 @@ public class BoardViewCtrl {
      */
     public void editTitle() {
         mainCtrl.showEditBoardNameView(board);
+        refocusFromBackup();
     }
 
     /**
@@ -310,6 +331,7 @@ public class BoardViewCtrl {
      */
     public void editPassword() {
         mainCtrl.showChangeBoardPasswordView(board);
+        refocusFromBackup();
     }
 
     /**
@@ -427,7 +449,132 @@ public class BoardViewCtrl {
         StringSelection stringSelection = new StringSelection(inviteCode);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
+        refocusFromBackup();
     }
+
+    /**
+     * Focuses the first CardCell on the Board
+     */
+    private void focusFirstCardCell() {
+        for (int x = 0; x < cardListObservableList.size(); x++) {
+            List<Card> cardList = cardListObservableList.get(x).getCards();
+            for (Card c: cardList) {
+                VirtualFlow virtualFlowCL = (VirtualFlow) cardListView
+                        .lookup(".virtual-flow");
+                VirtualFlow virtualFlowC = (VirtualFlow) virtualFlowCL.getCell(x)
+                        .lookup(".virtual-flow");
+                Node newFocus = virtualFlowC.getCell(0);
+                if (newFocus instanceof CardCell) {
+                    newFocus.requestFocus();
+                    CardCell cc = (CardCell) newFocus;
+                    if (cc.getItem() != null) {
+                        focusedNodeBackup = cc;
+                        cc.updateItem(cc.getItem(), false);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Setter for the backup of a focused node
+     * @param node new focused node backup
+     */
+    public void setFocusedNodeBackup(Node node) {
+        focusedNodeBackup = node;
+    }
+
+    /**
+     * Refocuses the backup node
+     */
+    public void refocusFromBackup() {
+        long focusedId = -1;
+        if (focusedNodeBackup instanceof CardCell
+                && ((CardCell) focusedNodeBackup).getItem() != null) {
+            focusedId = ((CardCell) focusedNodeBackup).getItem().getId();
+        }
+
+        if (focusedId >= 0) {
+            for (int x = 0; x < cardListObservableList.size(); x++) {
+                List<Card> cardList = cardListObservableList.get(x).getCards();
+                for (int y = 0; y < cardList.size(); y++) {
+                    if (cardList.get(y).getId() == focusedId) {
+                        VirtualFlow virtualFlowCL = (VirtualFlow) cardListView
+                                .lookup(".virtual-flow");
+                        VirtualFlow virtualFlowC = (VirtualFlow) virtualFlowCL.getCell(x)
+                                .lookup(".virtual-flow");
+                        Node newFocus = virtualFlowC.getCell(y);
+                        if (newFocus instanceof CardCell
+                                && ((CardCell) newFocus).getItem() != null) {
+                            newFocus.requestFocus();
+                            CardCell cc = (CardCell) newFocus;
+                            focusedNodeBackup = cc;
+                            cc.updateItem(cc.getItem(), false);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
+
+        quickRefresh();
+    }
+
+    private final MultipleSelectionModel<CardList> dsm = new MultipleSelectionModel<CardList>() {
+        @Override
+        public ObservableList<Integer> getSelectedIndices() {
+            return FXCollections.emptyObservableList();
+        }
+
+        @Override
+        public ObservableList<CardList> getSelectedItems() {
+            return FXCollections.emptyObservableList();
+        }
+
+        @Override
+        public void selectIndices(int index, int... indices) {}
+
+        @Override
+        public void selectAll() {}
+
+        @Override
+        public void selectFirst() {}
+
+        @Override
+        public void selectLast() {}
+
+        @Override
+        public void clearAndSelect(int index) {}
+
+        @Override
+        public void select(int index) {}
+
+        @Override
+        public void select(CardList obj) {}
+
+        @Override
+        public void clearSelection(int index) {}
+
+        @Override
+        public void clearSelection() {}
+
+        @Override
+        public boolean isSelected(int index) {
+            return false;
+        }
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+
+        @Override
+        public void selectPrevious() {}
+
+        @Override
+        public void selectNext() {}
+    };
 
     /**
      * Deletes a board and all lists of it from the database

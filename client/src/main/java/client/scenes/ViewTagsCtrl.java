@@ -125,5 +125,6 @@ public class ViewTagsCtrl {
     public void back() {
         mainCtrl.closeSecondaryStage();
         mainCtrl.showBoardView(server.getBoardByID(board.getId()));
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 }

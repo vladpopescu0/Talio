@@ -23,4 +23,12 @@ public class HelpCtrl {
         this.mainCtrl = mainCtrl;
         this.server = server;
     }
+
+    /**
+     * Changes the page-specific description for the Help Page
+     * @param help new page-specific description
+     */
+    public void setAdditionalHelp(String help) {
+        pageInfo.setText(help);
+    }
 }

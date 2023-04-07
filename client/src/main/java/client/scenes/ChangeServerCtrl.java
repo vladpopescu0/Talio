@@ -91,6 +91,16 @@ public class ChangeServerCtrl {
     }
 
     /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Change Server specific shortcuts:\n"
+                + "Enter - Submit the address\n"
+                + "Escape - Close the page";
+    }
+
+    /**
      * Shows the scene as the first scene shown in the app
      */
     public void startScene() {

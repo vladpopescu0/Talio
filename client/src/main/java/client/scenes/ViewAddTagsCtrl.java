@@ -28,7 +28,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.input.KeyEvent;
 
 import java.util.List;
 
@@ -50,11 +49,10 @@ public class ViewAddTagsCtrl {
 
     /**
      * Constructor for the ViewTagsCtrl
-     *
-     * @param server   the server to be used
+     * @param server the server to be used
      * @param mainCtrl the mainCtrl of the application
-     * @param board    the Board to which the Card belongs
-     * @param card     the Card to which a Tag will be added
+     * @param board the Board to which the Card belongs
+     * @param card the Card to which a Tag will be added
      */
     @Inject
     public ViewAddTagsCtrl(ServerUtils server, MainCtrl mainCtrl,
@@ -66,25 +64,10 @@ public class ViewAddTagsCtrl {
     }
 
     /**
-     * Adds support for keyboard shortcuts
-     */
-    @FXML
-    private void handleShortcuts(KeyEvent event) {
-        switch (event.getCode()) {
-            case ENTER:
-                addTags();
-                break;
-            case ESCAPE:
-                back();
-                break;
-        }
-    }
-
-    /**
      * Initializer for the ViewTags scene
      */
-    public void init() {
-        server.setSession(ServerUtils.getUrl());
+    public void initializ() {
+        server.setSession(server.getUrl());
         tagsView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         tagsView.setPlaceholder(new Label("There are currently no tags available to be added"));
         server.registerForUpdates("/topic/tags",
@@ -94,16 +77,13 @@ public class ViewAddTagsCtrl {
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getOverviewCtrl().refresh();
                 }));
-        server.registerForUpdates("/topic/deleteTaskTag", Long.class, q -> {
-            this.card = null;
-        });
     }
 
     /**
      * Refreshes the page, looking for updates
      */
     public void refresh() {
-        if (server.getCardById(card.getId()) != null) {
+        if(card != null && board != null && card.getId() > 0 && board.getId() != null) {
             this.card = server.getCardById(card.getId());
             this.board = server.getBoardByID(board.getId());
             List<Tag> observableTags = board.getTags();
@@ -135,7 +115,6 @@ public class ViewAddTagsCtrl {
 
     /**
      * Setter for the board
-     *
      * @param board the Board of which Tags are displayed
      */
     public void setBoard(Board board) {
@@ -151,7 +130,6 @@ public class ViewAddTagsCtrl {
 
     /**
      * Setter for the Card
-     *
      * @param card the Card to which a Tag can be added
      */
     public void setCard(Card card) {
@@ -160,7 +138,6 @@ public class ViewAddTagsCtrl {
 
     /**
      * Getter for the Card
-     *
      * @return the Card to which a Tag can be added
      */
     public Card getCard() {
@@ -169,7 +146,6 @@ public class ViewAddTagsCtrl {
 
     /**
      * Getter for the shortcut boolean
-     *
      * @return whether the page was opened using a keyboard shortcut
      */
     public boolean getShortcut() {
@@ -178,7 +154,6 @@ public class ViewAddTagsCtrl {
 
     /**
      * Setter for the shortcut boolean
-     *
      * @param shortcut whether the page was opened using a keyboard shortcut
      */
     public void setShortcut(boolean shortcut) {
