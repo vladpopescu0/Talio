@@ -22,12 +22,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MainCtrlTest extends MainCtrl{
+public class MainCtrlTest{
 
     private MainCtrl sut;
-    private MockStage primaryStageMock;
-    private MockStage secondaryStageMock;
-    private MockStage helpStageMock;
 
 
     /**
@@ -36,9 +33,6 @@ public class MainCtrlTest extends MainCtrl{
     @BeforeEach
     public void setup() {
         sut = new MainCtrl();
-        primaryStageMock = new MockStage();
-        secondaryStageMock = new MockStage();
-        helpStageMock = new MockStage();
     }
 
     /**
@@ -97,37 +91,8 @@ public class MainCtrlTest extends MainCtrl{
         assertEquals(new User("name"),sut.getCurrentUser());
     }
 
-    /**
-     * close secondary stage override mock
-     */
-    @Override
-    public void closeSecondaryStage(){
-        secondaryStageMock=null;
-    }
-
-    /**
-     * close help stage mock
-     */
-    @Override
-    public void closeHelpStage(){
-        helpStageMock=null;
-    }
-
-    /**
-     * get focused node mock
-     * @return the mocked focused node
-     */
-    @Override
-    public Node getFocusedNode(){
-        return primaryStageMock.getFocusedNode();
-    }
-
-    /**
-     * show add card mock override
-     */
-    @Override
-    public void showAddCard(){
-        secondaryStageMock.setScene(new SceneMock("addCard"));
-        secondaryStageMock.setTitle("Add Card");
+    @Test
+    public void loadPasswordTest(){
+        sut.loadPasswords();
     }
 }

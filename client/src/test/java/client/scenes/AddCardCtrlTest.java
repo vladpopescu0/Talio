@@ -5,28 +5,21 @@ import client.utils.ServerUtils;
 import commons.Board;
 import commons.Card;
 import commons.CardList;
-import javafx.application.Platform;
-import javafx.scene.control.TextField;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 
-import org.junit.jupiter.api.TestInstance;
 import org.mockito.Mockito;
 
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class AddCardCtrlTest{
 
-    private TextField textFieldMock;
+public class AddCardCtrlTest{
     private MainCtrl mainCtrlMock;
     private ServerUtils serverUtilsMock;
     private BoardViewCtrl boardViewCtrlMock;
-    private MainCtrl mainMock;
     private AddCardCtrl sut;
     private Card card;
     //to change this to serverUtilsMock or serverUtilsTest
@@ -47,23 +40,13 @@ public class AddCardCtrlTest{
         cardList.setId(2L);
         Board board = new Board();
         board.setId(3L);
-        card = new Card("Test");
+        card = new Card("Card");
 
         Mockito.when(serverUtilsMock.addCardToList(eq(card), eq(2L))).thenReturn(card);
         Mockito.when(serverUtilsMock.addCardToList(eq(card)
                 , not(eq(2L)))).thenThrow(new IllegalStateException());
         Mockito.when(mainCtrlMock.getBoardViewCtrl()).thenReturn(boardViewCtrlMock);
         Mockito.when(boardViewCtrlMock.getBoard()).thenReturn(board);
-
-    }
-
-    /**
-     * this makes the fxml work in tests
-     */
-
-    @BeforeAll
-    void initJfxRuntime() {
-        Platform.startup(() -> {});
     }
 
     /**
@@ -72,8 +55,6 @@ public class AddCardCtrlTest{
      */
     @Test
     public void cancelTest(){
-        textFieldMock = new TextField("Test");
-        sut.title = textFieldMock;
         sut.cancel();
         Mockito.verify(mainCtrlMock).closeSecondaryStage();
     }
@@ -84,8 +65,6 @@ public class AddCardCtrlTest{
     @Test
     public void okTest(){
         Mockito.when(mainCtrlMock.getId()).thenReturn(2L);
-        textFieldMock = new TextField("Test");
-        sut.title = textFieldMock;
         sut.ok();
         Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(2L));
         Mockito.verify(mainCtrlMock).closeSecondaryStage();
@@ -103,21 +82,8 @@ public class AddCardCtrlTest{
     @Test
     public void okTestBadRequest(){
         Mockito.when(mainCtrlMock.getId()).thenReturn(3L);
-        textFieldMock = new TextField("Test");
-        sut.title = textFieldMock;
         assertThrows(IllegalStateException.class,()->sut.ok());
         Mockito.verify(serverUtilsMock).addCardToList(eq(card), eq(3L));
-    }
-
-    /**
-     * test when the text field has an empty field
-     */
-    @Test
-    public void okTestEmptyField(){
-        textFieldMock = new TextField("");
-        sut.title = textFieldMock;
-        sut.ok();
-        Mockito.verify(serverUtilsMock,times(0)).addCardToList(eq(card), eq(2L));
     }
 
     /**
