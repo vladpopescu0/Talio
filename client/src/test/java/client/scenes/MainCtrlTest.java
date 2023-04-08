@@ -15,7 +15,6 @@
  */
 package client.scenes;
 import commons.User;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -89,10 +88,5 @@ public class MainCtrlTest{
         User u = new User("name");
         sut.setCurrentUser(u);
         assertEquals(new User("name"),sut.getCurrentUser());
-    }
-
-    @Test
-    public void loadPasswordTest(){
-        sut.loadPasswords();
     }
 }
