@@ -706,6 +706,7 @@ public class MainCtrl {
     public BoardsOverviewCtrl getBoardsOverviewCtrl() {
         return this.overviewCtrl;
     }
+
     /**
      * Event listener for shortcuts
      * @param event the key event
@@ -807,6 +808,7 @@ public class MainCtrl {
     }
 
     /**
+     * Loads passwords from current User's file
      * When the user changes, all saved passwords should be forgotten
      */
     public void forgetPasswords() {

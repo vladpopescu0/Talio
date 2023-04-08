@@ -97,6 +97,9 @@ public class CardListCell extends ListCell<CardList>{
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    titledPane.setOnMouseClicked(event ->
+                            mainCtrl.getBoardViewCtrl().refocusFromBackup());
+                    cardsList.setFocusTraversable(false);
                     Platform.runLater(() -> {
                         Pane title = (Pane) titledPane.lookup(".title");
                         if (title != null) {

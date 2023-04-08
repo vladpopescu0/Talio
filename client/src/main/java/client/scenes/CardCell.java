@@ -152,7 +152,9 @@ public class CardCell extends ListCell<Card> {
         if (empty || card == null) {
             setText(null);
             setGraphic(null);
+            this.setMouseTransparent(true);
         } else {
+            this.setMouseTransparent(false);
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
@@ -172,29 +174,13 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
-                    this.deleteButton.setOnAction(event ->{
-                        deleteCard();
-//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-                    });
 
-                    cardPane.hoverProperty().addListener(
-                            (observable, oldValue, newValue) -> {
-                                if (newValue) {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";");
-                                } else {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";");
-                                }
-                            });
+                    this.deleteButton.setOnAction(event -> deleteCard());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
+            focusChange(card);
 
             paneLabel.setText(card.getName());
             focusChange(card);
@@ -210,6 +196,10 @@ public class CardCell extends ListCell<Card> {
         }
     }
 
+    /**
+     * Helper method for distinguishing the focused Card visually
+     * @param card Card to be checked for being focused
+     */
     private void focusChange(Card card) {
         setAnim();
         if (mainCtrl.getFocusedNode() instanceof CardCell) {
@@ -217,12 +207,24 @@ public class CardCell extends ListCell<Card> {
             if (cardCell.getItem() != null &&
                     this.getItem().getId() == cardCell.getItem().getId()) {
                 fadeTransition.play();
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";");
                 this.requestFocus();
             } else {
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";");
                 fadeTransition.jumpTo(Duration.ZERO);
                 fadeTransition.stop();
             }
         } else {
+            cardPane.setStyle("-fx-background-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";" +
+                    "\n-fx-border-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";");
             fadeTransition.jumpTo(Duration.ZERO);
             fadeTransition.stop();
         }
