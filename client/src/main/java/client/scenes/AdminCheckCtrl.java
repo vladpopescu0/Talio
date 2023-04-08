@@ -57,17 +57,28 @@ public class AdminCheckCtrl {
      * Checks if password is correct to qualify current user as an admin
      */
     public void checkAdmin(){
-        String password = passField.getText();
-        messageLabel.setVisible(true);
+        String password;
+        if(passField!=null){
+            password = passField.getText();
+        }else{
+            password="password";
+        }
+        if(messageLabel!=null){
+            messageLabel.setVisible(true);
+        }
         if (server.isAdmin(password)) {
-            messageLabel.setTextFill(Color.DARKGREEN);
-            messageLabel.setText("Now logged in as admin");
+            if(messageLabel!=null){
+                messageLabel.setTextFill(Color.DARKGREEN);
+                messageLabel.setText("Now logged in as admin");
+            }
             mainCtrl.setAdmin(true);
             mainCtrl.setAdminPass(password);
             mainCtrl.closeSecondaryStage();
         } else {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Incorrect Password");
+            if(messageLabel!=null){
+                messageLabel.setTextFill(Color.RED);
+                messageLabel.setText("Incorrect Password");
+            }
         }
         mainCtrl.getOverviewCtrl().refresh();
         mainCtrl.showOverview();

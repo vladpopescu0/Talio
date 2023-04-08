@@ -22,8 +22,6 @@ public class AddCardCtrlTest{
     private BoardViewCtrl boardViewCtrlMock;
     private AddCardCtrl sut;
     private Card card;
-    //to change this to serverUtilsMock or serverUtilsTest
-    //hope this works
 
     /**
      * setup tests sut and doc
