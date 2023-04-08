@@ -19,6 +19,9 @@ import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MainCtrlTest{
@@ -89,4 +92,50 @@ public class MainCtrlTest{
         sut.setCurrentUser(u);
         assertEquals(new User("name"),sut.getCurrentUser());
     }
+
+    /**
+     * saved password test
+     */
+    @Test
+    void getterAndSetterSavedPasswordsTest() {
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        assertEquals(sut.getSavedPasswords(),savedPasswords);
+    }
+
+    /**
+     * update when there is a board with that password
+     */
+    @Test
+    void updatePasswordExistsTest(){
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        sut.passwordFile = new File("./file.txt");
+        sut.updatePassword(13L, "Secret");
+        assertEquals("Secret", sut.getSavedPasswords().get(13L));
+        sut.passwordFile.delete();
+    }
+
+    /**
+     * test when no such board has a password
+     */
+    @Test
+    void updatePasswordNotExistsTest(){
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        sut.passwordFile = new File("./file.txt");
+        sut.updatePassword(12L, "Secret");
+        assertEquals("Secret", sut.getSavedPasswords().get(12L));
+        sut.passwordFile.delete();
+    }
+
 }

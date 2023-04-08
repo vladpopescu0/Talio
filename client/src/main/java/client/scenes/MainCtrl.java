@@ -21,7 +21,6 @@ import commons.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.DataFormat;
@@ -106,7 +105,7 @@ public class MainCtrl {
     private HashMap<Long, String> savedPasswords = new HashMap<>();
 
     private final ObjectMapper mapper = new ObjectMapper();
-    private File passwordFile;
+    public File passwordFile;
     private final TypeReference<HashMap<Long, String>> typeref =
             new TypeReference<HashMap<Long, String>>() {};
 
@@ -598,20 +597,6 @@ public class MainCtrl {
         return customizationPageCtrl;
     }
 
-    /** Sets the style for a button
-     * @param button the button for which the style is set
-     * @param bgColor the bg color of the button
-     * @param fontColor the cont color of the button
-     */
-    public void setButtonStyle(Button button, String bgColor, String fontColor) {
-        String style = "-fx-background-color: " + bgColor + "; "
-                + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
-                + "-fx-background-radius: 5px;" +
-                "-fx-text-fill:" + fontColor + ";"+
-                "-fx-border-color: " + fontColor+";"+
-                "-fx-border-radius: 5%;";
-        button.setStyle(style);
-    }
     public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
     public boolean isAdmin() { return this.isAdmin; }
@@ -627,14 +612,6 @@ public class MainCtrl {
         if (secondaryStage.isShowing()) {
             secondaryStage.close();
         }
-    }
-
-    /**
-     * returns the Secondary Stage
-     * @return the secondary stage
-     */
-    public Stage getSecondaryStage(){
-        return secondaryStage;
     }
 
     /**
@@ -663,7 +640,7 @@ public class MainCtrl {
      * @param scene scene to be shown on the pop up page
      * @param title title of the pop up page
      */
-    private void showSecondaryStage(Scene scene, String title) {
+    public void showSecondaryStage(Scene scene, String title) {
         Scene oldScene = secondaryStage.getScene();
         secondaryStage.setTitle(title);
         secondaryStage.setScene(scene);
@@ -721,12 +698,6 @@ public class MainCtrl {
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
 
-    /**
-     * @return the primary stage
-     */
-    public Stage getPrimaryStage() {
-        return primaryStage;
-    }
 
     /**
      * Returns the currently focused node
