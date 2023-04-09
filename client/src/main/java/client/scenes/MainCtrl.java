@@ -715,11 +715,11 @@ public class MainCtrl {
         return this.overviewCtrl;
     }
 
-        /**
-         * Event listener for shortcuts
-         * @param event the key event
-         * @param primary whether the key listener concerns primary stage
-         */
+    /**
+     * Event listener for shortcuts
+     * @param event the key event
+     * @param primary whether the key listener concerns primary stage
+     */
     private void keyEventListener(KeyEvent event, boolean primary) {
         Node focused = primary? primaryStage.getScene().getFocusOwner()
                 : secondaryStage.getScene().getFocusOwner();
@@ -828,4 +828,11 @@ public class MainCtrl {
         return primaryStage.isFocused();
     }
 
+    /**
+     * Loads passwords from current User's file
+     * When the user changes, all saved passwords should be forgotten
+     */
+    public void forgetPasswords() {
+        savedPasswords = new HashMap<>();
+    }
 }
