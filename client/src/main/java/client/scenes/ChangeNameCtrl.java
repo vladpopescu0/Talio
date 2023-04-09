@@ -127,4 +127,14 @@ public class ChangeNameCtrl {
         clearField();
         mainCtrl.closeSecondaryStage();
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Edit List specific shortcuts:\n"
+                + "Enter - Submit the name change\n"
+                + "Escape - Close the page";
+    }
 }

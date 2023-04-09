@@ -84,10 +84,6 @@ public class BoardsOverviewCtrl {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-//        server.registerForUpdates("/topic/refreshUsers",
-//                Long.class, q -> Platform.runLater(() -> {
-//                    refresh();
-//                }));
     }
 
     /**

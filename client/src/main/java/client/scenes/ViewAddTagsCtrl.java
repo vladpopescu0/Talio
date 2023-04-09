@@ -28,7 +28,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
-import javafx.scene.input.KeyEvent;
 
 import java.util.List;
 
@@ -62,19 +61,6 @@ public class ViewAddTagsCtrl {
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.card = card;
-    }
-
-    /**
-     * Adds support for keyboard shortcuts
-     */
-    @FXML
-    private void handleShortcuts(KeyEvent event) {
-        switch(event.getCode()) {
-            case ENTER: addTags();
-                break;
-            case ESCAPE: back();
-                break;
-        }
     }
 
     /**

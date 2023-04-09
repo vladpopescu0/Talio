@@ -87,6 +87,8 @@ public class MainCtrl {
     private EditTagCtrl editTagCtrl;
     private Scene viewAddTag;
     private ViewAddTagsCtrl viewAddTagsCtrl;
+    private Scene cardPreset;
+    private CardPresetCtrl cardPresetCtrl;
     private Scene helpPage;
     private HelpCtrl helpPageCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
@@ -126,6 +128,7 @@ public class MainCtrl {
      * @param adminCheck the adminCheck scene
      * @param editBoardPass the editBoardPassword scene
      * @param checkBoardPass the checkBoardPassword scene
+     * @param cardPreset the cardPresetView scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage, Stage helpStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -149,7 +152,8 @@ public class MainCtrl {
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
                            Pair<HelpCtrl, Parent> helpPage,
                            Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
-                           Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass){
+                           Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass,
+                           Pair<CardPresetCtrl, Parent> cardPreset){
         this.primaryStage = primaryStage;
         this.secondaryStage = secondaryStage;
         this.helpStage = helpStage;
@@ -219,6 +223,9 @@ public class MainCtrl {
 
         this.checkBoardPassCtrl = checkBoardPass.getKey();
         this.checkBoardPass = new Scene(checkBoardPass.getValue());
+
+        this.cardPresetCtrl = cardPreset.getKey();
+        this.cardPreset = new Scene(cardPreset.getValue());
         primaryStage.show();
 
         helpStage.setScene(this.helpPage);
@@ -429,8 +436,7 @@ public class MainCtrl {
      * Shows the admin login page
      */
     public void showAdminCheck(){
-        primaryStage.setTitle("Admin Password");
-        primaryStage.setScene(adminCheck);
+        showSecondaryStage(adminCheck, "Admin Password");
     }
 
     /** Shows the ChangeListName scene
@@ -514,6 +520,17 @@ public class MainCtrl {
         viewAddTagsCtrl.setCard(card);
         viewAddTagsCtrl.setShortcut(shortcut);
         viewAddTagsCtrl.refresh();
+    }
+
+    /**
+     * Shows the preset selection page for individual Card
+     * @param card Card for which the preset might be selected
+     */
+    public void showCardPresetShortcut(Card card) {
+        showSecondaryStage(cardPreset, "Select preset for " + card.getName());
+        cardPresetCtrl.setBoard(boardViewCtrl.getBoard());
+        cardPresetCtrl.setCard(card);
+        cardPresetCtrl.refresh();
     }
 
     /**
@@ -651,6 +668,7 @@ public class MainCtrl {
      * Shows the help stage if it's not visible
      */
     private void showHelpStage() {
+        helpPageCtrl.setAdditionalHelp(getAdditionalHelp());
         helpStage.toFront();
         if (!helpStage.isShowing()) {
             helpStage.centerOnScreen();
@@ -691,7 +709,6 @@ public class MainCtrl {
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
 
-
     /**
      * @return the primary stage
      */
@@ -706,11 +723,12 @@ public class MainCtrl {
     public BoardsOverviewCtrl getBoardsOverviewCtrl() {
         return this.overviewCtrl;
     }
-        /**
-         * Event listener for shortcuts
-         * @param event the key event
-         * @param primary whether the key listener concerns primary stage
-         */
+
+    /**
+     * Event listener for shortcuts
+     * @param event the key event
+     * @param primary whether the key listener concerns primary stage
+     */
     private void keyEventListener(KeyEvent event, boolean primary) {
         Node focused = primary? primaryStage.getScene().getFocusOwner()
                 : secondaryStage.getScene().getFocusOwner();
@@ -721,10 +739,10 @@ public class MainCtrl {
         }
     }
 
-        /**
-         * Returns the currently focused node
-         * @return the currently focused node in the primary stage
-         */
+    /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
     public Node getFocusedNode() {
         return primaryStage.getScene().getFocusOwner();
     }
@@ -759,6 +777,55 @@ public class MainCtrl {
     }
 
     /**
+     * Returns a String describing currently shown page-specific shortcuts
+     * @return String description of currently shown page-specific shortcuts
+     */
+    private String getAdditionalHelp() {
+        if (secondaryStage.isShowing()) {
+            List<Scene> scenes = List.of(createBoard, joinBoardByLink, adminCheck, changeServer,
+                    addCard, changeListName, changeBoardPass, createList, createTag, editTag,
+                    editCard, editBoardName);
+            switch(scenes.indexOf(secondaryStage.getScene())) {
+                case 0:
+                    return createBoardViewCtrl.additionalHelp();
+                case 1:
+                    return joinBoardByLinkCtrl.additionalHelp();
+                case 2:
+                    return adminCheckCtrl.additionalHelp();
+                case 3:
+                    return changeServerCtrl.additionalHelp();
+                case 4:
+                    return addCardCtrl.additionalHelp();
+                case 5:
+                    return changeListNameCtrl.additionalHelp();
+                case 6:
+                    return changeBoardPassCtrl.additionalHelp();
+                case 7:
+                    return createListCtrl.additionalHelp();
+                case 8:
+                    return createTagCtrl.additionalHelp();
+                case 9:
+                    return editTagCtrl.additionalHelp();
+                case 10:
+                    return editCardCtrl.additionalHelp();
+                case 11:
+                    return editBoardNameViewCtrl.additionalHelp();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns whether the primary stage is focused
+     * @return whether the primary stage is focused
+     */
+    public boolean isPrimaryStageFocused() {
+        return primaryStage.isFocused();
+    }
+
+    /**
+     * Loads passwords from current User's file
      * When the user changes, all saved passwords should be forgotten
      */
     public void forgetPasswords() {

@@ -71,6 +71,7 @@ public class CardCell extends ListCell<Card> {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
+        this.parent = cardList;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
 //            //statusLabel.setText(this.getItem().tasksLabel());
@@ -105,7 +106,7 @@ public class CardCell extends ListCell<Card> {
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
             case C:
-                mainCtrl.getBoardViewCtrl().toCustomizationPage();
+                mainCtrl.showCardPresetShortcut(this.getItem());
                 break;
             case T:
                 mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
@@ -151,7 +152,9 @@ public class CardCell extends ListCell<Card> {
         if (empty || card == null) {
             setText(null);
             setGraphic(null);
+            this.setMouseTransparent(true);
         } else {
+            this.setMouseTransparent(false);
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
@@ -171,36 +174,15 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
-                    this.deleteButton.setOnAction(event ->{
-                        deleteCard();
-//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-                    });
 
-                    cardPane.hoverProperty().addListener(
-                            (observable, oldValue, newValue) -> {
-                                if (newValue) {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";");
-                                } else {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";");
-                                }
-                            });
+                    this.deleteButton.setOnAction(event -> deleteCard());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            setAnim();
-            if(mainCtrl.getFocusedNode().equals(this)){
-                fadeTransition.play();
-            }else{
-                fadeTransition.jumpTo(Duration.ZERO);
-                fadeTransition.stop();
-            }
+            focusChange(card);
+
+            paneLabel.setText(card.getName());
             focusChange(card);
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
@@ -214,18 +196,37 @@ public class CardCell extends ListCell<Card> {
         }
     }
 
+    /**
+     * Helper method for distinguishing the focused Card visually
+     * @param card Card to be checked for being focused
+     */
     private void focusChange(Card card) {
+        setAnim();
         if (mainCtrl.getFocusedNode() instanceof CardCell) {
             CardCell cardCell = (CardCell) mainCtrl.getFocusedNode();
             if (cardCell.getItem() != null &&
                     this.getItem().getId() == cardCell.getItem().getId()) {
-                paneLabel.setText(card.getName() + " (S)");
+                fadeTransition.play();
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";");
                 this.requestFocus();
             } else {
-                paneLabel.setText(card.getName());
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";");
+                fadeTransition.jumpTo(Duration.ZERO);
+                fadeTransition.stop();
             }
         } else {
-            paneLabel.setText(card.getName());
+            cardPane.setStyle("-fx-background-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";" +
+                    "\n-fx-border-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";");
+            fadeTransition.jumpTo(Duration.ZERO);
+            fadeTransition.stop();
         }
     }
 
@@ -235,6 +236,7 @@ public class CardCell extends ListCell<Card> {
     public void editCard() {
         mainCtrl.setCardId(this.getItem().getId());
         mainCtrl.showEditCard();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -256,6 +258,7 @@ public class CardCell extends ListCell<Card> {
         }
 
         mainCtrl.getBoardViewCtrl().refresh();
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -335,18 +338,22 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleHover() {
         this.setOnMouseEntered(event -> {
-            Node oldFocus = mainCtrl.getFocusedNode();
-            this.requestFocus();
-            updateItem(this.getItem(), false);
-            if (oldFocus instanceof CardCell) {
-                CardCell oldFocusCell = (CardCell) oldFocus;
-                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            if (mainCtrl.isPrimaryStageFocused()) {
+                Node oldFocus = mainCtrl.getFocusedNode();
+                this.requestFocus();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
+                updateItem(this.getItem(), false);
+                if (oldFocus instanceof CardCell) {
+                    CardCell oldFocusCell = (CardCell) oldFocus;
+                    oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+                }
             }
         });
 
         this.setOnMouseClicked(event -> {
             Node oldFocus = mainCtrl.getFocusedNode();
             this.requestFocus();
+            mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
             updateItem(this.getItem(), false);
             if (oldFocus instanceof CardCell) {
                 CardCell oldFocusCell = (CardCell) oldFocus;
@@ -356,7 +363,7 @@ public class CardCell extends ListCell<Card> {
     }
 
     /**
-     * Handles drag-and-drop gesture between Cards of the same CardList
+     * Handles drag-and-drop gesture between two Cards
      * @param id the ID of the Card that the gesture origins from
      */
     private void dragCard(long id) {
@@ -385,7 +392,7 @@ public class CardCell extends ListCell<Card> {
             fadeTransition = new FadeTransition(Duration.millis(1000));
             fadeTransition.setNode(this);
             fadeTransition.setFromValue(1.0);
-            fadeTransition.setToValue(0.7);
+            fadeTransition.setToValue(0.5);
             fadeTransition.setCycleCount(200);
             fadeTransition.setAutoReverse(true);
         }

@@ -97,6 +97,9 @@ public class CardListCell extends ListCell<CardList>{
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    titledPane.setOnMouseClicked(event ->
+                            mainCtrl.getBoardViewCtrl().refocusFromBackup());
+                    cardsList.setFocusTraversable(false);
                     Platform.runLater(() -> {
                         Pane title = (Pane) titledPane.lookup(".title");
                         if (title != null) {
@@ -113,6 +116,7 @@ public class CardListCell extends ListCell<CardList>{
                     addCardButton.setOnAction(event -> {
                         mainCtrl.setId(this.getItem().getId());
                         mainCtrl.showAddCard();
+                        mainCtrl.getBoardViewCtrl().refocusFromBackup();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -188,6 +192,7 @@ public class CardListCell extends ListCell<CardList>{
      */
     public void rename(Long id) {
         mainCtrl.showChangeListName(id);
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /** Helper method for renaming a cardlist
@@ -210,6 +215,7 @@ public class CardListCell extends ListCell<CardList>{
         }
 
         mainCtrl.showBoardView(b);
+        mainCtrl.getBoardViewCtrl().refocusFromBackup();
     }
 
     /**
@@ -227,6 +233,7 @@ public class CardListCell extends ListCell<CardList>{
 
             if (mainCtrl.getFocusedNode() instanceof CardCell) {
                 CardCell newFocusCell = (CardCell) mainCtrl.getFocusedNode();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(newFocusCell);
                 newFocusCell.updateItem(newFocusCell.getItem(), false);
             }
             if (oldFocus instanceof CardCell) {
@@ -238,6 +245,7 @@ public class CardListCell extends ListCell<CardList>{
 
             if (mainCtrl.getFocusedNode() instanceof CardCell) {
                 CardCell newFocusCell = (CardCell) mainCtrl.getFocusedNode();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(newFocusCell);
                 newFocusCell.updateItem(newFocusCell.getItem(), false);
             }
             if (oldFocus instanceof CardCell) {
