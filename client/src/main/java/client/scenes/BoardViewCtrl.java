@@ -172,6 +172,7 @@ public class BoardViewCtrl {
                 @Override
                 public void handle(MouseEvent event) {
                     unlock();
+
                 }
             });
         } else {
@@ -230,6 +231,7 @@ public class BoardViewCtrl {
             cardListView.setCellFactory(cl ->
                     new CardListCell(mainCtrl, server, board, unlocked)
             );
+            lockImage.setVisible(false);
             customizeBoard(board);
             boardTitle.setText(board.getName());
             focusChange(focusedId);

@@ -5,6 +5,7 @@ import commons.CardList;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,18 +24,21 @@ public class AdminController {
     private BoardRepository boardRepo;
     private CardListRepository cardListRepo;
     private CardRepository cardRepo;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Constructor for AdminController class
      * @param boardRepo Board Repository
      * @param cardListRepo Card List Repository
      * @param cardRepo Card Repository
+     * @param msgs messaging template
      */
     public AdminController(BoardRepository boardRepo, CardListRepository cardListRepo,
-                           CardRepository cardRepo) {
+                           CardRepository cardRepo,SimpMessagingTemplate msgs) {
         this.boardRepo = boardRepo;
         this.cardListRepo = cardListRepo;
         this.cardRepo = cardRepo;
+        this.msgs = msgs;
     }
 
     /**
@@ -68,6 +72,7 @@ public class AdminController {
             cardListRepo.deleteById(c.getId());
         }
         boardRepo.deleteById(bid);
+        msgs.convertAndSend("/topic/deleteBoard",bid);
         return ResponseEntity.ok(true);
     }
 

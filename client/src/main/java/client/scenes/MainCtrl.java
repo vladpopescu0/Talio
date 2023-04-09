@@ -292,6 +292,7 @@ public class MainCtrl {
         changePrimaryStage(boardView, board.getName());
 
         this.boardViewCtrl.setBoard(board);
+//        this.boardViewCtrl.
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
 
