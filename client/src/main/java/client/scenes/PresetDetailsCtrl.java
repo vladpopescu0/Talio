@@ -88,7 +88,8 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                     this.set.setOnAction(event -> setColorScheme());
                     colorBG.setStyle("-fx-fill: "+this.getItem().getColorBGlight()+";");
                     colorFont.setStyle("-fx-fill: "+this.getItem().getColorFont()+";");
-                    if(card.getColors().equals(this.getItem())){
+                    if(card!=null && card.getColors()!=null
+                            && card.getColors().equals(this.getItem())){
                         setStyle("-fx-border-color: red;");
                     }
                 } catch (Exception e) {

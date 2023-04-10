@@ -2,7 +2,6 @@ package server.api;
 
 import commons.Board;
 import commons.CardList;
-import commons.ColorScheme;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -257,23 +256,6 @@ public class BoardController {
         }
         Board b = repo.getById(id);
         return ResponseEntity.ok(b.comparePass(pass));
-    }
-
-    /**
-     * Updates a board
-     * @param id the id of the board to be updated
-     * @param colorScheme the new version of the board
-     * @return a response entity containing the updated board, if the update is possible
-     */
-    @PutMapping("/updateColorScheme/{id}")
-    public ResponseEntity<ColorScheme> updateColorScheme(@PathVariable("id") long id,
-                                                       @RequestBody ColorScheme colorScheme) {
-        if (!colorSchemeRepository.existsById(id)) {
-            return ResponseEntity.badRequest().build();
-        }
-        colorSchemeRepository.save(colorScheme);
-        msgs.convertAndSend("/topic/boardsUpdate", id);
-        return ResponseEntity.ok(colorScheme);
     }
 
     /**

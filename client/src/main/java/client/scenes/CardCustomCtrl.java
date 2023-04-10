@@ -158,7 +158,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
             board.setCardsColorScheme(newScheme);
         }
         board.getCardsColorSchemesList().remove(this.getItem());
-        board.setCardsColorScheme(new ColorScheme());
         server.updateBoard(board);
         mainCtrl.showCustomizationPage(board);
     }

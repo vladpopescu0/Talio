@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 package client.scenes;
-import client.utils.ServerUtils;
 import commons.User;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.util.HashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MainCtrlTest extends MainCtrl{
+public class MainCtrlTest{
 
     private MainCtrl sut;
-    private MockStage primaryStageMock;
-    private MockStage secondaryStageMock;
-    private MockStage helpStageMock;
 
-    private AddCardCtrlTest addCardCtrlTest;
 
     /**
      * sets up the mainCtrl for the application
@@ -38,10 +35,6 @@ public class MainCtrlTest extends MainCtrl{
     @BeforeEach
     public void setup() {
         sut = new MainCtrl();
-        primaryStageMock = new MockStage();
-        secondaryStageMock = new MockStage();
-        helpStageMock = new MockStage();
-        addCardCtrlTest = new AddCardCtrlTest(new ServerUtils(),this);
     }
 
     /**
@@ -101,36 +94,48 @@ public class MainCtrlTest extends MainCtrl{
     }
 
     /**
-     * close secondary stage override mock
+     * saved password test
      */
-    @Override
-    public void closeSecondaryStage(){
-        secondaryStageMock=null;
+    @Test
+    void getterAndSetterSavedPasswordsTest() {
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        assertEquals(sut.getSavedPasswords(),savedPasswords);
     }
 
     /**
-     * close help stage mock
+     * update when there is a board with that password
      */
-    @Override
-    public void closeHelpStage(){
-        helpStageMock=null;
+    @Test
+    void updatePasswordExistsTest(){
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        sut.passwordFile = new File("./file.txt");
+        sut.updatePassword(13L, "Secret");
+        assertEquals("Secret", sut.getSavedPasswords().get(13L));
+        sut.passwordFile.delete();
     }
 
     /**
-     * get focused node mock
-     * @return the mocked focused node
+     * test when no such board has a password
      */
-    @Override
-    public Node getFocusedNode(){
-        return primaryStageMock.getFocusedNode();
+    @Test
+    void updatePasswordNotExistsTest(){
+        HashMap<Long, String> savedPasswords = new HashMap<>();
+        savedPasswords.put(13L,"Test");
+        savedPasswords.put(14L,"More Test");
+        savedPasswords.put(15L,"Extra Test");
+        sut.setSavedPasswords(savedPasswords);
+        sut.passwordFile = new File("./file.txt");
+        sut.updatePassword(12L, "Secret");
+        assertEquals("Secret", sut.getSavedPasswords().get(12L));
+        sut.passwordFile.delete();
     }
 
-    /**
-     * show add card mock override
-     */
-    @Override
-    public void showAddCard(){
-        secondaryStageMock.setScene(new SceneMock("addCard"));
-        secondaryStageMock.setTitle("Add Card");
-    }
 }
