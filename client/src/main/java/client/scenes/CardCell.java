@@ -156,7 +156,9 @@ public class CardCell extends ListCell<Card> {
         if (empty || card == null) {
             setText(null);
             setGraphic(null);
+            this.setMouseTransparent(true);
         } else {
+            this.setMouseTransparent(false);
             if (fxmlLoader == null) {
                 fxmlLoader = new FXMLLoader(getClass().getResource("CardView.fxml"));
                 fxmlLoader.setController(this);
@@ -176,62 +178,13 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
-                    this.deleteButton.setOnAction(event ->{
-                        deleteCard();
-//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-                    });
-//=======
-//                    this.editButton.setOnAction(event -> editCard());
-//                    this.deleteButton.setOnAction(event -> deleteCard());
-//                    this.setOnKeyPressed(this::handleShortcuts);
-////                    this.editButton.setOnAction(event -> {
-////                        mainCtrl.setCardId(this.getItem().getId());
-////                        mainCtrl.showEditCard();
-////                    });
-////                    this.deleteButton.setOnAction(event ->{
-////
-////                        var c = server.deleteCardfromList
-////                                (this.getItem().getParentCardList()
-////                                .getId(),this.getItem().getId());
-////                        if (this.getItem().getTasks() != null) {
-////                            for (Task t : this.getItem().getTasks()) {
-////                                server.deleteTaskFromCard(this.getItem().getId(), t.getId());
-////                                server.deleteTask(t.getId());
-////                            }
-////                        }
-////
-////                        server.deleteCard(this.getItem().getId());
-////
-////                        if (mainCtrl.isSecondaryFromCardCell(this.getItem())) {
-////                            mainCtrl.closeSecondaryStage();
-////                        }
-////
-////                        mainCtrl.getBoardViewCtrl().refresh();
-//////                        mainCtrl.getCardDetailsViewCtr().setCard(null);
-////                    });
-//>>>>>>> c6fd328439b80fd6171e36ba5516efcbab6a9d87
-
-                    cardPane.hoverProperty().addListener(
-                            (observable, oldValue, newValue) -> {
-                                if (newValue) {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGdark()+";");
-                                } else {
-                                    cardPane.setStyle("-fx-background-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";" +
-                                            "\n-fx-border-color:"
-                                            +board.getCardsColorScheme().getColorBGlight()+";");
-                                }
-                            });
+                    this.deleteButton.setOnAction(event -> deleteCard());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             focusChange(card);
-            paneLabel.setText(mainCtrl.getFocusedNode().equals(this)?
-                    card.getName() + " (S)" : card.getName());
+            paneLabel.setText(card.getName());
 
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
@@ -249,6 +202,10 @@ public class CardCell extends ListCell<Card> {
         }
     }
 
+    /**
+     * Helper method for distinguishing the focused Card visually
+     * @param card Card to be checked for being focused
+     */
     private void focusChange(Card card) {
         setAnim();
         if (mainCtrl.getFocusedNode() instanceof CardCell) {
@@ -256,12 +213,24 @@ public class CardCell extends ListCell<Card> {
             if (cardCell.getItem() != null &&
                     this.getItem().getId() == cardCell.getItem().getId()) {
                 fadeTransition.play();
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGdark()+";");
                 this.requestFocus();
             } else {
+                cardPane.setStyle("-fx-background-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";" +
+                        "\n-fx-border-color:"
+                        +board.getCardsColorScheme().getColorBGlight()+";");
                 fadeTransition.jumpTo(Duration.ZERO);
                 fadeTransition.stop();
             }
         } else {
+            cardPane.setStyle("-fx-background-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";" +
+                    "\n-fx-border-color:"
+                    +board.getCardsColorScheme().getColorBGlight()+";");
             fadeTransition.jumpTo(Duration.ZERO);
             fadeTransition.stop();
         }

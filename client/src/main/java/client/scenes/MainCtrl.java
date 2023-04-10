@@ -779,17 +779,6 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
-=======
-     * Returns the currently focused node
-     *
-     * @return the currently focused node in the primary stage
-     */
-    public Node getFocusedNode() {
-        return primaryStage.getScene().getFocusOwner();
-    }
-
-    /**
 >>>>>>> dev_branch
      * Getter for the boardOverviewCtrl
      * @return the boardOverviewCtrl
@@ -798,11 +787,11 @@ public class MainCtrl {
         return this.overviewCtrl;
     }
 
-        /**
-         * Event listener for shortcuts
-         * @param event the key event
-         * @param primary whether the key listener concerns primary stage
-         */
+    /**
+     * Event listener for shortcuts
+     * @param event the key event
+     * @param primary whether the key listener concerns primary stage
+     */
     private void keyEventListener(KeyEvent event, boolean primary) {
         Node focused = primary? primaryStage.getScene().getFocusOwner()
                 : secondaryStage.getScene().getFocusOwner();
@@ -813,6 +802,13 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
+    public Node getFocusedNode() {
+        return primaryStage.getScene().getFocusOwner();
+    }
     /**
      * Gets the map of saved passwords
      * @return Map of board ID to saved password
@@ -855,9 +851,7 @@ public class MainCtrl {
     }
 
     /**
-<<<<<<< HEAD
      * Loads passwords from current User's file
-=======
      * Returns a String describing currently shown page-specific shortcuts
      * @return String description of currently shown page-specific shortcuts
      */
@@ -906,6 +900,7 @@ public class MainCtrl {
     }
 
     /**
+     * Loads passwords from current User's file
      * When the user changes, all saved passwords should be forgotten
 >>>>>>> dev_branch
      */

@@ -133,6 +133,7 @@ public class BoardViewCtrl {
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board, unlocked));
         titledPane.setText(board.getName());
+        titledPane.setOnMouseClicked(event -> refocusFromBackup());
         cardListView.setFocusTraversable(false);
         cardListView.setSelectionModel(dsm);
         server.registerForUpdates("/topic/updateList",
@@ -265,17 +266,6 @@ public class BoardViewCtrl {
                 }
             }
         }
-
-        quickRefresh();
-    }
-
-    /**
-     * Refreshes the boardView page without checking the data on the server
-     */
-    public void quickRefresh() {
-        cardListObservableList = FXCollections.observableList(board.getList());
-        cardListView.setItems(cardListObservableList);
-        customizeBoard(board);
     }
 
     /**
@@ -342,7 +332,7 @@ public class BoardViewCtrl {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        //mainCtrl.closeSecondaryStage();
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showUserBoardOverview();
     }
 
@@ -546,11 +536,9 @@ public class BoardViewCtrl {
                 }
             }
         }
-
-        quickRefresh();
     }
 
-    private final MultipleSelectionModel<CardList> dsm = new MultipleSelectionModel<CardList>() {
+    private final MultipleSelectionModel<CardList> dsm = new MultipleSelectionModel<>() {
         @Override
         public ObservableList<Integer> getSelectedIndices() {
             return FXCollections.emptyObservableList();
