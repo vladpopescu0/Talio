@@ -38,6 +38,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+
+import javafx.scene.image.Image;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 import javafx.util.Duration;
 
@@ -146,6 +150,11 @@ public class BoardViewCtrl {
                     refresh();
                     mainCtrl.getOverviewCtrl().refresh();
                 }));
+        server.registerForUpdates("/topic/passwordChange",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getOverviewCtrl().refresh();
+                }));
     }
 
     /**
@@ -153,10 +162,7 @@ public class BoardViewCtrl {
      * edit it
      */
     public void checkUser() {
-        if (!board.getUsers().contains(mainCtrl.getCurrentUser()) ||
-                (board.isHasPassword() && (!mainCtrl.getSavedPasswords().containsKey(board.getId())
-                || !server.checkBoardPassword(mainCtrl.getSavedPasswords().get(
-                        board.getId()), board.getId())))) {
+        if (!checkBoardAccess()) {
             leaveButton.setDisable(true);
             deleteButton.setDisable(true);
             editTitle.setDisable(true);
@@ -168,6 +174,11 @@ public class BoardViewCtrl {
             boardPass.setDisable(true);
             unlocked = false;
             lockImage.setVisible(true);
+            try {
+                lockImage.setImage(new Image(new FileInputStream("client\\src\\main\\resources\\images\\locked.png")));
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            }
             lockImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -186,7 +197,23 @@ public class BoardViewCtrl {
             boardPass.setDisable(false);
             unlocked = true;
             lockImage.setOnMouseClicked(null);
+            try {
+                lockImage.setImage(new Image(new FileInputStream("client\\src\\main\\resources\\images\\unlocked.png")));
+            } catch (Exception e) {
+                System.out.println(e);
+            }
             lockImage.setVisible(true);
+        }
+    }
+
+    private boolean checkBoardAccess(){
+        if (!board.isHasPassword()){
+            return true;
+        } else if (!mainCtrl.getSavedPasswords().containsKey(board.getId())){
+            return false;
+        } else {
+            String savedPass = mainCtrl.getSavedPasswords().get(board.getId());
+            return server.checkBoardPassword(savedPass, board.getId());
         }
     }
 
@@ -234,6 +261,7 @@ public class BoardViewCtrl {
             boardTitle.setText(board.getName());
             focusChange(focusedId);
         }
+        checkUser();
     }
 
     /**

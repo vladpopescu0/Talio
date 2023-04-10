@@ -224,6 +224,7 @@ public class BoardController {
         Board b = repo.getById(id);
         b.setPasswordHash(pass);
         repo.save(b);
+        msgs.convertAndSend("/topic/passwordChange", id);
         return ResponseEntity.ok(true);
     }
 

@@ -9,12 +9,17 @@ import commons.Task;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.stage.Modality;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -157,11 +162,30 @@ public class CardDetailsViewCtr {
             description.setText(card.getDescription());
 
             if (!unlocked) {
-                editButton.setVisible(false);
+                editButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        alert("This board is locked!");
+                    }
+                });
                 addTaskButton.setVisible(false);
                 addTagButton.setVisible(false);
+            } else {
+                editButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        edit();
+                    }
+                });
             }
         }
+    }
+
+    private void alert(String message){
+        var alert = new Alert(Alert.AlertType.ERROR);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     /**
