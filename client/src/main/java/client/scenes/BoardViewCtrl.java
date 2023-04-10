@@ -52,7 +52,7 @@ public class BoardViewCtrl {
     private final MainCtrl mainCtrl;
 
     private Board board;
-    private boolean isAnimationPlayed = false;
+    public boolean isAnimationPlayed = false;
     private Node focusedNodeBackup;
 
     private Region content;
@@ -213,7 +213,9 @@ public class BoardViewCtrl {
      */
     public void addCardList() {
         mainCtrl.showCreateList(board);
-        refocusFromBackup();
+        if(focusedNodeBackup!=null){
+            refocusFromBackup();
+        }
     }
 
     /**
@@ -280,32 +282,18 @@ public class BoardViewCtrl {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
-        if (board.getColorScheme().getColorLighter() == null) {
-            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
-        } else {
-            mainCtrl.getCustomizationPageCtrl().getBoardBG()
-                    .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
-        }
-        if (board.getColorScheme().getColorFont() == null) {
-            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.WHITE);
-        } else {
-            mainCtrl.getCustomizationPageCtrl().getBoardFont()
-                    .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
-        }
-        if (board.getListsColorScheme().getColorBGlight() == null) {
-            mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
-        } else {
-            mainCtrl.getCustomizationPageCtrl().getListBG()
-                    .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
-        }
-        if (board.getListsColorScheme().getColorFont() == null) {
-            mainCtrl.getCustomizationPageCtrl().getListFont().setValue(Color.WHITE);
-        } else {
-            mainCtrl.getCustomizationPageCtrl().getListFont()
-                    .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
-        }
+        mainCtrl.getCustomizationPageCtrl().getBoardBG()
+                .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
+        mainCtrl.getCustomizationPageCtrl().getBoardFont()
+                .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
+        mainCtrl.getCustomizationPageCtrl().getListBG()
+                .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
+        mainCtrl.getCustomizationPageCtrl().getListFont()
+                .setValue(Color.valueOf(board.getListsColorScheme().getColorFont()));
         mainCtrl.showCustomizationPage(this.board);
-        refocusFromBackup();
+        if(focusedNodeBackup!=null){
+            refocusFromBackup();
+        }
     }
 
     /**
@@ -334,7 +322,9 @@ public class BoardViewCtrl {
      */
     public void editTitle() {
         mainCtrl.showEditBoardNameView(board);
-        refocusFromBackup();
+        if(focusedNodeBackup!=null){
+            refocusFromBackup();
+        }
     }
 
     /**
@@ -342,7 +332,9 @@ public class BoardViewCtrl {
      */
     public void editPassword() {
         mainCtrl.showChangeBoardPasswordView(board);
-        refocusFromBackup();
+        if(focusedNodeBackup!=null){
+            refocusFromBackup();
+        }
     }
 
     /**
@@ -351,19 +343,6 @@ public class BoardViewCtrl {
      * @param board the board to be customized
      */
     public void customizeBoard(Board board) {
-        if (board.getColorScheme().getColorBGlight() == null) {
-            board.getColorScheme().setColorBGlight(mainCtrl.colorToHex(Color.WHITE));
-        }
-        if (board.getColorScheme().getColorBGdark() == null) {
-            board.getColorScheme().setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
-        }
-        if (board.getColorScheme().getColorFont() == null) {
-            board.getColorScheme().setColorFont(mainCtrl.colorToHex(Color.BLACK));
-        }
-        if (board.getColorScheme().getColorLighter() == null) {
-            board.getColorScheme().setColorLighter(mainCtrl.colorToHex(Color.GRAY));
-        }
-
         this.content = (Region) titledPane.lookup(".title");
 //        this.scrollbar = (Region) cardListView.lookup(".virtual-flow > .corner");
 
@@ -441,7 +420,9 @@ public class BoardViewCtrl {
         StringSelection stringSelection = new StringSelection(inviteCode);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(stringSelection, null);
-        refocusFromBackup();
+        if(focusedNodeBackup!=null){
+            refocusFromBackup();
+        }
     }
 
     /**
@@ -475,6 +456,13 @@ public class BoardViewCtrl {
      */
     public void setFocusedNodeBackup(Node node) {
         focusedNodeBackup = node;
+    }
+    /**
+     * Getter for the backup of a focused node
+     * @return node new focused node backup
+     */
+    public Node getFocusedNodeBackup() {
+        return focusedNodeBackup;
     }
 
     /**
@@ -583,12 +571,8 @@ public class BoardViewCtrl {
             for (Tag t : board.getTags()) {
                 server.removeTag(t.getId());
             }
+            System.out.println(board.getTags());
         }
-        //if (board.getCardsColorSchemesList() != null) {
-        //    for (ColorScheme c : board.getCardsColorSchemesList()) {
-        //        server.deleteColorSchemeById(c.getId());
-        //    }
-        //}
         server.deleteBoard(board.getId());
         mainCtrl.showUserBoardOverview();
     }
