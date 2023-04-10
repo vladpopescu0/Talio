@@ -85,6 +85,9 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
+                    if(!parent.getUnlocked()){
+                        set.setVisible(false);
+                    }
                     this.set.setOnAction(event -> setColorScheme());
                     colorBG.setStyle("-fx-fill: "+this.getItem().getColorBGlight()+";");
                     colorFont.setStyle("-fx-fill: "+this.getItem().getColorFont()+";");
@@ -97,7 +100,6 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                 }
             }
             setText(null);
-            setGraphic(presetsPane);
         }
     }
 
