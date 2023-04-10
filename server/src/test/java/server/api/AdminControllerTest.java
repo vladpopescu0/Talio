@@ -4,6 +4,8 @@ import commons.Board;
 import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -20,16 +22,20 @@ public class AdminControllerTest {
     private static final String wrongPass = "definitelyWrongPassword";
 
     private String password;
+    private MessageChannel channel;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Setup before each test
      */
     @BeforeEach
     public void setup() {
+        channel = (message, timeout) -> true;
         boardRepo = new TestBoardRepository();
         cardListRepo = new TestCardListRepository();
         cardRepo = new TestCardRepository();
-        cont = new AdminController(boardRepo, cardListRepo, cardRepo,null);
+        msgs = new SimpMessagingTemplate(channel);
+        cont = new AdminController(boardRepo, cardListRepo, cardRepo,msgs);
         password = cont.startup();
     }
 
@@ -63,16 +69,16 @@ public class AdminControllerTest {
         assertEquals(true, actual.getBody());
     }
 
-//    /**
-//     * Tests deleting a board from the board repository
-//     */
-//    @Test
-//    public void deleteBoard(){
-//        Board b = new Board(SOME_USER, "b");
-//        boardRepo.save(b);
-//        cont.deleteBoard(password, b.getId());
-//        assertEquals(0, boardRepo.boards.size());
-//    }
+    /**
+     * Tests deleting a board from the board repository
+     */
+    @Test
+    public void deleteBoard(){
+        Board b = new Board(SOME_USER, "b");
+        boardRepo.save(b);
+        cont.deleteBoard(password, b.getId());
+        assertEquals(0, boardRepo.boards.size());
+    }
 
     /**
      * Tests deleting a board with the wrong admin password

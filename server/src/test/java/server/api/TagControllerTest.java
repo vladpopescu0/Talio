@@ -4,6 +4,7 @@ import commons.Card;
 import commons.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.ArrayList;
@@ -20,19 +21,22 @@ public class TagControllerTest {
     private TagController controller;
     private CardController cardController;
 
-    SimpMessagingTemplate msg;
+    private MessageChannel channel;
+    private SimpMessagingTemplate msgs;
 
     /**
      * Setup
      */
     @BeforeEach
     public void setup() {
+        channel = (message, timeout) -> true;
+        msgs = new SimpMessagingTemplate(channel);
         repo = new TestTagRepository();
         cardRepo = new TestCardRepository();
         clRepo = new TestCardListRepository();
         taskRepo = new TestTaskRepository();
-        controller = new TagController(repo, cardRepo, null);
-        cardController = new CardController(cardRepo, clRepo, msg, taskRepo, repo);
+        controller = new TagController(repo, cardRepo, msgs);
+        cardController = new CardController(cardRepo, clRepo, msgs, taskRepo, repo);
     }
 
     /**
