@@ -547,5 +547,5 @@ public class BoardControllerTest {
         var actual = sut.putBoard(b2);
         assertEquals(actual.getStatusCodeValue(), 400);
     }
-    
+
 }
