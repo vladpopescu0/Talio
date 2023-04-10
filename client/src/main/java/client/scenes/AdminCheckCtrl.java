@@ -68,6 +68,7 @@ public class AdminCheckCtrl {
         } else {
             messageLabel.setTextFill(Color.RED);
             messageLabel.setText("Incorrect Password");
+            return;
         }
         mainCtrl.getOverviewCtrl().refresh();
         mainCtrl.showOverview();

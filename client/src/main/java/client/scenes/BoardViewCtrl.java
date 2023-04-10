@@ -214,7 +214,7 @@ public class BoardViewCtrl {
     }
 
     private boolean checkBoardAccess(){
-        if (!board.isHasPassword()){
+        if (!board.isHasPassword() || mainCtrl.isAdmin()){
             return true;
         } else if (!mainCtrl.getSavedPasswords().containsKey(board.getId())){
             return false;
