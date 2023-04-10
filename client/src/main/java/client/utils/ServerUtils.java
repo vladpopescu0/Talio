@@ -344,7 +344,7 @@ public class ServerUtils {
      */
     public boolean deleteBoardPassword(long boardId) {
         boolean b = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/boards/" + boardId + "/pass/check") //
+                .target(server).path("api/boards/" + boardId + "/pass/remove") //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .get(Boolean.class);
