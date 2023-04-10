@@ -58,6 +58,8 @@ public class CardCell extends ListCell<Card> {
 
     private FadeTransition fadeTransition;
 
+    private boolean unlocked;
+
     /**
      * useful dependencies for universal variables and server communication
      * @param server the utils where the connection to the apis is
@@ -65,9 +67,10 @@ public class CardCell extends ListCell<Card> {
      * @param cardList the cardListCell in which this card is
      * @param board the board the card belongs to
      * @param colorScheme the colorscheme of this card
+     * @param unlocked whether it is unlocked
      */
     public CardCell(MainCtrl mainCtrl, ServerUtils server, CardListCell cardList,
-                    Board board, ColorScheme colorScheme) {
+                    Board board, ColorScheme colorScheme, boolean unlocked) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
@@ -78,6 +81,7 @@ public class CardCell extends ListCell<Card> {
 //            statusLabel.setText("AAAA");
         }
         this.colorSchemeCustom = colorScheme;
+        this.unlocked = unlocked;
     }
 
     /**
@@ -174,16 +178,14 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
-
                     this.deleteButton.setOnAction(event -> deleteCard());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             focusChange(card);
-
             paneLabel.setText(card.getName());
-            focusChange(card);
+
             setStyle("-fx-background-color:" + colorSchemeCustom.getColorBGdark() + ";");
             setText(null);
             setGraphic(cardPane);
@@ -193,6 +195,10 @@ public class CardCell extends ListCell<Card> {
                     .valueOf(colorSchemeCustom.getColorBGdark()).brighter());
             mainCtrl.setButtonStyle(deleteButton,lighter,colorSchemeCustom.getColorFont());
             mainCtrl.setButtonStyle(editButton,lighter,colorSchemeCustom.getColorFont());
+            if (!unlocked) {
+                editButton.setVisible(false);
+                deleteButton.setVisible(false);
+            }
         }
     }
 
@@ -267,7 +273,7 @@ public class CardCell extends ListCell<Card> {
     public void showDetails() {
         mainCtrl.closeSecondaryStage();
         //otherwise the board will have empty lists
-        mainCtrl.showCardDetailsView(this.getItem(), board);
+        mainCtrl.showCardDetailsView(this.getItem(), board, unlocked);
     }
 
     /**

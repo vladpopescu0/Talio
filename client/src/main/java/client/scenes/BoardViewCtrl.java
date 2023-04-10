@@ -25,6 +25,7 @@ import javafx.animation.FadeTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -32,6 +33,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.skin.VirtualFlow;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -93,6 +96,11 @@ public class BoardViewCtrl {
     @FXML
     private Label boardTitle;
 
+    @FXML
+    private ImageView lockImage;
+
+    private boolean unlocked = true;
+
     /**
      * Constructor of the Controller for BoardView
      *
@@ -119,11 +127,11 @@ public class BoardViewCtrl {
     /**
      * Runs upon initialization of the controller
      */
-    public void initializ() {
-        server.setSession(server.getUrl());
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
-        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board));
+        cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board, unlocked));
         titledPane.setText(board.getName());
         titledPane.setOnMouseClicked(event -> refocusFromBackup());
         cardListView.setFocusTraversable(false);
@@ -154,11 +162,20 @@ public class BoardViewCtrl {
             deleteButton.setDisable(true);
             editTitle.setDisable(true);
             addList.setDisable(true);
-            cardListView.setDisable(true);
+            //cardListView.setDisable(true);
             viewTags.setDisable(true);
             customizeButton.setDisable(true);
             copyInviteButton.setDisable(true);
             boardPass.setDisable(true);
+            unlocked = false;
+            lockImage.setVisible(true);
+            lockImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    unlock();
+
+                }
+            });
         } else {
             leaveButton.setDisable(false);
             deleteButton.setDisable(false);
@@ -169,6 +186,9 @@ public class BoardViewCtrl {
             customizeButton.setDisable(false);
             copyInviteButton.setDisable(false);
             boardPass.setDisable(false);
+            unlocked = true;
+            lockImage.setOnMouseClicked(null);
+            lockImage.setVisible(true);
         }
     }
 
@@ -210,8 +230,9 @@ public class BoardViewCtrl {
             cardListObservableList = FXCollections.observableList(board.getList());
             cardListView.setItems(cardListObservableList);
             cardListView.setCellFactory(cl ->
-                    new CardListCell(mainCtrl, server, board)
+                    new CardListCell(mainCtrl, server, board, unlocked)
             );
+            lockImage.setVisible(false);
             customizeBoard(board);
             boardTitle.setText(board.getName());
             focusChange(focusedId);
@@ -259,6 +280,14 @@ public class BoardViewCtrl {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
+        prepareCustomizationPage();
+        mainCtrl.showCustomizationPage(this.board);
+    }
+
+    /**
+     * Sets the existing colors in the customization page
+     */
+    public void prepareCustomizationPage(){
         if (board.getColorScheme().getColorLighter() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {
@@ -381,7 +410,7 @@ public class BoardViewCtrl {
         cardListView.setStyle(style);
         scrollPane.setStyle(style);
         cardListView.setCellFactory(cc -> {
-            CardListCell c = new CardListCell(mainCtrl, server, board);
+            CardListCell c = new CardListCell(mainCtrl, server, board, unlocked);
             c.setStyle("-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
                     "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";");
             return c;
@@ -589,5 +618,12 @@ public class BoardViewCtrl {
         //}
         server.deleteBoard(board.getId());
         mainCtrl.showUserBoardOverview();
+    }
+
+    /**
+     * Unlock method
+     */
+    public void unlock(){
+        mainCtrl.showCheckBoardPasswordView(board);
     }
 }

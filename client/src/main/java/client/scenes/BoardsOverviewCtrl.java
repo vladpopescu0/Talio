@@ -61,25 +61,28 @@ public class BoardsOverviewCtrl {
     /**
      * Initializer for the BoardsOverview scene
      */
-    public void initializ() {
-        server.setSession(server.getUrl());
+    public void init() {
+        server.setSession(ServerUtils.getUrl());
         colBoardName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getName()));
-        //long polling
+//        //long polling
         server.getBoardUpdates(q -> {
             data.add(q);
             refresh();
         });
         //websockets
         server.registerForUpdates("/topic/boardsUpdate",
-                Board.class, q -> Platform.runLater(() -> {
+                Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
-                    mainCtrl.getPrimaryStage()
-                            .setTitle(mainCtrl.getBoardViewCtrl().getBoard().getName());
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                }));
+        server.registerForUpdates("/topic/deleteBoard",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
@@ -137,7 +140,6 @@ public class BoardsOverviewCtrl {
                 }
             }
             mainCtrl.showBoardView(b);
-            mainCtrl.showCheckBoardPasswordView(b);
 
         } else {
             b.addUser(mainCtrl.getCurrentUser());

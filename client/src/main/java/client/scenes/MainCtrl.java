@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,6 +31,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -101,20 +105,26 @@ public class MainCtrl {
 
     private HashMap<Long, String> savedPasswords = new HashMap<>();
 
+    private final ObjectMapper mapper = new ObjectMapper();
+    private File passwordFile;
+    private final TypeReference<HashMap<Long, String>> typeref =
+            new TypeReference<HashMap<Long, String>>() {};
+
     /**
      * Initializes the application
-     * @param primaryStage the primary stage used
-     * @param secondaryStage the secondary stage used
-     * @param helpStage the stage for help information used
-     * @param overview the boardOverview scene
-     * @param boardView the boardView scene
-     * @param createList the createList scene
-     * @param createBoard the createBoard scene
-     * @param addCard the addCard scene
-     * @param userPage the user log in page
-     * @param editCard the editCard scene
-     * @param changeListName the changeListName scene
-     * @param changeServer the changeServer scene
+     *
+     * @param primaryStage       the primary stage used
+     * @param secondaryStage     the secondary stage used
+     * @param helpStage          the stage for help information used
+     * @param overview           the boardOverview scene
+     * @param boardView          the boardView scene
+     * @param createList         the createList scene
+     * @param createBoard        the createBoard scene
+     * @param addCard            the addCard scene
+     * @param userPage           the user log in page
+     * @param editCard           the editCard scene
+     * @param changeListName     the changeListName scene
+     * @param changeServer       the changeServer scene
      * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
      * @param createTag the createTag scene
@@ -124,9 +134,9 @@ public class MainCtrl {
      * @param viewAddTag the viewAddTag scene
      * @param details the cardDetails scene
      * @param customizationPage the CustomizationPage scene
-     * @param helpPage the HelpPage scene
      * @param adminCheck the adminCheck scene
      * @param editBoardPass the editBoardPassword scene
+     * @param helpPage the HelpPage scene
      * @param checkBoardPass the checkBoardPassword scene
      * @param cardPreset the cardPresetView scene
      */
@@ -135,7 +145,7 @@ public class MainCtrl {
                            Pair<BoardViewCtrl, Parent> boardView,
                            Pair<CreateListCtrl, Parent> createList,
                            Pair<CreateBoardViewCtrl, Parent> createBoard,
-                           Pair<AddCardCtrl,Parent> addCard,
+                           Pair<AddCardCtrl, Parent> addCard,
                            Pair<UserCtrl, Parent> userPage,
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
@@ -150,11 +160,12 @@ public class MainCtrl {
                            Pair<CreateTagCtrl, Parent> createTag,
                            Pair<EditTagCtrl, Parent> editTag,
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
-                           Pair<HelpCtrl, Parent> helpPage,
-                           Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
+                            Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
                            Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass,
+                           Pair<HelpCtrl, Parent> helpPage,
                            Pair<CardPresetCtrl, Parent> cardPreset){
         this.primaryStage = primaryStage;
+
         this.secondaryStage = secondaryStage;
         this.helpStage = helpStage;
 
@@ -247,14 +258,17 @@ public class MainCtrl {
 
     /**
      * Setter for the current user
+     *
      * @param user the user to be introduced as current user
      */
-    public void setCurrentUser (User user) {
+    public void setCurrentUser(User user) {
         this.currentUser = user;
+        this.passwordFile = new File("userPasswords/"+user.getUsername()+".csv");
     }
 
     /**
      * Getter for the current user
+     *
      * @return the current user
      */
     public User getCurrentUser() {
@@ -278,6 +292,7 @@ public class MainCtrl {
         changePrimaryStage(boardView, board.getName());
 
         this.boardViewCtrl.setBoard(board);
+//        this.boardViewCtrl.
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
 
@@ -285,19 +300,23 @@ public class MainCtrl {
 
     /**
      * Shows the detailed view of cards
-     * @param card the card whose details are to be shown
+     *
+     * @param card  the card whose details are to be shown
      * @param board the board to which the card belongs
+     * @param unlocked whether it is unlocked
      */
-    public void showCardDetailsView(Card card, Board board) {
+    public void showCardDetailsView(Card card, Board board, boolean unlocked) {
         changePrimaryStage(cardDetails, card.getName());
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
+        this.cardDetailsViewCtr.setUnlocked(unlocked);
         this.cardDetailsViewCtr.refresh();
     }
 
     /**
      * Redirects to the edit Board name page
+     *
      * @param board the board whose name is to be changed
      */
     public void showEditBoardNameView(Board board) {
@@ -365,6 +384,7 @@ public class MainCtrl {
     public BoardViewCtrl getBoardViewCtrl() {
         return boardViewCtrl;
     }
+
     /**
      * Getter for boardViewCtrl
      *
@@ -377,9 +397,12 @@ public class MainCtrl {
 
     /**
      * Getter for the CardDetailsViewCtr
+     *
      * @return the CardDetailsViewCtr
      */
-    public CardDetailsViewCtr getCardDetailsViewCtr() {return cardDetailsViewCtr;}
+    public CardDetailsViewCtr getCardDetailsViewCtr() {
+        return cardDetailsViewCtr;
+    }
 
     /**
      * Getter for userBoardOverviewCtrl
@@ -392,6 +415,7 @@ public class MainCtrl {
 
     /**
      * Getter for viewTagsCtrl
+     *
      * @return the viewTagsCtrl
      */
     @SuppressWarnings("unused")
@@ -401,6 +425,7 @@ public class MainCtrl {
 
     /**
      * Getter for viewAddTagsCtrl
+     *
      * @return the viewAddTagsCtrl
      */
     public ViewAddTagsCtrl getViewAddTagsCtrl() {
@@ -423,6 +448,7 @@ public class MainCtrl {
 
     /**
      * Shows the customization page
+     *
      * @param board the board to be customized
      */
     public void showCustomizationPage(Board board) {
@@ -430,8 +456,10 @@ public class MainCtrl {
         showSecondaryStage(customizationPage,"Customize Your Board");
         this.customizationPageCtrl.setBoard(board);
         this.customizationPageCtrl.refresh();
+        this.customizationPageCtrl.init();
         //primaryStage.setScene(customizationPage);
     }
+
     /**
      * Shows the admin login page
      */
@@ -439,7 +467,9 @@ public class MainCtrl {
         showSecondaryStage(adminCheck, "Admin Password");
     }
 
-    /** Shows the ChangeListName scene
+    /**
+     * Shows the ChangeListName scene
+     *
      * @param id id of the current cardList
      */
     public void showChangeListName(Long id) {
@@ -480,6 +510,7 @@ public class MainCtrl {
 
     /**
      * Opens a new window with an overview of all tags for the current board
+     *
      * @param board the Board of which Tag overview is to be shown
      */
     public void showViewTags(Board board) {
@@ -491,6 +522,7 @@ public class MainCtrl {
 
     /**
      * Shows the add Tag page
+     *
      * @param board the Board to add a Tag to
      */
     public void showAddTag(Board board) {
@@ -500,6 +532,7 @@ public class MainCtrl {
 
     /**
      * Shows the edit Tag page
+     *
      * @param tag Tag to be edited
      */
     public void showEditTag(Tag tag) {
@@ -510,8 +543,9 @@ public class MainCtrl {
 
     /**
      * Shows the Add Tag to Card page
-     * @param board the board to which the Card belongs
-     * @param card the Card to which a Tag might be added
+     *
+     * @param board    the board to which the Card belongs
+     * @param card     the Card to which a Tag might be added
      * @param shortcut whether the page was opened using a keyboard shortcut
      */
     public void showViewAddTag(Board board, Card card, boolean shortcut) {
@@ -536,7 +570,7 @@ public class MainCtrl {
     /**
      * Sets the current screen to the "JoinBoardByLink scene from resources"
      */
-    public void showJoinBoardByLink(){
+    public void showJoinBoardByLink() {
         showSecondaryStage(joinBoardByLink, "Join A Board By Code");
     }
 
@@ -572,11 +606,11 @@ public class MainCtrl {
      * @param color the color the needs to be transformed to hex format
      * @return a hex format of the color
      */
-    public String colorToHex(Color color){
-        return String.format( "#%02X%02X%02X",
-                (int)( color.getRed() * 255 ),
-                (int)( color.getGreen() * 255 ),
-                (int)( color.getBlue() * 255 ) );
+    public String colorToHex(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
     /**
@@ -586,27 +620,50 @@ public class MainCtrl {
         return customizationPageCtrl;
     }
 
-    /** Sets the style for a button
-     * @param button the button for which the style is set
-     * @param bgColor the bg color of the button
+    /**
+     * Sets the style for a button
+     *
+     * @param button    the button for which the style is set
+     * @param bgColor   the bg color of the button
      * @param fontColor the cont color of the button
      */
     public void setButtonStyle(Button button, String bgColor, String fontColor) {
         String style = "-fx-background-color: " + bgColor + "; "
                 + "-fx-background-insets: 0,0 0 5 0, 0 0 6 0, 0 0 7 0;"
                 + "-fx-background-radius: 5px;" +
-                "-fx-text-fill:" + fontColor + ";"+
-                "-fx-border-color: " + fontColor+";"+
+                "-fx-text-fill:" + fontColor + ";" +
+                "-fx-border-color: " + fontColor + ";" +
                 "-fx-border-radius: 5%;";
         button.setStyle(style);
     }
-    public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
 
-    public boolean isAdmin() { return this.isAdmin; }
+    /**
+     * @param isAdmin boolean if user is admin
+     */
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
-    public String getAdminPass() { return adminPass; }
+    /**
+     * @return boolean if user is admin
+     */
+    public boolean isAdmin() {
+        return this.isAdmin;
+    }
 
-    public void setAdminPass(String pass) { this.adminPass = pass; }
+    /**
+     * @return the admin password
+     */
+    public String getAdminPass() {
+        return adminPass;
+    }
+
+    /**
+     * @param pass the admin password
+     */
+    public void setAdminPass(String pass) {
+        this.adminPass = pass;
+    }
 
     /**
      * Closes the secondary stage if it's visible
@@ -636,6 +693,7 @@ public class MainCtrl {
 
     /**
      * Sets up the primary stage for change
+     *
      * @param scene scene to be shown on the page
      * @param title title of the page
      */
@@ -648,6 +706,7 @@ public class MainCtrl {
 
     /**
      * Shows the secondary stage if it's not visible
+     *
      * @param scene scene to be shown on the pop up page
      * @param title title of the pop up page
      */
@@ -678,6 +737,7 @@ public class MainCtrl {
 
     /**
      * Checks whether the pop up page was invoked from the CardListCell entity
+     *
      * @param cardList CardList corresponding to the CardListCell
      * @return whether the pop up page was invoked from the CardListCell entity
      */
@@ -690,6 +750,7 @@ public class MainCtrl {
 
     /**
      * Checks whether the pop up page was invoked from the CardCell entity
+     *
      * @param card Card corresponding to the CardCell
      * @return whether the pop up page was invoked from the CardCell entity
      */
@@ -700,6 +761,7 @@ public class MainCtrl {
 
     /**
      * Checks whether the pop up page was invoked from the TagCell entity
+     *
      * @param tag Tag corresponding to the TagCell
      * @return whether the pop up page was invoked from the TagCell entity
      */
@@ -717,6 +779,7 @@ public class MainCtrl {
     }
 
     /**
+>>>>>>> dev_branch
      * Getter for the boardOverviewCtrl
      * @return the boardOverviewCtrl
      */
@@ -774,9 +837,21 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+        try {
+            String newPasswords = mapper.writeValueAsString(savedPasswords);
+            if (!passwordFile.exists()){
+                passwordFile.createNewFile();
+            }
+            FileWriter fw = new FileWriter(passwordFile);
+            fw.write(newPasswords);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
+     * Loads passwords from current User's file
      * Returns a String describing currently shown page-specific shortcuts
      * @return String description of currently shown page-specific shortcuts
      */
@@ -827,8 +902,13 @@ public class MainCtrl {
     /**
      * Loads passwords from current User's file
      * When the user changes, all saved passwords should be forgotten
+>>>>>>> dev_branch
      */
-    public void forgetPasswords() {
-        savedPasswords = new HashMap<>();
+    public void loadPasswords() {
+        try {
+            this.savedPasswords = mapper.readValue(passwordFile, typeref);
+        } catch (Exception e){
+            savedPasswords = new HashMap<>();
+        }
     }
 }

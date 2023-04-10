@@ -1,7 +1,6 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import client.utils.SocketHandler;
 import commons.Board;
 import commons.ColorScheme;
 import javafx.application.Platform;
@@ -17,8 +16,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private final CustomizationPageCtrl parent;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-    private final SocketHandler socketHandler = new SocketHandler(ServerUtils.getServer());
-
     private Board board;
 
     @FXML
@@ -94,11 +91,11 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                     if(board.getCardsColorScheme().equals(this.getItem())){
                         setStyle("-fx-border-color: red;");
                     }
-                    socketHandler.registerForUpdates("/topic/colorsUpdate",
+                    server.registerForUpdates("/topic/colorsUpdate",
                             ColorScheme.class, q -> Platform.runLater(() -> {
                                 mainCtrl.getCustomizationPageCtrl().refresh();
                             }));
-                    socketHandler.registerForUpdates("/topic/boardsUpdate",
+                    server.registerForUpdates("/topic/boardsUpdate",
                             Board.class, q -> Platform.runLater(() -> {
                                 mainCtrl.getCustomizationPageCtrl().refresh();
                             }));

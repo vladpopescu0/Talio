@@ -50,6 +50,13 @@ public class CardDetailsViewCtr {
     private TextArea description;
     @FXML
     private Button editButton;
+    @FXML
+    private Button addTagButton;
+
+    @FXML
+    private Button addTaskButton;
+
+    private boolean unlocked = true;
 
     /**
      * Constructor for the detailed card view
@@ -80,9 +87,9 @@ public class CardDetailsViewCtr {
     /**
      * Initialized the card Details view
      */
-    public void initializ() {
+    public void init() {
         //cancelButton.setDisable(true);
-        server.setSession(server.getUrl());
+        server.setSession(ServerUtils.getUrl());
         editButton.setVisible(true);
         cancelButton.setVisible(false);
         confirmButton.setVisible(false);
@@ -93,11 +100,11 @@ public class CardDetailsViewCtr {
 
         taskObservableList = FXCollections.observableList(tasks);
         taskList.setItems(taskObservableList);
-        taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+        taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this, unlocked));
         tagObservableList = FXCollections.observableList(card == null || card.getTags() == null ?
                 new ArrayList<>() : card.getTags());
         tagList.setItems(tagObservableList);
-        tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+        tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true, unlocked));
         List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
                 new ArrayList<>() : board.getCardsColorSchemesList());
         colorSchemeObservableList = FXCollections.observableList(colors);
@@ -107,8 +114,7 @@ public class CardDetailsViewCtr {
         description.setText(card.getDescription());
         server.registerForUpdates("/topic/tasks",
                 Long.class, q -> Platform.runLater(() -> {
-                    System.out.println("id " + q);
-                    refreshTagChange();
+                    refresh();
                     description.setText(card.getDescription());
                     mainCtrl.getBoardViewCtrl().refresh();
                     mainCtrl.getOverviewCtrl().refresh();
@@ -120,26 +126,28 @@ public class CardDetailsViewCtr {
                         mainCtrl.getBoardViewCtrl().refresh();
                         mainCtrl.getOverviewCtrl().refresh();
                         mainCtrl.getCardDetailsViewCtr().setCard(null);
+                        mainCtrl.getViewAddTagsCtrl().setCard(null);
                     }
                 }));
+
     }
 
     /**
      * Updates the tasks, description and tags
      */
     public void refresh() {
-        if (card != null && card.getId() > 0) {
+        if (server.getCardById(card.getId()) != null) {
             this.card = server.getCardById(card.getId());
             List<Task> tasks = (card == null || card.getTasks() == null ?
                     new ArrayList<>() : card.getTasks());
             taskObservableList = FXCollections.observableList(tasks);
             taskList.setItems(taskObservableList);
-            taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this));
+            taskList.setCellFactory(t -> new TaskCell(mainCtrl, server, this, unlocked));
             tagObservableList =
                     FXCollections.observableList(card == null || card.getTags() == null ?
                             new ArrayList<>() : card.getTags());
             tagList.setItems(tagObservableList);
-            tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true));
+            tagList.setCellFactory(t -> new TagAddCell(mainCtrl, server, true, unlocked));
             List<ColorScheme> colors = (board == null || board.getCardsColorSchemesList() == null ?
                     new ArrayList<>() : board.getCardsColorSchemesList());
             colorSchemeObservableList = FXCollections.observableList(colors);
@@ -147,6 +155,12 @@ public class CardDetailsViewCtr {
             colorSchemeList.setCellFactory(p ->
                     new PresetDetailsCtrl(mainCtrl, server, this,board,card));
             description.setText(card.getDescription());
+
+            if (!unlocked) {
+                editButton.setVisible(false);
+                addTaskButton.setVisible(false);
+                addTagButton.setVisible(false);
+            }
         }
     }
 
@@ -235,7 +249,7 @@ public class CardDetailsViewCtr {
         Task added = new Task("Task name");
         server.addTaskToCard(added, card.getId());
         refresh();
-        mainCtrl.showCardDetailsView(server.getCardById(card.getId()), board);
+        mainCtrl.showCardDetailsView(server.getCardById(card.getId()), board, unlocked);
     }
 
     /**
@@ -248,8 +262,9 @@ public class CardDetailsViewCtr {
     /**
      * Pops up a secondary page on which tag to be added can be selected
      * and informs the page that it's popped from a shortcut
+     *
      * @param board Board to which the Card belongs
-     * @param card Card to which Tags may be added
+     * @param card  Card to which Tags may be added
      */
     public void addTagsShortcut(Board board, Card card) {
         mainCtrl.showViewAddTag(board, card, true);
@@ -261,5 +276,13 @@ public class CardDetailsViewCtr {
     public void back() {
         mainCtrl.showBoardView(board);
         mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Set unlocked
+     * @param unlocked whether it's unlocked
+     */
+    public void setUnlocked(boolean unlocked) {
+        this.unlocked = unlocked;
     }
 }

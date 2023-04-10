@@ -4,9 +4,12 @@ import client.utils.ServerUtils;
 import commons.Card;
 import commons.Task;
 import jakarta.ws.rs.WebApplicationException;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 
@@ -32,19 +35,28 @@ public class TaskCell extends ListCell<Task> {
     private Button cancelButton;
     @FXML
     private Button confirmButton;
+    @FXML
+    private ImageView upImage;
+    @FXML
+    private ImageView downImage;
 
     private FXMLLoader fxmlLoader;
+
+    private boolean unlocked = true;
 
     /**
      * Constructor for the Task Cell class
      * @param mainCtrl the mainCtrl used
      * @param server the serverUtils
      * @param cardDetails the parent Controller in which this component is located
+     * @param unlocked whether it is unlocked
      */
-    public TaskCell(MainCtrl mainCtrl, ServerUtils server, CardDetailsViewCtr cardDetails) {
+    public TaskCell(MainCtrl mainCtrl, ServerUtils server, CardDetailsViewCtr cardDetails,
+                    boolean unlocked) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.parentController = cardDetails;
+        this.unlocked = unlocked;
     }
 
     /**
@@ -93,11 +105,38 @@ public class TaskCell extends ListCell<Task> {
                         mainCtrl.getCardDetailsViewCtr().refresh();
                         mainCtrl.showCardDetailsView(server.getCardById(parentController
                                         .getCard().getId()),
-                                parentController.getBoard());
+                                parentController.getBoard(), unlocked);
                         mainCtrl.getCardDetailsViewCtr().refresh();
                     });
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                if (!unlocked) {
+                    cancelButton.setVisible(false);
+                    statusBox.setDisable(true);
+                    removeButton.setVisible(false);
+                    editButton.setVisible(false);
+                    confirmButton.setVisible(false);
+                    upImage.setOnMouseClicked(null);
+                    downImage.setOnMouseClicked(null);
+                } else {
+                    cancelButton.setVisible(true);
+                    statusBox.setDisable(false);
+                    removeButton.setVisible(true);
+                    editButton.setVisible(true);
+                    confirmButton.setVisible(true);
+                    upImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            moveUp();
+                        }
+                    });
+                    downImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            moveDown();
+                        }
+                    });
                 }
             }
 
