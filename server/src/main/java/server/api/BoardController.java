@@ -21,7 +21,6 @@ import java.util.function.Consumer;
 @RequestMapping("api/boards")
 public class BoardController {
 
-    //private final BoardService boardService;
     private final BoardRepository repo;
     private final ColorSchemeRepository colorSchemeRepository;
     private SimpMessagingTemplate msgs;
@@ -119,12 +118,7 @@ public class BoardController {
      * @return an error if the board does not exist in the repo
      */
     @DeleteMapping(path = "/delete/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Board> removeBoard(@PathVariable("id") long id) {
-        //if (boardService.delete(id)){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok().build();
         if (id < 0 || !repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }
@@ -140,12 +134,7 @@ public class BoardController {
      * @return an error if the change cannot be made, ok otherwise
      */
     @PostMapping(path = "/{id}")
-    @SuppressWarnings("unused")
     public ResponseEntity<Board> modifyName(@PathVariable("id") long id, @RequestBody String name) {
-        //if(!boardService.changeName(boardService.getById(id), name)) {
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //return ResponseEntity.ok().build();
         if (!repo.existsById(id)) {
             return ResponseEntity.badRequest().build();
         }

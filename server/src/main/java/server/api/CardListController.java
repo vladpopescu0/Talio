@@ -66,11 +66,6 @@ public class CardListController {
      */
     @PostMapping("/addCard/{id}")
     public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
-        //if(card==null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //cLService.addCard(id,card);
-        //return ResponseEntity.ok(card);
         if (card == null || card.getName() == null
                 || card.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
