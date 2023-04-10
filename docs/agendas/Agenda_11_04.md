@@ -1,11 +1,15 @@
 # Agenda - Week 9
 **Location:** Drebbelweg-PC Hall 1
+
 **Date:** 11th of April, 2023
+
 **Time:** 15:15-15:40
+
 **Attendees:** Georgios Kontos, Ioan Leolea, Jakub Matyja, Vlad Popescu, Shashwat Sahay 
 
 ## Roles
 **Chair:** Georgios Kontos
+
 **Minute-taker:** Vlad Popescu
 
 ## Agenda Items
