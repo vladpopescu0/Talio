@@ -312,6 +312,7 @@ public class CardDetailsViewCtr {
     }
     /**
      * get unlocked
+     * @return unlocked whether the controller is unlocked or not
      */
     public boolean getUnlocked(){
         return unlocked;
