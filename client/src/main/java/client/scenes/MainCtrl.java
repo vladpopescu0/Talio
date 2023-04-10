@@ -287,6 +287,7 @@ public class MainCtrl {
         changePrimaryStage(boardView, board.getName());
 
         this.boardViewCtrl.setBoard(board);
+//        this.boardViewCtrl.
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
 
@@ -700,14 +701,6 @@ public class MainCtrl {
 
 
     /**
-     * Returns the currently focused node
-     * @return the currently focused node in the primary stage
-     */
-    public Node getFocusedNode() {
-        return primaryStage.getScene().getFocusOwner();
-    }
-
-    /**
      * Getter for the boardOverviewCtrl
      * @return the boardOverviewCtrl
      */
@@ -728,6 +721,14 @@ public class MainCtrl {
                 showHelpStage();
             }
         }
+    }
+
+    /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
+    public Node getFocusedNode() {
+        return primaryStage.getScene().getFocusOwner();
     }
     /**
      * Gets the map of saved passwords

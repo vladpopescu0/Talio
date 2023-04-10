@@ -50,8 +50,6 @@ public class AdminCheckCtrlTest {
         Mockito.verify(mainCtrlMock).setAdmin(true);
         Mockito.verify(mainCtrlMock).setAdminPass("password");
         Mockito.verify(mainCtrlMock).closeSecondaryStage();
-        Mockito.verify(mainCtrlMock).getOverviewCtrl();
-        Mockito.verify(boardsOverviewCtrlMock).refresh();
         Mockito.verify(mainCtrlMock).showOverview();
 
     }

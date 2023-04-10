@@ -171,6 +171,7 @@ public class CardCell extends ListCell<Card> {
                         mainCtrl.setCardId(this.getItem().getId());
                         mainCtrl.showEditCard();
                     });
+
                     this.deleteButton.setOnAction(event ->{
                         deleteCard();
 //                        mainCtrl.getCardDetailsViewCtr().setCard(null);

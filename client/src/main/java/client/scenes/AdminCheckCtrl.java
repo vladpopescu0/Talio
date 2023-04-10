@@ -80,7 +80,6 @@ public class AdminCheckCtrl {
                 messageLabel.setText("Incorrect Password");
             }
         }
-        mainCtrl.getOverviewCtrl().refresh();
         mainCtrl.showOverview();
     }
 

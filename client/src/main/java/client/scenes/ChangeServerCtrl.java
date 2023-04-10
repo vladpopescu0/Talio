@@ -78,7 +78,9 @@ public class ChangeServerCtrl {
     public void changeServer() {
         decideServer();
         mainCtrl.closeSecondaryStage();
-        mainCtrl.getOverviewCtrl().refresh();
+        if(mainCtrl.getCurrentUser() != null){
+            mainCtrl.getOverviewCtrl().refresh();
+        }
     }
 
     /**
