@@ -6,19 +6,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="118.0" prefWidth="187.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
-    <Label fx:id="paneLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="17.0" layoutY="-11.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="162.0" text="a" textAlignment="CENTER">
-        <!--=======-->
-        <!--<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="96.0" prefWidth="197.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">-->
-        <!--    <children>-->
-        <!--        <Label fx:id="paneLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="52.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="145.0" text="card" textAlignment="CENTER">-->
-        <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
-        <font>
-            <Font size="24.0" />
-        </font>
+<Pane fx:id="cardPane" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="121.0" prefWidth="187.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1">
+    <Label fx:id="paneLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="17.0" layoutY="-48.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="134.0" prefWidth="162.0" text="a" textAlignment="CENTER" wrapText="true">
         <padding>
             <Insets left="10.0" />
         </padding>
+      <font>
+         <Font size="14.0" />
+      </font>
     </Label>
     <Button fx:id="editButton" layoutX="8.0" layoutY="89.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="66.0" style="-fx-background-color: #00C9A7;" text="Rename" textFill="WHITE">
         <font>
