@@ -241,6 +241,7 @@ public class BoardController {
         Board b = repo.getById(id);
         b.removePass();
         repo.save(b);
+        msgs.convertAndSend("/topic/passwordChange", id);
         return  ResponseEntity.ok(true);
     }
 
