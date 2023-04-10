@@ -212,7 +212,7 @@ public class CardCell extends ListCell<Card> {
                         location--;
                         //Recursively calling the method to check whether the
                         // focus changed between animation changes
-                        //this way any animation can be applied
+                        //this way any animation can be applied smoothly
                         focusChange(card);
                     });
                 }
