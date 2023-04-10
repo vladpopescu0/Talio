@@ -103,37 +103,39 @@ public class CardCell extends ListCell<Card> {
      * Adds support for keyboard shortcuts
      */
     private void handleShortcuts(KeyEvent event) {
-        switch(event.getCode()) {
-            case C:
-                mainCtrl.showCardPresetShortcut(this.getItem());
-                break;
-            case T:
-                mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
-                break;
-            case E:
-                editCard();
-                break;
-            case ENTER:
-                showDetails();
-                break;
-            case DELETE:
-            case BACK_SPACE:
-                deleteCard();
-                break;
-            case UP:
-                if (event.isShiftDown()) {
-                    parent.swapCards(this.getItem(), true);
-                } else {
-                    parent.changeCardFocus(this.getItem(), true);
-                }
-                break;
-            case DOWN:
-                if (event.isShiftDown()) {
-                    parent.swapCards(this.getItem(), false);
-                } else {
-                    parent.changeCardFocus(this.getItem(), false);
-                }
-                break;
+        if (unlocked) {
+            switch(event.getCode()) {
+                case C:
+                    mainCtrl.showCardPresetShortcut(this.getItem());
+                    break;
+                case T:
+                    mainCtrl.getCardDetailsViewCtr().addTagsShortcut(board, this.getItem());
+                    break;
+                case E:
+                    editCard();
+                    break;
+                case ENTER:
+                    showDetails();
+                    break;
+                case DELETE:
+                case BACK_SPACE:
+                    deleteCard();
+                    break;
+                case UP:
+                    if (event.isShiftDown()) {
+                        parent.swapCards(this.getItem(), true);
+                    } else {
+                        parent.changeCardFocus(this.getItem(), true);
+                    }
+                    break;
+                case DOWN:
+                    if (event.isShiftDown()) {
+                        parent.swapCards(this.getItem(), false);
+                    } else {
+                        parent.changeCardFocus(this.getItem(), false);
+                    }
+                    break;
+            }
         }
     }
 
@@ -315,12 +317,14 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleDraggable() {
         this.setOnDragDetected(event -> {
-            Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
-            ClipboardContent content = new ClipboardContent();
-            content.put(cardDataFormat, this.getItem().getId());
-            db.setContent(content);
-            WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
-            db.setDragView(snapshot);
+            if (unlocked) {
+                Dragboard db = this.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent content = new ClipboardContent();
+                content.put(cardDataFormat, this.getItem().getId());
+                db.setContent(content);
+                WritableImage snapshot = this.snapshot(new SnapshotParameters(), null);
+                db.setDragView(snapshot);
+            }
 
             event.consume();
         });
@@ -350,7 +354,7 @@ public class CardCell extends ListCell<Card> {
      */
     private void handleHover() {
         this.setOnMouseEntered(event -> {
-            if (mainCtrl.isPrimaryStageFocused()) {
+            if (mainCtrl.isPrimaryStageFocused() && unlocked) {
                 Node oldFocus = mainCtrl.getFocusedNode();
                 this.requestFocus();
                 mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
@@ -363,13 +367,15 @@ public class CardCell extends ListCell<Card> {
         });
 
         this.setOnMouseClicked(event -> {
-            Node oldFocus = mainCtrl.getFocusedNode();
-            this.requestFocus();
-            mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
-            updateItem(this.getItem(), false);
-            if (oldFocus instanceof CardCell) {
-                CardCell oldFocusCell = (CardCell) oldFocus;
-                oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+            if (unlocked) {
+                Node oldFocus = mainCtrl.getFocusedNode();
+                this.requestFocus();
+                mainCtrl.getBoardViewCtrl().setFocusedNodeBackup(this);
+                updateItem(this.getItem(), false);
+                if (oldFocus instanceof CardCell) {
+                    CardCell oldFocusCell = (CardCell) oldFocus;
+                    oldFocusCell.updateItem(oldFocusCell.getItem(), false);
+                }
             }
         });
     }
