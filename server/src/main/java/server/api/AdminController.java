@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Board;
+import commons.Card;
 import commons.CardList;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
@@ -69,6 +70,8 @@ public class AdminController {
         if (!boardRepo.existsById(bid)) return ResponseEntity.ok(false);
         Board b = boardRepo.getById(bid);
         for (CardList c : b.getList()){
+            for (Card card: c.getCards())
+                cardRepo.deleteById(card.getId());
             cardListRepo.deleteById(c.getId());
         }
         boardRepo.deleteById(bid);

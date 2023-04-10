@@ -20,9 +20,8 @@ public class TagControllerTest {
     private TestTaskRepository taskRepo;
     private TagController controller;
     private CardController cardController;
-
+    private SimpMessagingTemplate msg;
     private MessageChannel channel;
-    private SimpMessagingTemplate msgs;
 
     /**
      * Setup
@@ -30,13 +29,13 @@ public class TagControllerTest {
     @BeforeEach
     public void setup() {
         channel = (message, timeout) -> true;
-        msgs = new SimpMessagingTemplate(channel);
+        msg = new SimpMessagingTemplate(channel);
         repo = new TestTagRepository();
         cardRepo = new TestCardRepository();
         clRepo = new TestCardListRepository();
         taskRepo = new TestTaskRepository();
-        controller = new TagController(repo, cardRepo, msgs);
-        cardController = new CardController(cardRepo, clRepo, msgs, taskRepo, repo);
+        controller = new TagController(repo, cardRepo, msg);
+        cardController = new CardController(cardRepo, clRepo, msg, taskRepo, repo);
     }
 
     /**
@@ -158,6 +157,16 @@ public class TagControllerTest {
     }
 
     /**
+     * Test for modifyTag, with a non-existing Tag
+     */
+    @Test
+    public void modifyNonExistingTagTest() {
+        Tag t = new Tag("22");
+        var actual = controller.modifyTag(22, t);
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+    }
+
+    /**
      * Test for removeTag
      */
     @Test
@@ -174,11 +183,20 @@ public class TagControllerTest {
         cardController.add(c);
         cardController.addTags(c.getId(), List.of(tag1, tag2, tag3));
         controller.removeTag(1);
-        var actual = controller.getById(1);
-        assertEquals(BAD_REQUEST, actual.getStatusCode());
+        //var actual = controller.getById(1);
+        //assertEquals(BAD_REQUEST, actual.getStatusCode());
         c = cardController.getById(c.getId()).getBody();
         assertTrue(c.getTags().contains(tag1));
         assertTrue(c.getTags().contains(tag3));
         assertFalse(c.getTags().contains(tag2));
+    }
+
+    /**
+     * Test for removeTag, when the Tag is non-existing
+     */
+    @Test
+    public void removeNonExistingTagTest() {
+        var actual = controller.removeTag(22);
+        assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 }

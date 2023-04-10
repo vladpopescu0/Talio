@@ -209,6 +209,27 @@ public class CardControllerTest {
     }
 
     /**
+     * Test for updateCardDetails, particularly when
+     * the card is non-Existent
+     */
+    @Test
+    public void updateCardDetailsNonExistingCard() {
+        Card c1 = new Card("1");
+        Card c2 = new Card("2");
+        Card c3 = new Card("3");
+        c1.setId(-1);
+        c2.setId(-2);
+        c3.setId(-3);
+        sut.add(c1);
+        sut.add(c2);
+        sut.add(c3);
+        Card c4 = sut.getById(2).getBody();
+        c4.setDescription("99");
+        var actual = sut.updateCardDetails(32, c4);
+        assertEquals(actual.getStatusCode(), BAD_REQUEST);
+    }
+
+    /**
      * Test for updateCardDetails
      */
     @Test
@@ -373,6 +394,18 @@ public class CardControllerTest {
         assertEquals(actual.getStatusCode(), BAD_REQUEST);
         actual = sut.addTags(c.getId(), List.of(tag1, tag2, tag3));
         assertEquals(actual.getStatusCode(), BAD_REQUEST);
+    }
+
+    @Test
+    public void addNullOrZeroTagsToCardTest() {
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        var actual1 = sut.addTags(c.getId(), null);
+        assertEquals(BAD_REQUEST, actual1.getStatusCode());
+        var actual2 = sut.addTags(c.getId(), new ArrayList<>());
+        assertEquals(BAD_REQUEST, actual2.getStatusCode());
     }
 
     /**

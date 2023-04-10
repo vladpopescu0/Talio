@@ -116,13 +116,4 @@ public class Tag {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
-    /**
-     * toString method for the Tag class
-     * @return this as a String
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
 }

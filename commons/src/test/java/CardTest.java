@@ -123,6 +123,11 @@ public class CardTest {
         newList.add(t3);
         newList.add(t4);
         assertEquals(newList, c.getTasks());
+        Card c1 = new Card();
+        c1.addTask(t1);
+        List<Task> l = new ArrayList<>();
+        l.add(t1);
+        assertEquals(c1.getTasks(), l);
     }
 
     /**
@@ -337,5 +342,33 @@ public class CardTest {
         CardList cl = new CardList("aa");
         c.setParentCardList(cl);
         assertEquals(c.getParentCardList(), cl);
+    }
+
+    @Test
+    public void getIdTest() {
+        Card c = new Card("a");
+        assertEquals(c.getId(), 0);
+    }
+
+    @Test
+    public void setIdTest() {
+        Card c = new Card();
+        c.setId(22);
+        assertEquals(c.getId(), 22);
+    }
+
+    @Test
+    public void getColorsTest() {
+        Card c = new Card("a");
+        assertNull(c.getColors());
+    }
+
+    @Test
+    public void setColorsTest() {
+        ColorScheme cs = new ColorScheme("B", "n",
+                "1", "N");
+        Card c = new Card("a");
+        c.setColors(cs);
+        assertEquals(c.getColors(), cs);
     }
 }
