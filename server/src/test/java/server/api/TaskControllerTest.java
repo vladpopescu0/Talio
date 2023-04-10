@@ -3,6 +3,8 @@ package server.api;
 import commons.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 
 import java.util.List;
 
@@ -13,13 +15,18 @@ public class TaskControllerTest {
     private TestTaskRepository repo;
     private TaskController sut;
 
+    private SimpMessagingTemplate msg;
+    private MessageChannel channel;
+
     /**
      * Setup
      */
     @BeforeEach
     public void setUp() {
+        channel = (message, timeout) -> true;
+        msg = new SimpMessagingTemplate(channel);
         repo = new TestTaskRepository();
-        sut = new TaskController(repo, null);
+        sut = new TaskController(repo, msg);
     }
 
     /**
@@ -138,30 +145,30 @@ public class TaskControllerTest {
         assertEquals(BAD_REQUEST, actual.getStatusCode());
     }
 
-//    /**
-//     * Test for updateTask
-//     */
-//    @Test
-//    public void updateTaskTest() {
-//        Task t1 = new Task("1");
-//        Task t2 = new Task("2");
-//        Task t3 = new Task("3");
-//        t1.setId(-1);
-//        t2.setId(-2);
-//        t3.setId(-3);
-//        sut.add(t1);
-//        sut.add(t2);
-//        sut.add(t3);
-//        Task t4 = sut.getById(1).getBody();
-//        t4.changeStatus();
-//        Task t5 = sut.getById(2).getBody();
-//        t5.setTitle("4");
-//        var actual1 = sut.updateTask(1, t4);
-//        var actual2 = sut.updateTask(2, t5);
-//        assertEquals(actual1.getBody().getStatus(), true);
-//        assertEquals(actual2.getBody().getTitle(), "4");
-//        assertTrue(repo.calledMethods.contains("save"));
-//    }
+    /**
+     * Test for updateTask
+     */
+    @Test
+    public void updateTaskTest() {
+        Task t1 = new Task("1");
+        Task t2 = new Task("2");
+        Task t3 = new Task("3");
+        t1.setId(-1);
+        t2.setId(-2);
+        t3.setId(-3);
+        sut.add(t1);
+        sut.add(t2);
+        sut.add(t3);
+        Task t4 = sut.getById(1).getBody();
+        t4.changeStatus();
+        Task t5 = sut.getById(2).getBody();
+        t5.setTitle("4");
+        var actual1 = sut.updateTask(1, t4);
+        var actual2 = sut.updateTask(2, t5);
+        assertEquals(actual1.getBody().getStatus(), true);
+        assertEquals(actual2.getBody().getTitle(), "4");
+        assertTrue(repo.calledMethods.contains("save"));
+    }
 
     /**
      * Test for removeTask
@@ -172,23 +179,23 @@ public class TaskControllerTest {
         assertEquals(BAD_REQUEST, alert.getStatusCode());
     }
 
-//    /**
-//     * Test for removeTask
-//     */
-//    @Test
-//    public void removeTaskTest() {
-//        Task t1 = new Task("1");
-//        Task t2 = new Task("2");
-//        Task t3 = new Task("3");
-//        t1.setId(-1);
-//        t2.setId(-2);
-//        t3.setId(-3);
-//        sut.add(t1);
-//        sut.add(t2);
-//        sut.add(t3);
-//        var alert = sut.removeTask(2);
-//        assertEquals(alert.getBody(), t3);
-//        assertEquals(repo.tasks.size(), 2);
-//        assertTrue(repo.calledMethods.contains("deleteById"));
-//    }
+    /**
+     * Test for removeTask
+     */
+    @Test
+    public void removeTaskTest() {
+        Task t1 = new Task("1");
+        Task t2 = new Task("2");
+        Task t3 = new Task("3");
+        t1.setId(-1);
+        t2.setId(-2);
+        t3.setId(-3);
+        sut.add(t1);
+        sut.add(t2);
+        sut.add(t3);
+        var alert = sut.removeTask(2);
+        assertEquals(alert.getBody(), t3);
+        assertEquals(repo.tasks.size(), 2);
+        assertTrue(repo.calledMethods.contains("deleteById"));
+    }
 }
