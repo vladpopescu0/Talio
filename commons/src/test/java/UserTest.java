@@ -120,6 +120,9 @@ public class UserTest {
         assertNotEquals(u.hashCode(), u1.hashCode());
     }
 
+    /**
+     * Test for setBoardList
+     */
     @Test
     public void setBoardListTest() {
         User u = new User();

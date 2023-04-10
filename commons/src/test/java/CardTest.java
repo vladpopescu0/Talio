@@ -344,12 +344,18 @@ public class CardTest {
         assertEquals(c.getParentCardList(), cl);
     }
 
+    /**
+     * Test for getId
+     */
     @Test
     public void getIdTest() {
         Card c = new Card("a");
         assertEquals(c.getId(), 0);
     }
 
+    /**
+     * Test for setId
+     */
     @Test
     public void setIdTest() {
         Card c = new Card();
@@ -357,12 +363,18 @@ public class CardTest {
         assertEquals(c.getId(), 22);
     }
 
+    /**
+     * Test for getColors
+     */
     @Test
     public void getColorsTest() {
         Card c = new Card("a");
         assertNull(c.getColors());
     }
 
+    /**
+     * Test for setColors
+     */
     @Test
     public void setColorsTest() {
         ColorScheme cs = new ColorScheme("B", "n",

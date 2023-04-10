@@ -396,6 +396,9 @@ public class CardControllerTest {
         assertEquals(actual.getStatusCode(), BAD_REQUEST);
     }
 
+    /**
+     * Test for addTagsToCard
+     */
     @Test
     public void addNullOrZeroTagsToCardTest() {
         Card c = new Card("card");

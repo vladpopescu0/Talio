@@ -191,6 +191,9 @@ public class CardListTest {
         assertNotEquals(cL1.hashCode(), cL2.hashCode());
     }
 
+    /**
+     * Test for setCards
+     */
     @Test
     public void setCardsTest() {
         CardList cl = new CardList("list");

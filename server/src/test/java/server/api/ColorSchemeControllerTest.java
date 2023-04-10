@@ -74,6 +74,9 @@ public class ColorSchemeControllerTest {
         assertEquals("existsById", repo.calledMethods.get(1));
     }
 
+    /**
+     * Test for updateColorScheme
+     */
     @Test
     public void updateNonExistingColorSchemeTest() {
         ColorScheme c = new ColorScheme("red","green","black","yellow");
