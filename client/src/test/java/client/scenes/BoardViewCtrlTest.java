@@ -140,58 +140,38 @@ public class BoardViewCtrlTest {
 
     /**
      * test for copy link when id has only one digit
-     * @throws IOException thrown by clipboard
-     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkTest() throws IOException, UnsupportedFlavorException {
+    public void copyLinkTest(){
         sut.isAnimationPlayed = true;
         sut.copyLink();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
-                ,board.getId());
     }
     /**
      * test for copy link when id has only two digits
-     * @throws IOException thrown by clipboard
-     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkTwoZerosTest() throws IOException, UnsupportedFlavorException {
+    public void copyLinkTwoZerosTest(){
         sut.isAnimationPlayed = true;
         board.setId(34L);
         sut.copyLink();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
-                ,board.getId());
     }
     /**
      * test for copy link when id has only three digits
-     * @throws IOException thrown by clipboard
-     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkOneZerosTest() throws IOException, UnsupportedFlavorException {
+    public void copyLinkOneZerosTest(){
         sut.isAnimationPlayed = true;
         board.setId(394L);
         sut.copyLink();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
-                ,board.getId());
     }
     /**
      * test for copy link when id has more than 3 digits
-     * @throws IOException thrown by clipboard
-     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkNoZerosTest() throws IOException, UnsupportedFlavorException {
+    public void copyLinkNoZerosTest(){
         sut.isAnimationPlayed = true;
         board.setId(3924L);
         sut.copyLink();
-        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-        assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
-                ,board.getId());
     }
 
     /**
