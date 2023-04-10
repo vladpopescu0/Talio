@@ -177,7 +177,7 @@ public class BoardViewCtrl {
             lockImage.setVisible(true);
             try {
                 lockImage.setImage(new Image(new FileInputStream(
-                        "client\\src\\main\\resources\\images\\locked.png")));
+                        "client/src/main/resources/images/locked.png")));
             } catch (FileNotFoundException e) {
                 System.out.println(e);
             }
@@ -207,7 +207,7 @@ public class BoardViewCtrl {
             });
             try {
                 lockImage.setImage(new Image(new FileInputStream(
-                        "client\\src\\main\\resources\\images\\unlocked.png")));
+                        "client/src/main/resources/images/unlocked.png")));
             } catch (Exception e) {
                 System.out.println(e);
             }
