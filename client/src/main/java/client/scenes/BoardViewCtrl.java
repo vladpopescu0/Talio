@@ -175,7 +175,8 @@ public class BoardViewCtrl {
             unlocked = false;
             lockImage.setVisible(true);
             try {
-                lockImage.setImage(new Image(new FileInputStream("client\\src\\main\\resources\\images\\locked.png")));
+                lockImage.setImage(new Image(new FileInputStream(
+                        "client\\src\\main\\resources\\images\\locked.png")));
             } catch (FileNotFoundException e) {
                 System.out.println(e);
             }
@@ -196,9 +197,15 @@ public class BoardViewCtrl {
             copyInviteButton.setDisable(false);
             boardPass.setDisable(false);
             unlocked = true;
-            lockImage.setOnMouseClicked(null);
+            lockImage.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    editPassword();
+                }
+            });
             try {
-                lockImage.setImage(new Image(new FileInputStream("client\\src\\main\\resources\\images\\unlocked.png")));
+                lockImage.setImage(new Image(new FileInputStream(
+                        "client\\src\\main\\resources\\images\\unlocked.png")));
             } catch (Exception e) {
                 System.out.println(e);
             }
