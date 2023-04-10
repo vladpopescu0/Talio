@@ -2,8 +2,6 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-
-
 import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;

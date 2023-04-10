@@ -330,6 +330,9 @@ public class BoardTest {
         assertEquals(b.getPassword(), String.valueOf("pass123".hashCode()));
     }
 
+    /**
+     * Test for getListsColorScheme
+     */
     @Test
     public void getListsColorSchemeTest() {
         Board board = new Board(SOME_USER, new ArrayList<>(), "Board",
@@ -337,6 +340,9 @@ public class BoardTest {
         assertEquals(board.getListsColorScheme(), new ColorScheme());
     }
 
+    /**
+     * Test for removePass
+     */
     @Test
     public void removePassTest() {
         Board b = new Board(SOME_USER, "A");
@@ -346,12 +352,18 @@ public class BoardTest {
         assertEquals(b.getPassword(), "");
     }
 
+    /**
+     * Test for getId
+     */
     @Test
     public void getIdTest() {
         Board b = new Board(SOME_USER,"B");
         assertNull(b.getId());
     }
 
+    /**
+     * Test for setId
+     */
     @Test
     public void setIdTst() {
         Board b = new Board(SOME_USER, "B");
@@ -359,24 +371,36 @@ public class BoardTest {
         assertEquals(b.getId(), 100);
     }
 
+    /**
+     * Test for getCardsColorSchemeList
+     */
     @Test
     public void getCardsColorSchemeListTest() {
         Board b = new Board(SOME_USER, "B");
         assertEquals(b.getCardsColorSchemesList(), new ArrayList<>());
     }
 
+    /**
+     * Test for getColorScheme
+     */
     @Test
     public void getColorSchemeTest() {
         Board b = new Board(SOME_USER, "B");
         assertEquals(b.getColorScheme(), new ColorScheme());
     }
 
+    /**
+     * Test for getCardsColorScheme
+     */
     @Test
     public void getCardsColorSchemeTest() {
         Board b = new Board(SOME_USER, "B");
         assertEquals(b.getCardsColorScheme(), new ColorScheme());
     }
 
+    /**
+     * Test for setCardsColorScheme
+     */
     @Test
     public void setCardsColorSchemeTest() {
         Board b = new Board(SOME_USER, "B");

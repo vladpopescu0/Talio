@@ -77,12 +77,18 @@ public class TagTest {
         assertNotEquals(t.hashCode(), t1.hashCode());
     }
 
+    /**
+     * Test for getColor
+     */
     @Test
     public void getColorTest() {
         Tag t = new Tag();
         assertNull(t.getColor());
     }
 
+    /**
+     * Test for setColor
+     */
     @Test
     public void setColorTest() {
         Tag t = new Tag("t");
