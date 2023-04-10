@@ -1,6 +1,7 @@
 package server.api;
 
 import commons.Board;
+import commons.CardList;
 import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,7 @@ public class BoardControllerTest {
      */
     @Test
     public void addNullOrEmptyNameBoardTest() {
-        var actual = sut.add(new Board(SOME_USER,null));
+        var actual = sut.add(new Board(SOME_USER, null));
         assertEquals(BAD_REQUEST, actual.getStatusCode());
         var empty = sut.add(new Board(SOME_USER, ""));
         assertEquals(BAD_REQUEST, empty.getStatusCode());
@@ -163,6 +164,15 @@ public class BoardControllerTest {
     }
 
     /**
+     * Test for removeBoard when board has negative id
+     */
+    @Test
+    public void removeNegativeIdBoard() {
+        var alert = sut.removeBoard(-1);
+        assertEquals(BAD_REQUEST, alert.getStatusCode());
+    }
+
+    /**
      * Test for removeBoard
      */
     @Test
@@ -217,6 +227,232 @@ public class BoardControllerTest {
     }
 
     /**
+     * Test for setBoardPassword
+     */
+    @Test
+    public void setBoardPasswordTest() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_OTHER_USER, "bb");
+        sut.add(b1);
+        sut.add(b2);
+        assertEquals(true, sut.setBoardPassword(1, "pass").getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+    /**
+     * Test for setBoardPassword with a wrong id
+     */
+    @Test
+    public void setBoardPasswordTestWrongId() {
+        Board b1 = new Board(SOME_USER, "b");
+        sut.add(b1);
+        assertEquals(400, sut.setBoardPassword(5, "pass").getStatusCodeValue());
+    }
+
+    /**
+     * Test for removeBoardPassword
+     */
+    @Test
+    public void removeBoardPasswordTest() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.removeBoardPassword(1).getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+
+    /**
+     * Test for removeBoardPassword with wrong id
+     */
+    @Test
+    public void removeBoardPasswordTestWrongId() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(400, sut.removeBoardPassword(8).getStatusCodeValue());
+    }
+
+
+
+    /**
+     * Test for checkBoardPassword
+     */
+    @Test
+    public void checkBoardPasswordTest() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.setBoardPassword(1, "pass").getBody());
+        assertEquals(true, sut.setBoardPassword(2, "pass2").getBody());
+        assertEquals(true, sut.checkBoardPassword(1, "pass").getBody());
+        assertEquals(true, sut.checkBoardPassword(2, "pass2").getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+    /**
+     * Test for checkBoardPassword when one password is wrong
+     */
+    @Test
+    public void checkBoardPasswordTestOneWrongPassword() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.setBoardPassword(1, "password").getBody());
+        assertEquals(true, sut.setBoardPassword(2, "pass2").getBody());
+        assertEquals(true, sut.checkBoardPassword(2, "pass2").getBody());
+        assertEquals(false, sut.checkBoardPassword(1, "pass").getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+    /**
+     * Test for checkBoardPassword when both passwords are wrong
+     */
+    @Test
+    public void checkBoardPasswordTestTwoWrongPasswords() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.setBoardPassword(1, "password").getBody());
+        assertEquals(true, sut.setBoardPassword(2, "pass2").getBody());
+        assertEquals(false, sut.checkBoardPassword(2, "password2").getBody());
+        assertEquals(false, sut.checkBoardPassword(1, "pass").getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+    /**
+     * Test for checkBoardPassword when the ID of the board is wrong
+     * and the password for the other situation is correct
+     */
+    @Test
+    public void checkBoardPasswordTestOneWrongIdCorectPass() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.setBoardPassword(1, "password").getBody());
+        assertEquals(true, sut.setBoardPassword(0, "pass2").getBody());
+        assertEquals(400, sut.checkBoardPassword(8, "pass2").getStatusCodeValue());
+        assertEquals(true, sut.checkBoardPassword(1, "password").getBody());
+        assertTrue(repo.calledMethods.contains("save"));
+    }
+
+    /**
+     * Test for checkBoardPassword when the ID of the board is wrong
+     * and the password for the other situation is wrong
+     */
+    @Test
+    public void checkBoardPasswordTestOneWrongIdWrongPass() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        Board b3 = new Board(SOME_USER, "c");
+        sut.add(b1);
+        sut.add(b2);
+        sut.add(b3);
+        assertEquals(true, sut.setBoardPassword(1, "password").getBody());
+        assertEquals(400, sut.checkBoardPassword(8, "pass2").getStatusCodeValue());
+        assertEquals(false, sut.checkBoardPassword(1, "passwo").getBody());
+    }
+
+    /**
+     * Test for AddListToBoard
+     */
+    @Test
+    public void addListToBoard() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        CardList c1 = new CardList("c1");
+        CardList c2 = new CardList("c2");
+        sut.add(b1);
+        sut.add(b2);
+        sut.addListToBoard(1, c1);
+        sut.addListToBoard(1, c2);
+        Board board = sut.getById(1).getBody();
+        assertTrue(board.getList().contains(c1));
+        assertTrue(board.getList().contains(c2));
+    }
+
+    /**
+     * Test for AddListToBoard when the id of the board is wrong
+     */
+    @Test
+    public void addListToBoardWrongId() {
+        Board b1 = new Board(SOME_USER, "b");
+        CardList c1 = new CardList("c1");
+        sut.add(b1);
+        assertEquals(400, sut.addListToBoard(10, c1).getStatusCodeValue());
+    }
+
+    /**
+     * Test for AddListToBoard when only one id is wrong
+     */
+    @Test
+    public void addListToBoardOneWrongId() {
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "bb");
+        CardList c1 = new CardList("c1");
+        CardList c2 = new CardList("c2");
+        sut.add(b1);
+        sut.add(b2);
+        sut.addListToBoard(1, c1);
+        sut.addListToBoard(1, c2);
+        Board board = sut.getById(1).getBody();
+        assertEquals(400, sut.addListToBoard(10, c1).getStatusCodeValue());
+        assertTrue(board.getList().contains(c1));
+        assertTrue(board.getList().contains(c2));
+    }
+
+    /**
+     * Test for AddListToBoard when the list is null
+     */
+    @Test
+    public void addListToBoardNullName() {
+        Board b1 = new Board(SOME_USER, "b");
+        CardList c1 = new CardList();
+        sut.add(b1);
+        assertEquals(400, sut.addListToBoard(1, c1).getStatusCodeValue());
+    }
+
+    /**
+     * Test for AddListToBoard when the list is null
+     */
+    @Test
+    public void addListToBoardNull() {
+        Board b1 = new Board(SOME_USER, "b");
+        CardList c1 = null;
+        sut.add(b1);
+        assertEquals(400, sut.addListToBoard(1, c1).getStatusCodeValue());
+    }
+
+    /**
+     * Test for AddListToBoard when the list is empty
+     */
+    @Test
+    public void addListToBoardEmptyName() {
+        Board b1 = new Board(SOME_USER, "b");
+        CardList c1 = new CardList("");
+        sut.add(b1);
+        assertEquals(400, sut.addListToBoard(1, c1).getStatusCodeValue());
+    }
+
+    /**
      * Test for getByUser
      */
     @Test
@@ -261,7 +497,7 @@ public class BoardControllerTest {
      * put board test
      */
     @Test
-    public void putBoardTest(){
+    public void putBoardTest() {
         SOME_USER.setId(1);
         Board b1 = new Board(SOME_USER, "b");
         Board b2 = new Board(SOME_USER, "newBoard");
@@ -269,14 +505,29 @@ public class BoardControllerTest {
         b2.setId(8L);
         sut.add(b1);
         var actual = sut.putBoard(b2);
-        assertEquals(actual.getBody(),b2);
+        assertEquals(actual.getBody(), b2);
     }
 
     /**
      * put board no name test
      */
     @Test
-    public void putBoardNoNameTest(){
+    public void putBoardEmptyNameTest() {
+        SOME_USER.setId(1);
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "");
+        b1.setId(99L);
+        b2.setId(99L);
+        sut.add(b1);
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getStatusCodeValue(), 400);
+    }
+
+    /**
+     * put board null name test
+     */
+    @Test
+    public void putBoardNullNameTest() {
         SOME_USER.setId(1);
         Board b1 = new Board(SOME_USER, "b");
         Board b2 = new Board(SOME_USER, null);
@@ -284,6 +535,17 @@ public class BoardControllerTest {
         b2.setId(99L);
         sut.add(b1);
         var actual = sut.putBoard(b2);
-        assertEquals(actual.getStatusCodeValue(),400);
+        assertEquals(actual.getStatusCodeValue(), 400);
     }
+
+    /**
+     * put null board test
+     */
+    @Test
+    public void putBoardNullTest() {
+        Board b2 = null;
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getStatusCodeValue(), 400);
+    }
+
 }

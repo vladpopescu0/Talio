@@ -2,7 +2,6 @@ package server.api;
 
 
 import commons.Card;
-import commons.CardList;
 import commons.Tag;
 import commons.Task;
 import org.springframework.http.ResponseEntity;
@@ -105,55 +104,6 @@ public class CardController {
         msgs.convertAndSend("/topic/boardsRenameDeleteAdd", id);
         return ResponseEntity.ok(newChangedCard);
     }
-
-    /**
-     * Updates the parent CardList of a Card with provided ID
-     * @param id ID of the Card to be updated
-     * @param lists old and new CardList of the provided Card
-     */
-    @PutMapping("/updateParent/{id}")
-    public void updateParent(@PathVariable("id") Long id, @RequestBody List<CardList> lists) {
-        if (lists == null || !repo.existsById(id) || lists.size() < 2
-                || !clRepo.existsById(lists.get(0).getId())
-                || !clRepo.existsById(lists.get(1).getId())) {
-            return;
-        }
-
-        Card card = repo.getById(id);
-        CardList oldParent = clRepo.getById(lists.get(0).getId());
-        CardList newParent = clRepo.getById(lists.get(1).getId());
-        for(int x = 0; x < oldParent.getCards().size(); x++) {
-            if (oldParent.getCards().get(x).getId() == id) {
-                oldParent.getCards().remove(x);
-                break;
-            }
-        }
-        newParent.addCard(card);
-        lists.set(0, oldParent);
-        lists.set(1, newParent);
-        clRepo.saveAll(lists);
-        msgs.convertAndSend("/topic/updateParent", id);
-    }
-
-//     /**
-//     * Changes the parent list of a card, could be used when dragged and dropped
-//     * @param id id of card that is changed
-//     * @return response of request
-//     */
-//    @PutMapping("/updateParent/{id}")
-//    public ResponseEntity<Card> updateParent(@PathVariable("id") long id, CardList cardList){
-//        //I would like to have a query to get the list but i
-//        //do not think it is really necessary and should
-//        //put the list in the frontend
-//        if(cardList==null || !repo.existsById(id)){
-//            return ResponseEntity.badRequest().build();
-//        }
-//
-//        Card updatedCard = repo.getById(id);
-//        updatedCard.setList(cardList);
-//        return ResponseEntity.ok(updatedCard);
-//    }
-
 
     /**
      * Removes a card from the database

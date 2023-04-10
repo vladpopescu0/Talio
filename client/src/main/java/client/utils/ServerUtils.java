@@ -429,20 +429,6 @@ public class ServerUtils {
     }
 
     /**
-     * Updates the parent CardList of a Card with provided ID
-     *
-     * @param id    ID of the Card to be updated
-     * @param lists old and new CardList of the provided Card
-     */
-    public void updateParent(long id, List<CardList> lists) {
-        ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/cards/updateParent/" + id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .put(Entity.entity(lists, APPLICATION_JSON), Card.class);
-    }
-
-    /**
      * Gets all the boards a user has joined
      *
      * @param id the id of the user
@@ -580,7 +566,6 @@ public class ServerUtils {
      * Removes a cardList
      * @param listid the id of the list to be removed
      */
-    @SuppressWarnings("unused")
     public void removeCL(long listid) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/lists/delete/" + listid) //
@@ -595,7 +580,6 @@ public class ServerUtils {
      * @param name the new name of the cardList
      * @return the CardList with modified name
      */
-    @SuppressWarnings("unused")
     public CardList modifyNameCL(long listid, String name) {
         CardList cl = ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/lists/" + listid) //

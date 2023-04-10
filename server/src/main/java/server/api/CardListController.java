@@ -66,11 +66,6 @@ public class CardListController {
      */
     @PostMapping("/addCard/{id}")
     public ResponseEntity<Card> addCardToList(@PathVariable("id") long id,@RequestBody Card card){
-        //if(card==null){
-        //    return ResponseEntity.badRequest().build();
-        //}
-        //cLService.addCard(id,card);
-        //return ResponseEntity.ok(card);
         if (card == null || card.getName() == null
                 || card.getName().isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -169,7 +164,7 @@ public class CardListController {
     @PutMapping(path = "/moveCard")
     public ResponseEntity<Boolean> moveCard(@RequestBody List<Long> ids) {
         if (ids == null || ids.size() != 2 || !cardRepository.existsById(ids.get(0))
-                || !cardRepository.existsById(ids.get(0)) || !repo.existsByCards_Id(ids.get(0))
+                || !cardRepository.existsById(ids.get(1)) || !repo.existsByCards_Id(ids.get(0))
                 || !repo.existsByCards_Id(ids.get(1))) {
             return ResponseEntity.badRequest().build();
         }

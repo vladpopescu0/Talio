@@ -41,7 +41,6 @@ public class AdminCheckCtrlTest {
     /**
      * check admin test
      */
-
     @Test
     public void checkAdminTest(){
         sut.checkAdmin();

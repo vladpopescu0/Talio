@@ -22,18 +22,6 @@ public class ColorSchemeController {
         this.msg = msg;
     }
 
-//    /**
-//     * get from database by id given in the path
-//     * @param id the id of the ColorScheme
-//     * @return the colorScheme which was requested or an exception
-//     */
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ColorScheme> getById(@PathVariable("id") long id) {
-//        if (id < 0 || !repo.existsById(id)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        return ResponseEntity.ok(repo.getById(id));
-//    }
     /**
      * Adds a colorScheme if possible
      * @param colorScheme the colorScheme to be added

@@ -4,7 +4,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-
 <TitledPane animated="false" collapsible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleShortcuts" prefHeight="265.0" prefWidth="459.0" text="Admin Password" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.AdminCheckCtrl">
    <content>
       <AnchorPane prefHeight="240.0" prefWidth="415.0" style="-fx-background-color: #027883;">

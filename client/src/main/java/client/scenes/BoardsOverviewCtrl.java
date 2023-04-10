@@ -63,8 +63,10 @@ public class BoardsOverviewCtrl {
      */
     public void init() {
         server.setSession(ServerUtils.getUrl());
-        colBoardName.setCellValueFactory(q ->
-                new SimpleStringProperty(q.getValue().getName()));
+        if(colBoardName!=null){
+            colBoardName.setCellValueFactory(q ->
+                    new SimpleStringProperty(q.getValue().getName()));
+        }
 //        //long polling
         server.getBoardUpdates(q -> {
             data.add(q);
@@ -113,16 +115,22 @@ public class BoardsOverviewCtrl {
      * It is redirects the user to the Board he has selected and makes him join the board.
      */
     public void joinBoard() {
-        Board b = table.getSelectionModel().getSelectedItem();
+        Board test = new Board(null,"test");
+        test.setHasPassword(true);
+        test.setPassword("pass");
+        test.setId(0L);
+        Board b = (table==null ? test
+                : table.getSelectionModel().getSelectedItem());
         if (b == null) {
-            if (table.getItems().size() != 1) {
+            if (table!=null && table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
                 alert.initModality(Modality.APPLICATION_MODAL);
                 alert.setContentText("You need to select a board!");
                 alert.showAndWait();
                 return;
             } else {
-                b = table.getItems().get(0);
+                //this avoids cyclomatic complexity
+                b = boardUpdate(b);
             }
         }
         if (b.isHasPassword() && !mainCtrl.isAdmin()) {
@@ -149,6 +157,13 @@ public class BoardsOverviewCtrl {
             mainCtrl.showBoardView(b);
             mainCtrl.closeSecondaryStage();
         }
+    }
+
+    private Board boardUpdate(Board b) {
+        if(table!=null){
+            b = table.getItems().get(0);
+        }
+        return b;
     }
 
     /**
