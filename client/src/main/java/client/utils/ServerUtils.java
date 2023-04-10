@@ -845,32 +845,5 @@ public class ServerUtils {
             }
         });
     }
-//    /**
-//     * gets a colorScheme by id
-//     * @param id of the searched colorscheme
-//     * @return the given entity, can throw
-//     * server exception if not found
-//     */
-//    public ColorScheme getColorSchemeById(long id){
-//        return ClientBuilder.newClient(new ClientConfig())
-//                .target(server).path("api/colors/"+id)
-//                .request(APPLICATION_JSON)
-//                .accept(APPLICATION_JSON)
-//                .get(ColorScheme.class);
-//    }
-//
-//    /**
-//     * deletes a colorScheme by id
-//     * @param id of the colorScheme
-//     * @return the colorScheme if it was deleted,
-//     * throws an exception if not found
-//     */
-//    public ColorScheme deleteColorSchemeById(long id) {
-//        return ClientBuilder.newClient(new ClientConfig())
-//                .target(server).path("api/colors/delete/"+id)
-//                .request(APPLICATION_JSON)
-//                .accept(APPLICATION_JSON)
-//                .delete(ColorScheme.class);
-//    }
 }
 

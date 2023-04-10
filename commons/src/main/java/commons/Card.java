@@ -60,7 +60,7 @@ public class Card {
         parentCardList = cardList;
         tasks = new ArrayList<>();
         tags = new ArrayList<>();
-        colors = new ColorScheme("black","black","black","black");
+        colors = new ColorScheme();
     }
 
     /**

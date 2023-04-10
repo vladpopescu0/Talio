@@ -111,7 +111,6 @@ public class Main extends Application {
 
         Stage helpStage = new Stage();
         helpStage.setResizable(false);
-
         mainCtrl.initialize(primaryStage, secondaryStage, helpStage, overview, boardView,
                 createList, createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
                 changeServer, userBoardOverview, editBoardName,joinBoardByLink, details,
