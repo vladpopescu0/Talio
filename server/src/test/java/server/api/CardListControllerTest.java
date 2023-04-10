@@ -407,6 +407,93 @@ public class CardListControllerTest {
     }
 
     /**
+     * Test for moveCard for cards in the same list when the ids list is null
+     */
+    @Test
+    public void moveCardTestNullId() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        List<Long> ids = null;
+        assertEquals(400,sut.moveCard(ids).getStatusCodeValue());
+    }
+
+    /**
+     * Test for moveCard for cards in the same list
+     */
+    @Test
+    public void moveCardTestOneElement() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card1 = new Card("Card1");
+        card1.setId(4L);
+        cSut.add(card1);
+        sut.addCardToList(0,card1);
+        List<Long> ids = new ArrayList<>();
+        ids.add(card1.getId());
+        assertEquals(400,sut.moveCard(ids).getStatusCodeValue());
+    }
+
+    /**
+     * Test for moveCard for cards in the same list
+     */
+    @Test
+    public void moveCardTestFirstIdWrong() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card1 = new Card("Card1");
+        card1.setId(4L);
+        cSut.add(card1);
+        sut.addCardToList(0,card1);
+        List<Long> ids = new ArrayList<>();
+        ids.add(10L);
+        ids.add(card1.getId());
+        assertEquals(400,sut.moveCard(ids).getStatusCodeValue());
+    }
+
+    /**
+     * Test for moveCard for cards in the same list
+     */
+    @Test
+    public void moveCardTestSecondIdWrong() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card2 = new Card("Card2");
+        card2.setId(5L);
+        cSut.add(card2);
+        sut.addCardToList(0,card2);
+        List<Long> ids = new ArrayList<>();
+        ids.add(card2.getId());
+        ids.add(-1L);
+        assertEquals(400,sut.moveCard(ids).getStatusCodeValue());
+    }
+
+    /**
+     * Test for moveCard for cards in the same list
+     */
+    @Test
+    public void moveCardTestSecondCardNoParent() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card1 = new Card("Card1");
+        Card card2 = new Card("Card2");
+        card1.setId(4L);
+        card2.setId(5L);
+        cSut.add(card2);
+        cSut.add(card1);
+        sut.addCardToList(0,card1);
+        List<Long> ids = new ArrayList<>();
+        ids.add(card1.getId());
+        ids.add(card2.getId());
+        assertEquals(400,sut.moveCard(ids).getStatusCodeValue());
+    }
+
+
+    /**
      * Test for moveCard when the lists are different
      */
     @Test
@@ -440,10 +527,10 @@ public class CardListControllerTest {
     }
 
     /**
-     * Test for moveCardtoCardList
+     * Test for moveCardToCardList
      */
     @Test
-    public void moveCardtoListTest() {
+    public void moveCardToListTest() {
         CardList c1 = new CardList("a");
         CardList c2 = new CardList("b");
         c1.setId(1L);
@@ -473,10 +560,10 @@ public class CardListControllerTest {
     }
 
     /**
-     * Test for moveCardtoCardList when the id of the list is incorrect
+     * Test for moveCardToCardList when the id of the list is incorrect
      */
     @Test
-    public void moveCardtoListTestBadRequest() {
+    public void moveCardToListTestBadRequest() {
         CardList c1 = new CardList("a");
         c1.setId(1L);
         sut.add(c1);
@@ -490,4 +577,42 @@ public class CardListControllerTest {
         sut.addCardToList(0,card2);
         assertEquals(400, sut.moveCardToCardList(3,0).getStatusCodeValue());
     }
+
+    /**
+     * Test for moveCardToCardList when the id of the list is incorrect
+     */
+    @Test
+    public void moveCardToListTestBadRequestWrongCardId() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card1 = new Card("Card1");
+        Card card2 = new Card("Card2");
+        card1.setId(1L);
+        card2.setId(2L);
+        cSut.add(card1);
+        cSut.add(card2);
+        sut.addCardToList(0,card1);
+        sut.addCardToList(0,card2);
+        assertEquals(400, sut.moveCardToCardList(0,5).getStatusCodeValue());
+    }
+
+    /**
+     * Test for moveCardToCardList when the id of the list is incorrect
+     */
+    @Test
+    public void moveCardToListTestCardNoParent() {
+        CardList c1 = new CardList("a");
+        c1.setId(1L);
+        sut.add(c1);
+        Card card1 = new Card("Card1");
+        Card card2 = new Card("Card2");
+        card1.setId(1L);
+        card2.setId(2L);
+        cSut.add(card1);
+        cSut.add(card2);
+        assertEquals(400, sut.moveCardToCardList(0,1).getStatusCodeValue());
+    }
+
+
 }

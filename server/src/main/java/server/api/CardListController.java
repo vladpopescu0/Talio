@@ -169,7 +169,7 @@ public class CardListController {
     @PutMapping(path = "/moveCard")
     public ResponseEntity<Boolean> moveCard(@RequestBody List<Long> ids) {
         if (ids == null || ids.size() != 2 || !cardRepository.existsById(ids.get(0))
-                || !cardRepository.existsById(ids.get(0)) || !repo.existsByCards_Id(ids.get(0))
+                || !cardRepository.existsById(ids.get(1)) || !repo.existsByCards_Id(ids.get(0))
                 || !repo.existsByCards_Id(ids.get(1))) {
             return ResponseEntity.badRequest().build();
         }

@@ -164,6 +164,15 @@ public class BoardControllerTest {
     }
 
     /**
+     * Test for removeBoard when board has negative id
+     */
+    @Test
+    public void removeNegativeIdBoard() {
+        var alert = sut.removeBoard(-1);
+        assertEquals(BAD_REQUEST, alert.getStatusCode());
+    }
+
+    /**
      * Test for removeBoard
      */
     @Test
@@ -270,6 +279,8 @@ public class BoardControllerTest {
         assertEquals(400, sut.removeBoardPassword(8).getStatusCodeValue());
     }
 
+
+
     /**
      * Test for checkBoardPassword
      */
@@ -337,7 +348,8 @@ public class BoardControllerTest {
         sut.add(b2);
         sut.add(b3);
         assertEquals(true, sut.setBoardPassword(1, "password").getBody());
-        assertEquals(400, sut.setBoardPassword(8, "pass2").getStatusCodeValue());
+        assertEquals(true, sut.setBoardPassword(0, "pass2").getBody());
+        assertEquals(400, sut.checkBoardPassword(8, "pass2").getStatusCodeValue());
         assertEquals(true, sut.checkBoardPassword(1, "password").getBody());
         assertTrue(repo.calledMethods.contains("save"));
     }
@@ -355,7 +367,7 @@ public class BoardControllerTest {
         sut.add(b2);
         sut.add(b3);
         assertEquals(true, sut.setBoardPassword(1, "password").getBody());
-        assertEquals(400, sut.setBoardPassword(8, "pass2").getStatusCodeValue());
+        assertEquals(400, sut.checkBoardPassword(8, "pass2").getStatusCodeValue());
         assertEquals(false, sut.checkBoardPassword(1, "passwo").getBody());
     }
 
@@ -405,6 +417,17 @@ public class BoardControllerTest {
         assertEquals(400, sut.addListToBoard(10, c1).getStatusCodeValue());
         assertTrue(board.getList().contains(c1));
         assertTrue(board.getList().contains(c2));
+    }
+
+    /**
+     * Test for AddListToBoard when the list is null
+     */
+    @Test
+    public void addListToBoardNullName() {
+        Board b1 = new Board(SOME_USER, "b");
+        CardList c1 = new CardList();
+        sut.add(b1);
+        assertEquals(400, sut.addListToBoard(1, c1).getStatusCodeValue());
     }
 
     /**
@@ -489,13 +512,38 @@ public class BoardControllerTest {
      * put board no name test
      */
     @Test
-    public void putBoardNoNameTest() {
+    public void putBoardEmptyNameTest() {
+        SOME_USER.setId(1);
+        Board b1 = new Board(SOME_USER, "b");
+        Board b2 = new Board(SOME_USER, "");
+        b1.setId(99L);
+        b2.setId(99L);
+        sut.add(b1);
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getStatusCodeValue(), 400);
+    }
+
+    /**
+     * put board null name test
+     */
+    @Test
+    public void putBoardNullNameTest() {
         SOME_USER.setId(1);
         Board b1 = new Board(SOME_USER, "b");
         Board b2 = new Board(SOME_USER, null);
         b1.setId(99L);
         b2.setId(99L);
         sut.add(b1);
+        var actual = sut.putBoard(b2);
+        assertEquals(actual.getStatusCodeValue(), 400);
+    }
+
+    /**
+     * put null board test
+     */
+    @Test
+    public void putBoardNullTest() {
+        Board b2 = null;
         var actual = sut.putBoard(b2);
         assertEquals(actual.getStatusCodeValue(), 400);
     }
