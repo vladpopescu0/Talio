@@ -355,11 +355,10 @@ public class BoardViewCtrl {
      * Removes the current user from the board, in case the user has joined the board
      */
     public void removeUser() {
-        board.removeUser(mainCtrl.getCurrentUser());
+        board.removeUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
+        //mainCtrl.getCurrentUser().getBoardList().remove(board);
         server.updateBoard(board);
-        mainCtrl.getCurrentUser().setBoardList(server.
-                getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.closeSecondaryStage();
+        mainCtrl.setCurrentUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showUserBoardOverview();
     }
 
