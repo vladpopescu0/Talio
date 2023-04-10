@@ -40,6 +40,7 @@ public class AddCardCtrl {
     /**
      * Adds support for keyboard shortcuts
      */
+    //Should not be tested, yet it appears in coverage
     @FXML
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
@@ -65,7 +66,13 @@ public class AddCardCtrl {
      * The method called when pressing the button creating a card
      */
     public void ok() {
-        Card toBeAdded = getCard();
+        Card toBeAdded;
+        if(getTitle()==null){
+            toBeAdded = getCard("Card");
+        }else{
+            toBeAdded = getCard(getTitle().getText());
+        }
+        //Card toBeAdded = getCard(title.getText());
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 server.addCardToList(toBeAdded, mainCtrl.getId());
@@ -79,7 +86,6 @@ public class AddCardCtrl {
                 ctrl.checkUser();
             }
         } catch (WebApplicationException e) {
-
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
             alert.setContentText(e.getMessage());
@@ -89,13 +95,18 @@ public class AddCardCtrl {
     }
 
     /**
+     * @return textField title, easier to test now
+     */
+    private TextField getTitle(){
+        return title;
+    }
+
+    /**
      * Gets a card with the fields filled by the user
      * @return the card from the fields
      */
-    private Card getCard() {
-        var name = title.getText();
-        Card newCard = new Card(name);
-        return newCard;
+    private Card getCard(String name) {
+        return new Card(name);
     }
 
     /**
@@ -111,7 +122,9 @@ public class AddCardCtrl {
      * clears the title text field
      */
     private void clearFields() {
-        title.clear();
+        if(title!=null){
+            title.clear();
+        }
     }
 
     /**

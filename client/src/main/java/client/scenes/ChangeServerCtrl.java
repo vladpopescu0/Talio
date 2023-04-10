@@ -63,7 +63,7 @@ public class ChangeServerCtrl {
      * Initializes the scene with the current server in the server field,
      * as well as setting the error message to be invisible
      */
-    public void initialize() {
+    public void init() {
         serverField.setText(ServerUtils.getServer());
         errorLabel.setVisible(false);
         selectServer.setVisible(false);
@@ -78,7 +78,9 @@ public class ChangeServerCtrl {
     public void changeServer() {
         decideServer();
         mainCtrl.closeSecondaryStage();
-        mainCtrl.getOverviewCtrl().refresh();
+        if(mainCtrl.getCurrentUser() != null){
+            mainCtrl.getOverviewCtrl().refresh();
+        }
     }
 
     /**

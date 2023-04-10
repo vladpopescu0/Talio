@@ -132,11 +132,12 @@ public class BoardViewCtrl {
      * Runs upon initialization of the controller
      */
     public void init() {
-        server.setSession(ServerUtils.getUrl());
+        server.setSession(server.getUrl());
         cardListObservableList = FXCollections.observableList(board.getList());
         cardListView.setItems(cardListObservableList);
         cardListView.setCellFactory(cl -> new CardListCell(mainCtrl, server, board, unlocked));
         titledPane.setText(board.getName());
+        titledPane.setOnMouseClicked(event -> refocusFromBackup());
         cardListView.setFocusTraversable(false);
         cardListView.setSelectionModel(dsm);
         server.registerForUpdates("/topic/updateList",
@@ -184,6 +185,7 @@ public class BoardViewCtrl {
                 @Override
                 public void handle(MouseEvent event) {
                     unlock();
+
                 }
             });
         } else {
@@ -264,6 +266,7 @@ public class BoardViewCtrl {
             cardListView.setCellFactory(cl ->
                     new CardListCell(mainCtrl, server, board, unlocked)
             );
+            lockImage.setVisible(false);
             customizeBoard(board);
             boardTitle.setText(board.getName());
             focusChange(focusedId);
@@ -298,17 +301,6 @@ public class BoardViewCtrl {
                 }
             }
         }
-
-        quickRefresh();
-    }
-
-    /**
-     * Refreshes the boardView page without checking the data on the server
-     */
-    public void quickRefresh() {
-        cardListObservableList = FXCollections.observableList(board.getList());
-        cardListView.setItems(cardListObservableList);
-        customizeBoard(board);
     }
 
     /**
@@ -323,14 +315,6 @@ public class BoardViewCtrl {
      * Redirects the user back to the overview page
      */
     public void toCustomizationPage() {
-        prepareCustomizationPage();
-        mainCtrl.showCustomizationPage(this.board);
-    }
-
-    /**
-     * Sets the existing colors in the customization page
-     */
-    public void prepareCustomizationPage(){
         if (board.getColorScheme().getColorLighter() == null) {
             mainCtrl.getCustomizationPageCtrl().getBoardBG().setValue(Color.BLACK);
         } else {
@@ -375,7 +359,7 @@ public class BoardViewCtrl {
         server.updateBoard(board);
         mainCtrl.getCurrentUser().setBoardList(server.
                 getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
-        //mainCtrl.closeSecondaryStage();
+        mainCtrl.closeSecondaryStage();
         mainCtrl.showUserBoardOverview();
     }
 
@@ -424,28 +408,7 @@ public class BoardViewCtrl {
                 + board.getColorScheme().getColorBGdark() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGdark() + ";";
 
-        mainCtrl.setButtonStyle(editTitle, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(leaveButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(addList, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(allBoardsButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(myBoardsButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(deleteButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(customizeButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(copyInviteButton, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(boardPass, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-        mainCtrl.setButtonStyle(viewTags, board.getColorScheme().getColorLighter()
-                , board.getColorScheme().getColorFont());
-
-        this.content = (Region) titledPane.lookup(".title");
+        boardTitle.setStyle("-fx-text-fill: "+board.getColorScheme().getColorFont()+";");
 
         content.setOpacity(0);
         titledPane.setStyle(darkerStyle);
@@ -454,8 +417,10 @@ public class BoardViewCtrl {
         scrollPane.setStyle(style);
         cardListView.setCellFactory(cc -> {
             CardListCell c = new CardListCell(mainCtrl, server, board, unlocked);
-            c.setStyle("-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
-                    "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";");
+            c.setStyle("-fx-background-color: "
+                    + board.getListsColorScheme().getColorBGlight() + ";"
+                    + "\n-fx-border-color: "
+                    + board.getListsColorScheme().getColorBGlight() + ";");
             return c;
         });
     }
@@ -579,11 +544,9 @@ public class BoardViewCtrl {
                 }
             }
         }
-
-        quickRefresh();
     }
 
-    private final MultipleSelectionModel<CardList> dsm = new MultipleSelectionModel<CardList>() {
+    private final MultipleSelectionModel<CardList> dsm = new MultipleSelectionModel<>() {
         @Override
         public ObservableList<Integer> getSelectedIndices() {
             return FXCollections.emptyObservableList();

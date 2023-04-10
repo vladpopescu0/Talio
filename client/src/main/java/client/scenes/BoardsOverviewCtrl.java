@@ -65,7 +65,7 @@ public class BoardsOverviewCtrl {
         server.setSession(ServerUtils.getUrl());
         colBoardName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getName()));
-        //long polling
+//        //long polling
         server.getBoardUpdates(q -> {
             data.add(q);
             refresh();
@@ -78,6 +78,11 @@ public class BoardsOverviewCtrl {
                     mainCtrl.getUserBoardsOverviewCtrl().refresh();
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                }));
+        server.registerForUpdates("/topic/deleteBoard",
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
