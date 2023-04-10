@@ -7,37 +7,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class ColorSchemeTest {
     ColorScheme colorSchemeDefault = new ColorScheme();
 
-//    /**
-//     * test for getter
-//     */
-//    @Test
-//    public void emptyConstructorTest_BGLightGetter(){
-//        assertEquals(colorSchemeDefault.getColorBGlight(),"#000000");
-//    }
-//
-//    /**
-//     * test for getter
-//     */
-//    @Test
-//    public void emptyConstructorTest_BGDarkGetter(){
-//        assertEquals(colorSchemeDefault.getColorBGdark(),"#000000");
-//    }
-//
-//    /**
-//     * test for getter
-//     */
-//    @Test
-//    public void emptyConstructorTest_colorFontGetter(){
-//        assertEquals(colorSchemeDefault.getColorFont(),"#FFFFFF");
-//    }
-//
-//    /**
-//     * test for getter
-//     */
-//    @Test
-//    public void emptyConstructorTest_colorLighterGetter(){
-//        assertEquals(colorSchemeDefault.getColorLighter(),"#121212");
-//    }
 
     /**
      * test for getter
