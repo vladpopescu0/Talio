@@ -580,7 +580,6 @@ public class ServerUtils {
      * Removes a cardList
      * @param listid the id of the list to be removed
      */
-    @SuppressWarnings("unused")
     public void removeCL(long listid) {
         ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/lists/delete/" + listid) //
@@ -595,7 +594,6 @@ public class ServerUtils {
      * @param name the new name of the cardList
      * @return the CardList with modified name
      */
-    @SuppressWarnings("unused")
     public CardList modifyNameCL(long listid, String name) {
         CardList cl = ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/lists/" + listid) //
