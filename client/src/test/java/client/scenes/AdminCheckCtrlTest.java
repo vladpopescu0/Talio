@@ -21,7 +21,7 @@ public class AdminCheckCtrlTest {
      * setup tests sut and doc
      */
     @BeforeEach
-    public void setup() throws NoSuchFieldException {
+    public void setup() {
         mainCtrlMock = Mockito.mock(MainCtrl.class);
         serverUtilsMock = Mockito.mock(ServerUtils.class);
         boardsOverviewCtrlMock = Mockito.mock(BoardsOverviewCtrl.class);
@@ -41,7 +41,6 @@ public class AdminCheckCtrlTest {
     /**
      * check admin test
      */
-
     @Test
     public void checkAdminTest(){
         sut.checkAdmin();

@@ -1,7 +1,4 @@
-import commons.Board;
-import commons.CardList;
-import commons.Tag;
-import commons.User;
+import commons.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -60,6 +57,11 @@ public class BoardTest {
         var b = new Board(SOME_USER, "b");
         b.addUser(SOME_OTHER_USER);
         assertTrue(b.getUsers().contains(SOME_OTHER_USER));
+        b.addUser(SOME_USER);
+        assertEquals(b.getUsers().size(), 2);
+        var b1 = new Board();
+        b1.addUser(SOME_USER);
+        assertTrue(b1.getUsers().contains(SOME_USER));
     }
 
     /**
@@ -311,9 +313,11 @@ public class BoardTest {
     @Test
     public void hasPasswordTest(){
         Board b = new Board(SOME_USER, "a");
+        assertTrue(b.comparePass("Pass"));
         b.setPasswordHash("Somepass");
         assertTrue(b.isHasPassword());
         assertTrue(b.comparePass("Somepass"));
+        assertFalse(b.comparePass("Somepas"));
     }
 
     /**
@@ -324,5 +328,85 @@ public class BoardTest {
         Board b = new Board(SOME_USER, "a");
         b.setPasswordHash("pass123");
         assertEquals(b.getPassword(), String.valueOf("pass123".hashCode()));
+    }
+
+    /**
+     * Test for getListsColorScheme
+     */
+    @Test
+    public void getListsColorSchemeTest() {
+        Board board = new Board(SOME_USER, new ArrayList<>(), "Board",
+                new ArrayList<>());
+        assertEquals(board.getListsColorScheme(), new ColorScheme());
+    }
+
+    /**
+     * Test for removePass
+     */
+    @Test
+    public void removePassTest() {
+        Board b = new Board(SOME_USER, "A");
+        b.setPassword("Pass");
+        b.removePass();
+        assertFalse(b.isHasPassword());
+        assertEquals(b.getPassword(), "");
+    }
+
+    /**
+     * Test for getId
+     */
+    @Test
+    public void getIdTest() {
+        Board b = new Board(SOME_USER,"B");
+        assertNull(b.getId());
+    }
+
+    /**
+     * Test for setId
+     */
+    @Test
+    public void setIdTst() {
+        Board b = new Board(SOME_USER, "B");
+        b.setId((long) 100);
+        assertEquals(b.getId(), 100);
+    }
+
+    /**
+     * Test for getCardsColorSchemeList
+     */
+    @Test
+    public void getCardsColorSchemeListTest() {
+        Board b = new Board(SOME_USER, "B");
+        assertEquals(b.getCardsColorSchemesList(), new ArrayList<>());
+    }
+
+    /**
+     * Test for getColorScheme
+     */
+    @Test
+    public void getColorSchemeTest() {
+        Board b = new Board(SOME_USER, "B");
+        assertEquals(b.getColorScheme(), new ColorScheme());
+    }
+
+    /**
+     * Test for getCardsColorScheme
+     */
+    @Test
+    public void getCardsColorSchemeTest() {
+        Board b = new Board(SOME_USER, "B");
+        assertEquals(b.getCardsColorScheme(), new ColorScheme());
+    }
+
+    /**
+     * Test for setCardsColorScheme
+     */
+    @Test
+    public void setCardsColorSchemeTest() {
+        Board b = new Board(SOME_USER, "B");
+        ColorScheme cs = new ColorScheme("BB", "BB",
+                "BB", "BB");
+        b.setCardsColorScheme(cs);
+        assertEquals(b.getCardsColorScheme(), cs);
     }
 }

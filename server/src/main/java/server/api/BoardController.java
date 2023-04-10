@@ -190,24 +190,6 @@ public class BoardController {
         return ResponseEntity.ok(board);
     }
 
-//    /**
-//     * Updates a board
-//     * @param id the id of the board to be updated
-//     * @param board the new version of the board
-//     * @return a response entity containing the updated board, if the update is possible
-//     */
-//    @PutMapping("/updateTagAdd/{id}")
-//    public ResponseEntity<Board> updateTagAdd(@PathVariable("id") long id,
-//                                             @RequestBody Board board) {
-//        if (!repo.existsById(id)) {
-//            return ResponseEntity.badRequest().build();
-//        }
-//        repo.save(board);
-//        msgs.convertAndSend("/topic/tags2",id);
-//        msgs.convertAndSend("/topic/tags",id);
-//        return ResponseEntity.ok(board);
-//    }
-
     /**
      * Sets the password of the given board
      * @param id Board ID
@@ -223,6 +205,7 @@ public class BoardController {
         Board b = repo.getById(id);
         b.setPasswordHash(pass);
         repo.save(b);
+        msgs.convertAndSend("/topic/passwordChange", id);
         return ResponseEntity.ok(true);
     }
 
@@ -239,6 +222,7 @@ public class BoardController {
         Board b = repo.getById(id);
         b.removePass();
         repo.save(b);
+        msgs.convertAndSend("/topic/passwordChange", id);
         return  ResponseEntity.ok(true);
     }
 

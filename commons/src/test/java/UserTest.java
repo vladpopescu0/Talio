@@ -3,6 +3,7 @@ import commons.User;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +52,7 @@ public class UserTest {
      */
     @Test
     public void addBoardTest() {
-        User u = new User("u");
+        User u = new User();
         Board b = new Board(u, "b");
         u.addBoard(b);
         assertTrue(u.getBoardList().contains(b));
@@ -117,5 +118,20 @@ public class UserTest {
         User u = new User("u");
         User u1 = new User("u1");
         assertNotEquals(u.hashCode(), u1.hashCode());
+    }
+
+    /**
+     * Test for setBoardList
+     */
+    @Test
+    public void setBoardListTest() {
+        User u = new User();
+        Board b1 = new Board(u, "1");
+        Board b2 = new Board(u, "2");
+        List<Board> list = new ArrayList<>();
+        list.add(b1);
+        list.add(b2);
+        u.setBoardList(list);
+        assertEquals(list, u.getBoardList());
     }
 }

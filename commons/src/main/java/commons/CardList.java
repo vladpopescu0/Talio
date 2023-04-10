@@ -2,14 +2,12 @@ package commons;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 
 @Entity
@@ -104,14 +102,6 @@ public class CardList {
         this.cards = cards;
     }
 
-    /**
-     * Removes given Card from the CardList
-     * @param card Card to be removed
-     */
-    public void removeCard(Card card) {
-        cards.remove(card);
-    }
-
     /** Sets a new name for a CardList object
      * @param name name that needs to be appended to object
      */
@@ -146,12 +136,4 @@ public class CardList {
         this.id = id;
     }
 
-    /**
-     * toString method for the CardList class
-     * @return this as a String
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
 }
