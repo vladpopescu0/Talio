@@ -9,6 +9,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.awt.*;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,38 +140,66 @@ public class BoardViewCtrlTest {
 
     /**
      * test for copy link when id has only one digit
+     * @throws IOException thrown by clipboard
+     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkTest(){
-        sut.isAnimationPlayed = true;
-        sut.copyLink();
+    public void copyLinkTest() throws IOException, UnsupportedFlavorException {
+        if(!GraphicsEnvironment.isHeadless()) {
+            sut.isAnimationPlayed = true;
+            sut.copyLink();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
+                    , board.getId());
+        }
     }
     /**
      * test for copy link when id has only two digits
+     * @throws IOException thrown by clipboard
+     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkTwoZerosTest(){
-        sut.isAnimationPlayed = true;
-        board.setId(34L);
-        sut.copyLink();
+    public void copyLinkTwoZerosTest() throws IOException, UnsupportedFlavorException {
+        if(!GraphicsEnvironment.isHeadless()) {
+            sut.isAnimationPlayed = true;
+            board.setId(34L);
+            sut.copyLink();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
+                    , board.getId());
+        }
     }
     /**
      * test for copy link when id has only three digits
+     * @throws IOException thrown by clipboard
+     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkOneZerosTest(){
-        sut.isAnimationPlayed = true;
-        board.setId(394L);
-        sut.copyLink();
+    public void copyLinkOneZerosTest() throws IOException, UnsupportedFlavorException {
+        if(!GraphicsEnvironment.isHeadless()) {
+            sut.isAnimationPlayed = true;
+            board.setId(394L);
+            sut.copyLink();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
+                    , board.getId());
+        }
     }
     /**
      * test for copy link when id has more than 3 digits
+     * @throws IOException thrown by clipboard
+     * @throws UnsupportedFlavorException thrown by clipboard
      */
     @Test
-    public void copyLinkNoZerosTest(){
-        sut.isAnimationPlayed = true;
-        board.setId(3924L);
-        sut.copyLink();
+    public void copyLinkNoZerosTest() throws IOException, UnsupportedFlavorException {
+        if(!GraphicsEnvironment.isHeadless()){
+            sut.isAnimationPlayed = true;
+            board.setId(3924L);
+            sut.copyLink();
+            Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+            assertEquals(Long.parseLong(clipboard.getData(DataFlavor.stringFlavor).toString())
+                    ,board.getId());
+        }
     }
 
     /**
