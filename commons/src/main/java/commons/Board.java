@@ -1,10 +1,8 @@
 package commons;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -12,9 +10,6 @@ import javax.inject.Inject;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
-import static org.apache.commons.lang3.builder.ToStringStyle.MULTI_LINE_STYLE;
 
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
@@ -192,25 +187,6 @@ public class Board {
     }
 
     /**
-     * Creates a string with all the users of the board
-     * (used for tables in overviews)
-     *
-     * @return all the users of the board
-     */
-    @JsonIgnore
-    public String listUsernames() {
-        if (users.isEmpty()) {
-            return "";
-        }
-        StringBuilder s = new StringBuilder();
-        for (int i = 0; i < users.size() - 1; i++) {
-            s.append(users.get(i).getUsername()).append(", ");
-        }
-        s.append(users.get(users.size() - 1).getUsername());
-        return s.toString();
-    }
-
-    /**
      * Removes a user from a board
      *
      * @param user the user to be removed
@@ -310,16 +286,6 @@ public class Board {
     }
 
     /**
-     * toString method for the board class
-     *
-     * @return this as a String
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
-
-    /**
      * @return the list of 3 presets for the cards font color
      */
     public List<ColorScheme> getCardsColorSchemesList() {
@@ -335,8 +301,7 @@ public class Board {
     }
 
     /**
-     *
-     * @param cardsColorScheme
+     * @param cardsColorScheme the new colorscheme
      */
     public void setCardsColorScheme(ColorScheme cardsColorScheme) {
         this.cardsColorScheme = cardsColorScheme;
@@ -369,7 +334,7 @@ public class Board {
     /**
      * Sets the board's password
      * SHOULD NOT BE USED, this is here for Spring, use setPasswordHash instead
-     * @param pass
+     * @param pass the password
      */
     public void setPassword(String pass) {
         this.password = pass;
@@ -390,7 +355,8 @@ public class Board {
      * @return True if passwords match, false otherwise
      */
     public boolean comparePass(String pass){
-        if (!isHasPassword()) return true;
+        if (!isHasPassword())
+            return true;
         return Integer.parseInt(this.password) == pass.hashCode();
     }
 

@@ -126,13 +126,4 @@ public class ColorScheme{
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
-    /**
-     * toString method for the board class
-     * @return this as a String
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
 }

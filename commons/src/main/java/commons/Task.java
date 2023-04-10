@@ -107,13 +107,4 @@ public class Task implements Serializable {
     public int hashCode() {
         return HashCodeBuilder.reflectionHashCode(this);
     }
-
-    /**
-     * toString method for the task class
-     * @return this as a String
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
-    }
 }

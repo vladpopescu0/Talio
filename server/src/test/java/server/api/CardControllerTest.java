@@ -396,6 +396,18 @@ public class CardControllerTest {
         assertEquals(actual.getStatusCode(), BAD_REQUEST);
     }
 
+    @Test
+    public void addNullOrZeroTagsToCardTest() {
+        Card c = new Card("card");
+        c.setTags(new ArrayList<>());
+        c.setId(5);
+        sut.add(c);
+        var actual1 = sut.addTags(c.getId(), null);
+        assertEquals(BAD_REQUEST, actual1.getStatusCode());
+        var actual2 = sut.addTags(c.getId(), new ArrayList<>());
+        assertEquals(BAD_REQUEST, actual2.getStatusCode());
+    }
+
     /**
      * Test for addTags with correct arguments
      */

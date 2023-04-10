@@ -13,6 +13,9 @@ public class TagTest {
         Tag t = new Tag("tag");
         assertNotNull(t);
         assertEquals(t.getName(), "tag");
+        Tag t1 = new Tag("tag", "red");
+        assertEquals(t1.getName(), "tag");
+        assertEquals(t1.getColor(), "red");
     }
 
     /**
@@ -72,5 +75,18 @@ public class TagTest {
         Tag t = new Tag("tag");
         Tag t1 = new Tag("tag1");
         assertNotEquals(t.hashCode(), t1.hashCode());
+    }
+
+    @Test
+    public void getColorTest() {
+        Tag t = new Tag();
+        assertNull(t.getColor());
+    }
+
+    @Test
+    public void setColorTest() {
+        Tag t = new Tag("t");
+        t.setColor("red");
+        assertEquals(t.getColor(), "red");
     }
 }

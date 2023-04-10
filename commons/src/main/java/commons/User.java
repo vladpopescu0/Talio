@@ -1,6 +1,7 @@
 package commons;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 
@@ -20,14 +21,8 @@ public class User {
     private long id;
     private String username;
 
-    //@JsonIgnore
-//    @JsonBackReference
     @JsonBackReference
     @ManyToMany(targetEntity = User.class, fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-//    @JoinTable(
-//            name = "user_board",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "board_id"))
     private List<Board> boardList;
 
     /**
@@ -118,15 +113,12 @@ public class User {
 
     /**
      * Equals method for User
-     * @param o another object
+     * @param obj another object
      * @return true if-f o is equal to this
      */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return id == user.id && Objects.equals(username, user.username);
+    public boolean equals(Object obj) {
+        return EqualsBuilder.reflectionEquals(this, obj);
     }
 
     /**
@@ -145,14 +137,5 @@ public class User {
      */
     public void setBoardList(List<Board> boardList) {
         this.boardList = boardList;
-    }
-
-    /**
-     * toString method for the User class
-     * @return this as a string
-     */
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this, MULTI_LINE_STYLE);
     }
 }
