@@ -325,4 +325,15 @@ public class BoardTest {
         b.setPasswordHash("pass123");
         assertEquals(b.getPassword(), String.valueOf("pass123".hashCode()));
     }
+
+    /**
+     * Test for removing a password from a board
+     */
+    @Test
+    public void removePasswordTest(){
+        Board b = new Board(SOME_USER, "a");
+        b.setPasswordHash("pass123");
+        b.removePass();
+        assertFalse(b.isHasPassword());
+    }
 }
