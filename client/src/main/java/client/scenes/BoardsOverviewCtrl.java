@@ -65,7 +65,7 @@ public class BoardsOverviewCtrl {
         server.setSession(ServerUtils.getUrl());
         colBoardName.setCellValueFactory(q ->
                 new SimpleStringProperty(q.getValue().getName()));
-        //long polling
+//        //long polling
         server.getBoardUpdates(q -> {
             data.add(q);
             refresh();
@@ -82,10 +82,11 @@ public class BoardsOverviewCtrl {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
                 }));
-//        server.registerForUpdates("/topic/refreshUsers",
-//                Long.class, q -> Platform.runLater(() -> {
-//                    refresh();
-//                }));
+        server.registerForUpdates("/topic/deleteBoard",
+                Long.class, q -> Platform.runLater(() -> {
+                    refresh();
+                    mainCtrl.getBoardViewCtrl().refresh();
+                }));
     }
 
     /**
@@ -139,7 +140,6 @@ public class BoardsOverviewCtrl {
                 }
             }
             mainCtrl.showBoardView(b);
-            mainCtrl.showCheckBoardPasswordView(b);
 
         } else {
             b.addUser(mainCtrl.getCurrentUser());

@@ -78,7 +78,9 @@ public class ChangeServerCtrl {
     public void changeServer() {
         decideServer();
         mainCtrl.closeSecondaryStage();
-        mainCtrl.getOverviewCtrl().refresh();
+        if(mainCtrl.getCurrentUser() != null){
+            mainCtrl.getOverviewCtrl().refresh();
+        }
     }
 
     /**
@@ -88,6 +90,16 @@ public class ChangeServerCtrl {
         serverField.clear();
         errorLabel.setVisible(false);
         mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Change Server specific shortcuts:\n"
+                + "Enter - Submit the address\n"
+                + "Escape - Close the page";
     }
 
     /**

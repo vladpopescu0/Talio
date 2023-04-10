@@ -15,6 +15,8 @@
  */
 package client.scenes;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import commons.*;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -29,6 +31,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
@@ -87,6 +91,8 @@ public class MainCtrl {
     private EditTagCtrl editTagCtrl;
     private Scene viewAddTag;
     private ViewAddTagsCtrl viewAddTagsCtrl;
+    private Scene cardPreset;
+    private CardPresetCtrl cardPresetCtrl;
     private Scene helpPage;
     private HelpCtrl helpPageCtrl;
     public static final DataFormat cardDataFormat = new DataFormat("card");
@@ -98,6 +104,11 @@ public class MainCtrl {
     private String adminPass = "";
 
     private HashMap<Long, String> savedPasswords = new HashMap<>();
+
+    private final ObjectMapper mapper = new ObjectMapper();
+    private File passwordFile;
+    private final TypeReference<HashMap<Long, String>> typeref =
+            new TypeReference<HashMap<Long, String>>() {};
 
     /**
      * Initializes the application
@@ -127,6 +138,7 @@ public class MainCtrl {
      * @param editBoardPass the editBoardPassword scene
      * @param helpPage the HelpPage scene
      * @param checkBoardPass the checkBoardPassword scene
+     * @param cardPreset the cardPresetView scene
      */
     public void initialize(Stage primaryStage, Stage secondaryStage, Stage helpStage,
                            Pair<BoardsOverviewCtrl, Parent> overview,
@@ -150,8 +162,8 @@ public class MainCtrl {
                            Pair<ViewAddTagsCtrl, Parent> viewAddTag,
                             Pair<EditBoardPasswordViewCtrl, Parent> editBoardPass,
                            Pair<CheckBoardPasswordViewCtrl, Parent> checkBoardPass,
-                           Pair<HelpCtrl, Parent> helpPage) {
-
+                           Pair<HelpCtrl, Parent> helpPage,
+                           Pair<CardPresetCtrl, Parent> cardPreset){
         this.primaryStage = primaryStage;
 
         this.secondaryStage = secondaryStage;
@@ -222,6 +234,9 @@ public class MainCtrl {
 
         this.checkBoardPassCtrl = checkBoardPass.getKey();
         this.checkBoardPass = new Scene(checkBoardPass.getValue());
+
+        this.cardPresetCtrl = cardPreset.getKey();
+        this.cardPreset = new Scene(cardPreset.getValue());
         primaryStage.show();
 
         helpStage.setScene(this.helpPage);
@@ -248,6 +263,7 @@ public class MainCtrl {
      */
     public void setCurrentUser(User user) {
         this.currentUser = user;
+        this.passwordFile = new File("userPasswords/"+user.getUsername()+".csv");
     }
 
     /**
@@ -276,6 +292,7 @@ public class MainCtrl {
         changePrimaryStage(boardView, board.getName());
 
         this.boardViewCtrl.setBoard(board);
+//        this.boardViewCtrl.
         this.boardViewCtrl.refresh();
         this.boardViewCtrl.checkUser();
 
@@ -286,12 +303,14 @@ public class MainCtrl {
      *
      * @param card  the card whose details are to be shown
      * @param board the board to which the card belongs
+     * @param unlocked whether it is unlocked
      */
-    public void showCardDetailsView(Card card, Board board) {
+    public void showCardDetailsView(Card card, Board board, boolean unlocked) {
         changePrimaryStage(cardDetails, card.getName());
 
         this.cardDetailsViewCtr.setCard(card);
         this.cardDetailsViewCtr.setBoard(board);
+        this.cardDetailsViewCtr.setUnlocked(unlocked);
         this.cardDetailsViewCtr.refresh();
     }
 
@@ -437,15 +456,15 @@ public class MainCtrl {
         showSecondaryStage(customizationPage,"Customize Your Board");
         this.customizationPageCtrl.setBoard(board);
         this.customizationPageCtrl.refresh();
+        this.customizationPageCtrl.init();
         //primaryStage.setScene(customizationPage);
     }
 
     /**
      * Shows the admin login page
      */
-    public void showAdminCheck() {
-        primaryStage.setTitle("Admin Password");
-        primaryStage.setScene(adminCheck);
+    public void showAdminCheck(){
+        showSecondaryStage(adminCheck, "Admin Password");
     }
 
     /**
@@ -535,6 +554,17 @@ public class MainCtrl {
         viewAddTagsCtrl.setCard(card);
         viewAddTagsCtrl.setShortcut(shortcut);
         viewAddTagsCtrl.refresh();
+    }
+
+    /**
+     * Shows the preset selection page for individual Card
+     * @param card Card for which the preset might be selected
+     */
+    public void showCardPresetShortcut(Card card) {
+        showSecondaryStage(cardPreset, "Select preset for " + card.getName());
+        cardPresetCtrl.setBoard(boardViewCtrl.getBoard());
+        cardPresetCtrl.setCard(card);
+        cardPresetCtrl.refresh();
     }
 
     /**
@@ -697,6 +727,7 @@ public class MainCtrl {
      * Shows the help stage if it's not visible
      */
     private void showHelpStage() {
+        helpPageCtrl.setAdditionalHelp(getAdditionalHelp());
         helpStage.toFront();
         if (!helpStage.isShowing()) {
             helpStage.centerOnScreen();
@@ -740,7 +771,6 @@ public class MainCtrl {
                 && tag.getId() == editTagCtrl.getTag().getId();
     }
 
-
     /**
      * @return the primary stage
      */
@@ -749,26 +779,19 @@ public class MainCtrl {
     }
 
     /**
-     * Returns the currently focused node
-     *
-     * @return the currently focused node in the primary stage
-     */
-    public Node getFocusedNode() {
-        return primaryStage.getScene().getFocusOwner();
-    }
-
-    /**
+>>>>>>> dev_branch
      * Getter for the boardOverviewCtrl
      * @return the boardOverviewCtrl
      */
     public BoardsOverviewCtrl getBoardsOverviewCtrl() {
         return this.overviewCtrl;
     }
-        /**
-         * Event listener for shortcuts
-         * @param event the key event
-         * @param primary whether the key listener concerns primary stage
-         */
+
+    /**
+     * Event listener for shortcuts
+     * @param event the key event
+     * @param primary whether the key listener concerns primary stage
+     */
     private void keyEventListener(KeyEvent event, boolean primary) {
         Node focused = primary? primaryStage.getScene().getFocusOwner()
                 : secondaryStage.getScene().getFocusOwner();
@@ -779,6 +802,13 @@ public class MainCtrl {
         }
     }
 
+    /**
+     * Returns the currently focused node
+     * @return the currently focused node in the primary stage
+     */
+    public Node getFocusedNode() {
+        return primaryStage.getScene().getFocusOwner();
+    }
     /**
      * Gets the map of saved passwords
      * @return Map of board ID to saved password
@@ -807,12 +837,78 @@ public class MainCtrl {
         } else {
             this.savedPasswords.put(id, pass);
         }
+        try {
+            String newPasswords = mapper.writeValueAsString(savedPasswords);
+            if (!passwordFile.exists()){
+                passwordFile.createNewFile();
+            }
+            FileWriter fw = new FileWriter(passwordFile);
+            fw.write(newPasswords);
+            fw.close();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     /**
-     * When the user changes, all saved passwords should be forgotten
+     * Loads passwords from current User's file
+     * Returns a String describing currently shown page-specific shortcuts
+     * @return String description of currently shown page-specific shortcuts
      */
-    public void forgetPasswords() {
-        savedPasswords = new HashMap<>();
+    private String getAdditionalHelp() {
+        if (secondaryStage.isShowing()) {
+            List<Scene> scenes = List.of(createBoard, joinBoardByLink, adminCheck, changeServer,
+                    addCard, changeListName, changeBoardPass, createList, createTag, editTag,
+                    editCard, editBoardName);
+            switch(scenes.indexOf(secondaryStage.getScene())) {
+                case 0:
+                    return createBoardViewCtrl.additionalHelp();
+                case 1:
+                    return joinBoardByLinkCtrl.additionalHelp();
+                case 2:
+                    return adminCheckCtrl.additionalHelp();
+                case 3:
+                    return changeServerCtrl.additionalHelp();
+                case 4:
+                    return addCardCtrl.additionalHelp();
+                case 5:
+                    return changeListNameCtrl.additionalHelp();
+                case 6:
+                    return changeBoardPassCtrl.additionalHelp();
+                case 7:
+                    return createListCtrl.additionalHelp();
+                case 8:
+                    return createTagCtrl.additionalHelp();
+                case 9:
+                    return editTagCtrl.additionalHelp();
+                case 10:
+                    return editCardCtrl.additionalHelp();
+                case 11:
+                    return editBoardNameViewCtrl.additionalHelp();
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns whether the primary stage is focused
+     * @return whether the primary stage is focused
+     */
+    public boolean isPrimaryStageFocused() {
+        return primaryStage.isFocused();
+    }
+
+    /**
+     * Loads passwords from current User's file
+     * When the user changes, all saved passwords should be forgotten
+>>>>>>> dev_branch
+     */
+    public void loadPasswords() {
+        try {
+            this.savedPasswords = mapper.readValue(passwordFile, typeref);
+        } catch (Exception e){
+            savedPasswords = new HashMap<>();
+        }
     }
 }

@@ -15,6 +15,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 public class BoardControllerTest {
     private TestBoardRepository repo;
+    private TestColorSchemeRepository csrepo;
     private BoardController sut;
     private SimpMessagingTemplate msg;
     private MessageChannel channel;
@@ -29,7 +30,8 @@ public class BoardControllerTest {
         channel = (message, timeout) -> true;
         msg = new SimpMessagingTemplate(channel);
         repo = new TestBoardRepository();
-        sut = new BoardController(repo, msg);
+        csrepo = new TestColorSchemeRepository();
+        sut = new BoardController(repo, msg, csrepo);
     }
 
     /**

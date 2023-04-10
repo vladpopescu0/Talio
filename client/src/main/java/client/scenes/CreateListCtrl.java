@@ -101,4 +101,14 @@ public class CreateListCtrl {
         clearField();
         mainCtrl.closeSecondaryStage();
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Add List specific shortcuts:\n"
+                + "Enter - Create a list\n"
+                + "Escape - Close the page";
+    }
 }

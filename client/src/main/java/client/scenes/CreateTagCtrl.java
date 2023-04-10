@@ -111,4 +111,14 @@ public class CreateTagCtrl {
         mainCtrl.closeSecondaryStage();
         mainCtrl.showViewTags(board);
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Create Tag specific shortcuts:\n"
+                + "Enter - Create a Tag\n"
+                + "Escape - Close the page";
+    }
 }

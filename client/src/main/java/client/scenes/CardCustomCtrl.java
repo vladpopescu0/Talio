@@ -16,7 +16,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
     private final CustomizationPageCtrl parent;
     private ServerUtils server;
     private MainCtrl mainCtrl;
-
     private Board board;
 
     @FXML

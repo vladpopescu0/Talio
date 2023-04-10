@@ -81,6 +81,7 @@ public class ViewAddTagsCtrl {
     }
 
     /**
+>>>>>>> 6bf4fe812fbb5f5ad8704cb72d26d0ec29c38de6
      * Initializer for the ViewTags scene
      */
     public void init() {
@@ -113,7 +114,7 @@ public class ViewAddTagsCtrl {
             tagObservableList = FXCollections.observableList(observableTags);
             tagsView.setItems(tagObservableList);
             tagsView.setCellFactory(tc ->
-                    new TagAddCell(mainCtrl, server, false)
+                    new TagAddCell(mainCtrl, server, false, true)
             );
         }
     }

@@ -66,14 +66,14 @@ public class CustomizationPageCtrl {
         colorPairObservableList = FXCollections.observableList(colors);
         colorPairList.setItems(colorPairObservableList);
         colorPairList.setCellFactory(t -> new CardCustomCtrl(mainCtrl, server, this));
+        server.registerForUpdates("/topic/boardsUpdate",
+                Long.class, q ->  changeColors());
+        server.setSession(ServerUtils.getUrl());
         server.registerForUpdates("/topic/colors",
                 ColorScheme.class, q -> Platform.runLater(() -> {
                     colorPairObservableList.add(q);
                     refresh();
                 }));
-
-        server.registerForUpdates("/topic/boardsUpdate",
-                Long.class, q ->  changeColors());
     }
 
     /**

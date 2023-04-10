@@ -64,10 +64,12 @@ public class AdminCheckCtrl {
             messageLabel.setText("Now logged in as admin");
             mainCtrl.setAdmin(true);
             mainCtrl.setAdminPass(password);
+            mainCtrl.closeSecondaryStage();
         } else {
             messageLabel.setTextFill(Color.RED);
             messageLabel.setText("Incorrect Password");
         }
+        mainCtrl.showOverview();
     }
 
     /**
@@ -76,6 +78,16 @@ public class AdminCheckCtrl {
     public void cancel(){
         passField.clear();
         messageLabel.setVisible(false);
-        mainCtrl.showOverview();
+        mainCtrl.closeSecondaryStage();
+    }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Admin Login specific shortcuts:\n"
+                + "Enter - Submit the password\n"
+                + "Escape - Close the page";
     }
 }

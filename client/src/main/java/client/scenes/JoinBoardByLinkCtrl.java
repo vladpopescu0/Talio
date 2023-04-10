@@ -117,4 +117,14 @@ public class JoinBoardByLinkCtrl {
     private void clearFields() {
         code.clear();
     }
+
+    /**
+     * Returns a String describing page-specific shortcuts
+     * @return String description of page-specific shortcuts
+     */
+    public String additionalHelp() {
+        return "Join by Code specific shortcuts:\n"
+                + "Enter - Submit the code\n"
+                + "Escape - Close the page";
+    }
 }
