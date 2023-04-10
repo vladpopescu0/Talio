@@ -41,17 +41,17 @@ public class AdminCheckCtrlTest {
     /**
      * check admin test
      */
-    //@Test
-    //public void checkAdminTest(){
-        //sut.checkAdmin();
+    @Test
+    public void checkAdminTest(){
+        sut.checkAdmin();
 
-        //Mockito.verify(serverUtilsMock).isAdmin("password");
-        //Mockito.verify(mainCtrlMock).setAdmin(true);
-        //Mockito.verify(mainCtrlMock).setAdminPass("password");
-        //Mockito.verify(mainCtrlMock).closeSecondaryStage();
-        //Mockito.verify(mainCtrlMock).showOverview();
+        Mockito.verify(serverUtilsMock).isAdmin("password");
+        Mockito.verify(mainCtrlMock).setAdmin(true);
+        Mockito.verify(mainCtrlMock).setAdminPass("password");
+        Mockito.verify(mainCtrlMock).closeSecondaryStage();
+        Mockito.verify(mainCtrlMock).showOverview();
 
-    //}
+    }
 
     /**
      * additional Help test

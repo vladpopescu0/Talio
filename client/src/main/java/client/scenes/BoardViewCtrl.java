@@ -346,6 +346,7 @@ public class BoardViewCtrl {
         board.removeUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
         //mainCtrl.getCurrentUser().getBoardList().remove(board);
         server.updateBoard(board);
+        board = server.getBoardByID(board.getId());
         mainCtrl.setCurrentUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
         mainCtrl.showUserBoardOverview();
     }
