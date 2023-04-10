@@ -50,7 +50,8 @@ public class CardPresetCtrl {
      * @param card the Card for which preset can be selected
      */
     @Inject
-    public CardPresetCtrl(ServerUtils server, MainCtrl mainCtrl, Card card, Board board) {
+    public CardPresetCtrl(ServerUtils server, MainCtrl mainCtrl
+            , Card card, Board board) {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.board = board;
