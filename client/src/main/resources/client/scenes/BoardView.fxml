@@ -20,7 +20,7 @@
                         <ListView fx:id="cardListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="HORIZONTAL" prefHeight="694.0" prefWidth="1066.0" />
                     </content>
                 </ScrollPane>
-                <Button fx:id="allBoardsButton" layoutX="1085.0" layoutY="160.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #00C9A7;" text="To all Boards" textFill="WHITE" />
+                <Button fx:id="allBoardsButton" layoutX="1085.0" layoutY="160.0" mnemonicParsing="false" onAction="#cancel" prefHeight="27.0" prefWidth="109.0" style="-fx-background-color: #00C9A7;" text="Back" textFill="WHITE" />
                 <Button fx:id="viewTags" layoutX="1085.0" layoutY="410.0" mnemonicParsing="false" onAction="#viewTags" prefHeight="27.0" prefWidth="109" style="-fx-background-color: #fafac8;" text="View Tags" />
                 <Button fx:id="leaveButton" layoutX="1085.0" layoutY="60.0" mnemonicParsing="false" onAction="#removeUser" prefHeight="27.0" prefWidth="109" style="-fx-background-color: #e33057;" text="Leave Board" textFill="WHITE" />
                 <Button fx:id="customizeButton" layoutX="1085.0" layoutY="260.0" mnemonicParsing="false" onAction="#toCustomizationPage" prefHeight="27.0" prefWidth="109" style="-fx-background-color: #fafac8;" text="Customize" />
