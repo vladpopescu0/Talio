@@ -12,7 +12,6 @@ import org.mockito.Mockito;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
 
 public class EditCardCtrlTest {
     private MainCtrl mainCtrlMock;
@@ -38,10 +37,15 @@ public class EditCardCtrlTest {
 
         sut = new EditCardCtrl(serverUtilsMock, mainCtrlMock);
 
-        Mockito.when(serverUtilsMock.updateCard(eq(card.getName()), eq(card.getId()))).thenReturn(card);
-        Mockito.when(mainCtrlMock.getBoardViewCtrl()).thenReturn(boardViewCtrlMock);
+        Mockito.when(serverUtilsMock
+                .updateCard(eq(card.getName()), eq(card.getId())))
+                .thenReturn(card);
+        Mockito.when(mainCtrlMock.getBoardViewCtrl())
+                .thenReturn(boardViewCtrlMock);
         Mockito.when(boardViewCtrlMock.getBoard()).thenReturn(board);
-        Mockito.when(serverUtilsMock.updateCard(eq("Card"), not(eq(0L)))).thenThrow(new IllegalStateException());
+        Mockito.when(serverUtilsMock.
+                updateCard(eq("Card"), not(eq(0L))))
+                .thenThrow(new IllegalStateException());
     }
 
     /**

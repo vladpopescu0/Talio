@@ -1,14 +1,11 @@
 package client.scenes;
 
 import client.utils.ServerUtils;
-import commons.Board;
-import commons.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
 
 public class JoinBoardByLinkCtrlTest {
     private MainCtrl mainCtrlMock;

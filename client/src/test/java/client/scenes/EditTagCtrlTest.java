@@ -8,12 +8,10 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.AdditionalMatchers.not;
 import static org.mockito.ArgumentMatchers.eq;
 
-import org.mockito.Mock;
 import org.mockito.Mockito;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.times;
 
 public class EditTagCtrlTest {
     private MainCtrl mainCtrlMock;
@@ -42,7 +40,9 @@ public class EditTagCtrlTest {
         sut = new EditTagCtrl(serverUtilsMock, mainCtrlMock, board, tag);
 
         Mockito.when(serverUtilsMock.modifyTag(eq(tag.getId()), eq(tag))).thenReturn(tag);
-        Mockito.when(serverUtilsMock.modifyTag(not(eq(tag.getId())), not(eq(tag)))).thenThrow(new IllegalStateException());
+        Mockito.when(serverUtilsMock
+                .modifyTag(not(eq(tag.getId())), not(eq(tag))))
+                .thenThrow(new IllegalStateException());
         Mockito.when(mainCtrlMock.getViewTagsCtrl()).thenReturn(viewTagsCtrlMock);
         Mockito.when(viewTagsCtrlMock.getBoard()).thenReturn(board);
     }
