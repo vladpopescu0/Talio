@@ -125,7 +125,6 @@ public class ChangeServerCtrl {
      */
     public void setServer() {
         decideServer();
-//        mainCtrl.getBoardsOverviewCtrl().init();
     }
 
     /**

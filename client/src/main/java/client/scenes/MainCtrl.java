@@ -438,11 +438,9 @@ public class MainCtrl {
      * @param board the board to be customized
      */
     public void showCustomizationPage(Board board) {
-        //primaryStage.setTitle("Customize Your Board");
         showSecondaryStage(customizationPage,"Customize Your Board");
         this.customizationPageCtrl.setBoard(board);
         this.customizationPageCtrl.refresh();
-        //primaryStage.setScene(customizationPage);
     }
     /**
      * Shows the admin login page

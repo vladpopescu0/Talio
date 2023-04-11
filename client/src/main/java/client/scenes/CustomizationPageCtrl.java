@@ -224,8 +224,6 @@ public class CustomizationPageCtrl {
         ColorScheme newDefaultColorScheme = server.addColorScheme(new ColorScheme());
         board.getCardsColorSchemesList().add(newDefaultColorScheme);
         server.updateBoard(board);
-        //refresh();
-        //this.mainCtrl.showCustomizationPage(board);
     }
 
     /**
