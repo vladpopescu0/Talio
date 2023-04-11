@@ -64,9 +64,9 @@ public class EditTagCtrl {
      * database by adding it to a Board with a given ID
      */
     public void ok() {
+        Tag toBeAdded = title == null? new Tag("Tag") : generateTag();
         try {
-            if (!isNullOrEmpty(getTitle())) {
-                Tag toBeAdded = generateTag();
+            if (!isNullOrEmpty(toBeAdded.getName())) {
                 server.modifyTag(tag.getId(), toBeAdded);
                 clearFields();
                 mainCtrl.closeSecondaryStage();
@@ -112,7 +112,9 @@ public class EditTagCtrl {
      * Clears the title text field
      */
     private void clearFields() {
-        title.clear();
+        if (title != null) {
+            title.clear();
+        }
     }
 
     /**

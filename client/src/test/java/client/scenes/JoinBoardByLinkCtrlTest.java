@@ -36,6 +36,15 @@ public class JoinBoardByLinkCtrlTest {
     }
 
     /**
+     * Testing the method bound to the cancel button
+     */
+    @Test
+    public void cancelTest() {
+        sut.cancel();
+        Mockito.verify(mainCtrlMock).closeSecondaryStage();
+    }
+
+    /**
      * Testing the method returning additional help for that page
      */
     @Test
