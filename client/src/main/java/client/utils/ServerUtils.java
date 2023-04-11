@@ -171,36 +171,6 @@ public class ServerUtils {
     }
 
     /**
-     * Get a CardList from the database using its id
-     *
-     * @param id the id to search in the database, gets bad request if it is not proper
-     * @return the CardList that was found
-     */
-    public CardList getCardListById(long id) {
-        CardList cl = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/lists/"+id) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>() {});
-        setCardsParent(cl);
-        return cl;
-    }
-
-    /**
-     * Adds a user to the database
-     *
-     * @param card the card to be added
-     * @return the new card
-     */
-    public Card addCard(Card card) {
-        return ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/cards/add") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .post(Entity.entity(card, APPLICATION_JSON), Card.class);
-    }
-
-    /**
      * Checks whether a username is already used
      *
      * @param username the username in search
@@ -284,22 +254,6 @@ public class ServerUtils {
     public Board updateBoard(Board board) {
         Board b = ClientBuilder.newClient(new ClientConfig()) //
                 .target(server).path("api/boards/update/" + board.getId()) //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .put(Entity.entity(board, APPLICATION_JSON), Board.class);
-        setCardsParent(b);
-        return b;
-    }
-
-    /**
-     * Updates a board in the database
-     *
-     * @param board the board to be updated
-     * @return the updated board
-     */
-    public Board updateBoardAddTag(Board board) {
-        Board b = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/boards/updateTagAdd/" + board.getId()) //
                 .request(APPLICATION_JSON) //
                 .accept(APPLICATION_JSON) //
                 .put(Entity.entity(board, APPLICATION_JSON), Board.class);
@@ -544,23 +498,7 @@ public class ServerUtils {
                 .get(CardList.class);
         setCardsParent(cl);
         return cl;
-        // can also use switch statement
     }
-
-//    /**
-//     * @param list the list that is posted
-//     */
-//    public void addCL(CardList list) {
-//        Response res = ClientBuilder.newClient(new ClientConfig()) //
-//                .target(server).path("api/lists/add") //
-//                .request(APPLICATION_JSON) //
-//                .accept(APPLICATION_JSON) //
-//                .post(Entity.entity(list, APPLICATION_JSON));
-//
-//        if (res.getStatus() != 200) {
-//            System.out.println("error");
-//        }
-//    }
 
     /**
      * Removes a cardList
@@ -614,22 +552,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .put(Entity.entity(tag, APPLICATION_JSON), Tag.class);
-    }
-
-    /**
-     * @return all lists in the database
-     */
-    public List<CardList> getAll() {
-        List<CardList> list = ClientBuilder.newClient(new ClientConfig()) //
-                .target(server).path("api/lists/all") //
-                .request(APPLICATION_JSON) //
-                .accept(APPLICATION_JSON) //
-                .get(new GenericType<>(){
-                });
-        for(CardList cl: list) {
-            setCardsParent(cl);
-        }
-        return list;
     }
 
     /**
@@ -740,33 +662,6 @@ public class ServerUtils {
                 .request(APPLICATION_JSON)
                 .accept(APPLICATION_JSON)
                 .post(Entity.entity(colorScheme,APPLICATION_JSON), ColorScheme.class);
-    }
-    /**
-     * gets a colorScheme by id
-     * @param id of the searched colorscheme
-     * @return the given entity, can throw
-     * server exception if not found
-     */
-    public ColorScheme getColorSchemeById(long id){
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/colors/"+id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .get(ColorScheme.class);
-    }
-
-    /**
-     * deletes a colorScheme by id
-     * @param id of the colorScheme
-     * @return the colorScheme if it was deleted,
-     * throws an exception if not found
-     */
-    public ColorScheme deleteColorSchemeById(long id) {
-        return ClientBuilder.newClient(new ClientConfig())
-                .target(server).path("api/colors/delete/"+id)
-                .request(APPLICATION_JSON)
-                .accept(APPLICATION_JSON)
-                .delete(ColorScheme.class);
     }
 
     /**
