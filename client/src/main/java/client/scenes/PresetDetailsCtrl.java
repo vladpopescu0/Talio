@@ -85,21 +85,22 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                 fxmlLoader.setController(this);
                 try {
                     fxmlLoader.load();
-                    if(!parent.getUnlocked()){
-                        set.setVisible(false);
-                    }
+//                    if(!parent.getUnlocked()){
+//                        set.setVisible(false);
+//                    }
                     this.set.setOnAction(event -> setColorScheme());
                     colorBG.setStyle("-fx-fill: "+this.getItem().getColorBGlight()+";");
                     colorFont.setStyle("-fx-fill: "+this.getItem().getColorFont()+";");
                     if(card!=null && card.getColors()!=null
                             && card.getColors().equals(this.getItem())){
-                        setStyle("-fx-border-color: red;");
+                        setStyle("-fx-border-color: #252424;");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             setText(null);
+            setGraphic(presetsPane);
         }
     }
 
