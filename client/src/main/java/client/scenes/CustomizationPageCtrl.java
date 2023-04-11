@@ -81,7 +81,7 @@ public class CustomizationPageCtrl {
      */
     public void changeColors(){
         if (board.getColorScheme().getColorLighter() == null) {
-            this.getBoardBG().setValue(Color.BLACK);
+            this.getBoardBG().setValue(Color.valueOf("#027883"));
         } else {
             this.getBoardBG()
                     .setValue(Color.valueOf(board.getColorScheme().getColorBGlight()));
@@ -93,7 +93,7 @@ public class CustomizationPageCtrl {
                     .setValue(Color.valueOf(board.getColorScheme().getColorFont()));
         }
         if (board.getListsColorScheme().getColorBGlight() == null) {
-            this.getBoardBG().setValue(Color.BLACK);
+            this.getBoardBG().setValue(Color.valueOf("#027883"));
         } else {
             this.getListBG()
                     .setValue(Color.valueOf(board.getListsColorScheme().getColorBGlight()));
@@ -177,14 +177,14 @@ public class CustomizationPageCtrl {
         board.getColorScheme()
                 .setColorFont(mainCtrl.colorToHex(Color.WHITE));
         board.getColorScheme()
-                .setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
+                .setColorBGdark("#027883");
         board.getColorScheme()
-                .setColorBGlight(mainCtrl.colorToHex(Color.BLACK));
+                .setColorBGlight("#027883");
         board.getColorScheme()
-                .setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+                .setColorLighter("#027883");
         server.updateBoard(board);
         boardFont.setValue(Color.WHITE);
-        boardBG.setValue(Color.BLACK);
+        boardBG.setValue(Color.valueOf(("#027883")));
     }
 
     /**
@@ -194,14 +194,14 @@ public class CustomizationPageCtrl {
         board.getListsColorScheme()
                 .setColorFont(mainCtrl.colorToHex(Color.WHITE));
         board.getListsColorScheme()
-                .setColorBGdark(mainCtrl.colorToHex(Color.BLACK));
+                .setColorBGdark("#027883");
         board.getListsColorScheme()
-                .setColorBGlight(mainCtrl.colorToHex(Color.BLACK));
+                .setColorBGlight("#027883");
         board.getListsColorScheme()
-                .setColorLighter(mainCtrl.colorToHex(Color.GRAY));
+                .setColorLighter("#027883");
         server.updateBoard(board);
         listFont.setValue(Color.WHITE);
-        listBG.setValue(Color.BLACK);
+        listBG.setValue(Color.valueOf("#027883"));
     }
 
     /**
@@ -225,8 +225,6 @@ public class CustomizationPageCtrl {
         ColorScheme newDefaultColorScheme = server.addColorScheme(new ColorScheme());
         board.getCardsColorSchemesList().add(newDefaultColorScheme);
         server.updateBoard(board);
-        //refresh();
-        //this.mainCtrl.showCustomizationPage(board);
     }
 
     /**

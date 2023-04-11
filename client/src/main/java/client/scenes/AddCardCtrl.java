@@ -40,7 +40,6 @@ public class AddCardCtrl {
     /**
      * Adds support for keyboard shortcuts
      */
-    //Should not be tested, yet it appears in coverage
     @FXML
     private void handleShortcuts(KeyEvent event) {
         switch(event.getCode()) {
@@ -72,7 +71,6 @@ public class AddCardCtrl {
         }else{
             toBeAdded = getCard(getTitle().getText());
         }
-        //Card toBeAdded = getCard(title.getText());
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 server.addCardToList(toBeAdded, mainCtrl.getId());

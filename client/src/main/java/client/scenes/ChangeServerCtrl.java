@@ -125,7 +125,6 @@ public class ChangeServerCtrl {
      */
     public void setServer() {
         decideServer();
-//        mainCtrl.getBoardsOverviewCtrl().init();
     }
 
     /**
@@ -133,7 +132,6 @@ public class ChangeServerCtrl {
      */
     public void decideServer() {
         String newServer = serverField.getText();
-        ServerUtils.setServer(newServer);
         if (newServer == null || newServer.isEmpty()) {
             var alert = new Alert(Alert.AlertType.ERROR);
             alert.initModality(Modality.APPLICATION_MODAL);
@@ -142,7 +140,7 @@ public class ChangeServerCtrl {
             return;
         }
         ServerUtils.setServer(newServer);
-        ServerUtils.setUrlFromServer(newServer);
+        ServerUtils.setUrlFromServer(ServerUtils.getServer());
         try {
             server.setSession(ServerUtils.getUrl());
         } catch (Exception e) {

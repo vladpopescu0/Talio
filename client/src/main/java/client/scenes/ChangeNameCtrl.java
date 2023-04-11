@@ -58,10 +58,6 @@ public class ChangeNameCtrl {
         return newName.getText();
     }
 
-//    public void setBoard(Board board) {
-//        this.board = board;
-//    }
-
     /**
      * Clears all fields so they are empty when the page is entered again
      */

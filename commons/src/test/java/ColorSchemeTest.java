@@ -123,21 +123,6 @@ public class ColorSchemeTest {
         ColorScheme colorSchemeCopy = new ColorScheme("blue","yellow","green","red");
         assertNotEquals(colorSchemeCopy.hashCode(),colorScheme.hashCode());
     }
-
-    //Test is under quarantine, not working since
-    // there is a difference between versions or operating systems
-//    /**
-//     * test for toString
-//     */
-//    @Test
-//    public void fourParamConstructor_toStringTest(){
-//        ColorScheme colorScheme = new ColorScheme("red","green","blue","yellow");
-//        assertTrue(colorScheme.toString().contains(
-//                "  colorBGdark=green\n" +
-//                "  colorBGlight=red\n" +
-//                "  colorFont=yellow\n" +
-//                "  colorLighter=blue\n"));
-//    }
     /**
      * test for setId, relevant only for backend tests
      */
