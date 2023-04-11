@@ -62,7 +62,10 @@ public class UserCtrl implements Initializable {
      * @return the username entered by the user.
      */
     public String getUsername() {
-        return username.getText();
+        if(username!=null){
+            return username.getText();
+        }
+        return "default";
     }
 
     /**
