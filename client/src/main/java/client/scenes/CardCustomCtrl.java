@@ -50,7 +50,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
         this.server = server;
         this.mainCtrl = mainCtrl;
         this.parent = customizationPageCtrl;
-//        this.board = server.getBoardByID(customizationPageCtrl.getBoard().getId());
     }
 
     /**
@@ -60,7 +59,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
         try{
             if (this.getItem() != null) {
                 this.board = server.getBoardByID(parent.getBoard().getId());
-//                int i = board.getColors().indexOf(this.getItem());
                 if(board.getCardsColorScheme().equals(this.getItem())){
                     setStyle("-fx-border-color: red;");
                 }
@@ -99,7 +97,6 @@ public class CardCustomCtrl extends ListCell<ColorScheme> {
                             Board.class, q -> Platform.runLater(() -> {
                                 mainCtrl.getCustomizationPageCtrl().refresh();
                             }));
-//                    int i = board.getColors().indexOf(this.getItem());
                     label.setText("Preset");
                     this.presFont.setOnAction(event -> saveFont());
                     this.presBG.setOnAction(event -> saveBG());

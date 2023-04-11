@@ -168,7 +168,6 @@ public class BoardViewCtrl {
             deleteButton.setDisable(true);
             editTitle.setDisable(true);
             addList.setDisable(true);
-            //cardListView.setDisable(true);
             viewTags.setDisable(true);
             customizeButton.setDisable(true);
             copyInviteButton.setDisable(true);
@@ -344,7 +343,6 @@ public class BoardViewCtrl {
      */
     public void removeUser() {
         board.removeUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
-        //mainCtrl.getCurrentUser().getBoardList().remove(board);
         server.updateBoard(board);
         board = server.getBoardByID(board.getId());
         mainCtrl.setCurrentUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
@@ -379,7 +377,6 @@ public class BoardViewCtrl {
      */
     public void customizeBoard(Board board) {
         this.content = (Region) titledPane.lookup(".title");
-//        this.scrollbar = (Region) cardListView.lookup(".virtual-flow > .corner");
 
         String style = "-fx-background-color: " + board.getColorScheme().getColorBGlight() + ";" +
                 "\n-fx-border-color: " + board.getColorScheme().getColorBGlight() + ";";
@@ -404,10 +401,6 @@ public class BoardViewCtrl {
         });
     }
 
-//    public void setScrollBarStyle(Region scrollbar, String bgColor) {
-//        String style = "-fx-background-color: " + bgColor + ";";
-//        scrollbar.setStyle(style);
-//    }
     /**
      * Redirects the user to the overview of tags for the current Board
      */

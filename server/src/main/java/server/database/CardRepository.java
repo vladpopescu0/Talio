@@ -7,9 +7,6 @@ import java.util.List;
 
 
 public interface CardRepository extends JpaRepository<Card, Long> {
-    //@Modifying
-    //@Query(value = "DELETE FROM CARD_LIST_CARDS clc WHERE clc.CARDS_ID = ?1")
-    //void deleteInRelationByCardId(long id);
 
     /**
      * Returns the Cards associated with a Tag of given ID

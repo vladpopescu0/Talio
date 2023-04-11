@@ -183,8 +183,6 @@ public class TagControllerTest {
         cardController.add(c);
         cardController.addTags(c.getId(), List.of(tag1, tag2, tag3));
         controller.removeTag(1);
-        //var actual = controller.getById(1);
-        //assertEquals(BAD_REQUEST, actual.getStatusCode());
         c = cardController.getById(c.getId()).getBody();
         assertTrue(c.getTags().contains(tag1));
         assertTrue(c.getTags().contains(tag3));
