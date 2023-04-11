@@ -237,7 +237,7 @@ public class BoardsOverviewCtrl {
     }
 
     /**
-     * Redirects the user to an overview of the boards they've joined
+     * Changes the board table to only show the user's boards (for admin use)
      */
     public void userBoards() {
         List<Board> boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
@@ -252,6 +252,10 @@ public class BoardsOverviewCtrl {
         });
     }
 
+
+    /**
+     * Changes the board table to only show all boards (for admin use)
+     */
     public void allBoards() {
         List<Board> boards = server.getBoards();
         data = FXCollections.observableList(boards);
