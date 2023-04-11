@@ -85,7 +85,7 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
             boolean check = server.checkBoardPassword(pass.getText(), board.getId());
 
             if (check) {
-                board.addUser(mainCtrl.getCurrentUser());
+//                board.addUser(mainCtrl.getCurrentUser());
                 mainCtrl.updatePassword(board.getId(), pass.getText());
                 board = server.updateBoard(board);
                 mainCtrl.getCurrentUser().setBoardList(server.

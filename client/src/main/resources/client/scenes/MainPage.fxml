@@ -27,7 +27,7 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
-        <Label fx:id="pageTitle" layoutX="196.0" layoutY="14.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="pageTitle" layoutX="206.0" layoutY="26.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font size="36.0" />
             </font>
