@@ -82,6 +82,10 @@ public class ServerUtils {
      * @param server New server host
      */
     public static void setServer(String server){
+        if(!server.contains("http://")){
+            ServerUtils.server = "http://" + server + "/";
+            return;
+        }
         ServerUtils.server = server;
     }
 

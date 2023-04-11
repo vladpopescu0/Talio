@@ -39,7 +39,7 @@
       <ColorPicker fx:id="boardBG" editable="true" layoutX="75.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <ColorPicker fx:id="boardFont" editable="true" layoutX="168.0" layoutY="156.0" prefHeight="24.0" prefWidth="36.0" style="-fx-color-label-visible: false; -fx-color-rect-width: 17; -fx-color-rect-height: 17; -fx-font-size: 5;" />
       <Button fx:id="boardReset" layoutX="222.0" layoutY="156.0" mnemonicParsing="false" onAction="#reset" style="-fx-background-color: #00C9A7;" text="RESET" />
-      <Button fx:id="listReset" layoutX="514.0" layoutY="156.0" mnemonicParsing="false" style="-fx-background-color: #00C9A7;" text="RESET" />
+      <Button fx:id="listReset" layoutX="514.0" layoutY="156.0" mnemonicParsing="false" onAction="#resetLists" style="-fx-background-color: #00C9A7;" text="RESET" />
       <Text fill="#ecebeb" layoutX="420.0" layoutY="176.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-family: Montserrat;" text="Font">
          <font>
             <Font size="18.0" />

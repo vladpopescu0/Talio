@@ -89,7 +89,6 @@ public class CreateListCtrl {
             alert.showAndWait();
         }
         clearField();
-//        mainCtrl.showBoardView(board);
         mainCtrl.closeSecondaryStage();
         mainCtrl.showBoardView(board);
     }

@@ -146,7 +146,6 @@ public class UserControllerTest {
         sut.add(u3);
         var actual = sut.modifyName(2, "cc");
         assertEquals(actual.getBody().getUsername(), "cc");
-        //assertEquals(sut.getById(2).getBody().getName(), "cc");
         assertTrue(repo.calledMethods.contains("save"));
     }
 

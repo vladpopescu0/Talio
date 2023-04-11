@@ -76,8 +76,6 @@ public class CardCell extends ListCell<Card> {
         this.parent = cardList;
         if(this.getItem()!=null){
             this.getItem().setParentCardList(cardList.getItem());
-//            //statusLabel.setText(this.getItem().tasksLabel());
-//            statusLabel.setText("AAAA");
         }
         this.colorSchemeCustom = colorScheme;
         this.unlocked = unlocked;
@@ -176,7 +174,6 @@ public class CardCell extends ListCell<Card> {
 
                     this.deleteButton.setOnAction(event ->{
                         deleteCard();
-//                        mainCtrl.getCardDetailsViewCtr().setCard(null);
                     });
 
                 } catch (Exception e) {
