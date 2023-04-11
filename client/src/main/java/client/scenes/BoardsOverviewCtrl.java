@@ -81,7 +81,6 @@ public class BoardsOverviewCtrl {
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
-                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {
@@ -233,7 +232,6 @@ public class BoardsOverviewCtrl {
      * Redirects the user to an overview of the boards they've joined
      */
     public void userBoards() {
-        mainCtrl.showUserBoardOverview();
         mainCtrl.closeSecondaryStage();
     }
 

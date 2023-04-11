@@ -43,7 +43,6 @@ public class MainCtrl {
     private Stage helpStage;
     private BoardsOverviewCtrl overviewCtrl;
     private Scene overview;
-    private UserBoardsOverviewCtrl userBoardsOverviewCtrl;
     private Scene userBoardOverview;
     private BoardViewCtrl boardViewCtrl;
     private Scene boardView;
@@ -123,7 +122,6 @@ public class MainCtrl {
      * @param editCard the editCard scene
      * @param changeListName the changeListName scene
      * @param changeServer the changeServer scene
-     * @param userBoardsOverview the userBoardsOverview scene
      * @param editBoardName the editBoardName scene
      * @param createTag the createTag scene
      * @param viewTags the viewTags scene
@@ -148,7 +146,6 @@ public class MainCtrl {
                            Pair<EditCardCtrl, Parent> editCard,
                            Pair<ChangeNameCtrl, Parent> changeListName,
                            Pair<ChangeServerCtrl, Parent> changeServer,
-                           Pair<UserBoardsOverviewCtrl, Parent> userBoardsOverview,
                            Pair<EditBoardNameViewCtrl, Parent> editBoardName,
                            Pair<JoinBoardByLinkCtrl, Parent> joinBoardByLink,
                            Pair<CardDetailsViewCtr, Parent> details,
@@ -195,9 +192,6 @@ public class MainCtrl {
 
         this.adminCheckCtrl = adminCheck.getKey();
         this.adminCheck = new Scene(adminCheck.getValue());
-
-        this.userBoardsOverviewCtrl = userBoardsOverview.getKey();
-        this.userBoardOverview = new Scene(userBoardsOverview.getValue());
 
         this.editBoardNameViewCtrl = editBoardName.getKey();
         this.editBoardName = new Scene(editBoardName.getValue());
@@ -394,15 +388,6 @@ public class MainCtrl {
     public CardDetailsViewCtr getCardDetailsViewCtr() {return cardDetailsViewCtr;}
 
     /**
-     * Getter for userBoardOverviewCtrl
-     *
-     * @return the userBoardOverviewCtrl
-     */
-    public UserBoardsOverviewCtrl getUserBoardsOverviewCtrl() {
-        return userBoardsOverviewCtrl;
-    }
-
-    /**
      * Getter for viewTagsCtrl
      * @return the viewTagsCtrl
      */
@@ -477,15 +462,6 @@ public class MainCtrl {
         primaryStage.setTitle("Select a server");
         this.primaryStage.setScene(changeServer);
         this.changeServerCtrl.startScene();
-    }
-
-    /**
-     * Shows an overview of all boards for a logged-in user
-     */
-    public void showUserBoardOverview() {
-        changePrimaryStage(userBoardOverview, "Your boards");
-
-        this.userBoardsOverviewCtrl.refresh();
     }
 
     /**

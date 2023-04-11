@@ -133,7 +133,7 @@ public class BoardsOverviewCtrlTest {
     @Test
     public void userBoardsTest(){
         sut.userBoards();
-        verify(mainCtrlMock).showUserBoardOverview();
+        verify(mainCtrlMock).showOverview();
         verify(mainCtrlMock).closeSecondaryStage();
     }
 
