@@ -65,6 +65,12 @@ public class CreateTagCtrl {
     }
 
     /**
+     * Getter for the board
+     * @return the board
+     */
+    public Board getBoard() {return this.board;}
+
+    /**
      * Clears the name field
      */
     private void clearField() {
