@@ -120,7 +120,9 @@ public class JoinBoardByLinkCtrl {
      * clears the title text field
      */
     private void clearFields() {
-        code.clear();
+        if (code != null) {
+            code.clear();
+        }
     }
 
     /**
