@@ -93,13 +93,14 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                     colorFont.setStyle("-fx-fill: "+this.getItem().getColorFont()+";");
                     if(card!=null && card.getColors()!=null
                             && card.getColors().equals(this.getItem())){
-                        setStyle("-fx-border-color: red;");
+                        setStyle("-fx-border-color: #252424;");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
             setText(null);
+            setGraphic(presetsPane);
         }
     }
 

@@ -171,6 +171,9 @@ public class CardDetailsViewCtr {
                 addTagButton.setVisible(false);
                 colorSchemeList.setEditable(false);
             } else {
+                addTagButton.setVisible(true);
+                addTaskButton.setVisible(true);
+                colorSchemeList.setEditable(true);
                 editButton.setOnAction(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {

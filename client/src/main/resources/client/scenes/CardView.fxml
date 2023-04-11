@@ -22,22 +22,14 @@
     </Button>
     <Button fx:id="deleteButton" layoutX="139.0" layoutY="89.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="66.0" style="-fx-background-color: #e33057;" text="Delete" textFill="WHITE" />
     <Label fx:id="hasDesc" alignment="CENTER" layoutX="165.0" layoutY="30.0" text="+" visible="false">
-        <!--=======-->
-        <!--      <Button fx:id="editButton" layoutX="69.0" layoutY="60.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="55.0" text="Edit">-->
-        <!--         <font>-->
-        <!--            <Font size="13.0" />-->
-        <!--         </font></Button>-->
-        <!--      <Button fx:id="deleteButton" layoutX="133.0" layoutY="60.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="55.0" text="Delete" />-->
-        <!--      <Label fx:id="hasDesc" alignment="CENTER" layoutX="179.0" text="+" visible="false">-->
-        <!--&gt;>>>>>> a2952db94afd7b01b9bb0445c471c8dfa4a39a91-->
         <font>
             <Font size="25.0" />
         </font>
     </Label>
     <Label fx:id="statusLabel" layoutX="144.0" layoutY="69.0" text="(a/ b done)" />
-    <Label fx:id="tagLabel1" alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="162.0" textAlignment="CENTER" />
-    <Label fx:id="tagLabel2" alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="73.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="13.0" prefWidth="128.0" textAlignment="CENTER" />
-    <Label fx:id="tagLabel3" alignment="CENTER" contentDisplay="CENTER" layoutX="8.0" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="170.0" textAlignment="CENTER" />
-    <Label fx:id="tagLabel4" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="177.0" textAlignment="CENTER" />
-    <Label fx:id="tagLabel5" alignment="CENTER" contentDisplay="CENTER" layoutX="7.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="162.0" textAlignment="CENTER" />
+    <Label fx:id="tagLabel2" layoutX="8.0" layoutY="60.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="150.0" />
+    <Label fx:id="tagLabel1" layoutX="8.0" layoutY="73.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="13.0" prefWidth="150.0" />
+    <Label fx:id="tagLabel3" layoutX="8.0" layoutY="47.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="150.0" />
+    <Label fx:id="tagLabel4" layoutX="8.0" layoutY="34.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="150.0" />
+    <Label fx:id="tagLabel5" layoutX="8.0" layoutY="21.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="13.0" prefWidth="150.0" />
 </Pane>
