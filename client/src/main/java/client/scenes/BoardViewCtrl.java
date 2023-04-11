@@ -164,6 +164,16 @@ public class BoardViewCtrl {
      */
     public void checkUser() {
         if (!checkBoardAccess()) {
+            Node oldFocus = focusedNodeBackup;
+            focusedNodeBackup = null;
+            if (oldFocus instanceof CardCell) {
+                CardCell cc = (CardCell) oldFocus;
+                if (cc.getItem() != null) {
+                    cc.updateItem(cc.getItem(), false);
+                }
+            }
+            refocusFromBackup();
+
             leaveButton.setDisable(true);
             deleteButton.setDisable(true);
             editTitle.setDisable(true);
@@ -184,7 +194,6 @@ public class BoardViewCtrl {
                 @Override
                 public void handle(MouseEvent event) {
                     unlock();
-
                 }
             });
         } else {
@@ -442,31 +451,6 @@ public class BoardViewCtrl {
         clipboard.setContents(stringSelection, null);
         if(focusedNodeBackup!=null){
             refocusFromBackup();
-        }
-    }
-
-    /**
-     * Focuses the first CardCell on the Board
-     */
-    private void focusFirstCardCell() {
-        for (int x = 0; x < cardListObservableList.size(); x++) {
-            List<Card> cardList = cardListObservableList.get(x).getCards();
-            for (Card c: cardList) {
-                VirtualFlow virtualFlowCL = (VirtualFlow) cardListView
-                        .lookup(".virtual-flow");
-                VirtualFlow virtualFlowC = (VirtualFlow) virtualFlowCL.getCell(x)
-                        .lookup(".virtual-flow");
-                Node newFocus = virtualFlowC.getCell(0);
-                if (newFocus instanceof CardCell) {
-                    newFocus.requestFocus();
-                    CardCell cc = (CardCell) newFocus;
-                    if (cc.getItem() != null) {
-                        focusedNodeBackup = cc;
-                        cc.updateItem(cc.getItem(), false);
-                        break;
-                    }
-                }
-            }
         }
     }
 
