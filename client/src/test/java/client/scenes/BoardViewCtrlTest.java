@@ -84,11 +84,11 @@ public class BoardViewCtrlTest {
      */
     @Test
     public void removeUserTest(){
-        //sut.removeUser();
-        //verify(mainCtrlMock,times(2)).getCurrentUser();
-        //verify(serverUtilsMock).updateBoard(board);
-        //board = serverUtilsMock.getBoardByID(board.getId());
-        //assertFalse(testUser.getBoardList().contains(board));
+        sut.removeUser();
+        verify(mainCtrlMock,times(2)).getCurrentUser();
+        verify(serverUtilsMock).updateBoard(board);
+        board = serverUtilsMock.getBoardByID(board.getId());
+        assertFalse(testUser.getBoardList().contains(board));
 
     }
 

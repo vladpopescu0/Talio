@@ -310,4 +310,10 @@ public class CardDetailsViewCtr {
     public void setUnlocked(boolean unlocked) {
         this.unlocked = unlocked;
     }
+
+    /**
+     * Getter for unlock(used for testing)
+     * @return unlocked
+     */
+    public boolean getUnlocked() {return unlocked;}
 }

@@ -67,6 +67,12 @@ public class CreateListCtrl {
     }
 
     /**
+     * Getter for the Board
+     * @return the board
+     */
+    public Board getBoard() {return board;}
+
+    /**
      * Clears the name field
      */
     private void clearField() {
