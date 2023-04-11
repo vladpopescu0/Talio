@@ -22,9 +22,13 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
+
+import java.util.List;
 
 /*Not imlementing initializable is required because otherwise, the ctrl tries to look for
 the current server when the app starts, which is impossible, since it has not been
@@ -45,6 +49,8 @@ public class BoardsOverviewCtrl {
     private Button deleteButton;
     @FXML
     private Label userLabel;
+    @FXML
+    private Button myBoardsButton;
 
     /**
      * Constructor for the BoardsOverviewCtrl
@@ -63,9 +69,11 @@ public class BoardsOverviewCtrl {
      */
     public void init() {
         server.setSession(ServerUtils.getUrl());
-        if(colBoardName!=null){
-            colBoardName.setCellValueFactory(q ->
-                    new SimpleStringProperty(q.getValue().getName()));
+        if(mainCtrl.isAdmin()){
+            if (colBoardName != null) {
+                colBoardName.setCellValueFactory(q ->
+                        new SimpleStringProperty(q.getValue().getName()));
+            }
         }
 //        //long polling
         server.getBoardUpdates(q -> {
@@ -77,7 +85,6 @@ public class BoardsOverviewCtrl {
                 Long.class, q -> Platform.runLater(() -> {
                     refresh();
                     mainCtrl.getBoardViewCtrl().refresh();
-                    mainCtrl.getUserBoardsOverviewCtrl().refresh();
                 }));
         server.registerForUpdates("/topic/boardsRenameDeleteAdd",
                 Long.class, q -> Platform.runLater(() -> {
@@ -102,12 +109,20 @@ public class BoardsOverviewCtrl {
      * refreshes the page, looking for updates, and checks for admin privileges
      */
     public void refresh() {
-        var boards = server.getBoards();
+        List<Board> boards;
+        if(mainCtrl.isAdmin()){
+            boards = server.getBoards();
+        } else {
+            boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
+        }
+
         data = FXCollections.observableList(boards);
         table.setItems(data);
+        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         this.serverLabel.setText(ServerUtils.getServer());
         this.userLabel.setText(mainCtrl.getCurrentUser().getUsername());
         deleteButton.setVisible(mainCtrl.isAdmin());
+        myBoardsButton.setVisible(mainCtrl.isAdmin());
     }
 
     /**
@@ -121,6 +136,8 @@ public class BoardsOverviewCtrl {
         test.setId(0L);
         Board b = (table==null ? test
                 : table.getSelectionModel().getSelectedItem());
+
+
         if (b == null) {
             if (table!=null && table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -138,10 +155,10 @@ public class BoardsOverviewCtrl {
                 if (server.checkBoardPassword(
                         mainCtrl.getSavedPasswords().get(b.getId()), b.getId()
                 )) {
-                    b.addUser(mainCtrl.getCurrentUser());
-                    b = server.updateBoard(b);
-                    mainCtrl.getCurrentUser().setBoardList(server.
-                            getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+//                    b.addUser(mainCtrl.getCurrentUser());
+//                    b = server.updateBoard(b);
+//                    mainCtrl.getCurrentUser().setBoardList(server.
+//                            getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
                     mainCtrl.showBoardView(b);
                     mainCtrl.closeSecondaryStage();
                     return;
@@ -150,14 +167,16 @@ public class BoardsOverviewCtrl {
             mainCtrl.showBoardView(b);
 
         } else {
-            b.addUser(mainCtrl.getCurrentUser());
-            b = server.updateBoard(b);
-            mainCtrl.getCurrentUser().setBoardList(server.
-                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+//            b.addUser(mainCtrl.getCurrentUser());
+//            b = server.updateBoard(b);
+//            mainCtrl.getCurrentUser().setBoardList(server.
+//                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
             mainCtrl.showBoardView(b);
             mainCtrl.closeSecondaryStage();
         }
     }
+
+
 
     private Board boardUpdate(Board b) {
         if(table!=null){
@@ -217,11 +236,36 @@ public class BoardsOverviewCtrl {
     }
 
     /**
-     * Redirects the user to an overview of the boards they've joined
+     * Changes the board table to only show the user's boards (for admin use)
      */
     public void userBoards() {
-        mainCtrl.showUserBoardOverview();
-        mainCtrl.closeSecondaryStage();
+        List<Board> boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
+        data = FXCollections.observableList(boards);
+        table.setItems(data);
+        myBoardsButton.setText("All Boards");
+        myBoardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                allBoards();
+            }
+        });
+    }
+
+
+    /**
+     * Changes the board table to only show all boards (for admin use)
+     */
+    public void allBoards() {
+        List<Board> boards = server.getBoards();
+        data = FXCollections.observableList(boards);
+        table.setItems(data);
+        myBoardsButton.setText("My Boards");
+        myBoardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                userBoards();
+            }
+        });
     }
 
     /**

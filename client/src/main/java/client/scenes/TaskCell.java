@@ -68,7 +68,7 @@ public class TaskCell extends ListCell<Task> {
                 taskTitle.setText(this.getItem().getTitle());
                 taskTitle.setEditable(false);
                 editButton.setVisible(true);
-                removeButton.setVisible(true);
+                removeButton.setVisible(false);
                 cancelButton.setVisible(false);
                 confirmButton.setVisible(false);
                 statusBox.setSelected(this.getItem().getStatus());

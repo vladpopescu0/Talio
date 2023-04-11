@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="501.0" prefWidth="798.0" style="-fx-background-color: #027883;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.scenes.BoardsOverviewCtrl">
     <children>
-        <Button fx:id="addBoard" layoutX="449.0" layoutY="185.0" mnemonicParsing="false" onAction="#createBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Add Board">
+        <Button fx:id="addBoard" layoutX="447.0" layoutY="150.0" mnemonicParsing="false" onAction="#createBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Add Board">
             <font>
                 <Font size="13.0" />
             </font>
@@ -27,15 +27,15 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
             </columnResizePolicy>
         </TableView>
-        <Label fx:id="pageTitle" layoutX="196.0" layoutY="14.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
+        <Label fx:id="pageTitle" layoutX="206.0" layoutY="26.0" prefHeight="60.0" prefWidth="92.0" style="-fx-font-weight: bold;" text="Talio" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font size="36.0" />
             </font>
         </Label>
-        <Button fx:id="joinBoard" layoutX="449.0" layoutY="335.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join board" />
-        <Label fx:id="serverLabel" alignment="CENTER" layoutX="453.0" layoutY="56.0" prefHeight="26.0" prefWidth="146.0" text="Whatever" textFill="WHITE">
+        <Button fx:id="joinBoard" layoutX="447.0" layoutY="252.0" mnemonicParsing="false" onAction="#joinBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join board" />
+        <Label fx:id="serverLabel" alignment="CENTER" layoutX="435.0" layoutY="56.0" prefHeight="26.0" prefWidth="174.0" text="Whatever" textFill="WHITE">
             <font>
-                <Font size="14.0" />
+                <Font size="13.0" />
             </font>
         </Label>
         <Label layoutX="476.0" layoutY="19.0" text="Current Server:" textFill="WHITE">
@@ -43,14 +43,14 @@
                 <Font size="14.0" />
             </font>
         </Label>
-        <Button fx:id="myBoardsButton" layoutX="449.0" layoutY="235.0" mnemonicParsing="false" onAction="#userBoards" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="My Boards">
+        <Button fx:id="myBoardsButton" layoutX="447.0" layoutY="349.0" mnemonicParsing="false" onAction="#userBoards" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="My Boards">
             <font>
                 <Font size="13.0" />
             </font>
         </Button>
-        <Button fx:id="joinByCode" layoutX="449.0" layoutY="385.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join by Code" textAlignment="CENTER" />
-        <Button fx:id="deleteButton" layoutX="449.0" layoutY="135.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #e33057;" text="Delete Board" />
-        <Button fx:id="adminButton" layoutX="449.0" layoutY="285.0" mnemonicParsing="false" onAction="#checkAdmin" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Admin Login" />
+        <Button fx:id="joinByCode" layoutX="447.0" layoutY="302.0" mnemonicParsing="false" onAction="#toJoinByLink" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #fafac8;" text="Join by Code" textAlignment="CENTER" />
+        <Button fx:id="deleteButton" layoutX="447.0" layoutY="398.0" mnemonicParsing="false" onAction="#deleteBoard" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #e33057;" text="Delete Board" />
+        <Button fx:id="adminButton" layoutX="447.0" layoutY="201.0" mnemonicParsing="false" onAction="#checkAdmin" prefHeight="34.0" prefWidth="304.0" style="-fx-background-color: #00C9A7;" text="Admin Login" />
       <Label layoutX="634.0" layoutY="19.0" text="Current User:" textFill="WHITE">
          <font>
             <Font size="14.0" />

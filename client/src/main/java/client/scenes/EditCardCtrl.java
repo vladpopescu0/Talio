@@ -54,7 +54,7 @@ public class EditCardCtrl {
      * database by adding it to a list with a given id
      */
     public void ok() {
-        Card toBeAdded = getCard();
+        Card toBeAdded = title == null? new Card("Card") : getCard();
         try {
             if(!isNullOrEmpty(toBeAdded.getName())){
                 server.updateCard(toBeAdded.getName(), mainCtrl.getCardId());
@@ -62,7 +62,7 @@ public class EditCardCtrl {
                 mainCtrl.closeSecondaryStage();
 
                 BoardViewCtrl ctrl = mainCtrl.getBoardViewCtrl();
-                ctrl.setBoard(mainCtrl.getBoardViewCtrl().getBoard());
+                ctrl.setBoard(ctrl.getBoard());
                 ctrl.refresh();
                 ctrl.checkUser();
             }
@@ -105,7 +105,9 @@ public class EditCardCtrl {
      * clears the title text field
      */
     private void clearFields() {
-        title.clear();
+        if (title != null) {
+            title.clear();
+        }
     }
 
     /**

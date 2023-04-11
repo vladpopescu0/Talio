@@ -72,6 +72,12 @@ public class EditBoardPasswordViewCtrl implements Initializable {
     }
 
     /**
+     * Getter for Board
+     * @return board
+     */
+    public Board getBoard() {return board;}
+
+    /**
      * Edits the password of the board to that entered by the User
      */
     public void editPass() {

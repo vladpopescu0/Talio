@@ -64,8 +64,6 @@ public class Main extends Application {
         var add = FXML.load(AddCardCtrl.class,
                 "client", "scenes", "AddCard.fxml");
         var userCtrl = FXML.load(UserCtrl.class, "client", "scenes", "User.fxml");
-        var userBoardOverview = FXML.load(UserBoardsOverviewCtrl.class,
-                "client", "scenes", "UserMainPage.fxml");
 
         var changeServer = FXML.load(ChangeServerCtrl.class,
                 "client", "scenes", "ChangeServer.fxml");
@@ -113,7 +111,7 @@ public class Main extends Application {
         helpStage.setResizable(false);
         mainCtrl.initialize(primaryStage, secondaryStage, helpStage, overview, boardView,
                 createList, createBoardCtrl,add, userCtrl, editCard, changeListNameCtrl,
-                changeServer, userBoardOverview, editBoardName,joinBoardByLink, details,
+                changeServer, editBoardName,joinBoardByLink, details,
                 customizationPage, adminCheck,
                 viewTags, createTag, editTag,
                 viewAddTag, viewChangeBoardPass, viewCheckBoardPass, helpPage, cardPresetPage);

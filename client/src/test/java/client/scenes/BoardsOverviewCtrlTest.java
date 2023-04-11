@@ -83,12 +83,9 @@ public class BoardsOverviewCtrlTest {
     @Test
     public void joinBoardIsAdminTest(){
         sut.joinBoard();
-        verify(mainCtrlMock, times(3)).getCurrentUser();
         verify(mainCtrlMock).showBoardView(any());
         verify(mainCtrlMock).closeSecondaryStage();
-        verify(serverUtilsMock).getBoardsByUserId(3);
-        verify(serverUtilsMock).updateBoard(any());
-        assertEquals(test.getBoardList(),boards);
+        assertNotEquals(test.getBoardList(),boards);
     }
 
     /**
@@ -104,7 +101,6 @@ public class BoardsOverviewCtrlTest {
         when(serverUtilsMock.checkBoardPassword("pass",0L)).thenReturn(true);
         sut.joinBoard();
 
-        verify(mainCtrlMock, times(3)).getCurrentUser();
         verify(mainCtrlMock).showBoardView(any());
         verify(mainCtrlMock).closeSecondaryStage();
     }
@@ -125,16 +121,6 @@ public class BoardsOverviewCtrlTest {
     public void changeServerTest(){
         sut.changeServer();
         verify(mainCtrlMock).showChangeServer();
-    }
-
-    /**
-     * user Boards test
-     */
-    @Test
-    public void userBoardsTest(){
-        sut.userBoards();
-        verify(mainCtrlMock).showUserBoardOverview();
-        verify(mainCtrlMock).closeSecondaryStage();
     }
 
     /**

@@ -340,14 +340,6 @@ public class BoardViewCtrl {
     }
 
     /**
-     * Redirects the user back to the overview page
-     */
-    public void toUserOverview() {
-        mainCtrl.closeSecondaryStage();
-        mainCtrl.showUserBoardOverview();
-    }
-
-    /**
      * Removes the current user from the board, in case the user has joined the board
      */
     public void removeUser() {
@@ -355,7 +347,7 @@ public class BoardViewCtrl {
         server.updateBoard(board);
         board = server.getBoardByID(board.getId());
         mainCtrl.setCurrentUser(server.getUserById(mainCtrl.getCurrentUser().getId()));
-        mainCtrl.showUserBoardOverview();
+        mainCtrl.showOverview();
     }
 
     /**
@@ -586,7 +578,7 @@ public class BoardViewCtrl {
             System.out.println(board.getTags());
         }
         server.deleteBoard(board.getId());
-        mainCtrl.showUserBoardOverview();
+        mainCtrl.showOverview();
     }
 
     /**

@@ -309,11 +309,10 @@ public class CardDetailsViewCtr {
     public void setUnlocked(boolean unlocked) {
         this.unlocked = unlocked;
     }
+
     /**
-     * get unlocked
-     * @return unlocked whether the controller is unlocked or not
+     * Getter for unlock(used for testing)
+     * @return unlocked
      */
-    public boolean getUnlocked(){
-        return unlocked;
-    }
+    public boolean getUnlocked() {return unlocked;}
 }

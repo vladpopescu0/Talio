@@ -62,6 +62,7 @@ public class ViewAddTagsCtrl {
         this.mainCtrl = mainCtrl;
         this.board = board;
         this.card = card;
+        shortcut = false;
     }
 
     /**

@@ -82,6 +82,18 @@ public class JoinBoardByLinkCtrl {
                     .collect(Collectors.toList());
             if(boards.size()==1){
                 Board foundBoard = boards.get(0);
+//                if(foundBoard.getUsers().contains(mainCtrl.getCurrentUser())){
+//                    mainCtrl.closeSecondaryStage();
+//                    mainCtrl.showBoardView(foundBoard);
+//                    return;
+//                }
+                for (Board b: mainCtrl.getCurrentUser().getBoardList()) {
+                    if (b.getId().equals(foundBoard.getId())) {
+                        mainCtrl.closeSecondaryStage();
+                        mainCtrl.showBoardView(foundBoard);
+                        return;
+                    }
+                }
                 foundBoard.addUser(mainCtrl.getCurrentUser());
                 foundBoard = server.updateBoard(foundBoard);
                 mainCtrl.getCurrentUser().setBoardList(server.
@@ -115,7 +127,9 @@ public class JoinBoardByLinkCtrl {
      * clears the title text field
      */
     private void clearFields() {
-        code.clear();
+        if (code != null) {
+            code.clear();
+        }
     }
 
     /**
