@@ -231,13 +231,6 @@ public class BoardsOverviewCtrl {
     }
 
     /**
-     * Redirects the user to an overview of the boards they've joined
-     */
-    public void userBoards() {
-        mainCtrl.closeSecondaryStage();
-    }
-
-    /**
      * Redirects the user to the join board by code scene
      */
     public void toJoinByLink() {

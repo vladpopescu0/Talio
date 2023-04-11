@@ -124,16 +124,6 @@ public class BoardsOverviewCtrlTest {
     }
 
     /**
-     * user Boards test
-     */
-    @Test
-    public void userBoardsTest(){
-        sut.userBoards();
-        verify(mainCtrlMock).showOverview();
-        verify(mainCtrlMock).closeSecondaryStage();
-    }
-
-    /**
      * to join by link test
      */
     @Test
