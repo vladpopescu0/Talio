@@ -22,6 +22,8 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
@@ -47,6 +49,8 @@ public class BoardsOverviewCtrl {
     private Button deleteButton;
     @FXML
     private Label userLabel;
+    @FXML
+    private Button myBoardsButton;
 
     /**
      * Constructor for the BoardsOverviewCtrl
@@ -119,6 +123,7 @@ public class BoardsOverviewCtrl {
         this.serverLabel.setText(ServerUtils.getServer());
         this.userLabel.setText(mainCtrl.getCurrentUser().getUsername());
         deleteButton.setVisible(mainCtrl.isAdmin());
+        myBoardsButton.setVisible(mainCtrl.isAdmin());
     }
 
     /**
@@ -233,8 +238,29 @@ public class BoardsOverviewCtrl {
      * Redirects the user to an overview of the boards they've joined
      */
     public void userBoards() {
-        mainCtrl.showUserBoardOverview();
-        mainCtrl.closeSecondaryStage();
+        List<Board> boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
+        data = FXCollections.observableList(boards);
+        table.setItems(data);
+        myBoardsButton.setText("All Boards");
+        myBoardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                allBoards();
+            }
+        });
+    }
+
+    public void allBoards() {
+        List<Board> boards = server.getBoards();
+        data = FXCollections.observableList(boards);
+        table.setItems(data);
+        myBoardsButton.setText("My Boards");
+        myBoardsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                userBoards();
+            }
+        });
     }
 
     /**
