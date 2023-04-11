@@ -68,6 +68,12 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
     }
 
     /**
+     * Getter for the board
+     * @return the board
+     */
+    public Board getBoard() {return board;}
+
+    /**
      * Checks the password of the board against the input password
      */
     public void checkPass() {
@@ -79,7 +85,7 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
             boolean check = server.checkBoardPassword(pass.getText(), board.getId());
 
             if (check) {
-                board.addUser(mainCtrl.getCurrentUser());
+//                board.addUser(mainCtrl.getCurrentUser());
                 mainCtrl.updatePassword(board.getId(), pass.getText());
                 board = server.updateBoard(board);
                 mainCtrl.getCurrentUser().setBoardList(server.

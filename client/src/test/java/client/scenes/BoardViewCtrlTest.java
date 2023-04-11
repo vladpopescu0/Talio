@@ -120,16 +120,6 @@ public class BoardViewCtrlTest {
     }
 
     /**
-     * test for user overview
-     */
-    @Test
-    public void toUserOverviewTest(){
-        sut.toUserOverview();
-        verify(mainCtrlMock).closeSecondaryStage();
-        verify(mainCtrlMock).showUserBoardOverview();
-    }
-
-    /**
      * test for view tags
      */
     @Test
@@ -266,7 +256,7 @@ public class BoardViewCtrlTest {
 
         verify(serverUtilsMock).updateBoard(board);
         verify(serverUtilsMock).deleteBoard(board.getId());
-        verify(mainCtrlMock).showUserBoardOverview();
+        verify(mainCtrlMock).showOverview();
 
         //the method used with doAnswer is getting overwritten, and
         //it only deletes the last element, so the size should be one

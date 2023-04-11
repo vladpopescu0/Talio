@@ -68,6 +68,14 @@ public class EditBoardNameViewCtrl implements Initializable {
     }
 
     /**
+     * Getter for the board
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
      * Edits the name of the board to that entered by the User
      */
     public void editName() {
