@@ -186,6 +186,7 @@ public class CustomizationPageCtrl {
         boardFont.setValue(Color.WHITE);
         boardBG.setValue(Color.BLACK);
     }
+
     /**
      * Resets the lists' colors
      */

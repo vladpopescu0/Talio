@@ -68,6 +68,12 @@ public class CheckBoardPasswordViewCtrl implements Initializable {
     }
 
     /**
+     * Getter for the board
+     * @return the board
+     */
+    public Board getBoard() {return board;}
+
+    /**
      * Checks the password of the board against the input password
      */
     public void checkPass() {

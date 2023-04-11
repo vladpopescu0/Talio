@@ -7,26 +7,28 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class CreateListCtrlTest {
+public class EditBoardNameCtrlTest {
     private MainCtrl mainCtrlMock;
     private ServerUtils serverUtilsMock;
     private BoardViewCtrl boardViewCtrlMock;
-    private CreateListCtrl sut;
+    private EditBoardNameViewCtrl sut;
     private Board board;
+    private User user;
 
     /**
-     * Setup for the tests
+     * Setup for tests
      */
     @BeforeEach
     public void setup() {
         mainCtrlMock = Mockito.mock(MainCtrl.class);
         serverUtilsMock = Mockito.mock(ServerUtils.class);
         boardViewCtrlMock = Mockito.mock(BoardViewCtrl.class);
-        User user = new User("User");
+        user = new User("User");
         board = new Board(user, "Board");
-        sut = new CreateListCtrl(mainCtrlMock, board, serverUtilsMock);
+        sut = new EditBoardNameViewCtrl(serverUtilsMock, mainCtrlMock, board);
         Mockito.when(mainCtrlMock.getBoardViewCtrl()).thenReturn(boardViewCtrlMock);
         Mockito.when(boardViewCtrlMock.getBoard()).thenReturn(board);
     }
@@ -36,7 +38,7 @@ public class CreateListCtrlTest {
      */
     @Test
     public void constructorTest() {
-        sut = new CreateListCtrl(mainCtrlMock, board, serverUtilsMock);
+        sut = new EditBoardNameViewCtrl(serverUtilsMock, mainCtrlMock, board);
         assertNotNull(sut);
     }
 
@@ -55,8 +57,8 @@ public class CreateListCtrlTest {
      */
     @Test
     public void additionalHelpTest() {
-        assertEquals(sut.additionalHelp(), "Add List specific shortcuts:\n"
-                + "Enter - Create a list\n"
+        assertEquals(sut.additionalHelp(), "Edit Board Name specific shortcuts:\n"
+                + "Enter - Submit the name change\n"
                 + "Escape - Close the page");
     }
 }

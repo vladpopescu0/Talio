@@ -9,15 +9,15 @@ import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CreateListCtrlTest {
+public class ChangeNameCtrlTest {
     private MainCtrl mainCtrlMock;
     private ServerUtils serverUtilsMock;
     private BoardViewCtrl boardViewCtrlMock;
-    private CreateListCtrl sut;
+    private ChangeNameCtrl sut;
     private Board board;
 
     /**
-     * Setup for the tests
+     * Setup for the test
      */
     @BeforeEach
     public void setup() {
@@ -26,28 +26,52 @@ public class CreateListCtrlTest {
         boardViewCtrlMock = Mockito.mock(BoardViewCtrl.class);
         User user = new User("User");
         board = new Board(user, "Board");
-        sut = new CreateListCtrl(mainCtrlMock, board, serverUtilsMock);
+        sut = new ChangeNameCtrl(mainCtrlMock, serverUtilsMock);
         Mockito.when(mainCtrlMock.getBoardViewCtrl()).thenReturn(boardViewCtrlMock);
         Mockito.when(boardViewCtrlMock.getBoard()).thenReturn(board);
     }
 
     /**
-     * Test for Constructor
+     * Test for the constructor
      */
     @Test
     public void constructorTest() {
-        sut = new CreateListCtrl(mainCtrlMock, board, serverUtilsMock);
+        sut = new ChangeNameCtrl(mainCtrlMock, serverUtilsMock);
         assertNotNull(sut);
     }
 
     /**
-     * Test of setBoard
+     * Test for setId
+     */
+    @Test
+    public void setIdTest() {
+        sut.setId(1L);
+        assertEquals(1L, sut.getId());
+    }
+
+    /**
+     * Test for getId
+     */
+    @Test
+    public void getIdTest() {
+        assertNull(sut.getId());
+    }
+
+    /**
+     * Test for getBoard
+     */
+    @Test
+    public void getBoardTest() {
+        assertNull(sut.getBoard());
+    }
+
+    /**
+     * Test for setBoard
      */
     @Test
     public void setBoardTest() {
-        Board b1 = new Board(new User("1"), "U");
-        sut.setBoard(b1);
-        assertEquals(b1, sut.getBoard());
+        sut.setBoard(board);
+        assertEquals(board, sut.getBoard());
     }
 
     /**
@@ -55,8 +79,8 @@ public class CreateListCtrlTest {
      */
     @Test
     public void additionalHelpTest() {
-        assertEquals(sut.additionalHelp(), "Add List specific shortcuts:\n"
-                + "Enter - Create a list\n"
+        assertEquals(sut.additionalHelp(), "Edit List specific shortcuts:\n"
+                + "Enter - Submit the name change\n"
                 + "Escape - Close the page");
     }
 }
