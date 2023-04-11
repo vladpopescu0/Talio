@@ -82,6 +82,11 @@ public class JoinBoardByLinkCtrl {
                     .collect(Collectors.toList());
             if(boards.size()==1){
                 Board foundBoard = boards.get(0);
+                if(mainCtrl.getCurrentUser().getBoardList().contains(foundBoard)){
+                    mainCtrl.closeSecondaryStage();
+                    mainCtrl.showBoardView(foundBoard);
+                    return;
+                }
                 foundBoard.addUser(mainCtrl.getCurrentUser());
                 foundBoard = server.updateBoard(foundBoard);
                 mainCtrl.getCurrentUser().setBoardList(server.

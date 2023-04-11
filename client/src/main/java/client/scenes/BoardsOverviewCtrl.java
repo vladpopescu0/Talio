@@ -26,6 +26,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Modality;
 
+import java.util.List;
+
 /*Not imlementing initializable is required because otherwise, the ctrl tries to look for
 the current server when the app starts, which is impossible, since it has not been
 selected yet by the user*/
@@ -63,9 +65,11 @@ public class BoardsOverviewCtrl {
      */
     public void init() {
         server.setSession(ServerUtils.getUrl());
-        if(colBoardName!=null){
-            colBoardName.setCellValueFactory(q ->
-                    new SimpleStringProperty(q.getValue().getName()));
+        if(mainCtrl.isAdmin()){
+            if (colBoardName != null) {
+                colBoardName.setCellValueFactory(q ->
+                        new SimpleStringProperty(q.getValue().getName()));
+            }
         }
 //        //long polling
         server.getBoardUpdates(q -> {
@@ -102,9 +106,16 @@ public class BoardsOverviewCtrl {
      * refreshes the page, looking for updates, and checks for admin privileges
      */
     public void refresh() {
-        var boards = server.getBoards();
+        List<Board> boards;
+        if(mainCtrl.isAdmin()){
+            boards = server.getBoards();
+        } else {
+            boards = server.getBoardsByUserId(mainCtrl.getCurrentUser().getId());
+        }
+
         data = FXCollections.observableList(boards);
         table.setItems(data);
+        colBoardName.setCellValueFactory(q -> new SimpleStringProperty(q.getValue().getName()));
         this.serverLabel.setText(ServerUtils.getServer());
         this.userLabel.setText(mainCtrl.getCurrentUser().getUsername());
         deleteButton.setVisible(mainCtrl.isAdmin());
@@ -121,6 +132,8 @@ public class BoardsOverviewCtrl {
         test.setId(0L);
         Board b = (table==null ? test
                 : table.getSelectionModel().getSelectedItem());
+
+
         if (b == null) {
             if (table!=null && table.getItems().size() != 1) {
                 var alert = new Alert(Alert.AlertType.ERROR);
@@ -138,10 +151,10 @@ public class BoardsOverviewCtrl {
                 if (server.checkBoardPassword(
                         mainCtrl.getSavedPasswords().get(b.getId()), b.getId()
                 )) {
-                    b.addUser(mainCtrl.getCurrentUser());
-                    b = server.updateBoard(b);
-                    mainCtrl.getCurrentUser().setBoardList(server.
-                            getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+//                    b.addUser(mainCtrl.getCurrentUser());
+//                    b = server.updateBoard(b);
+//                    mainCtrl.getCurrentUser().setBoardList(server.
+//                            getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
                     mainCtrl.showBoardView(b);
                     mainCtrl.closeSecondaryStage();
                     return;
@@ -150,10 +163,10 @@ public class BoardsOverviewCtrl {
             mainCtrl.showBoardView(b);
 
         } else {
-            b.addUser(mainCtrl.getCurrentUser());
-            b = server.updateBoard(b);
-            mainCtrl.getCurrentUser().setBoardList(server.
-                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
+//            b.addUser(mainCtrl.getCurrentUser());
+//            b = server.updateBoard(b);
+//            mainCtrl.getCurrentUser().setBoardList(server.
+//                    getBoardsByUserId(mainCtrl.getCurrentUser().getId()));
             mainCtrl.showBoardView(b);
             mainCtrl.closeSecondaryStage();
         }
