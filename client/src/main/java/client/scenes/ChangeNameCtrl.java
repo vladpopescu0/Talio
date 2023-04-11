@@ -117,6 +117,14 @@ public class ChangeNameCtrl {
     }
 
     /**
+     * Getter for the Board
+     * @return the board
+     */
+    public Board getBoard() {
+        return board;
+    }
+
+    /**
      * Goes back to the corresponding board overview page
      */
     public void cancel(){

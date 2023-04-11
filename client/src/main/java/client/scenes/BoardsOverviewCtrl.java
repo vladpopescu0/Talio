@@ -177,6 +177,8 @@ public class BoardsOverviewCtrl {
         }
     }
 
+
+
     private Board boardUpdate(Board b) {
         if(table!=null){
             b = table.getItems().get(0);
