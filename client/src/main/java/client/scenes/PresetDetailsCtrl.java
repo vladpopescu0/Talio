@@ -100,6 +100,7 @@ public class PresetDetailsCtrl extends ListCell<ColorScheme> {
                 }
             }
             setText(null);
+            setGraphic(presetsPane);
         }
     }
 
